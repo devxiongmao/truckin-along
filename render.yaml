@@ -1,9 +1,6 @@
 databases:
   - name: truckin-along
     databaseName: truckin-along
-    user: databases:
-  - name: mysite
-    databaseName: mysite
     user: truckin_along_user
     plan: free
 
