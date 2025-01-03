@@ -23,6 +23,17 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <nav class="navbar">
+        <div class="navbar-title">TRUCKIN' ALONG</div>
+        <div class="navbar-links">
+          <%= link_to 'Truck Management', trucks_path, class: 'nav-link' %>
+        </div>
+      </nav>
+    </header>
+
+    <main class="main-content">
+      <%= yield %>
+    </main>
   </body>
 </html>

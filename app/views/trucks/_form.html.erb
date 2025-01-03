@@ -1,0 +1,36 @@
+<%= form_with(model: truck, local: true, class: 'styled-form') do |form| %>
+  <% if truck.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(truck.errors.count, "error") %> prohibited this truck from being saved:</h2>
+      <ul>
+        <% truck.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :make, class: 'form-label' %>
+    <%= form.text_field :make, class: 'form-input' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :model, class: 'form-label' %>
+    <%= form.text_field :model, class: 'form-input' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :year, class: 'form-label' %>
+    <%= form.number_field :year, class: 'form-input' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :mileage, class: 'form-label' %>
+    <%= form.number_field :mileage, class: 'form-input' %>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit 'Save Truck', class: 'button primary-button' %>
+  </div>
+<% end %>
