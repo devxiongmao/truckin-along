@@ -6,7 +6,7 @@ RSpec.describe TrucksController, type: :controller do
   describe 'GET #index' do
     it 'assigns all trucks to @trucks and renders the index template' do
       get :index
-      expect(assigns(:trucks)).to eq([truck])
+      expect(assigns(:trucks)).to eq([ truck ])
       expect(response).to render_template(:index)
     end
   end
