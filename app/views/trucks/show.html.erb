@@ -1,0 +1,15 @@
+<div class="page-header">
+  <h1 class="page-title">Truck Details</h1>
+  <%= link_to 'Back', trucks_path, class: 'button secondary-button' %>
+</div>
+
+<div class="details-container">
+  <p><strong>Make:</strong> <span class="detail-value"><%= @truck.make %></span></p>
+  <p><strong>Model:</strong> <span class="detail-value"><%= @truck.model %></span></p>
+  <p><strong>Year:</strong> <span class="detail-value"><%= @truck.year %></span></p>
+  <p><strong>Mileage:</strong> <span class="detail-value"><%= @truck.mileage %> miles</span></p>
+</div>
+
+<div class="details-actions">
+  <%= link_to 'Edit', edit_truck_path(@truck), class: 'button primary-button' %>
+</div>
