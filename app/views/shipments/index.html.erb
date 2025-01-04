@@ -1,0 +1,33 @@
+<div class="page-header">
+  <h1 class="page-title">Shipments</h1>
+  <%= link_to 'New Shipment', new_shipment_path, class: 'button primary-button' %>
+</div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Weight</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment.status %></td>
+        <td><%= shipment.name %></td>
+        <td><%= shipment.sender_name %></td>
+        <td><%= shipment.receiver_name %></td>
+        <td><%= shipment.weight %></td>
+        <td>
+          <%= link_to 'Show', shipment, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |
+          <%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
