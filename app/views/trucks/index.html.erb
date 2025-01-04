@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h1 class="page-title">Trucks</h1>
+  <%= link_to 'New Truck', new_truck_path, class: 'button primary-button' %>
+</div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Year</th>
+      <th>Mileage</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @trucks.each do |truck| %>
+      <tr>
+        <td><%= truck.make %></td>
+        <td><%= truck.model %></td>
+        <td><%= truck.year %></td>
+        <td><%= truck.mileage %></td>
+        <td>
+          <%= link_to 'Show', truck, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |
+          <%= link_to 'Destroy', truck, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

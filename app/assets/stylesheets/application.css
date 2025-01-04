@@ -1,10 +1,208 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* White */
+    color: #333; /* Neutral text color */
+  }
+  
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #09e80d; /* Light Green */
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .navbar-links .nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    margin-left: 2rem;
+  }
+  
+  .navbar-links .nav-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Page Layout */
+  .main-content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff; /* Main background */
+    color: #333333; /* Default text */
+  }
+  
+  /* Links */
+  a, .action-link {
+    color: #09e80d; /* Light green */
+    text-decoration: none;
+  }
+  
+  a:hover, .action-link:hover {
+    text-decoration: underline;
+  }
+  
+  .danger-link {
+    color: #d9534f; /* Red for destructive actions */
+  }
+  
+  /* Page Header */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #09e80d; /* Light green underline */
+  }
+  
+  .page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333; /* Neutral text color */
+  }
+  
+  /* Buttons */
+  .primary-button, .secondary-button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .primary-button {
+    background-color: #09e80d; /* Light green */
+    color: #fff; /* White text */
+    border: none;
+  }
+  
+  .primary-button:hover {
+    background-color: #07c20b; /* Slightly darker green */
+  }
+  
+  .secondary-button {
+    background-color: #ffffff; /* White background */
+    color: #09e80d; /* Green text */
+    border: 2px solid #09e80d;
+  }
+  
+  .secondary-button:hover {
+    background-color: #f0fff0; /* Very light green */
+  }
+  
+  /* Tables */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 1rem;
+    text-align: left;
+    background-color: #ffffff; /* White table */
+  }
+  
+  .styled-table th, .styled-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #ddd; /* Light border */
+  }
+  
+  .styled-table th {
+    background-color: #09e80d; /* Light green */
+    color: #fff; /* White text */
+    font-weight: bold;
+  }
+  
+  .styled-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Subtle row striping */
+  }
+  
+  .styled-table tbody tr:hover {
+    background-color: #f1f1f1; /* Light hover effect */
+  }
+  
+  /* Forms */
+  .form-container, .details-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: #ffffff; /* White background */
+    border: 1px solid #09e80d; /* Light green border */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .styled-form .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333333; /* Neutral text */
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .form-input:focus {
+    border-color: #09e80d; /* Light green border on focus */
+    outline: none;
+  }
+  
+  /* Error Messages */
+  .error-messages {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8d7da; /* Light red */
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    color: #721c24; /* Dark red */
+  }
+  
+  .error-messages h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+  }
+  
+  .error-messages ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  /* Details */
+  .details-container p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .detail-value {
+    color: #333333; /* Neutral text color */
+    font-weight: bold;
+  }
+  
+  /* Actions */
+  .details-actions {
+    margin-top: 1rem;
+    text-align: right;
+  }
+  
