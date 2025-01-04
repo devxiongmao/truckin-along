@@ -76,7 +76,7 @@ body, html {
   }
   
   /* Buttons */
-  .primary-button, .secondary-button {
+  .primary-button, .secondary-button, .danger-button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     border-radius: 5px;
@@ -102,6 +102,11 @@ body, html {
   
   .secondary-button:hover {
     background-color: #f0fff0; /* Very light green */
+  }
+
+  .danger-button {
+    background-color: #dc3545;
+    color: #fff;
   }
   
   /* Tables */
@@ -206,3 +211,47 @@ body, html {
     text-align: right;
   }
   
+/* Welcome Page Styling */
+.intro {
+  margin-bottom: 2rem;
+}
+
+.intro h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #09e80d;
+}
+
+.features {
+  margin-bottom: 2rem;
+}
+
+.features h2.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #09e80d;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+
+.call-to-action {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.call-to-action p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.call-to-action a {
+  margin: 0 1rem;
+}

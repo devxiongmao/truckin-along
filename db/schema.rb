@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_03_042049) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_04_172329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "shipments", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.string "sender_name"
+    t.text "sender_address"
+    t.string "receiver_name"
+    t.text "receiver_address"
+    t.decimal "weight"
+    t.integer "boxes"
+    t.bigint "truck_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["truck_id"], name: "index_shipments_on_truck_id"
+  end
 
   create_table "trucks", force: :cascade do |t|
     t.string "make"
@@ -22,4 +37,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_03_042049) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "shipments", "trucks"
 end

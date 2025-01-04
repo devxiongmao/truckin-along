@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1 class="page-title">New Shipment</h1>
+  <%= link_to 'Back', shipments_path, class: 'button secondary-button' %>
+</div>
+
+<div class="form-container">
+  <%= render 'form', shipment: @shipment %>
+</div>

@@ -1,0 +1,23 @@
+<div class="page-header">
+  <h1 class="page-title">Shipment Details</h1>
+  <%= link_to 'Back to Shipments', shipments_path, class: 'button secondary-button' %>
+</div>
+
+<div class="details-container">
+  <p><strong>Name:</strong> <span class="detail-value"><%= @shipment.name %></span></p>
+  <p><strong>Status:</strong> <span class="detail-value"><%= @shipment.status %></span></p>
+  <p><strong>Sender Name:</strong> <span class="detail-value"><%= @shipment.sender_name %></span></p>
+  <p><strong>Sender Address:</strong> <span class="detail-value"><%= @shipment.sender_address %></span></p>
+  <p><strong>Receiver Name:</strong> <span class="detail-value"><%= @shipment.receiver_name %></span></p>
+  <p><strong>Receiver Address:</strong> <span class="detail-value"><%= @shipment.receiver_address %></span></p>
+  <p><strong>Weight:</strong> <span class="detail-value"><%= @shipment.weight %> kg</span></p>
+  <p><strong>Boxes:</strong> <span class="detail-value"><%= @shipment.boxes %></span></p>
+  <% if @shipment.truck %>
+    <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.make, @shipment.truck %></span></p>
+  <% end %>
+</div>
+
+<div class="details-actions">
+  <%= link_to 'Edit Shipment', edit_shipment_path(@shipment), class: 'button primary-button' %>
+  <%= link_to 'Destroy Shipment', @shipment, method: :delete, class: 'button danger-button', data: { confirm: 'Are you sure?' } %>
+</div>
