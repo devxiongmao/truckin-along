@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h1 class="page-title">Shipment Statuses</h1>
+  <%= link_to 'New Shipment Status', new_shipment_status_path, class: 'button primary-button' %>
+</div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shipment_statuses.each do |status| %>
+      <tr>
+        <td><%= status.name %></td>
+        <td>
+          <%= link_to 'Show', status, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_shipment_status_path(status), class: 'action-link' %> |
+          <%= link_to 'Destroy', status, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

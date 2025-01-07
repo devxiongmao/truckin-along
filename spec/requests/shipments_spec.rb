@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "/shipments", type: :request do
+  let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
+
   let(:valid_attributes) {
     {
       name: "Test Shipment",
-      status: "Pending",
+      shipment_status_id: shipment_status.id, # Use the associated ShipmentStatus
       sender_name: "John Doe",
       sender_address: "123 Sender St, Sender City",
       receiver_name: "Jane Smith",
@@ -17,7 +19,7 @@ RSpec.describe "/shipments", type: :request do
   let(:invalid_attributes) {
     {
       name: nil, # Missing required field
-      status: nil,
+      shipment_status_id: nil, # Invalid because it should belong to a ShipmentStatus
       sender_name: nil,
       sender_address: nil,
       receiver_name: nil,
@@ -87,10 +89,11 @@ RSpec.describe "/shipments", type: :request do
   end
 
   describe "PATCH /update" do
+    let!(:new_status) { ShipmentStatus.create!(name: "In Transit") }
     let(:new_attributes) {
       {
         name: "Updated Shipment",
-        status: "In Transit",
+        shipment_status_id: new_status.id,
         weight: 150.75,
         boxes: 20
       }
@@ -102,7 +105,7 @@ RSpec.describe "/shipments", type: :request do
         patch shipment_url(shipment), params: { shipment: new_attributes }
         shipment.reload
         expect(shipment.name).to eq("Updated Shipment")
-        expect(shipment.status).to eq("In Transit")
+        expect(shipment.shipment_status.name).to eq("In Transit")
         expect(shipment.weight).to eq(150.75)
         expect(shipment.boxes).to eq(20)
       end

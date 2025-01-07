@@ -1,0 +1,21 @@
+<%= form_with(model: shipment_status, local: true, class: 'styled-form') do |form| %>
+  <% if shipment_status.errors.any? %>
+    <div class="error-messages">
+      <h2><%= pluralize(@shipment_status.errors.count, 'error') %> prohibited this shipment status from being saved:</h2>
+      <ul>
+        <% shipment_status.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :name, class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-input' %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Save Shipment Status', class: 'button primary-button' %>
+  </div>
+<% end %>

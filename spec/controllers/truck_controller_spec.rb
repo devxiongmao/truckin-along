@@ -27,6 +27,14 @@ RSpec.describe TrucksController, type: :controller do
     end
   end
 
+  describe 'GET #edit' do
+    it 'assigns the requested truck to @truck and renders the edit template' do
+      get :edit, params: { id: truck.id }
+      expect(assigns(:truck)).to eq(truck)
+      expect(response).to render_template(:edit)
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'creates a new truck and redirects to the show page' do

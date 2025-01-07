@@ -3,10 +3,12 @@ require 'rails_helper'
 RSpec.describe Shipment, type: :model do
   # Define a valid shipment object for reuse
   let(:truck) { Truck.create!(make: "Volvo", model: "VNL", year: 2021, mileage: 120000) }
+  let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
+
   let(:valid_shipment) do
     Shipment.new(
       name: "Test Shipment",
-      status: "Pending",
+      shipment_status_id: shipment_status.id,
       sender_name: "John Doe",
       sender_address: "123 Sender St, Sender City",
       receiver_name: "Jane Smith",
@@ -20,6 +22,7 @@ RSpec.describe Shipment, type: :model do
   ## Association Tests
   describe "associations" do
     it { is_expected.to belong_to(:truck).optional }
+    it { is_expected.to belong_to(:shipment_status) }
   end
 
   ## Validation Tests
@@ -28,7 +31,6 @@ RSpec.describe Shipment, type: :model do
 
     # Presence Validations
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to validate_presence_of(:sender_name) }
     it { is_expected.to validate_presence_of(:sender_address) }
     it { is_expected.to validate_presence_of(:receiver_name) }
