@@ -83,6 +83,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
     database: truckin_along_production
     username: truckin_along
     password: <%= ENV["TRUCKIN_ALONG_DATABASE_PASSWORD"] %>
