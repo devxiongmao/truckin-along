@@ -4,7 +4,7 @@ RSpec.describe Shipment, type: :model do
   # Define a valid shipment object for reuse
   let(:truck) { Truck.create!(make: "Volvo", model: "VNL", year: 2021, mileage: 120000) }
   let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
-  
+
   let(:valid_shipment) do
     Shipment.new(
       name: "Test Shipment",

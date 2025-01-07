@@ -6,7 +6,7 @@ RSpec.describe ShipmentStatusesController, type: :controller do
   describe 'GET #index' do
     it 'assigns all shipment statuses to @shipment_statuses and renders the index template' do
       get :index
-      expect(assigns(:shipment_statuses)).to eq([shipment_status])
+      expect(assigns(:shipment_statuses)).to eq([ shipment_status ])
       expect(response).to render_template(:index)
     end
   end
