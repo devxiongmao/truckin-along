@@ -13,7 +13,7 @@
   <p><strong>Weight:</strong> <span class="detail-value"><%= @shipment.weight %> kg</span></p>
   <p><strong>Boxes:</strong> <span class="detail-value"><%= @shipment.boxes %></span></p>
   <% if @shipment.truck %>
-    <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.make, @shipment.truck %></span></p>
+    <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.display_name, @shipment.truck %></span></p>
   <% end %>
 </div>
 
