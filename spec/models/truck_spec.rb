@@ -78,4 +78,18 @@ RSpec.describe Truck, type: :model do
       expect(valid_truck).not_to be_valid
     end
   end
+
+  ## Custom Method Tests
+  describe "#display_name" do
+    it "returns a string formatted as make-model-year" do
+      expect(valid_truck.display_name).to eq("Volvo-VNL-2021")
+    end
+
+    it "handles nil values gracefully" do
+      valid_truck.make = nil
+      valid_truck.model = nil
+      valid_truck.year = nil
+      expect(valid_truck.display_name).to eq("--")
+    end
+  end
 end
