@@ -10,7 +10,7 @@ RSpec.describe ShipmentsController, type: :controller do
   before do
     sign_in valid_user, scope: :user
   end
-  
+
   describe 'GET #index' do
     it 'assigns all shipments to @shipments and renders the index template' do
       get :index

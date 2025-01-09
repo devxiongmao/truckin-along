@@ -8,7 +8,7 @@ RSpec.describe ShipmentStatusesController, type: :controller do
   before do
     sign_in valid_user, scope: :user
   end
-  
+
   describe 'GET #index' do
     it 'assigns all shipment statuses to @shipment_statuses and renders the index template' do
       get :index

@@ -3,8 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable
-  
-  enum :role, {driver: 0, admin: 1}
+
+  enum :role, { driver: 0, admin: 1 }
 
   # Convenience methods
   def admin?

@@ -41,7 +41,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 ## Manually added Gems
-gem 'devise'
+gem "devise"
 
 
 group :development, :test do
