@@ -1,5 +1,6 @@
 class TrucksController < ApplicationController
   before_action :set_truck, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /trucks or /trucks.json
   def index
