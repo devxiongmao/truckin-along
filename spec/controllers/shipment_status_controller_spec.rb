@@ -1,8 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentStatusesController, type: :controller do
+  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+
   let!(:shipment_status) { ShipmentStatus.create(name: 'Pending') }
 
+  before do
+    sign_in valid_user, scope: :user
+  end
+  
   describe 'GET #index' do
     it 'assigns all shipment statuses to @shipment_statuses and renders the index template' do
       get :index

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "/shipment_statuses", type: :request do
+  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+
   let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
 
   let(:valid_attributes) {
@@ -10,6 +12,10 @@ RSpec.describe "/shipment_statuses", type: :request do
   let(:invalid_attributes) {
     { name: nil } # Invalid because name is required
   }
+
+  before do
+    sign_in valid_user, scope: :user
+  end
 
   describe "GET /index" do
     it "renders a successful response" do

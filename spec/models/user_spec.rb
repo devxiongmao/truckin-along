@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
     User.new(
       email: "test@example.com",
       password: "password",
-      role: "admin" # Default role for testing
+      role: :driver
     )
   end
 
@@ -36,34 +36,18 @@ RSpec.describe User, type: :model do
     end
   end
 
-  ## Role Tests
+  ## Enum Tests
   describe "roles" do
-    it "is valid with a role of admin" do
-      valid_user.role = "admin"
+    it "allows valid roles" do
+      valid_user.role = :driver
+      expect(valid_user).to be_valid
+
+      valid_user.role = :admin
       expect(valid_user).to be_valid
     end
 
-    it "is valid with a role of driver" do
-      valid_user.role = "driver"
-      expect(valid_user).to be_valid
-    end
-
-    it "is invalid with an undefined role" do
-      valid_user.role = "manager"
-      expect(valid_user).not_to be_valid
-    end
-  end
-
-  ## Admin Method Tests
-  describe "#admin?" do
-    it "returns true if the user's role is admin" do
-      valid_user.role = "admin"
-      expect(valid_user.admin?).to eq(true)
-    end
-
-    it "returns false if the user's role is driver" do
-      valid_user.role = "driver"
-      expect(valid_user.admin?).to eq(false)
+    it "does not allow invalid roles" do
+      expect { valid_user.role = :manager }.to raise_error(ArgumentError)
     end
   end
 
@@ -85,10 +69,18 @@ RSpec.describe User, type: :model do
       valid_user.password = nil
       expect(valid_user).not_to be_valid
     end
+  end
 
-    it "is invalid with a blank role" do
-      valid_user.role = nil
-      expect(valid_user).not_to be_valid
+  ## Custom Method Tests
+  describe "#admin?" do
+    it "returns true if the user's role is admin" do
+      valid_user.role = :admin
+      expect(valid_user.admin?).to eq(true)
+    end
+
+    it "returns false if the user's role is driver" do
+      valid_user.role = :driver
+      expect(valid_user.admin?).to eq(false)
     end
   end
 end
