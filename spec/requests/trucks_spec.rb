@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "/trucks", type: :request do
+  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+
   let(:valid_attributes) {
     {
       make: "Volvo",
@@ -18,6 +20,10 @@ RSpec.describe "/trucks", type: :request do
       mileage: -1000    # Invalid mileage
     }
   }
+
+  before do
+    sign_in valid_user, scope: :user
+  end
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -71,7 +77,7 @@ RSpec.describe "/trucks", type: :request do
         }.to change(Truck, :count).by(0)
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
+      it "renders a response with 422 status (i.e., to display the 'new' template)" do
         post trucks_url, params: { truck: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -108,7 +114,7 @@ RSpec.describe "/trucks", type: :request do
     end
 
     context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
+      it "renders a response with 422 status (i.e., to display the 'edit' template)" do
         truck = Truck.create! valid_attributes
         patch truck_url(truck), params: { truck: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)

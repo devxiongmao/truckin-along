@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe TrucksController, type: :controller do
+  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+
   let!(:truck) { Truck.create(make: 'Ford', model: 'F-150', year: 2022, mileage: 15000) }
+
+  before do
+    sign_in valid_user, scope: :user
+  end
 
   describe 'GET #index' do
     it 'assigns all trucks to @trucks and renders the index template' do
