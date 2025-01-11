@@ -9,7 +9,6 @@ class User < ApplicationRecord
   scope :drivers, -> { where(role: "driver") }
   scope :admins, -> { where(role: "admin") }
 
-  # Helper methods
   def admin?
     role == "admin"
   end

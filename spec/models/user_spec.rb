@@ -71,6 +71,26 @@ RSpec.describe User, type: :model do
     end
   end
 
+  ## Scope Tests
+  describe "scopes" do
+    let!(:driver_user) { User.create!(email: "driver@example.com", password: "password", role: :driver) }
+    let!(:admin_user) { User.create!(email: "admin@example.com", password: "password", role: :admin) }
+
+    describe ".drivers" do
+      it "includes only users with the driver role" do
+        expect(User.drivers).to include(driver_user)
+        expect(User.drivers).not_to include(admin_user)
+      end
+    end
+
+    describe ".admins" do
+      it "includes only users with the admin role" do
+        expect(User.admins).to include(admin_user)
+        expect(User.admins).not_to include(driver_user)
+      end
+    end
+  end
+
   ## Custom Method Tests
   describe "#admin?" do
     it "returns true if the user's role is admin" do
