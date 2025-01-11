@@ -9,8 +9,11 @@ class User < ApplicationRecord
   scope :drivers, -> { where(role: "driver") }
   scope :admins, -> { where(role: "admin") }
 
-  # Convenience methods
   def admin?
     role == "admin"
+  end
+
+  def driver?
+    role == "driver"
   end
 end
