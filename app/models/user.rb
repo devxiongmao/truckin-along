@@ -6,8 +6,14 @@ class User < ApplicationRecord
 
   enum :role, { driver: 0, admin: 1 }
 
-  # Convenience methods
+  scope :drivers, -> { where(role: "driver") }
+  scope :admins, -> { where(role: "admin") }
+
   def admin?
     role == "admin"
+  end
+
+  def driver?
+    role == "driver"
   end
 end

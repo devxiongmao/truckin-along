@@ -24,12 +24,22 @@
     <header>
       <nav class="navbar">
         <div class="navbar-title">TRUCKIN' ALONG</div>
-        <div class="navbar-links">
-          <%= link_to 'Statuses', shipment_statuses_path, class: 'nav-link' %>
-        </div>
+        <% if user_signed_in? && current_user.admin? %>
+          <div class="navbar-links">
+            <%= link_to 'User Management', driver_managements_path, class: 'nav-link' %>
+          </div>
+        
+          <div class="navbar-links">
+            <%= link_to 'Statuses', shipment_statuses_path, class: 'nav-link' %>
+          </div>
+        <% end %>
         <div class="navbar-links">
           <%= link_to 'Shipments', shipments_path, class: 'nav-link' %>
         </div>
+        <div class="navbar-links">
+          <%= link_to 'Truck Management', trucks_path, class: 'nav-link' %>
+        </div>
+
         <div class="navbar-links">
           <%= link_to 'Truck Management', trucks_path, class: 'nav-link' %>
         </div>
