@@ -75,7 +75,7 @@ RSpec.describe User, type: :model do
   describe "scopes" do
     let!(:driver_user) { User.create!(email: "driver@example.com", password: "password", role: :driver) }
     let!(:admin_user) { User.create!(email: "admin@example.com", password: "password", role: :admin) }
-  
+
     describe ".drivers" do
       it "includes only users with the driver role" do
         expect(User.drivers).to include(driver_user)

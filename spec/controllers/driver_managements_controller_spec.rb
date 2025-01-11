@@ -14,7 +14,7 @@ RSpec.describe DriverManagementsController, type: :controller do
     context 'as an admin' do
       it 'assigns all drivers to @drivers and renders the index template' do
         get :index
-        expect(assigns(:drivers)).to eq([driver])
+        expect(assigns(:drivers)).to eq([ driver ])
         expect(response).to render_template(:index)
       end
     end
