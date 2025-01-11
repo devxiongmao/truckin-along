@@ -85,13 +85,19 @@ body, html {
   }
   
   .primary-button {
-    background-color: #09e80d; /* Light green */
-    color: #fff; /* White text */
+    width: 100%; /* Full width for better CTA visibility */
+    padding: 0.75rem 1rem;
+    font-size: 1.2rem;
     border: none;
+    background-color: #09e80d; /* Green background */
+    color: #fff; /* White text */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
   
   .primary-button:hover {
-    background-color: #07c20b; /* Slightly darker green */
+    background-color: #07c20b; /* Darker green for hover effect */
   }
   
   .secondary-button {
@@ -150,7 +156,7 @@ body, html {
   }
   
   .styled-form .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
   
   .form-label {
@@ -162,23 +168,25 @@ body, html {
   
   .form-input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem;
     font-size: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
+    transition: border-color 0.3s;
   }
   
   .form-input:focus {
-    border-color: #09e80d; /* Light green border on focus */
+    border-color: #09e80d; /* Green border on focus */
     outline: none;
+    box-shadow: 0 0 5px rgba(9, 232, 13, 0.5); /* Soft green glow */
   }
   
   /* Error Messages */
   .error-messages {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem; /* Extra spacing */
     padding: 1rem;
-    background-color: #f8d7da; /* Light red */
     border: 1px solid #f5c6cb;
+    background-color: #f8d7da; /* Light red */
     border-radius: 5px;
     color: #721c24; /* Dark red */
   }
@@ -254,4 +262,84 @@ body, html {
 
 .call-to-action a {
   margin: 0 1rem;
+}
+
+/* Auth Links Section */
+.auth-links {
+  margin-top: 1.5rem;
+  text-align: center; /* Center the links */
+}
+
+.auth-links a {
+  display: inline-block;
+  margin-bottom: 0.5rem; /* Space between links */
+  font-size: 1rem;
+}
+
+.auth-links .danger-link {
+  color: #dc3545; /* Red for important actions */
+  text-decoration: none;
+}
+
+.auth-links .danger-link:hover {
+  text-decoration: underline;
+}
+
+/* Adjust button appearance for OAuth links */
+.auth-links .primary-button {
+  margin-bottom: 0.5rem; /* Space between OAuth buttons */
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  text-align: center;
+}
+
+/* Danger Section */
+.danger-section {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.danger-button {
+  background-color: #dc3545; /* Red background */
+  color: #fff; /* White text */
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.danger-button:hover {
+  background-color: #c82333; /* Darker red for hover effect */
+}
+
+/* Back Link */
+.secondary-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #09e80d; /* Green border */
+  background-color: #fff; /* White background */
+  color: #09e80d; /* Green text */
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.secondary-button:hover {
+  background-color: #f0fff0; /* Light green background on hover */
+}
+
+/* Info Message */
+.info-message {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f9f9f9; /* Light gray background */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #555; /* Neutral text color */
+  font-size: 0.9rem;
 }
