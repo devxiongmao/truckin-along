@@ -1,0 +1,20 @@
+<h1>Drivers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @drivers.each do |driver| %>
+      <tr>
+        <td><%= driver.email %></td>
+        <td><%= driver.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Create New Driver", new_driver_management_path, class: "btn btn-primary" %>
