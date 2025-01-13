@@ -1,20 +1,32 @@
-<h1>Drivers</h1>
+<div class="page-header">
+  <h1 class="page-title">Drivers</h1>
+  <%= link_to "Create New Driver", new_driver_management_path, class: 'button primary-button' %>
+</div>
 
-<table>
+
+<table class="styled-table">
   <thead>
     <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
       <th>Email</th>
+      <th>Driver's License</th>
       <th>Created At</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <% @drivers.each do |driver| %>
       <tr>
+        <td><%= driver.first_name %></td>
+        <td><%= driver.last_name %></td>
         <td><%= driver.email %></td>
+        <td><%= driver.drivers_license %></td>
         <td><%= driver.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+        <td>
+          <%= link_to 'Edit', edit_driver_management_path(driver), class: 'action-link' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<%= link_to "Create New Driver", new_driver_management_path, class: "btn btn-primary" %>
