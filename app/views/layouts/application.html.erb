@@ -41,10 +41,6 @@
         </div>
 
         <div class="navbar-links">
-          <%= link_to 'Truck Management', trucks_path, class: 'nav-link' %>
-        </div>
-
-        <div class="navbar-links">
           <% if user_signed_in? %>
             <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
           <% else %>
