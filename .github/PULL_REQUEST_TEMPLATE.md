@@ -7,5 +7,5 @@ Describe the approach you used to solve the problem. Did you consider any other 
 ## What Could Go Wrong?
 Describe the possible impacts of your change. What could go wrong with this change?
 
-## Remediation Stategy 
+## Remediation Strategy 
 Please describe your plan for whatyuhgunnado if things begin striking the fan?
