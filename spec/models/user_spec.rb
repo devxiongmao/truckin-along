@@ -4,10 +4,17 @@ RSpec.describe User, type: :model do
   # Define a valid user object for reuse
   let(:valid_user) do
     User.new(
+      first_name: "John",
+      last_name: "Doe",
       email: "test@example.com",
       password: "password",
       role: :driver
     )
+  end
+
+  ## Association Tests
+  describe "associations" do
+    it { is_expected.to have_many(:shipments) }
   end
 
   ## Validation Tests
@@ -92,6 +99,18 @@ RSpec.describe User, type: :model do
   end
 
   ## Custom Method Tests
+  describe "#display_name" do
+    it "returns the users display name" do
+      expect(valid_user.display_name).to eq("John Doe")
+    end
+
+    it "handles nil values gracefully" do
+      valid_user.first_name = nil
+      valid_user.last_name = nil
+      expect(valid_user.display_name).to eq(" ")
+    end
+  end
+
   describe "#admin?" do
     it "returns true if the user's role is admin" do
       valid_user.role = :admin
@@ -101,6 +120,18 @@ RSpec.describe User, type: :model do
     it "returns false if the user's role is driver" do
       valid_user.role = :driver
       expect(valid_user.admin?).to eq(false)
+    end
+  end
+
+  describe "#driver?" do
+    it "returns true if the user's role is driver" do
+      valid_user.role = :driver
+      expect(valid_user.driver?).to eq(true)
+    end
+
+    it "returns false if the user's role is admin" do
+      valid_user.role = :admin
+      expect(valid_user.driver?).to eq(false)
     end
   end
 end

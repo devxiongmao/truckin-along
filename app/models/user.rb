@@ -9,6 +9,12 @@ class User < ApplicationRecord
   scope :drivers, -> { where(role: "driver") }
   scope :admins, -> { where(role: "admin") }
 
+  has_many :shipments, dependent: :nullify
+
+  def display_name
+    "#{first_name} #{last_name}"
+  end
+
   def admin?
     role == "admin"
   end
