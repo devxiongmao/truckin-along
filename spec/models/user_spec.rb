@@ -2,15 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   # Define a valid user object for reuse
-  let(:valid_user) do
-    User.new(
-      first_name: "John",
-      last_name: "Doe",
-      email: "test@example.com",
-      password: "password",
-      role: :driver
-    )
-  end
+  let(:valid_user) { create(:user, :driver) }
 
   ## Association Tests
   describe "associations" do
@@ -39,6 +31,7 @@ RSpec.describe User, type: :model do
 
     it "is valid with a password of 6 or more characters" do
       valid_user.password = "123456"
+      valid_user.password_confirmation = "123456"
       expect(valid_user).to be_valid
     end
   end
