@@ -1,0 +1,29 @@
+<h1>Deliveries</h1>
+
+<h2>Unassigned Shipments</h2>
+<% if @unassigned_shipments.any? %>
+  <ul>
+    <% @unassigned_shipments.each do |shipment| %>
+      <li>
+        <strong>Name:</strong> <%= shipment.name %> |
+        <strong>Details:</strong> <%= shipment.sender_name %> <!-- Replace 'details' with actual attributes -->
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No unassigned shipments available.</p>
+<% end %>
+
+<h2>My Shipments</h2>
+<% if @my_shipments.any? %>
+  <ul>
+    <% @my_shipments.each do |shipment| %>
+      <li>
+        <strong>Name:</strong> <%= shipment.name %> |
+        <strong>Details:</strong> <%= shipment.sender_name %> <!-- Replace 'details' with actual attributes -->
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no shipments assigned to you.</p>
+<% end %>

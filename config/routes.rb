@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: "users/registrations"
   }
+
+  resources :deliveries, only: [ :index ]
   resources :shipment_statuses
   resources :shipments
   resources :trucks
