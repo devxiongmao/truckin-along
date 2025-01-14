@@ -22,6 +22,7 @@ RSpec.describe Shipment, type: :model do
   ## Association Tests
   describe "associations" do
     it { is_expected.to belong_to(:truck).optional }
+    it { is_expected.to belong_to(:user).optional }
     it { is_expected.to belong_to(:shipment_status) }
   end
 
@@ -71,6 +72,23 @@ RSpec.describe Shipment, type: :model do
     it "is invalid with a negative number of boxes" do
       valid_shipment.boxes = -1
       expect(valid_shipment).not_to be_valid
+    end
+  end
+
+  ## Scope Tests
+  describe "scopes" do
+    let(:user) { User.create!(email: "admin@example.com", password: "password", role: "admin") }
+    let!(:unassigned_shipment) { Shipment.create!(name: "Test Shipment", shipment_status_id: shipment_status.id, sender_name: "John Doe", sender_address: "123 Sender St, Sender City", receiver_name: "Jane Smith", receiver_address: "456 Receiver Ave, Receiver City", weight: 100.5, boxes: 10, truck: truck) }
+    let!(:assigned_shipment) { Shipment.create!(name: "Test Shipment", shipment_status_id: shipment_status.id, sender_name: "John Doe", sender_address: "123 Sender St, Sender City", receiver_name: "Jane Smith", receiver_address: "456 Receiver Ave, Receiver City", weight: 100.5, boxes: 10, truck: truck, user_id: user.id) }
+
+    describe ".unassigned" do
+      it "does not include shipments that are assigned to a driver" do
+        expect(Shipment.unassigned).not_to include(assigned_shipment)
+      end
+
+      it "includes shipments that are unassigned" do
+        expect(Shipment.unassigned).to include(unassigned_shipment)
+      end
     end
   end
 
