@@ -14,6 +14,15 @@ RSpec.describe User, type: :model do
     subject { valid_user } # Use a valid user as the baseline for testing
 
     # Presence Validations
+    it { is_expected.to validate_presence_of(:first_name) }
+    it { is_expected.to validate_presence_of(:last_name) }
+    it { is_expected.to validate_presence_of(:drivers_license) }
+    it { is_expected.to validate_uniqueness_of(:drivers_license) }
+    it { is_expected.to validate_length_of(:drivers_license).is_equal_to(8) }
+    it do
+      is_expected.to allow_value("AB123456").for(:drivers_license)
+      should_not allow_value("abc123").for(:drivers_license)
+    end
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:password) }
 
@@ -73,8 +82,8 @@ RSpec.describe User, type: :model do
 
   ## Scope Tests
   describe "scopes" do
-    let!(:driver_user) { User.create!(email: "driver@example.com", password: "password", role: :driver) }
-    let!(:admin_user) { User.create!(email: "admin@example.com", password: "password", role: :admin) }
+    let!(:driver_user) { create(:user, email: "driver@example.com", role: "driver") }
+    let!(:admin_user) { create(:user, email: "admin@example.com", role: "admin") }
 
     describe ".drivers" do
       it "includes only users with the driver role" do
