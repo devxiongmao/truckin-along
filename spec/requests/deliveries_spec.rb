@@ -1,37 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe "/deliveries", type: :request do
-  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
-  let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
+  let(:valid_user) { create(:user) }
+  let!(:shipment_status) { create(:shipment_status) }
 
-
-  let!(:unassigned_shipment) {
-    Shipment.create!(
-      name: "Unassigned Shipment",
-      user_id: nil,
-      sender_name: "John Doe",
-      sender_address: "123 Sender St, Sender City",
-      receiver_name: "Jane Smith",
-      receiver_address: "456 Receiver Ave, Receiver City",
-      weight: 50.0,
-      boxes: 5,
-      shipment_status_id: shipment_status.id
-    )
-  }
-
-  let!(:assigned_shipment) {
-    Shipment.create!(
-      name: "Assigned Shipment",
-      user: valid_user,
-      sender_name: "John Doe",
-      sender_address: "123 Sender St, Sender City",
-      receiver_name: "Jane Smith",
-      receiver_address: "456 Receiver Ave, Receiver City",
-      weight: 75.0,
-      boxes: 8,
-      shipment_status_id: shipment_status.id
-    )
-  }
+  let!(:unassigned_shipment) { create(:shipment, user: nil) }
+  let!(:assigned_shipment) { create(:shipment, user: valid_user) }
 
   before do
     sign_in valid_user, scope: :user

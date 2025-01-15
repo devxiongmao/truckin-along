@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentsController, type: :controller do
-  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+  let(:valid_user) { create(:user, email: "test_user_email@gmail.com") }
 
-  let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
+  let!(:shipment_status) { create(:shipment_status) }
 
-  let!(:shipment) { Shipment.create!(name: "Test Shipment", shipment_status_id: shipment_status.id, sender_name: "John Doe", sender_address: "123 Sender St", receiver_name: "Jane Smith", receiver_address: "456 Receiver Ave", weight: 100.5, boxes: 10) }
+  let!(:shipment) { create(:shipment) }
 
   before do
     sign_in valid_user, scope: :user
@@ -45,7 +45,7 @@ RSpec.describe ShipmentsController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid attributes' do
-      let!(:shipment_status) { ShipmentStatus.create!(name: "Delivered") }
+      let!(:shipment_status) { create(:shipment_status) }
 
       it 'creates a new shipment and redirects to the show page' do
         expect {
@@ -69,7 +69,7 @@ RSpec.describe ShipmentsController, type: :controller do
 
   describe 'PATCH/PUT #update' do
     context 'with valid attributes' do
-      let!(:shipment_status) { ShipmentStatus.create!(name: "Delivered") }
+      let!(:shipment_status) { create(:shipment_status, name: "Delivered") }
 
       it 'updates the shipment and redirects to the show page' do
         patch :update, params: { id: shipment.id, shipment: { shipment_status_id: shipment_status.id } }

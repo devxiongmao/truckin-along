@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "/shipment_statuses", type: :request do
-  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+  let(:valid_user) { create(:user) }
 
-  let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
+  let!(:shipment_status) { create(:shipment_status) }
 
   let(:valid_attributes) {
     { name: "In Transit" }

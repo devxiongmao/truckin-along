@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe DriverManagementsController, type: :request do
-  let(:admin_user) { User.create!(email: "admin@example.com", password: "password", role: "admin") }
-  let(:driver_user) { User.create!(email: "driver@example.com", password: "password", role: "driver") }
+  let(:admin_user) { create(:user, role: "admin") }
+  let(:driver_user) { create(:user, email: "walle@rocket.com", role: "driver") }
 
   let(:valid_attributes) {
     { first_name: "John", last_name: "Doe", drivers_license: "A123456", email: "newdriver@example.com", password: "password", password_confirmation: "password" }

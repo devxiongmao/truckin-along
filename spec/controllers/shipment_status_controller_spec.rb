@@ -1,9 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentStatusesController, type: :controller do
-  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
-
-  let!(:shipment_status) { ShipmentStatus.create(name: 'Pending') }
+  let(:valid_user) { create(:user) }
+  let!(:shipment_status) { create(:shipment_status) }
 
   before do
     sign_in valid_user, scope: :user
@@ -76,7 +75,7 @@ RSpec.describe ShipmentStatusesController, type: :controller do
     context 'with invalid attributes' do
       it 'does not update the shipment status and re-renders the edit template' do
         patch :update, params: { id: shipment_status.id, shipment_status: { name: '' } }
-        expect(shipment_status.reload.name).to eq('Pending')
+        expect(shipment_status.reload.name).to eq('Ready')
         expect(response).to render_template(:edit)
       end
     end

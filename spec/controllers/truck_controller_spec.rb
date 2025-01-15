@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe TrucksController, type: :controller do
-  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+  let(:valid_user) { create(:user) }
 
-  let!(:truck) { Truck.create(make: 'Ford', model: 'F-150', year: 2022, mileage: 15000) }
+  let!(:truck) { create(:truck) }
 
   before do
     sign_in valid_user, scope: :user
@@ -76,7 +76,7 @@ RSpec.describe TrucksController, type: :controller do
     context 'with invalid attributes' do
       it 'does not update the truck and re-renders the edit template' do
         patch :update, params: { id: truck.id, truck: { make: '' } }
-        expect(truck.reload.make).to eq('Ford')
+        expect(truck.reload.make).to eq('Volvo')
         expect(response).to render_template(:edit)
       end
     end
