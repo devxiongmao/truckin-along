@@ -82,8 +82,8 @@ RSpec.describe User, type: :model do
 
   ## Scope Tests
   describe "scopes" do
-    let!(:driver_user) { create(:user, email: "driver@example.com", drivers_license: "CD789012", role: "driver") }
-    let!(:admin_user) { create(:user, email: "admin@example.com", drivers_license: "CD789013", role: "admin") }
+    let!(:driver_user) { create(:user, email: "driver@example.com", role: "driver") }
+    let!(:admin_user) { create(:user, email: "admin@example.com", role: "admin") }
 
     describe ".drivers" do
       it "includes only users with the driver role" do
