@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe DriverManagementsController, type: :controller do
-  let(:admin_user) { User.create!(email: "admin@example.com", password: "password", role: "admin") }
-  let(:non_admin_user) { User.create!(email: "user@example.com", password: "password", role: "driver") }
+  let(:admin_user) { create(:user, role: "admin") }
+  let(:non_admin_user) { create(:user, email: "test_driver@gmail.com", role: "driver") }
 
-  let!(:driver) { User.create!(first_name: "John", last_name: "Doe", drivers_license: "12345", email: "driver@example.com", password: "password", role: "driver") }
+  let!(:driver) { create(:user, email: "test_driver2@gmail.com", role: "driver") }
 
   before do
     sign_in admin_user
@@ -48,7 +48,7 @@ RSpec.describe DriverManagementsController, type: :controller do
             user: {
               first_name: "Jane",
               last_name: "Smith",
-              drivers_license: "54321",
+              drivers_license: "87654321",
               email: "jane@example.com",
               password: "password",
               password_confirmation: "password"
@@ -80,7 +80,7 @@ RSpec.describe DriverManagementsController, type: :controller do
         user: {
           first_name: "Jane",
           last_name: "Smith",
-          drivers_license: "54321",
+          drivers_license: "87654321",
           email: "jane@example.com",
           password: "password",
           password_confirmation: "password"

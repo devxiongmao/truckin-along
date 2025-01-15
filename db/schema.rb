@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_11_035548) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_14_032547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,8 +33,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_11_035548) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "shipment_status_id", null: false
+    t.bigint "user_id"
     t.index ["shipment_status_id"], name: "index_shipments_on_shipment_status_id"
     t.index ["truck_id"], name: "index_shipments_on_truck_id"
+    t.index ["user_id"], name: "index_shipments_on_user_id"
   end
 
   create_table "trucks", force: :cascade do |t|
@@ -64,4 +66,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_11_035548) do
 
   add_foreign_key "shipments", "shipment_statuses"
   add_foreign_key "shipments", "trucks"
+  add_foreign_key "shipments", "users"
 end

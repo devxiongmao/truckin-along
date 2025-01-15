@@ -6,6 +6,6 @@ class Truck < ApplicationRecord
     validates :mileage, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
     def display_name
-        "#{make}-#{model}-#{year}"
-      end
+      "#{make}-#{model}-#{year}"
+    end
 end

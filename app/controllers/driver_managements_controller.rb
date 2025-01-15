@@ -4,7 +4,6 @@ class DriverManagementsController < ApplicationController
 
     before_action :set_driver, only: %i[edit update]
 
-
     def new
       @driver = User.new(role: "driver")
     end

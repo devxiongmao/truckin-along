@@ -2,14 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Truck, type: :model do
   # Define a valid truck object for reuse
-  let(:valid_truck) do
-    Truck.new(
-      make: "Volvo",
-      model: "VNL",
-      year: 2021,
-      mileage: 120000
-    )
-  end
+  let(:valid_truck) { create(:truck) }
 
   ## Association Tests
   describe "associations" do

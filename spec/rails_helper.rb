@@ -38,6 +38,11 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+  config.after(:suite) do
+    Faker::UniqueGenerator.clear
+  end
+
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::ControllerHelpers, type: :controller
 

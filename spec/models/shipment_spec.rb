@@ -2,26 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Shipment, type: :model do
   # Define a valid shipment object for reuse
-  let(:truck) { Truck.create!(make: "Volvo", model: "VNL", year: 2021, mileage: 120000) }
-  let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
+  let(:truck) { create(:truck) }
+  let!(:shipment_status) { create(:shipment_status) }
 
-  let(:valid_shipment) do
-    Shipment.new(
-      name: "Test Shipment",
-      shipment_status_id: shipment_status.id,
-      sender_name: "John Doe",
-      sender_address: "123 Sender St, Sender City",
-      receiver_name: "Jane Smith",
-      receiver_address: "456 Receiver Ave, Receiver City",
-      weight: 100.5,
-      boxes: 10,
-      truck: truck
-    )
-  end
+  let(:valid_shipment) { create(:shipment) }
 
   ## Association Tests
   describe "associations" do
     it { is_expected.to belong_to(:truck).optional }
+    it { is_expected.to belong_to(:user).optional }
     it { is_expected.to belong_to(:shipment_status) }
   end
 
@@ -71,6 +60,22 @@ RSpec.describe Shipment, type: :model do
     it "is invalid with a negative number of boxes" do
       valid_shipment.boxes = -1
       expect(valid_shipment).not_to be_valid
+    end
+  end
+
+  ## Scope Tests
+  describe "scopes" do
+    let(:user) { create(:user, :driver) }
+    let!(:unassigned_shipment) { create(:shipment, user: nil) }
+    let!(:assigned_shipment) { create(:shipment, user: user) }
+    describe ".unassigned" do
+      it "does not include shipments that are assigned to a driver" do
+        expect(Shipment.unassigned).not_to include(assigned_shipment)
+      end
+
+      it "includes shipments that are unassigned" do
+        expect(Shipment.unassigned).to include(unassigned_shipment)
+      end
     end
   end
 
