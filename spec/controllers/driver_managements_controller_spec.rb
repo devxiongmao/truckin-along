@@ -48,7 +48,7 @@ RSpec.describe DriverManagementsController, type: :controller do
             user: {
               first_name: "Jane",
               last_name: "Smith",
-              drivers_license: "54321",
+              drivers_license: "87654321",
               email: "jane@example.com",
               password: "password",
               password_confirmation: "password"
@@ -80,7 +80,7 @@ RSpec.describe DriverManagementsController, type: :controller do
         user: {
           first_name: "Jane",
           last_name: "Smith",
-          drivers_license: "54321",
+          drivers_license: "87654321",
           email: "jane@example.com",
           password: "password",
           password_confirmation: "password"

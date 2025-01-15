@@ -5,7 +5,7 @@ RSpec.describe DriverManagementsController, type: :request do
   let(:driver_user) { create(:user, email: "walle@rocket.com", role: "driver") }
 
   let(:valid_attributes) {
-    { first_name: "John", last_name: "Doe", drivers_license: "A123456", email: "newdriver@example.com", password: "password", password_confirmation: "password" }
+    { first_name: "John", last_name: "Doe", drivers_license: "A1234567", email: "newdriver@example.com", password: "password", password_confirmation: "password" }
   }
 
   before do

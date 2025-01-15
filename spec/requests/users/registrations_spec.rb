@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Users::RegistrationsController", type: :request do
   let(:valid_attributes) {
-    { email: "test@example.com", password: "password", password_confirmation: "password" }
+    { email: "test@example.com", password: "password", password_confirmation: "password", first_name: "Frank", last_name: "Dillenger", drivers_license: "87654321" }
   }
 
   let(:invalid_attributes) {
