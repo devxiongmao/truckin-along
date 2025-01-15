@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentStatus, type: :model do
+  let(:shipment_status) { create(:shipment_status) }
+
   ## Association Tests
   describe "associations" do
     it { is_expected.to have_many(:shipments).dependent(:destroy) }
@@ -8,7 +10,7 @@ RSpec.describe ShipmentStatus, type: :model do
 
   ## Validation Tests
   describe "validations" do
-    subject { ShipmentStatus.new(name: "Pending") } # Use a valid ShipmentStatus as the baseline for testing
+    subject { shipment_status } # Use a valid ShipmentStatus as the baseline for testing
 
     # Presence Validations
     it { is_expected.to validate_presence_of(:name) }
@@ -17,7 +19,6 @@ RSpec.describe ShipmentStatus, type: :model do
   ## Valid ShipmentStatus Test
   describe "valid shipment status" do
     it "is valid with a name" do
-      shipment_status = ShipmentStatus.new(name: "Shipped")
       expect(shipment_status).to be_valid
     end
   end
@@ -25,19 +26,18 @@ RSpec.describe ShipmentStatus, type: :model do
   ## Invalid ShipmentStatus Tests
   describe "invalid shipment status" do
     it "is invalid without a name" do
-      shipment_status = ShipmentStatus.new(name: nil)
+      shipment_status.name = nil
       expect(shipment_status).not_to be_valid
     end
 
     it "is invalid with a blank name" do
-      shipment_status = ShipmentStatus.new(name: "")
+      shipment_status.name = ""
       expect(shipment_status).not_to be_valid
     end
   end
 
   ## Dependent Destroy Tests
   describe "dependent destroy" do
-    let!(:shipment_status) { ShipmentStatus.create!(name: "Pending") }
     let!(:shipment) { Shipment.create!(name: "Test Shipment", shipment_status: shipment_status, sender_name: "John Doe", sender_address: "123 Sender St", receiver_name: "Jane Smith", receiver_address: "456 Receiver Ave", weight: 100, boxes: 5) }
 
     it "destroys associated shipments when destroyed" do
@@ -49,13 +49,13 @@ RSpec.describe ShipmentStatus, type: :model do
   describe "edge cases" do
     it "is valid with a very long name" do
       long_name = "A" * 255 # Assuming a database or application limit of 255 characters
-      shipment_status = ShipmentStatus.new(name: long_name)
+      shipment_status.name = long_name
       expect(shipment_status).to be_valid
     end
 
     it "is invalid with a name that is excessively long" do
       long_name = "A" * 256 # Assuming a limit of 255 characters
-      shipment_status = ShipmentStatus.new(name: long_name)
+      shipment_status.name = long_name
       expect(shipment_status).not_to be_valid
     end
   end

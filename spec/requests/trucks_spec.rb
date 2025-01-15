@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "/trucks", type: :request do
-  let(:valid_user) { User.create!(email: "test@example.com", password: "password") }
+  let(:valid_user) { create(:user) }
 
   let(:valid_attributes) {
     {
