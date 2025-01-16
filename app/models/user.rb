@@ -9,6 +9,8 @@ class User < ApplicationRecord
   scope :drivers, -> { where(role: "driver") }
   scope :admins, -> { where(role: "admin") }
 
+  belongs_to :company, optional: true
+
   has_many :shipments, dependent: :nullify
 
   # Validations
@@ -27,5 +29,9 @@ class User < ApplicationRecord
 
   def driver?
     role == "driver"
+  end
+
+  def has_company?
+    company.present?
   end
 end
