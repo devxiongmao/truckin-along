@@ -7,6 +7,7 @@ RSpec.describe User, type: :model do
   ## Association Tests
   describe "associations" do
     it { is_expected.to have_many(:shipments) }
+    it { should belong_to(:company).optional }
   end
 
   ## Validation Tests
@@ -134,6 +135,19 @@ RSpec.describe User, type: :model do
     it "returns false if the user's role is admin" do
       valid_user.role = :admin
       expect(valid_user.driver?).to eq(false)
+    end
+  end
+
+  describe "#has_company?" do
+    let(:company) { create(:company) }
+    it "returns true if the user's company is set" do
+      valid_user.company = company
+      expect(valid_user.has_company?).to eq(true)
+    end
+
+    it "returns false if the user's company not set" do
+      valid_user.company = nil
+      expect(valid_user.has_company?).to eq(false)
     end
   end
 end

@@ -3,6 +3,18 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :redirect_unless_company_registered
+
+  private
+
+  def redirect_unless_company_registered
+    return if devise_controller? || controller_name.in?(%w[companies welcome])
+
+    if user_signed_in? && !current_user.has_company?
+      flash[:alert] = "You must register a company before accessing the application."
+      redirect_to new_company_path
+    end
+  end
 
   protected
 
