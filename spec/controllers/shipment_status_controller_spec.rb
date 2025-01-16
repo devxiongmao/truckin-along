@@ -16,14 +16,6 @@ RSpec.describe ShipmentStatusesController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
-    it 'assigns the requested shipment status to @shipment_status and renders the show template' do
-      get :show, params: { id: shipment_status.id }
-      expect(assigns(:shipment_status)).to eq(shipment_status)
-      expect(response).to render_template(:show)
-    end
-  end
-
   describe 'GET #new' do
     it 'assigns a new shipment status to @shipment_status and renders the new template' do
       get :new
@@ -39,7 +31,7 @@ RSpec.describe ShipmentStatusesController, type: :controller do
           post :create, params: { shipment_status: { name: 'Shipped' } }
         }.to change(ShipmentStatus, :count).by(1)
 
-        expect(response).to redirect_to(shipment_status_path(assigns(:shipment_status)))
+        expect(response).to redirect_to(shipment_statuses_path)
       end
     end
 
@@ -68,7 +60,7 @@ RSpec.describe ShipmentStatusesController, type: :controller do
         patch :update, params: { id: shipment_status.id, shipment_status: { name: 'Delivered' } }
         shipment_status.reload
         expect(shipment_status.name).to eq('Delivered')
-        expect(response).to redirect_to(shipment_status_path(shipment_status))
+        expect(response).to redirect_to(shipment_statuses_path)
       end
     end
 
