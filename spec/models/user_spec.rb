@@ -137,4 +137,17 @@ RSpec.describe User, type: :model do
       expect(valid_user.driver?).to eq(false)
     end
   end
+
+  describe "#has_company?" do
+    let(:company) { create(:company) }
+    it "returns true if the user's company is set" do
+      valid_user.company = company
+      expect(valid_user.has_company?).to eq(true)
+    end
+
+    it "returns false if the user's company not set" do
+      valid_user.company = nil
+      expect(valid_user.has_company?).to eq(false)
+    end
+  end
 end

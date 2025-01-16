@@ -6,7 +6,7 @@ FactoryBot.define do
     first_name { "John" }
     last_name { "Doe" }
     drivers_license { Faker::Alphanumeric.alphanumeric(number: 8, min_alpha: 2).upcase }
-    role { :driver } 
+    role { :driver }
     association :company
 
     trait :admin do
