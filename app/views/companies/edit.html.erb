@@ -1,0 +1,17 @@
+<h1>Edit Company Details</h1>
+
+<%= form_with model: @company, local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :name, "Company Name", class: 'form-label' %>
+    <%= f.text_field :name, class: 'form-input', required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :address, "Company Address", class: 'form-label' %>
+    <%= f.text_field :address, class: 'form-input', required: true %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Update Company", class: "primary-button" %>
+  </div>
+<% end %>

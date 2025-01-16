@@ -7,6 +7,7 @@ RSpec.describe User, type: :model do
   ## Association Tests
   describe "associations" do
     it { is_expected.to have_many(:shipments) }
+    it { should belong_to(:company).optional }
   end
 
   ## Validation Tests
