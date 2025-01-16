@@ -25,14 +25,6 @@ RSpec.describe "/shipment_statuses", type: :request do
     end
   end
 
-  describe "GET /show" do
-    it "renders a successful response" do
-      shipment_status = ShipmentStatus.create! valid_attributes
-      get shipment_status_url(shipment_status)
-      expect(response).to be_successful
-    end
-  end
-
   describe "GET /new" do
     it "renders a successful response" do
       get new_shipment_status_url
@@ -56,9 +48,9 @@ RSpec.describe "/shipment_statuses", type: :request do
         }.to change(ShipmentStatus, :count).by(1)
       end
 
-      it "redirects to the created shipment_status" do
+      it "redirects to the created shipment_status index" do
         post shipment_statuses_url, params: { shipment_status: valid_attributes }
-        expect(response).to redirect_to(shipment_status_url(ShipmentStatus.last))
+        expect(response).to redirect_to(shipment_statuses_url)
       end
     end
 
@@ -89,11 +81,11 @@ RSpec.describe "/shipment_statuses", type: :request do
         expect(shipment_status.name).to eq("Delivered")
       end
 
-      it "redirects to the shipment_status" do
+      it "redirects to the shipment_status index" do
         shipment_status = ShipmentStatus.create! valid_attributes
         patch shipment_status_url(shipment_status), params: { shipment_status: new_attributes }
         shipment_status.reload
-        expect(response).to redirect_to(shipment_status_url(shipment_status))
+        expect(response).to redirect_to(shipment_statuses_url)
       end
     end
 
