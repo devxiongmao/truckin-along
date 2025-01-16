@@ -1,12 +1,10 @@
 class ShipmentStatusesController < ApplicationController
-    before_action :set_shipment_status, only: %i[show edit update destroy]
+    before_action :set_shipment_status, only: %i[edit update destroy]
     before_action :authenticate_user!
 
     def index
       @shipment_statuses = ShipmentStatus.all
     end
-
-    def show; end
 
     def new
       @shipment_status = ShipmentStatus.new
@@ -15,7 +13,7 @@ class ShipmentStatusesController < ApplicationController
     def create
       @shipment_status = ShipmentStatus.new(shipment_status_params)
       if @shipment_status.save
-        redirect_to @shipment_status, notice: "Shipment status was successfully created."
+        redirect_to shipment_statuses_url, notice: "Shipment status was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -25,7 +23,7 @@ class ShipmentStatusesController < ApplicationController
 
     def update
       if @shipment_status.update(shipment_status_params)
-        redirect_to @shipment_status, notice: "Shipment status was successfully updated."
+        redirect_to shipment_statuses_url, notice: "Shipment status was successfully updated."
       else
         render :edit, status: :unprocessable_entity
       end

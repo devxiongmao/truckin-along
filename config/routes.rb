@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :deliveries, only: [ :index ]
   resources :companies, only: %i[new create edit update]
-  resources :shipment_statuses
+  resources :shipment_statuses, only: %i[new create edit update index destroy]
   resources :shipments
   resources :trucks
   resources :driver_managements, only: [ :new, :create, :edit, :update, :index ]
