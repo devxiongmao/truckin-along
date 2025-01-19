@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_16_020144) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_18_224758) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -25,6 +25,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_16_020144) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id", null: false
+    t.index ["company_id"], name: "index_shipment_statuses_on_company_id"
   end
 
   create_table "shipments", force: :cascade do |t|
@@ -41,6 +43,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_16_020144) do
     t.datetime "updated_at", null: false
     t.bigint "shipment_status_id", null: false
     t.bigint "user_id"
+    t.bigint "company_id", null: false
+    t.index ["company_id"], name: "index_shipments_on_company_id"
     t.index ["shipment_status_id"], name: "index_shipments_on_shipment_status_id"
     t.index ["truck_id"], name: "index_shipments_on_truck_id"
     t.index ["user_id"], name: "index_shipments_on_user_id"
@@ -53,6 +57,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_16_020144) do
     t.integer "mileage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id", null: false
+    t.index ["company_id"], name: "index_trucks_on_company_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -73,8 +79,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_16_020144) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "shipment_statuses", "companies"
+  add_foreign_key "shipments", "companies"
   add_foreign_key "shipments", "shipment_statuses"
   add_foreign_key "shipments", "trucks"
   add_foreign_key "shipments", "users"
+  add_foreign_key "trucks", "companies"
   add_foreign_key "users", "companies"
 end

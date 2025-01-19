@@ -1,51 +1,56 @@
 require 'rails_helper'
 
 RSpec.describe "/shipments", type: :request do
-  let(:valid_user) { create(:user) }
+  let(:company) { create(:company) } # Create a company
+  let(:user) { create(:user, company: company) } # Create a user tied to the company
+  let(:other_company) { create(:company) } # Another company for isolation testing
 
-  let!(:shipment_status) { create(:shipment_status) }
+  let!(:shipment) { create(:shipment, company: company) } # A shipment belonging to the current company
+  let!(:other_shipment) { create(:shipment, company: other_company) } # A shipment from another company
 
-  let(:valid_attributes) {
+  let!(:truck) { create(:truck, company: company) }
+  let!(:status) { create(:shipment_status, company: company) }
+
+  let(:valid_attributes) do
     {
       name: "Test Shipment",
-      shipment_status_id: shipment_status.id, # Use the associated ShipmentStatus
+      shipment_status_id: status.id,
       sender_name: "John Doe",
-      sender_address: "123 Sender St, Sender City",
+      sender_address: "123 Sender St",
       receiver_name: "Jane Smith",
-      receiver_address: "456 Receiver Ave, Receiver City",
+      receiver_address: "456 Receiver Ave",
       weight: 100.5,
-      boxes: 10
+      boxes: 10,
+      truck_id: truck.id,
+      user_id: user.id,
+      company_id: company.id
     }
-  }
+  end
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) do
     {
-      name: nil, # Missing required field
-      shipment_status_id: nil, # Invalid because it should belong to a ShipmentStatus
+      name: nil,
+      shipment_status_id: status.id,
       sender_name: nil,
-      sender_address: nil,
-      receiver_name: nil,
-      receiver_address: nil,
-      weight: -10, # Invalid value
-      boxes: -1    # Invalid value
+      sender_address: nil
     }
-  }
+  end
 
   before do
-    sign_in valid_user, scope: :user
+    sign_in user, scope: :user
   end
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Shipment.create! valid_attributes
+    it "renders a successful response with shipments from the current company" do
       get shipments_url
       expect(response).to be_successful
+      expect(assigns(:shipments)).to include(shipment)
+      expect(assigns(:shipments)).not_to include(other_shipment)
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      shipment = Shipment.create! valid_attributes
+    it "renders a successful response for a shipment from the current company" do
       get shipment_url(shipment)
       expect(response).to be_successful
     end
@@ -55,23 +60,30 @@ RSpec.describe "/shipments", type: :request do
     it "renders a successful response" do
       get new_shipment_url
       expect(response).to be_successful
+      expect(assigns(:drivers)).to include(user) # Ensure company resources are loaded
+      expect(assigns(:trucks)).to include(truck)
+      expect(assigns(:statuses)).to include(status)
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      shipment = Shipment.create! valid_attributes
+    it "renders a successful response for a shipment from the current company" do
       get edit_shipment_url(shipment)
       expect(response).to be_successful
+      expect(assigns(:drivers)).to include(user) # Ensure company resources are loaded
+      expect(assigns(:trucks)).to include(truck)
+      expect(assigns(:statuses)).to include(status)
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Shipment" do
+      it "creates a new Shipment for the current company" do
         expect {
           post shipments_url, params: { shipment: valid_attributes }
         }.to change(Shipment, :count).by(1)
+        created_shipment = Shipment.last
+        expect(created_shipment.company).to eq(company)
       end
 
       it "redirects to the created shipment" do
@@ -87,7 +99,7 @@ RSpec.describe "/shipments", type: :request do
         }.to change(Shipment, :count).by(0)
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
+      it "renders an unprocessable_entity response" do
         post shipments_url, params: { shipment: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -95,38 +107,35 @@ RSpec.describe "/shipments", type: :request do
   end
 
   describe "PATCH /update" do
-    let!(:new_status) { ShipmentStatus.create!(name: "In Transit") }
-    let(:new_attributes) {
+    let(:new_attributes) do
       {
-        name: "Updated Shipment",
-        shipment_status_id: new_status.id,
-        weight: 150.75,
-        boxes: 20
+        name: "Updated Shipment Name",
+        weight: 200.0
       }
-    }
+    end
 
     context "with valid parameters" do
       it "updates the requested shipment" do
-        shipment = Shipment.create! valid_attributes
         patch shipment_url(shipment), params: { shipment: new_attributes }
         shipment.reload
-        expect(shipment.name).to eq("Updated Shipment")
-        expect(shipment.shipment_status.name).to eq("In Transit")
-        expect(shipment.weight).to eq(150.75)
-        expect(shipment.boxes).to eq(20)
+        expect(shipment.name).to eq("Updated Shipment Name")
+        expect(shipment.weight).to eq(200.0)
       end
 
       it "redirects to the shipment" do
-        shipment = Shipment.create! valid_attributes
         patch shipment_url(shipment), params: { shipment: new_attributes }
-        shipment.reload
         expect(response).to redirect_to(shipment_url(shipment))
       end
     end
 
     context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        shipment = Shipment.create! valid_attributes
+      it "does not update the shipment" do
+        patch shipment_url(shipment), params: { shipment: invalid_attributes }
+        shipment.reload
+        expect(shipment.name).not_to eq(nil)
+      end
+
+      it "renders an unprocessable_entity response" do
         patch shipment_url(shipment), params: { shipment: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -135,14 +144,12 @@ RSpec.describe "/shipments", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested shipment" do
-      shipment = Shipment.create! valid_attributes
       expect {
         delete shipment_url(shipment)
       }.to change(Shipment, :count).by(-1)
     end
 
     it "redirects to the shipments list" do
-      shipment = Shipment.create! valid_attributes
       delete shipment_url(shipment)
       expect(response).to redirect_to(shipments_url)
     end

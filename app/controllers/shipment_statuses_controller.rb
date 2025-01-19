@@ -3,7 +3,7 @@ class ShipmentStatusesController < ApplicationController
     before_action :authenticate_user!
 
     def index
-      @shipment_statuses = ShipmentStatus.all
+      @shipment_statuses = ShipmentStatus.for_company(current_company)
     end
 
     def new
@@ -37,10 +37,10 @@ class ShipmentStatusesController < ApplicationController
     private
 
     def set_shipment_status
-      @shipment_status = ShipmentStatus.find(params[:id])
+      @shipment_status = ShipmentStatus.for_company(current_company).find(params[:id])
     end
 
     def shipment_status_params
-      params.require(:shipment_status).permit(:name)
+      params.require(:shipment_status).permit(:company_id, :name)
     end
 end

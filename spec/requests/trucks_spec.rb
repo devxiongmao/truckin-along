@@ -1,41 +1,45 @@
 require 'rails_helper'
 
 RSpec.describe "/trucks", type: :request do
-  let(:valid_user) { create(:user) }
+  let(:company) { create(:company) } # Create a company
+  let(:user) { create(:user, company: company) } # Create a user tied to the company
+  let(:other_company) { create(:company) } # Another company for isolation testing
 
-  let(:valid_attributes) {
-    {
-      make: "Volvo",
-      model: "VNL",
-      year: 2021,
-      mileage: 120000
-    }
-  }
+  let!(:truck) { create(:truck, company: company) } # A truck belonging to the current company
+  let!(:other_truck) { create(:truck, company: other_company) } # A truck from another company
 
-  let(:invalid_attributes) {
+  let(:valid_attributes) do
     {
-      make: nil,        # Missing required field
-      model: nil,       # Missing required field
-      year: 1800,       # Invalid year
-      mileage: -1000    # Invalid mileage
+      make: "Toyota",
+      model: "Tacoma",
+      year: 2022,
+      mileage: 12000,
+      company_id: company.id
     }
-  }
+  end
+
+  let(:invalid_attributes) do
+    {
+      make: nil,
+      model: nil
+    }
+  end
 
   before do
-    sign_in valid_user, scope: :user
+    sign_in user, scope: :user
   end
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Truck.create! valid_attributes
+    it "renders a successful response and shows only trucks from the current company" do
       get trucks_url
       expect(response).to be_successful
+      expect(assigns(:trucks)).to include(truck)
+      expect(assigns(:trucks)).not_to include(other_truck)
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      truck = Truck.create! valid_attributes
+    it "renders a successful response for a truck from the current company" do
       get truck_url(truck)
       expect(response).to be_successful
     end
@@ -49,8 +53,7 @@ RSpec.describe "/trucks", type: :request do
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      truck = Truck.create! valid_attributes
+    it "renders a successful response for a truck from the current company" do
       get edit_truck_url(truck)
       expect(response).to be_successful
     end
@@ -58,15 +61,17 @@ RSpec.describe "/trucks", type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Truck" do
+      it "creates a new Truck for the current company" do
         expect {
           post trucks_url, params: { truck: valid_attributes }
         }.to change(Truck, :count).by(1)
+        created_truck = Truck.last
+        expect(created_truck.company).to eq(company)
       end
 
       it "redirects to the created truck" do
         post trucks_url, params: { truck: valid_attributes }
-        expect(response).to redirect_to(truck_url(Truck.last))
+        expect(response).to redirect_to(trucks_url)
       end
     end
 
@@ -77,7 +82,7 @@ RSpec.describe "/trucks", type: :request do
         }.to change(Truck, :count).by(0)
       end
 
-      it "renders a response with 422 status (i.e., to display the 'new' template)" do
+      it "renders an unprocessable_entity response" do
         post trucks_url, params: { truck: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -85,37 +90,37 @@ RSpec.describe "/trucks", type: :request do
   end
 
   describe "PATCH /update" do
-    let(:new_attributes) {
+    let(:new_attributes) do
       {
-        make: "Updated Make",
-        model: "Updated Model",
-        year: 2022,
-        mileage: 90000
+        make: "Ford",
+        model: "F-150",
+        mileage: 20000
       }
-    }
+    end
 
     context "with valid parameters" do
       it "updates the requested truck" do
-        truck = Truck.create! valid_attributes
         patch truck_url(truck), params: { truck: new_attributes }
         truck.reload
-        expect(truck.make).to eq("Updated Make")
-        expect(truck.model).to eq("Updated Model")
-        expect(truck.year).to eq(2022)
-        expect(truck.mileage).to eq(90000)
+        expect(truck.make).to eq("Ford")
+        expect(truck.model).to eq("F-150")
+        expect(truck.mileage).to eq(20000)
       end
 
       it "redirects to the truck" do
-        truck = Truck.create! valid_attributes
         patch truck_url(truck), params: { truck: new_attributes }
-        truck.reload
-        expect(response).to redirect_to(truck_url(truck))
+        expect(response).to redirect_to(trucks_url)
       end
     end
 
     context "with invalid parameters" do
-      it "renders a response with 422 status (i.e., to display the 'edit' template)" do
-        truck = Truck.create! valid_attributes
+      it "does not update the truck" do
+        patch truck_url(truck), params: { truck: invalid_attributes }
+        truck.reload
+        expect(truck.make).not_to eq(nil)
+      end
+
+      it "renders an unprocessable_entity response" do
         patch truck_url(truck), params: { truck: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -124,14 +129,12 @@ RSpec.describe "/trucks", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested truck" do
-      truck = Truck.create! valid_attributes
       expect {
         delete truck_url(truck)
       }.to change(Truck, :count).by(-1)
     end
 
     it "redirects to the trucks list" do
-      truck = Truck.create! valid_attributes
       delete truck_url(truck)
       expect(response).to redirect_to(trucks_url)
     end

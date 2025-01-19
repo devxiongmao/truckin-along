@@ -1,10 +1,11 @@
 class ShipmentsController < ApplicationController
+  before_action :set_company_resources, only: [ :new, :edit ]
   before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
 
   # GET /shipments
   def index
-    @shipments = Shipment.all
+    @shipments = Shipment.for_company(current_company)
   end
 
   # GET /shipments/1
@@ -47,13 +48,18 @@ class ShipmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_shipment
-      @shipment = Shipment.find(params.expect(:id))
+
+    def set_company_resources
+      @drivers  = User.for_company(current_company)
+      @trucks   = Truck.for_company(current_company)
+      @statuses = ShipmentStatus.for_company(current_company)
     end
 
-    # Only allow a list of trusted parameters through.
+    def set_shipment
+      @shipment = Shipment.for_company(current_company).find(params.expect(:id))
+    end
+
     def shipment_params
-      params.require(:shipment).permit(:name, :shipment_status_id, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :boxes, :truck_id, :user_id)
+      params.require(:shipment).permit(:name, :shipment_status_id, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :boxes, :truck_id, :user_id, :company_id)
     end
 end

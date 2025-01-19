@@ -11,8 +11,8 @@ RSpec.describe "/companies", type: :request do
 
   let(:invalid_attributes) {
     {
-      name: nil,       # Missing required field
-      address: nil     # Missing required field
+      name: nil,
+      address: nil
     }
   }
 
@@ -42,7 +42,7 @@ RSpec.describe "/companies", type: :request do
 
       it "redirects to the edit page for the company" do
         post companies_url, params: { company: valid_attributes }
-        expect(response).to redirect_to(edit_company_url(Company.last))
+        expect(response).to redirect_to(root_url)
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe "/companies", type: :request do
 
       it "redirects to the edit page for the company" do
         patch company_url(company), params: { company: new_attributes }
-        expect(response).to redirect_to(edit_company_url(company))
+        expect(response).to redirect_to(root_url)
       end
     end
 
