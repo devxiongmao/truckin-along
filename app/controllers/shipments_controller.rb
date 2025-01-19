@@ -2,12 +2,12 @@ class ShipmentsController < ApplicationController
   before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
 
-  # GET /shipments or /shipments.json
+  # GET /shipments
   def index
     @shipments = Shipment.all
   end
 
-  # GET /shipments/1 or /shipments/1.json
+  # GET /shipments/1
   def show
   end
 
@@ -20,42 +20,30 @@ class ShipmentsController < ApplicationController
   def edit
   end
 
-  # POST /shipments or /shipments.json
+  # POST /shipments
   def create
     @shipment = Shipment.new(shipment_params)
 
-    respond_to do |format|
-      if @shipment.save
-        format.html { redirect_to @shipment, notice: "Shipment was successfully created." }
-        format.json { render :show, status: :created, location: @shipment }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @shipment.errors, status: :unprocessable_entity }
-      end
+    if @shipment.save
+      redirect_to @shipment, notice: "Shipment was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /shipments/1 or /shipments/1.json
+  # PATCH/PUT /shipments/1
   def update
-    respond_to do |format|
-      if @shipment.update(shipment_params)
-        format.html { redirect_to @shipment, notice: "Shipment was successfully updated." }
-        format.json { render :show, status: :ok, location: @shipment }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @shipment.errors, status: :unprocessable_entity }
-      end
+    if @shipment.update(shipment_params)
+      redirect_to @shipment, notice: "Shipment was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /shipments/1 or /shipments/1.json
+  # DELETE /shipments/1
   def destroy
     @shipment.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
   end
 
   private
