@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "/deliveries", type: :request do
-  let(:valid_user) { create(:user) }
-  let!(:shipment_status) { create(:shipment_status) }
+  let(:company) { create(:company) }
 
-  let!(:unassigned_shipment) { create(:shipment, user: nil) }
-  let!(:assigned_shipment) { create(:shipment, user: valid_user) }
+  let(:valid_user) { create(:user, company: company) }
+  let!(:shipment_status) { create(:shipment_status, company: company) }
+
+  let!(:unassigned_shipment) { create(:shipment, user: nil, company: company) }
+  let!(:assigned_shipment) { create(:shipment, user: valid_user, company: company) }
 
   before do
     sign_in valid_user, scope: :user

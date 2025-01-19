@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentStatus, type: :model do
-  let(:shipment_status) { create(:shipment_status) }
+  let(:company) { create(:company) }
+  let(:shipment_status) { create(:shipment_status, company: company) }
 
   ## Association Tests
   describe "associations" do
@@ -38,7 +39,7 @@ RSpec.describe ShipmentStatus, type: :model do
 
   ## Dependent Destroy Tests
   describe "dependent destroy" do
-    let!(:shipment) { Shipment.create!(name: "Test Shipment", shipment_status: shipment_status, sender_name: "John Doe", sender_address: "123 Sender St", receiver_name: "Jane Smith", receiver_address: "456 Receiver Ave", weight: 100, boxes: 5) }
+    let!(:shipment) { Shipment.create!(name: "Test Shipment", shipment_status: shipment_status, sender_name: "John Doe", sender_address: "123 Sender St", receiver_name: "Jane Smith", receiver_address: "456 Receiver Ave", weight: 100, boxes: 5, company: company) }
 
     it "destroys associated shipments when destroyed" do
       expect { shipment_status.destroy }.to change(Shipment, :count).by(-1)

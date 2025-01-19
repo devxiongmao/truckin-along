@@ -10,6 +10,8 @@
     </div>
   <% end %>
 
+  <%= f.hidden_field :company_id, value: current_user.company_id %>
+
   <div class="form-group">
     <%= f.label :first_name, "First Name", class: 'form-label' %>
     <%= f.text_field :first_name, class: 'form-input', autocomplete: "given-name" %>
