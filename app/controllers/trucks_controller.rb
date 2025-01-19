@@ -2,12 +2,12 @@ class TrucksController < ApplicationController
   before_action :set_truck, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
 
-  # GET /trucks or /trucks.json
+  # GET /trucks
   def index
     @trucks = Truck.all
   end
 
-  # GET /trucks/1 or /trucks/1.json
+  # GET /trucks/1
   def show
   end
 
@@ -20,42 +20,29 @@ class TrucksController < ApplicationController
   def edit
   end
 
-  # POST /trucks or /trucks.json
+  # POST /trucks
   def create
     @truck = Truck.new(truck_params)
-
-    respond_to do |format|
-      if @truck.save
-        format.html { redirect_to @truck, notice: "Truck was successfully created." }
-        format.json { render :show, status: :created, location: @truck }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @truck.errors, status: :unprocessable_entity }
-      end
+    if @truck.save
+      redirect_to @truck, notice: "Truck was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /trucks/1 or /trucks/1.json
+  # PATCH/PUT /trucks/1
   def update
-    respond_to do |format|
-      if @truck.update(truck_params)
-        format.html { redirect_to @truck, notice: "Truck was successfully updated." }
-        format.json { render :show, status: :ok, location: @truck }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @truck.errors, status: :unprocessable_entity }
-      end
+    if @truck.update(truck_params)
+      redirect_to @truck, notice: "Truck was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /trucks/1 or /trucks/1.json
+  # DELETE /trucks/1
   def destroy
     @truck.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to trucks_path, status: :see_other, notice: "Truck was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to trucks_path, status: :see_other, notice: "Truck was successfully destroyed."
   end
 
   private
