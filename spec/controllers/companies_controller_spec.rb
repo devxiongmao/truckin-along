@@ -24,7 +24,7 @@ RSpec.describe CompaniesController, type: :controller do
         }.to change(Company, :count).by(1)
 
         expect(valid_user.reload.company).to eq(Company.last)
-        expect(response).to redirect_to(edit_company_path(assigns(:company)))
+        expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq("Company created successfully.")
       end
     end
@@ -71,7 +71,7 @@ RSpec.describe CompaniesController, type: :controller do
         company.reload
         expect(company.name).to eq("Updated Company")
         expect(company.address).to eq("789 Updated Street")
-        expect(response).to redirect_to(edit_company_path(company))
+        expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq("Company updated successfully.")
       end
     end

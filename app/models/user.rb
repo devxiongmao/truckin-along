@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   enum :role, { driver: 0, admin: 1 }
 
+  scope :for_company, ->(company) { where(company_id: company.id) }
+
   scope :drivers, -> { where(role: "driver") }
   scope :admins, -> { where(role: "admin") }
 

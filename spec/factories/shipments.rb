@@ -11,5 +11,6 @@ FactoryBot.define do
     association :truck
     association :shipment_status
     association :user
+    association :company
   end
 end

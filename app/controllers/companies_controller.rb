@@ -13,7 +13,7 @@ class CompaniesController < ApplicationController
       current_user.company = @company
       current_user.save
       flash[:notice] = "Company created successfully."
-      redirect_to edit_company_path(@company)
+      redirect_to root_path
     else
       flash.now[:alert] = "Failed to create company."
       render :new, status: :unprocessable_entity
@@ -25,7 +25,7 @@ class CompaniesController < ApplicationController
   def update
     if @company.update(company_params)
       flash[:notice] = "Company updated successfully."
-      redirect_to edit_company_path(@company)
+      redirect_to root_path
     else
       flash.now[:alert] = "Failed to update company."
       render :edit, status: :unprocessable_entity

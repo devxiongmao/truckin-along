@@ -4,7 +4,7 @@ class TrucksController < ApplicationController
 
   # GET /trucks
   def index
-    @trucks = Truck.all
+    @trucks = Truck.for_company(current_company)
   end
 
   # GET /trucks/1
@@ -23,8 +23,9 @@ class TrucksController < ApplicationController
   # POST /trucks
   def create
     @truck = Truck.new(truck_params)
+
     if @truck.save
-      redirect_to @truck, notice: "Truck was successfully created."
+      redirect_to trucks_path, notice: "Truck was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +34,7 @@ class TrucksController < ApplicationController
   # PATCH/PUT /trucks/1
   def update
     if @truck.update(truck_params)
-      redirect_to @truck, notice: "Truck was successfully updated."
+      redirect_to trucks_path, notice: "Truck was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -48,11 +49,11 @@ class TrucksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_truck
-      @truck = Truck.find(params.expect(:id))
+      @truck = Truck.for_company(current_company).find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def truck_params
-      params.expect(truck: [ :make, :model, :year, :mileage ])
+      params.expect(truck: [ :make, :model, :year, :mileage, :company_id ])
     end
 end

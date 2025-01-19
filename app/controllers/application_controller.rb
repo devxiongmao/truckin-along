@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :redirect_unless_company_registered
 
+  def current_company
+    current_user&.company
+  end
+
   private
 
   def redirect_unless_company_registered
