@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   resources :deliveries, only: [ :index ]
   resources :companies, only: %i[new create edit update]
   resources :shipment_statuses, only: %i[new create edit update index destroy]
-  resources :shipments
+  resources :shipments do
+    collection do
+      post :assign
+    end
+  end
   resources :trucks
   resources :driver_managements, only: [ :new, :create, :edit, :update, :index ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

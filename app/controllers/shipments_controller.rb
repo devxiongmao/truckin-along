@@ -47,6 +47,20 @@ class ShipmentsController < ApplicationController
     redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
   end
 
+  def assign
+    shipment_ids = params[:shipment_ids] || []
+    shipments = Shipment.for_company(current_company).where(id: shipment_ids, user_id: nil)
+    shipments.update_all(user_id: current_user.id)
+
+    if shipment_ids.any?
+      flash[:notice] = "Selected shipments have been assigned to you."
+    else
+      flash[:alert] = "No shipments were selected."
+    end
+
+    redirect_to deliveries_path
+  end
+
   private
 
     def set_company_resources
