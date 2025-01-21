@@ -49,7 +49,7 @@ class ShipmentsController < ApplicationController
 
   def assign
     shipment_ids = params[:shipment_ids] || []
-    shipments = Shipment.for_company(current_company).where(id: shipment_ids, user_id: nil) 
+    shipments = Shipment.for_company(current_company).where(id: shipment_ids, user_id: nil)
     shipments.update_all(user_id: current_user.id)
 
     if shipment_ids.any?

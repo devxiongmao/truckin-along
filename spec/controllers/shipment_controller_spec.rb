@@ -213,7 +213,7 @@ RSpec.describe ShipmentsController, type: :controller do
     let!(:unassigned_shipment) { create(:shipment, user: nil, company: company) }
     let!(:unassigned_shipment2) { create(:shipment, user: nil, company: company) }
 
-    let!(:unassigned_shipments) { [unassigned_shipment, unassigned_shipment2] }
+    let!(:unassigned_shipments) { [ unassigned_shipment, unassigned_shipment2 ] }
 
     it "assigns selected shipments to the current user" do
       shipment_ids = unassigned_shipments.map(&:id)
