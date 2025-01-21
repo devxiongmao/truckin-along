@@ -208,4 +208,38 @@ RSpec.describe ShipmentsController, type: :controller do
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe "POST #assign" do
+    let!(:unassigned_shipment) { create(:shipment, user: nil, company: company) }
+    let!(:unassigned_shipment2) { create(:shipment, user: nil, company: company) }
+
+    let!(:unassigned_shipments) { [ unassigned_shipment, unassigned_shipment2 ] }
+
+    it "assigns selected shipments to the current user" do
+      shipment_ids = unassigned_shipments.map(&:id)
+      post :assign, params: { shipment_ids: shipment_ids }
+
+      unassigned_shipments.each do |shipment|
+        shipment.reload
+        expect(shipment.user_id).to eq(valid_user.id)
+      end
+    end
+
+    it "redirects to the deliveries path" do
+      post :assign, params: { shipment_ids: [] }
+      expect(response).to redirect_to(deliveries_path)
+    end
+
+    it "shows an alert saying shipments have been assigned" do
+      shipment_ids = unassigned_shipments.map(&:id)
+      post :assign, params: { shipment_ids: shipment_ids }
+      expect(flash[:notice]).to eq("Selected shipments have been assigned to you.")
+    end
+
+    it "shows an alert if no shipments are selected" do
+      post :assign, params: { shipment_ids: [] }
+
+      expect(flash[:alert]).to eq("No shipments were selected.")
+    end
+  end
 end
