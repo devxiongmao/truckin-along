@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "/companies", type: :request do
-  let(:valid_user) { create(:user) }
+  let(:valid_user) { create(:user, role: "admin",) }
   let(:valid_attributes) {
     {
       name: "Test Company",
