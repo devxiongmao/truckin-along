@@ -1,5 +1,6 @@
 class CompaniesController < ApplicationController
   before_action :authenticate_user!
+  before_action :ensure_admin
   before_action :set_company, only: %i[edit update]
 
   def new
