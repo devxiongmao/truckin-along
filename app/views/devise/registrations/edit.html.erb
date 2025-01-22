@@ -1,6 +1,17 @@
 <h2 class="page-title">Edit <%= resource_name.to_s.humanize %></h2>
 
 <div class="form-container">
+  <h2 class="company-name"><%= resource.company.name %></h2>
+  <p class="company-address"><%= resource.company.address %></p>
+  <% if resource.admin? %>
+    <div>
+      <%= link_to 'Edit Company', edit_company_path(resource.company), class: "primary-button" %>
+    </div>
+  <% end %>
+</div>
+<br />
+
+<div class="form-container">
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'styled-form' }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 

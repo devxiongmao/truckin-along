@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CompaniesController, type: :controller do
-  let(:valid_user) { create(:user) }
+  let(:valid_user) { create(:user, role: "admin",) }
   let!(:company) { create(:company, name: "Test Company", address: "123 Test Street") }
 
   before do
