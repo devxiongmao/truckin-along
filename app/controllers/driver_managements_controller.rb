@@ -41,8 +41,4 @@ class DriverManagementsController < ApplicationController
     def driver_params
       params.require(:user).permit(:company_id, :first_name, :last_name, :drivers_license, :email, :password, :password_confirmation)
     end
-
-    def ensure_admin
-      redirect_to(root_path, alert: "Not authorized.") unless current_user&.admin?
-    end
 end

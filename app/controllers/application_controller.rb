@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def ensure_admin
+    redirect_to(root_path, alert: "Not authorized.") unless current_user&.admin?
+  end
+
   protected
 
   def configure_permitted_parameters
