@@ -12,7 +12,7 @@ RSpec.describe "/driver_managements", type: :request do
       first_name: "John",
       last_name: "Doe",
       drivers_license: "D1234567",
-      email: "john.doe@example.com",
+      email: "john.doe@gmail.com",
       password: "password123",
       password_confirmation: "password123",
       company_id: company.id
