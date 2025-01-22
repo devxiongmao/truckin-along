@@ -11,7 +11,7 @@ RSpec.describe "/driver_managements", type: :request do
     {
       first_name: "John",
       last_name: "Doe",
-      drivers_license: "D1234567",
+      drivers_license: "ALFT2864",
       email: "john.doe@gmail.com",
       password: "password123",
       password_confirmation: "password123",
