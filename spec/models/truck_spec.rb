@@ -16,8 +16,16 @@ RSpec.describe Truck, type: :model do
     # Presence Validations
     it { is_expected.to validate_presence_of(:make) }
     it { is_expected.to validate_presence_of(:model) }
+    it { is_expected.to validate_presence_of(:length) }
+    it { is_expected.to validate_presence_of(:width) }
+    it { is_expected.to validate_presence_of(:height) }
+    it { is_expected.to validate_presence_of(:weight) }
 
     # Numericality Validations
+    it { is_expected.to validate_numericality_of(:length).is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:width).is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:height).is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:weight).is_greater_than(0) }
     it { is_expected.to validate_numericality_of(:year).only_integer }
     it { is_expected.to validate_numericality_of(:year).is_greater_than_or_equal_to(1900) }
     it { is_expected.to validate_numericality_of(:mileage).only_integer }

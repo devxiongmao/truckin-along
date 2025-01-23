@@ -17,6 +17,9 @@ RSpec.describe ShipmentsController, type: :controller do
       receiver_name: "Receiver",
       receiver_address: "456 Avenue",
       weight: 50.0,
+      length: 50.0,
+      width: 20.0,
+      height: 22.5,
       boxes: 5,
       company_id: company.id
     }
@@ -120,7 +123,7 @@ RSpec.describe ShipmentsController, type: :controller do
 
   describe "POST #create" do
     context "with valid parameters" do
-      it 'creates a new shipment=' do
+      it 'creates a new shipment' do
         expect {
           post :create, params: { shipment: valid_attributes }
         }.to change(Shipment, :count).by(1)
