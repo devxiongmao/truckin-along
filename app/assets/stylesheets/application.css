@@ -28,7 +28,6 @@ button, .primary-button, .secondary-button, .danger-button {
 }
 
 .primary-button {
-  width: 100%; /* Full width for better CTA visibility */
   background-color: #09e80d;
   color: #fff;
   border: none;
@@ -211,6 +210,15 @@ button, .primary-button, .secondary-button, .danger-button {
   display: inline-block;
   margin-bottom: 0.5rem;
   font-size: 1rem;
+}
+
+.action-link.danger-link {
+  color: #dc3545; /* Red for destructive actions */
+}
+
+.action-link.danger-link:hover {
+  color: #c82333; /* Darker red on hover */
+  text-decoration: underline;
 }
 
 .auth-links .danger-link {
