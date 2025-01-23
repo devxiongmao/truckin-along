@@ -74,11 +74,66 @@ user5 = User.create!(
 
 # Create trucks
 puts "Creating trucks..."
-truck1 = Truck.create!(make: "Volvo", model: "FH16", year: 2022, mileage: 5000, company: company1)
-truck2 = Truck.create!(make: "Scania", model: "R500", year: 2021, mileage: 12000, company: company1)
-truck3 = Truck.create!(make: "Kenworth", model: "T680", year: 2020, mileage: 15000, company: company1)
-truck4 = Truck.create!(make: "Peterbilt", model: "579", year: 2019, mileage: 18000, company: company1)
-truck5 = Truck.create!(make: "Freightliner", model: "Cascadia", year: 2022, mileage: 8000, company: company1)
+truck1 = Truck.create!(
+  make: "Volvo",
+  model: "FH16",
+  year: 2022,
+  mileage: 5000,
+  company: company1,
+  weight: 18000, # in kilograms
+  length: 1000.5,
+  height: 300.9,
+  width: 200.5
+)
+
+truck2 = Truck.create!(
+  make: "Scania",
+  model: "R500",
+  year: 2021,
+  mileage: 12000,
+  company: company1,
+  weight: 19000, # in kilograms
+  length: 1100.0,
+  height: 400.0,
+  width: 200.5
+)
+
+truck3 = Truck.create!(
+  make: "Kenworth",
+  model: "T680",
+  year: 2020,
+  mileage: 15000,
+  company: company1,
+  weight: 18500, # in kilograms
+  length: 1000.8,
+  height: 300.8,
+  width: 200.5
+)
+
+truck4 = Truck.create!(
+  make: "Peterbilt",
+  model: "579",
+  year: 2019,
+  mileage: 18000,
+  company: company1,
+  weight: 18700, # in kilograms
+  length: 1000.6,
+  height: 300.9,
+  width: 200.5
+)
+
+truck5 = Truck.create!(
+  make: "Freightliner",
+  model: "Cascadia",
+  year: 2022,
+  mileage: 8000,
+  company: company1,
+  weight: 18300, # in kilograms
+  length: 1100.2,
+  height: 300.95,
+  width: 200.5
+)
+
 
 # Create shipment statuses
 puts "Creating shipment statuses..."
@@ -96,6 +151,9 @@ Shipment.create!(
   receiver_address: "789 Innovation St, New York, USA",
   weight: 120.5,
   boxes: 10,
+  length: 200.0,
+  width: 100.2,
+  height: 100.0,
   truck: truck1,
   shipment_status: status1,
   user: user1,
@@ -110,6 +168,9 @@ Shipment.create!(
   receiver_address: "321 Style St, Boston, USA",
   weight: 250.8,
   boxes: 5,
+  length: 300.0,
+  width: 100.5,
+  height: 200.0,
   truck: truck2,
   shipment_status: status2,
   user: user2,
@@ -124,6 +185,9 @@ Shipment.create!(
   receiver_address: "456 Care Rd, Austin, USA",
   weight: 250.0,
   boxes: 15,
+  length: 200.5,
+  width: 100.2,
+  height: 100.5,
   truck: truck1,
   shipment_status: status1,
   user: nil,
@@ -138,6 +202,9 @@ Shipment.create!(
   receiver_address: "321 Comfort Blvd, Boston, USA",
   weight: 300.5,
   boxes: 8,
+  length: 300.5,
+  width: 200.0,
+  height: 200.5,
   truck: truck1,
   shipment_status: status1,
   user: nil,
@@ -152,6 +219,9 @@ Shipment.create!(
   receiver_address: "200 Chic St, Los Angeles, USA",
   weight: 180.7,
   boxes: 20,
+  length: 200.2,
+  width: 100.5,
+  height: 100.2,
   truck: truck1,
   shipment_status: status1,
   user: nil,
@@ -166,6 +236,9 @@ Shipment.create!(
   receiver_address: "77 Digital Rd, Dallas, USA",
   weight: 95.0,
   boxes: 30,
+  length: 100.5,
+  width: 100.0,
+  height: 100.0,
   truck: nil,
   shipment_status: status1,
   user: nil,
@@ -180,6 +253,9 @@ Shipment.create!(
   receiver_address: "456 Knowledge Ave, Chicago, USA",
   weight: 200.3,
   boxes: 40,
+  length: 100.8,
+  width: 100.2,
+  height: 100.0,
   truck: nil,
   shipment_status: status1,
   user: nil,
@@ -194,6 +270,9 @@ Shipment.create!(
   receiver_address: "88 Fitness Blvd, Atlanta, USA",
   weight: 170.2,
   boxes: 12,
+  length: 200.5,
+  width: 100.2,
+  height: 100.5,
   truck: nil,
   shipment_status: status1,
   user: nil,
@@ -208,6 +287,9 @@ Shipment.create!(
   receiver_address: "34 Comfort Rd, Philadelphia, USA",
   weight: 310.0,
   boxes: 18,
+  length: 200.8,
+  width: 100.5,
+  height: 200.0,
   truck: nil,
   shipment_status: status1,
   user: nil,
@@ -222,6 +304,9 @@ Shipment.create!(
   receiver_address: "555 Happy Blvd, Charlotte, USA",
   weight: 140.9,
   boxes: 25,
+  length: 200.0,
+  width: 100.2,
+  height: 100.3,
   truck: nil,
   shipment_status: status1,
   user: nil,
