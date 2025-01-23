@@ -90,7 +90,6 @@ status3 = ShipmentStatus.create!(name: "Delivered", company: company1)
 puts "Creating shipments..."
 Shipment.create!(
   name: "Electronics",
-  status: "In Transit",
   sender_name: "TechWorld",
   sender_address: "101 Tech Blvd, Silicon Valley, USA",
   receiver_name: "GadgetCo",
@@ -105,7 +104,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Furniture",
-  status: "Delivered",
   sender_name: "FurnitureHub",
   sender_address: "456 Home Decor Ave, Chicago, USA",
   receiver_name: "DecoLuxe",
@@ -120,7 +118,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Medical Supplies",
-  status: "In Transit",
   sender_name: "HealthCo",
   sender_address: "123 Wellness St, Denver, USA",
   receiver_name: "MediCenter",
@@ -135,7 +132,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Furniture",
-  status: "Delivered",
   sender_name: "Furniture World",
   sender_address: "789 Home Ln, Seattle, USA",
   receiver_name: "CozyLiving",
@@ -150,7 +146,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Clothing",
-  status: "Pending",
   sender_name: "FashionHouse",
   sender_address: "100 Style Ave, Miami, USA",
   receiver_name: "Trendy Threads",
@@ -165,7 +160,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Electronics Accessories",
-  status: "In Transit",
   sender_name: "GadgetMart",
   sender_address: "55 Tech St, San Francisco, USA",
   receiver_name: "ElectroWorld",
@@ -180,7 +174,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Books",
-  status: "Delivered",
   sender_name: "Library Supplies",
   sender_address: "123 Read Blvd, Portland, USA",
   receiver_name: "City Library",
@@ -195,7 +188,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Sports Equipment",
-  status: "In Transit",
   sender_name: "SportsPro",
   sender_address: "99 Game Rd, Orlando, USA",
   receiver_name: "PlayNation",
@@ -210,7 +202,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Home Appliances",
-  status: "Pending",
   sender_name: "ApplianceDepot",
   sender_address: "67 Power Ln, Houston, USA",
   receiver_name: "HomeTech",
@@ -225,7 +216,6 @@ Shipment.create!(
 
 Shipment.create!(
   name: "Toys",
-  status: "Delivered",
   sender_name: "ToyFactory",
   sender_address: "101 Fun St, Minneapolis, USA",
   receiver_name: "KidsLand",

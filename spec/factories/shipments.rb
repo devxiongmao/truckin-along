@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :shipment do
     name { "Test Shipment" }
-    status { "Pending" }
     sender_name { "John Doe" }
     sender_address { "123 Sender St, Sender City" }
     receiver_name { "Jane Smith" }
