@@ -25,8 +25,7 @@ RSpec.describe ShipmentsController, type: :controller do
   let(:invalid_attributes) do
     {
       name: nil,
-      status: nil,
-      status_id: nil,
+      shipment_status_id: nil,
       sender_name: nil,
       sender_address: nil,
       receiver_name: nil,
