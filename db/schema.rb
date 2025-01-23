@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_23_012701) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_23_015838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_23_012701) do
     t.bigint "shipment_status_id", null: false
     t.bigint "user_id"
     t.bigint "company_id", null: false
+    t.decimal "length"
+    t.decimal "width"
+    t.decimal "height"
     t.index ["company_id"], name: "index_shipments_on_company_id"
     t.index ["shipment_status_id"], name: "index_shipments_on_shipment_status_id"
     t.index ["truck_id"], name: "index_shipments_on_truck_id"
@@ -57,6 +60,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_23_012701) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "company_id", null: false
+    t.decimal "length"
+    t.decimal "width"
+    t.decimal "height"
+    t.decimal "weight"
     t.index ["company_id"], name: "index_trucks_on_company_id"
   end
 

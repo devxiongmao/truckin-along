@@ -25,10 +25,16 @@ RSpec.describe Shipment, type: :model do
     it { is_expected.to validate_presence_of(:receiver_name) }
     it { is_expected.to validate_presence_of(:receiver_address) }
     it { is_expected.to validate_presence_of(:weight) }
+    it { is_expected.to validate_presence_of(:length) }
+    it { is_expected.to validate_presence_of(:width) }
+    it { is_expected.to validate_presence_of(:height) }
     it { is_expected.to validate_presence_of(:boxes) }
 
     # Numericality Validations
     it { is_expected.to validate_numericality_of(:weight).is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:length).is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:width).is_greater_than(0) }
+    it { is_expected.to validate_numericality_of(:height).is_greater_than(0) }
     it { is_expected.to validate_numericality_of(:boxes).only_integer }
     it { is_expected.to validate_numericality_of(:boxes).is_greater_than_or_equal_to(0) }
   end

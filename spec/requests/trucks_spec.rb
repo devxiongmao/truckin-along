@@ -14,7 +14,11 @@ RSpec.describe "/trucks", type: :request do
       model: "Tacoma",
       year: 2022,
       mileage: 12000,
-      company_id: company.id
+      company_id: company.id,
+      weight: 2000.0,
+      length: 5050.0,
+      width: 200.0,
+      height: 220.5,
     }
   end
 

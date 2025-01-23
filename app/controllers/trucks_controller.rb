@@ -54,6 +54,6 @@ class TrucksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def truck_params
-      params.expect(truck: [ :make, :model, :year, :mileage, :company_id ])
+      params.expect(truck: [ :make, :model, :year, :mileage, :weight, :length, :width, :height, :company_id ])
     end
 end

@@ -3,7 +3,8 @@ class Truck < ApplicationRecord
 
   has_many :shipments
 
-  validates :make, :model, presence: true
+  validates :make, :model, :weight, :length, :width, :height, presence: true
+  validates :weight, :length, :width, :height, numericality: { greater_than: 0 }
   validates :year, numericality: { only_integer: true, greater_than_or_equal_to: 1900 }
   validates :mileage, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
