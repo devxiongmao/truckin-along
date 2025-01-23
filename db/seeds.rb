@@ -95,7 +95,7 @@ truck2 = Truck.create!(
   weight: 19000, # in kilograms
   length: 1100.0,
   height: 400.0,
-  width: 200.5 
+  width: 200.5
 )
 
 truck3 = Truck.create!(
@@ -107,7 +107,7 @@ truck3 = Truck.create!(
   weight: 18500, # in kilograms
   length: 1000.8,
   height: 300.8,
-  width: 200.5 
+  width: 200.5
 )
 
 truck4 = Truck.create!(

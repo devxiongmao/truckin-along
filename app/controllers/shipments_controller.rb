@@ -75,19 +75,19 @@ class ShipmentsController < ApplicationController
 
     def shipment_params
       params.require(:shipment).permit(
-        :name, 
-        :shipment_status_id, 
-        :sender_name, 
-        :sender_address, 
-        :receiver_name, 
-        :receiver_address, 
-        :weight, 
-        :length, 
-        :width, 
-        :height, 
-        :boxes, 
-        :truck_id, 
-        :user_id, 
+        :name,
+        :shipment_status_id,
+        :sender_name,
+        :sender_address,
+        :receiver_name,
+        :receiver_address,
+        :weight,
+        :length,
+        :width,
+        :height,
+        :boxes,
+        :truck_id,
+        :user_id,
         :company_id)
     end
 end
