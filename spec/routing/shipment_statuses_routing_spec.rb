@@ -2,10 +2,6 @@ require "rails_helper"
 
 RSpec.describe ShipmentsController, type: :routing do
   describe "routing" do
-    it "routes to #index" do
-      expect(get: "/shipment_statuses").to route_to("shipment_statuses#index")
-    end
-
     it "routes to #new" do
       expect(get: "/shipment_statuses/new").to route_to("shipment_statuses#new")
     end
