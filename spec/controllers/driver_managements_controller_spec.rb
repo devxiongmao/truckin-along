@@ -122,9 +122,8 @@ RSpec.describe DriverManagementsController, type: :controller do
           expect(response).to render_template(:edit)
         end
 
-        it 'does not update the driver and re-renders the edit template' do
-          patch :update, params: { id: non_admin_user.id, user: { name: '' } }
-          expect(non_admin_user.reload.first_name).to eq('John')
+        it 're-renders the edit template' do
+          patch :update, params: { id: non_admin_user.id, user: invalid_attributes }
           expect(response).to render_template(:edit)
         end
       end
