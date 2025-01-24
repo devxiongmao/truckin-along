@@ -18,13 +18,24 @@ RSpec.describe CompaniesController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid attributes' do
-      it 'creates a new company and assigns it to the current user' do
+      it 'creates a new company' do
         expect {
           post :create, params: { company: { name: "New Company", address: "456 New Street" } }
         }.to change(Company, :count).by(1)
+      end
 
+      it 'assigns the new company to the current user' do
+        post :create, params: { company: { name: "New Company", address: "456 New Street" } }
         expect(valid_user.reload.company).to eq(Company.last)
+      end
+
+      it 'redirects to the root path' do
+        post :create, params: { company: { name: "New Company", address: "456 New Street" } }
         expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders the correct flash response' do
+        post :create, params: { company: { name: "New Company", address: "456 New Street" } }
         expect(flash[:notice]).to eq("Company created successfully.")
       end
     end

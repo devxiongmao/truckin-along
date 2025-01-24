@@ -2,11 +2,33 @@ require 'rails_helper'
 
 RSpec.describe DriverManagementsController, type: :controller do
   let(:company) { create(:company) }
+  let(:other_company) { create(:company) }
+
 
   let(:admin_user) { create(:user, role: "admin", company: company) }
   let(:non_admin_user) { create(:user, email: "test_driver@gmail.com", role: "driver", company: company) }
+  let(:other_non_admin_user) { create(:user, email: "test_driver@gmail.com", role: "driver", company: other_company) }
+
 
   let!(:driver) { create(:user, email: "test_driver2@gmail.com", role: "driver", company: company) }
+
+  let(:valid_attributes) do
+    {
+      first_name: "Jane",
+      last_name: "Smith",
+      drivers_license: "87654321",
+      email: "jane@example.com",
+      password: "password",
+      password_confirmation: "password",
+      company_id: company.id
+    }
+  end
+
+  let(:invalid_attributes) do
+    {
+      first_name: nil
+    }
+  end
 
   describe "as an admin user" do
     before do
@@ -24,23 +46,86 @@ RSpec.describe DriverManagementsController, type: :controller do
 
     describe 'POST #create' do
       context 'with valid attributes' do
-        it 'creates a new driver and redirects to the admin page' do
+        it 'creates a new driver' do
           expect {
             post :create, params: {
-              user: {
-                first_name: "Jane",
-                last_name: "Smith",
-                drivers_license: "87654321",
-                email: "jane@example.com",
-                password: "password",
-                password_confirmation: "password",
-                company_id: company.id
-              }
+              user: valid_attributes
             }
           }.to change(User.drivers, :count).by(1)
+        end
 
+        it 'redirects to the admin page' do
+          post :create, params: { user: valid_attributes }
           expect(response).to redirect_to(admin_index_path)
+        end
+
+        it 'has the appropriate flash message' do
+          post :create, params: { user: valid_attributes }
           expect(flash[:notice]).to eq("Driver account created successfully.")
+        end
+      end
+    end
+
+    describe "GET #edit" do
+      it "assigns the requested driver as @driver" do
+        get :edit, params: { id: non_admin_user.id }
+        expect(assigns(:driver)).to eq(non_admin_user)
+      end
+
+      it "renders the edit template" do
+        get :edit, params: { id: non_admin_user.id }
+        expect(response).to render_template(:edit)
+      end
+
+      it "raises ActiveRecord::RecordNotFound for a driver from another company" do
+        expect {
+          get :edit, params: { id: other_non_admin_user.id }
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "responds successfully" do
+        get :edit, params: { id: non_admin_user.id }
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe "PATCH #update" do
+      let(:new_attributes) do
+        {
+          first_name: "Tim"
+        }
+      end
+
+      context "with valid parameters" do
+        it "updates the requested driver" do
+          patch :update, params: { id: non_admin_user.id, user: new_attributes }
+          non_admin_user.reload
+          expect(non_admin_user.first_name).to eq("Tim")
+        end
+
+        it "redirects to the admin_index_path" do
+          patch :update, params: { id: non_admin_user.id, user: new_attributes }
+          expect(response).to redirect_to(admin_index_path)
+        end
+      end
+
+      context "with invalid parameters" do
+        it "does not update the driver" do
+          patch :update, params: { id: non_admin_user.id, user: invalid_attributes }
+          non_admin_user.reload
+          expect(non_admin_user.first_name).not_to eq(nil)
+        end
+
+        it "renders the edit template with unprocessable_entity status" do
+          patch :update, params: { id: non_admin_user.id, user: invalid_attributes }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:edit)
+        end
+
+        it 'does not update the driver and re-renders the edit template' do
+          patch :update, params: { id: non_admin_user.id, user: { name: '' } }
+          expect(non_admin_user.reload.first_name).to eq('John')
+          expect(response).to render_template(:edit)
         end
       end
     end
