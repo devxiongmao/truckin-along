@@ -24,27 +24,6 @@ RSpec.describe ShipmentStatusesController, type: :controller do
     sign_in valid_user, scope: :user
   end
 
-  describe "GET #index" do
-    it "assigns @shipment_statuses to shipment_statuses from the current company" do
-      shipment_status # Trigger creation of the truck
-      other_shipment_status # Trigger creation of a truck from another company
-
-      get :index
-      expect(assigns(:shipment_statuses)).to include(shipment_status)
-      expect(assigns(:shipment_statuses)).not_to include(other_shipment_status)
-    end
-
-    it "renders the index template" do
-      get :index
-      expect(response).to render_template(:index)
-    end
-
-    it "responds successfully" do
-      get :index
-      expect(response).to have_http_status(:ok)
-    end
-  end
-
   describe "GET #new" do
     it "assigns a new shipment_statuses as @shipment_statuses" do
       get :new
@@ -93,9 +72,9 @@ RSpec.describe ShipmentStatusesController, type: :controller do
         }.to change(ShipmentStatus, :count).by(1)
       end
 
-      it "redirects to the created shipment_status" do
+      it "redirects to the admin_index_path" do
         post :create, params: { shipment_status: valid_attributes }
-        expect(response).to redirect_to(shipment_statuses_path)
+        expect(response).to redirect_to(admin_index_path)
       end
     end
 
@@ -128,9 +107,9 @@ RSpec.describe ShipmentStatusesController, type: :controller do
         expect(shipment_status.name).to eq("Delivered")
       end
 
-      it "redirects to the shipment_status index path" do
+      it "redirects to the admin_index_path" do
         patch :update, params: { id: shipment_status.id, shipment_status: new_attributes }
-        expect(response).to redirect_to(shipment_statuses_path)
+        expect(response).to redirect_to(admin_index_path)
       end
     end
 
@@ -163,9 +142,9 @@ RSpec.describe ShipmentStatusesController, type: :controller do
       }.to change(ShipmentStatus, :count).by(-1)
     end
 
-    it "redirects to the shipment_statuses list" do
+    it "redirects to the admin_index_path" do
       delete :destroy, params: { id: shipment_status.id }
-      expect(response).to redirect_to(shipment_statuses_path)
+      expect(response).to redirect_to(admin_index_path)
     end
 
     it "raises ActiveRecord::RecordNotFound for a shipment_status from another company" do

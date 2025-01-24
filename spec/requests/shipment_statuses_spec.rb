@@ -25,15 +25,6 @@ RSpec.describe "/shipment_statuses", type: :request do
     sign_in user, scope: :user
   end
 
-  describe "GET /index" do
-    it "renders a successful response and shows only statuses from the current company" do
-      get shipment_statuses_url
-      expect(response).to be_successful
-      expect(assigns(:shipment_statuses)).to include(shipment_status)
-      expect(assigns(:shipment_statuses)).not_to include(other_shipment_status)
-    end
-  end
-
   describe "GET /new" do
     it "renders a successful response" do
       get new_shipment_status_url
@@ -58,9 +49,9 @@ RSpec.describe "/shipment_statuses", type: :request do
         expect(created_status.company).to eq(company)
       end
 
-      it "redirects to the shipment_status index" do
+      it "redirects to the admin index" do
         post shipment_statuses_url, params: { shipment_status: valid_attributes }
-        expect(response).to redirect_to(shipment_statuses_url)
+        expect(response).to redirect_to(admin_index_url)
       end
     end
 
@@ -92,9 +83,9 @@ RSpec.describe "/shipment_statuses", type: :request do
         expect(shipment_status.name).to eq("Delivered")
       end
 
-      it "redirects to the shipment_status index" do
+      it "redirects to the admin index" do
         patch shipment_status_url(shipment_status), params: { shipment_status: new_attributes }
-        expect(response).to redirect_to(shipment_statuses_url)
+        expect(response).to redirect_to(admin_index_url)
       end
     end
 
@@ -119,9 +110,9 @@ RSpec.describe "/shipment_statuses", type: :request do
       }.to change(ShipmentStatus, :count).by(-1)
     end
 
-    it "redirects to the shipment_status index" do
+    it "redirects to the admin index" do
       delete shipment_status_url(shipment_status)
-      expect(response).to redirect_to(shipment_statuses_url)
+      expect(response).to redirect_to(admin_index_url)
     end
   end
 end

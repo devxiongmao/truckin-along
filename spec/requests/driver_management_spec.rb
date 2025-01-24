@@ -34,16 +34,6 @@ RSpec.describe "/driver_managements", type: :request do
       sign_in admin, scope: :user
     end
 
-    describe "GET /index" do
-      it "renders a successful response and shows only drivers from the current company" do
-        driver
-        get driver_managements_url
-        expect(response).to be_successful
-        expect(assigns(:drivers)).to include(driver)
-        expect(assigns(:drivers)).not_to include(other_driver)
-      end
-    end
-
     describe "GET /new" do
       it "renders a successful response for an admin user" do
         get new_driver_management_url
@@ -62,9 +52,9 @@ RSpec.describe "/driver_managements", type: :request do
           expect(created_driver.role).to eq("driver")
         end
 
-        it "redirects to the driver index" do
+        it "redirects to the admin index" do
           post driver_managements_url, params: { user: valid_attributes }
-          expect(response).to redirect_to(driver_managements_url)
+          expect(response).to redirect_to(admin_index_url)
         end
       end
 
@@ -107,9 +97,9 @@ RSpec.describe "/driver_managements", type: :request do
           expect(driver.drivers_license).to eq("D7654321")
         end
 
-        it "redirects to the driver index" do
+        it "redirects to the admin index" do
           patch driver_management_url(driver), params: { user: new_attributes }
-          expect(response).to redirect_to(driver_managements_url)
+          expect(response).to redirect_to(admin_index_url)
         end
       end
 
@@ -131,14 +121,6 @@ RSpec.describe "/driver_managements", type: :request do
   describe "when the current_user is a driver" do
     before do
       sign_in driver, scope: :user
-    end
-
-    describe "GET /index" do
-      it "redirects non-admin users to the root path" do
-        get driver_managements_url
-        expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("Not authorized.")
-      end
     end
 
     describe "GET /new" do
