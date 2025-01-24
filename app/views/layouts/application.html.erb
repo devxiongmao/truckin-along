@@ -26,11 +26,7 @@
         <div class="navbar-title">TRUCKIN' ALONG</div>
         <% if user_signed_in? && current_user.admin? %>
           <div class="navbar-links">
-            <%= link_to 'User Management', driver_managements_path, class: 'nav-link' %>
-          </div>
-        
-          <div class="navbar-links">
-            <%= link_to 'Statuses', shipment_statuses_path, class: 'nav-link' %>
+            <%= link_to 'Admin', admin_index_path, class: 'nav-link' %>
           </div>
         <% end %>
         <div class="navbar-links">

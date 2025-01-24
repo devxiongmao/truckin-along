@@ -13,15 +13,6 @@ RSpec.describe DriverManagementsController, type: :controller do
       sign_in admin_user, scope: :user
     end
 
-    describe 'GET #index' do
-      context 'as an admin' do
-        it 'assigns all drivers to @drivers and renders the index template' do
-          get :index
-          expect(response).to render_template(:index)
-        end
-      end
-    end
-
     describe 'GET #new' do
       it 'assigns a new driver to @driver and renders the new template' do
         get :new
@@ -33,7 +24,7 @@ RSpec.describe DriverManagementsController, type: :controller do
 
     describe 'POST #create' do
       context 'with valid attributes' do
-        it 'creates a new driver and redirects to the index page' do
+        it 'creates a new driver and redirects to the admin page' do
           expect {
             post :create, params: {
               user: {
@@ -48,7 +39,7 @@ RSpec.describe DriverManagementsController, type: :controller do
             }
           }.to change(User.drivers, :count).by(1)
 
-          expect(response).to redirect_to(driver_managements_path)
+          expect(response).to redirect_to(admin_index_path)
           expect(flash[:notice]).to eq("Driver account created successfully.")
         end
       end
@@ -58,14 +49,6 @@ RSpec.describe DriverManagementsController, type: :controller do
   describe "as a non-admin user" do
     before do
       sign_in non_admin_user, scope: :user
-    end
-
-    describe 'GET #index' do
-      it 'redirects to the root path with an alert' do
-        get :index
-        expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("Not authorized.")
-      end
     end
 
     describe 'GET #new' do

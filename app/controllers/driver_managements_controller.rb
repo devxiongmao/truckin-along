@@ -4,10 +4,6 @@ class DriverManagementsController < ApplicationController
 
     before_action :set_driver, only: %i[edit update]
 
-    def index
-      @drivers = User.for_company(current_company).drivers
-    end
-
     def new
       @driver = User.new(role: "driver")
     end
@@ -16,7 +12,7 @@ class DriverManagementsController < ApplicationController
       @driver = User.new(driver_params)
       @driver.role = "driver"
       if @driver.save
-        redirect_to driver_managements_path, notice: "Driver account created successfully."
+        redirect_to admin_index_path, notice: "Driver account created successfully."
       else
         render :new, status: :unprocessable_entity, alert: "Unable to create driver account."
       end
@@ -26,7 +22,7 @@ class DriverManagementsController < ApplicationController
 
     def update
       if @driver.update(driver_params)
-        redirect_to driver_managements_path, notice: "Driver was successfully updated."
+        redirect_to admin_index_path, notice: "Driver was successfully updated."
       else
         render :edit, status: :unprocessable_entity
       end
