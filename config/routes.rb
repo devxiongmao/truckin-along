@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       post :assign
     end
   end
-  resources :trucks
+  resources :trucks, only: %i[show new create edit update destroy]
   resources :driver_managements, only: [ :new, :create, :edit, :update ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

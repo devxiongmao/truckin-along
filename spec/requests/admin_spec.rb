@@ -12,6 +12,9 @@ RSpec.describe "/admin", type: :request do
   let!(:shipment_status) { create(:shipment_status, company: company) }
   let!(:other_shipment_status) { create(:shipment_status, company: create(:company)) }
 
+  let!(:truck) { create(:truck, company: company) }
+  let!(:other_truck) { create(:truck, company: create(:company)) }
+
   before do
     sign_in admin_user, scope: :user
   end
@@ -35,9 +38,20 @@ RSpec.describe "/admin", type: :request do
         expect(assigns(:shipment_statuses)).not_to include(other_shipment_status)
       end
 
+      it "assigns trucks from the current company to @trucks" do
+        get admin_index_url
+        expect(assigns(:trucks)).to include(truck)
+        expect(assigns(:trucks)).not_to include(other_truck)
+      end
+
       it "renders the correct template" do
         get admin_index_url
         expect(response).to render_template(:index)
+      end
+
+      it "returns a successfull response" do
+        get admin_index_url
+        expect(response).to be_successful
       end
     end
 
