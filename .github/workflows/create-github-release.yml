@@ -14,6 +14,9 @@ jobs:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          tags: true   
 
       # Install Ruby dependencies to run the changelog task (optional)
       - name: Set up Ruby
