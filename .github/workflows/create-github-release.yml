@@ -1,0 +1,42 @@
+name: Create GitHub Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Ruby dependencies to run the changelog task (optional)
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Generate changelog
+        run: |
+          bin/rails generate:changelog
+          echo "Changelog generated and updated."
+
+      # Create a GitHub Release
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v$(date +'%Y.%m.%d') # Generate a timestamp-based tag
+          release_name: Release v$(date +'%Y.%m.%d')
+          body: |
+            ## Changelog
+            $(cat CHANGELOG.md)
+          draft: false
+          prerelease: false
