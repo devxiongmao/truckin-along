@@ -240,7 +240,6 @@ RSpec.describe ShipmentsController, type: :controller do
 
     it "shows an alert if no shipments are selected" do
       post :assign, params: { shipment_ids: [] }
-
       expect(flash[:alert]).to eq("No shipments were selected.")
     end
   end

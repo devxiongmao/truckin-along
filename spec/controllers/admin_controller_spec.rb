@@ -57,9 +57,13 @@ RSpec.describe AdminController, type: :controller do
         sign_in non_admin_user, scope: :user
       end
 
-      it 'redirects to the root path with an error message' do
+      it 'redirects to the root path' do
         get :index
         expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders an error message' do
+        get :index
         expect(flash[:alert]).to eq('Not authorized.')
       end
     end
