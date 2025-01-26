@@ -29,6 +29,11 @@ scan-ruby:
 scan-js:
 	bin/importmap audit
 
+.PHONY: determine-app-version
+determine-app-version:
+	ruby script/determine_app_version.rb
+
+
 .PHONY: pre-commit-check
 pre-commit-check:
 	$(MAKE) rubocop

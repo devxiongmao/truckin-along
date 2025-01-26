@@ -1,9 +1,15 @@
 name: Create GitHub Release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'docs/**'
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
@@ -14,36 +20,49 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
 
+    if: startsWith(github.head_ref, 'release-')
+
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          tags: true   
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tags: true
 
-      # Install Ruby dependencies to run the changelog task (optional)
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Generate changelog
+      - name: Generate Changelog
         run: |
           bin/rails generate:changelog
           echo "Changelog generated and updated."
 
-      # Create a tag
+      - name: Determine Version Number
+        run: |
+          make determine-app-version
+          echo "App Version Determined."
+
       - name: Create Tag
         id: create_tag
         run: |
-          TAG_NAME="v$(date +'%Y.%m.%d')"
+          TAG_NAME="v$(cat VERSION)"
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
           git tag $TAG_NAME
           git push origin $TAG_NAME
 
-      # Create a GitHub Release
+      - name: Commit Changelog and Version Updates
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add CHANGELOG.md VERSION
+          git commit -m "Release ${{ env.TAG_NAME }}"
+          git push origin ${{ github.head_ref }}
+
       - name: Create Release
         uses: actions/create-release@v1
         env:
