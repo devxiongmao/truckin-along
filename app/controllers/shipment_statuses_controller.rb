@@ -1,6 +1,7 @@
 class ShipmentStatusesController < ApplicationController
     before_action :set_shipment_status, only: %i[edit update destroy]
     before_action :authenticate_user!
+    before_action :ensure_admin
 
     def new
       @shipment_status = ShipmentStatus.new

@@ -5,5 +5,6 @@ class AdminController < ApplicationController
   def index
     @drivers = User.for_company(current_company).drivers
     @shipment_statuses = ShipmentStatus.for_company(current_company)
+    @trucks = Truck.for_company(current_company)
   end
 end
