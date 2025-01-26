@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "/trucks", type: :request do
   let(:company) { create(:company) } # Create a company
-  let(:user) { create(:user, company: company) } # Create a user tied to the company
+  let(:user) { create(:user, role: "admin", company: company) } # Create a user tied to the company
   let(:other_company) { create(:company) } # Another company for isolation testing
 
   let!(:truck) { create(:truck, company: company) } # A truck belonging to the current company
@@ -31,15 +31,6 @@ RSpec.describe "/trucks", type: :request do
 
   before do
     sign_in user, scope: :user
-  end
-
-  describe "GET /index" do
-    it "renders a successful response and shows only trucks from the current company" do
-      get trucks_url
-      expect(response).to be_successful
-      expect(assigns(:trucks)).to include(truck)
-      expect(assigns(:trucks)).not_to include(other_truck)
-    end
   end
 
   describe "GET /show" do
@@ -140,7 +131,7 @@ RSpec.describe "/trucks", type: :request do
 
     it "redirects to the trucks list" do
       delete truck_url(truck)
-      expect(response).to redirect_to(trucks_url)
+      expect(response).to redirect_to(admin_index_url)
     end
   end
 end

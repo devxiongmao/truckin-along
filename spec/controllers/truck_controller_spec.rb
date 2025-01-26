@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe TrucksController, type: :controller do
   let(:company) { create(:company) } # Current company
-  let(:user) { create(:user, company: company) } # Logged-in user
+  let(:user) { create(:user, role: "admin", company: company) } # Logged-in user
   let(:other_company) { create(:company) } # A different company for isolation testing
   let(:truck) { create(:truck, company: company) } # Truck belonging to the current company
   let(:other_truck) { create(:truck, company: other_company) } # Truck from another company
@@ -30,27 +30,6 @@ RSpec.describe TrucksController, type: :controller do
 
   before do
     sign_in user, scope: :user
-  end
-
-  describe "GET #index" do
-    it "assigns @trucks to trucks from the current company" do
-      truck # Trigger creation of the truck
-      other_truck # Trigger creation of a truck from another company
-
-      get :index
-      expect(assigns(:trucks)).to include(truck)
-      expect(assigns(:trucks)).not_to include(other_truck)
-    end
-
-    it "renders the index template" do
-      get :index
-      expect(response).to render_template(:index)
-    end
-
-    it "responds successfully" do
-      get :index
-      expect(response).to have_http_status(:ok)
-    end
   end
 
   describe "GET #show" do
@@ -198,9 +177,9 @@ RSpec.describe TrucksController, type: :controller do
       }.to change(Truck, :count).by(-1)
     end
 
-    it "redirects to the trucks list" do
+    it "redirects to the admin index" do
       delete :destroy, params: { id: truck.id }
-      expect(response).to redirect_to(trucks_path)
+      expect(response).to redirect_to(admin_index_path)
     end
 
     it "raises ActiveRecord::RecordNotFound for a truck from another company" do

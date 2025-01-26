@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ShipmentStatusesController, type: :controller do
   let(:company) { create(:company) } # Current company
-  let(:valid_user) { create(:user, company: company) } # Logged-in user
+  let(:valid_user) { create(:user, role: "admin", company: company) } # Logged-in user
   let(:other_company) { create(:company) } # A different company for isolation testing
   let!(:shipment_status) { create(:shipment_status, company: company) }
   let!(:other_shipment_status) { create(:shipment_status, company: other_company) }

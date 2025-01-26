@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "/shipment_statuses", type: :request do
   let(:company) { create(:company) } # Create a company
-  let(:user) { create(:user, company: company) } # Create a user tied to the company
+  let(:user) { create(:user, role: "admin", company: company) } # Create a user tied to the company
   let(:other_company) { create(:company) } # Another company for isolation testing
 
   let!(:shipment_status) { create(:shipment_status, company: company) } # A status belonging to the current company
