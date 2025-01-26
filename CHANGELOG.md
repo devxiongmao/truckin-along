@@ -12,3 +12,10 @@
 
 - Adds tag name to the github env (78c42bf) by Jon Psaila
 
+## Changelog
+### From v2025.01.26 to HEAD
+
+- Adds tag name to the github env (#65) (683d048) by Jon
+- Update changelog (b177300) by GitHub Actions Bot
+- Adds tag name to the github env (78c42bf) by Jon Psaila
+
