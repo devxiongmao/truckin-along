@@ -1,11 +1,7 @@
 class TrucksController < ApplicationController
   before_action :set_truck, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
-
-  # GET /trucks
-  def index
-    @trucks = Truck.for_company(current_company)
-  end
+  before_action :ensure_admin
 
   # GET /trucks/1
   def show
@@ -43,7 +39,7 @@ class TrucksController < ApplicationController
   # DELETE /trucks/1
   def destroy
     @truck.destroy!
-    redirect_to trucks_path, status: :see_other, notice: "Truck was successfully destroyed."
+    redirect_to admin_index_path, status: :see_other, notice: "Truck was successfully destroyed."
   end
 
   private

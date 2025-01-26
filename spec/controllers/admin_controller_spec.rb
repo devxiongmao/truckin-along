@@ -13,6 +13,9 @@ RSpec.describe AdminController, type: :controller do
   let!(:shipment_status) { create(:shipment_status, company: company) }
   let!(:other_shipment_status) { create(:shipment_status, company: other_company) }
 
+  let(:truck) { create(:truck, company: company) }
+  let(:other_truck) { create(:truck, company: other_company) }
+
   before do
     sign_in admin_user, scope: :user
   end
@@ -31,9 +34,20 @@ RSpec.describe AdminController, type: :controller do
         expect(assigns(:shipment_statuses)).not_to include(other_shipment_status)
       end
 
+      it "assigns @trucks to trucks from the current company" do
+        get :index
+        expect(assigns(:trucks)).to include(truck)
+        expect(assigns(:trucks)).not_to include(other_truck)
+      end
+
       it 'renders the index template' do
         get :index
         expect(response).to render_template(:index)
+      end
+
+      it "responds successfully" do
+        get :index
+        expect(response).to have_http_status(:ok)
       end
     end
 
