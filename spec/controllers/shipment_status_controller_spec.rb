@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe ShipmentStatusesController, type: :controller do
   let(:company) { create(:company) } # Current company
-  let(:valid_user) { create(:user, role: "admin", company: company) } # Logged-in user
+  let(:valid_user) { create(:user, :admin, company: company) }
+  let(:non_admin_user) { create(:user, company: company) }
   let(:other_company) { create(:company) } # A different company for isolation testing
   let!(:shipment_status) { create(:shipment_status, company: company) }
   let!(:other_shipment_status) { create(:shipment_status, company: other_company) }
@@ -20,137 +21,205 @@ RSpec.describe ShipmentStatusesController, type: :controller do
     }
   end
 
-  before do
-    sign_in valid_user, scope: :user
-  end
-
-  describe "GET #new" do
-    it "assigns a new shipment_statuses as @shipment_statuses" do
-      get :new
-      expect(assigns(:shipment_status)).to be_a_new(ShipmentStatus)
+  describe "when the user is an admin" do
+    before do
+      sign_in valid_user, scope: :user
     end
 
-    it "renders the new template" do
-      get :new
-      expect(response).to render_template(:new)
-    end
-
-    it "responds successfully" do
-      get :new
-      expect(response).to have_http_status(:ok)
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns the requested shipment_status as @shipment_status" do
-      get :edit, params: { id: shipment_status.id }
-      expect(assigns(:shipment_status)).to eq(shipment_status)
-    end
-
-    it "renders the edit template" do
-      get :edit, params: { id: shipment_status.id }
-      expect(response).to render_template(:edit)
-    end
-
-    it "raises ActiveRecord::RecordNotFound for a shipment_statuses from another company" do
-      expect {
-        get :edit, params: { id: other_shipment_status.id }
-      }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it "responds successfully" do
-      get :edit, params: { id: shipment_status.id }
-      expect(response).to have_http_status(:ok)
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid parameters" do
-      it "creates a new shipment_status for the current company" do
-        expect {
-          post :create, params: { shipment_status: valid_attributes }
-        }.to change(ShipmentStatus, :count).by(1)
+    describe "GET #new" do
+      it "assigns a new shipment_statuses as @shipment_statuses" do
+        get :new
+        expect(assigns(:shipment_status)).to be_a_new(ShipmentStatus)
       end
 
-      it "redirects to the admin_index_path" do
-        post :create, params: { shipment_status: valid_attributes }
-        expect(response).to redirect_to(admin_index_path)
-      end
-    end
-
-    context "with invalid parameters" do
-      it "does not create a new shipment_status" do
-        expect {
-          post :create, params: { shipment_status: invalid_attributes }
-        }.to change(ShipmentStatus, :count).by(0)
-      end
-
-      it "renders the new template with unprocessable_entity status" do
-        post :create, params: { shipment_status: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+      it "renders the new template" do
+        get :new
         expect(response).to render_template(:new)
       end
-    end
-  end
 
-  describe "PATCH #update" do
-    let(:new_attributes) do
-      {
-        name: "Delivered"
-      }
+      it "responds successfully" do
+        get :new
+        expect(response).to have_http_status(:ok)
+      end
     end
 
-    context "with valid parameters" do
-      it "updates the requested shipment_status" do
-        patch :update, params: { id: shipment_status.id, shipment_status: new_attributes }
-        shipment_status.reload
-        expect(shipment_status.name).to eq("Delivered")
+    describe "GET #edit" do
+      it "assigns the requested shipment_status as @shipment_status" do
+        get :edit, params: { id: shipment_status.id }
+        expect(assigns(:shipment_status)).to eq(shipment_status)
+      end
+
+      it "renders the edit template" do
+        get :edit, params: { id: shipment_status.id }
+        expect(response).to render_template(:edit)
+      end
+
+      it "raises ActiveRecord::RecordNotFound for a shipment_statuses from another company" do
+        expect {
+          get :edit, params: { id: other_shipment_status.id }
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "responds successfully" do
+        get :edit, params: { id: shipment_status.id }
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe "POST #create" do
+      context "with valid parameters" do
+        it "creates a new shipment_status for the current company" do
+          expect {
+            post :create, params: { shipment_status: valid_attributes }
+          }.to change(ShipmentStatus, :count).by(1)
+        end
+
+        it "redirects to the admin_index_path" do
+          post :create, params: { shipment_status: valid_attributes }
+          expect(response).to redirect_to(admin_index_path)
+        end
+      end
+
+      context "with invalid parameters" do
+        it "does not create a new shipment_status" do
+          expect {
+            post :create, params: { shipment_status: invalid_attributes }
+          }.to change(ShipmentStatus, :count).by(0)
+        end
+
+        it "renders the new template with unprocessable_entity status" do
+          post :create, params: { shipment_status: invalid_attributes }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:new)
+        end
+      end
+    end
+
+    describe "PATCH #update" do
+      let(:new_attributes) do
+        {
+          name: "Delivered"
+        }
+      end
+
+      context "with valid parameters" do
+        it "updates the requested shipment_status" do
+          patch :update, params: { id: shipment_status.id, shipment_status: new_attributes }
+          shipment_status.reload
+          expect(shipment_status.name).to eq("Delivered")
+        end
+
+        it "redirects to the admin_index_path" do
+          patch :update, params: { id: shipment_status.id, shipment_status: new_attributes }
+          expect(response).to redirect_to(admin_index_path)
+        end
+      end
+
+      context "with invalid parameters" do
+        it "does not update the shipment_status" do
+          patch :update, params: { id: shipment_status.id, shipment_status: invalid_attributes }
+          shipment_status.reload
+          expect(shipment_status.name).not_to eq(nil)
+        end
+
+        it "renders the edit template with unprocessable_entity status" do
+          patch :update, params: { id: shipment_status.id, shipment_status: invalid_attributes }
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to render_template(:edit)
+        end
+
+        it 'does not update the shipment status and re-renders the edit template' do
+          patch :update, params: { id: shipment_status.id, shipment_status: { name: '' } }
+          expect(shipment_status.reload.name).to eq('Ready')
+          expect(response).to render_template(:edit)
+        end
+      end
+    end
+
+    describe "DELETE #destroy" do
+      it "destroys the requested shipment_status" do
+        shipment_status
+        expect {
+          delete :destroy, params: { id: shipment_status.id }
+        }.to change(ShipmentStatus, :count).by(-1)
       end
 
       it "redirects to the admin_index_path" do
-        patch :update, params: { id: shipment_status.id, shipment_status: new_attributes }
+        delete :destroy, params: { id: shipment_status.id }
         expect(response).to redirect_to(admin_index_path)
       end
-    end
 
-    context "with invalid parameters" do
-      it "does not update the shipment_status" do
-        patch :update, params: { id: shipment_status.id, shipment_status: invalid_attributes }
-        shipment_status.reload
-        expect(shipment_status.name).not_to eq(nil)
-      end
-
-      it "renders the edit template with unprocessable_entity status" do
-        patch :update, params: { id: shipment_status.id, shipment_status: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response).to render_template(:edit)
-      end
-
-      it 'does not update the shipment status and re-renders the edit template' do
-        patch :update, params: { id: shipment_status.id, shipment_status: { name: '' } }
-        expect(shipment_status.reload.name).to eq('Ready')
-        expect(response).to render_template(:edit)
+      it "raises ActiveRecord::RecordNotFound for a shipment_status from another company" do
+        expect {
+          delete :destroy, params: { id: other_shipment_status.id }
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested shipment_status" do
-      shipment_status
-      expect {
+  describe "when user is not an admin" do
+    before do
+      sign_in non_admin_user, scope: :user
+    end
+
+    describe 'GET #new' do
+      it 'redirects to the root path' do
+        get :new
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an error message' do
+        get :new
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
+    end
+
+    describe 'GET #edit' do
+      it 'redirects to the root path' do
+        get :edit, params: { id: shipment_status.id }
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an error message' do
+        get :edit, params: { id: shipment_status.id }
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
+    end
+
+    describe 'POST #create' do
+      it 'redirects to the root path' do
+        post :create, params: { shipment_status: valid_attributes }
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an error message' do
+        post :create, params: { shipment_status: valid_attributes }
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
+    end
+
+    describe 'PATCH #update' do
+      it 'redirects to the root path' do
+        patch :update, params: { id: shipment_status.id, shipment_status: valid_attributes }
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an error message' do
+        patch :update, params: { id: shipment_status.id, shipment_status: valid_attributes }
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
+    end
+
+    describe "DELETE #destroy" do
+      it 'redirects to the root path' do
         delete :destroy, params: { id: shipment_status.id }
-      }.to change(ShipmentStatus, :count).by(-1)
-    end
+        expect(response).to redirect_to(root_path)
+      end
 
-    it "redirects to the admin_index_path" do
-      delete :destroy, params: { id: shipment_status.id }
-      expect(response).to redirect_to(admin_index_path)
-    end
-
-    it "raises ActiveRecord::RecordNotFound for a shipment_status from another company" do
-      expect {
-        delete :destroy, params: { id: other_shipment_status.id }
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      it 'renders with an error message' do
+        delete :destroy, params: { id: shipment_status.id }
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
     end
   end
 end

@@ -5,12 +5,9 @@ RSpec.describe DriverManagementsController, type: :controller do
   let(:other_company) { create(:company) }
 
 
-  let(:admin_user) { create(:user, role: "admin", company: company) }
-  let(:non_admin_user) { create(:user, email: "test_driver@gmail.com", role: "driver", company: company) }
-  let(:other_non_admin_user) { create(:user, email: "test_driver@gmail.com", role: "driver", company: other_company) }
-
-
-  let!(:driver) { create(:user, email: "test_driver2@gmail.com", role: "driver", company: company) }
+  let(:admin_user) { create(:user, :admin, company: company) }
+  let(:non_admin_user) { create(:user, company: company) }
+  let(:other_non_admin_user) { create(:user, company: other_company) }
 
   let(:valid_attributes) do
     {
@@ -36,11 +33,20 @@ RSpec.describe DriverManagementsController, type: :controller do
     end
 
     describe 'GET #new' do
-      it 'assigns a new driver to @driver and renders the new template' do
+      it 'assigns a new driver to @driver' do
         get :new
         expect(assigns(:driver)).to be_a_new(User)
         expect(assigns(:driver).role).to eq("driver")
+      end
+
+      it 'renders the new template' do
+        get :new
         expect(response).to render_template(:new)
+      end
+
+      it "responds successfully" do
+        get :new
+        expect(response).to have_http_status(:ok)
       end
     end
 
@@ -136,28 +142,50 @@ RSpec.describe DriverManagementsController, type: :controller do
     end
 
     describe 'GET #new' do
-      it 'redirects to the root path with an alert' do
+      it 'redirects to the root path' do
         get :new
         expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an alert' do
+        get :new
         expect(flash[:alert]).to eq("Not authorized.")
       end
     end
 
-    describe 'Authorization' do
-      it 'redirects non-admin users attempting to create a driver' do
-        post :create, params: {
-          user: {
-            first_name: "Jane",
-            last_name: "Smith",
-            drivers_license: "87654321",
-            email: "jane@example.com",
-            password: "password",
-            password_confirmation: "password",
-            company_id: company.id
-          }
-        }
+    describe 'POST #create' do
+      it 'redirects to the root path' do
+        post :create, params: { user: valid_attributes }
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("Not authorized.")
+      end
+
+      it 'renders with an error message' do
+        post :create, params: { user: valid_attributes }
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
+    end
+
+    describe 'GET #edit' do
+      it 'redirects to the root path' do
+        get :edit, params: { id: non_admin_user.id }
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an error message' do
+        get :edit, params: { id: non_admin_user.id }
+        expect(flash[:alert]).to eq('Not authorized.')
+      end
+    end
+
+    describe 'PATCH #update' do
+      it 'redirects to the root path' do
+        patch :update, params: { id: non_admin_user.id, user: valid_attributes }
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders with an error message' do
+        patch :update, params: { id: non_admin_user.id, user: valid_attributes }
+        expect(flash[:alert]).to eq('Not authorized.')
       end
     end
   end
