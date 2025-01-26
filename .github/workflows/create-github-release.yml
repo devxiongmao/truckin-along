@@ -36,8 +36,10 @@ jobs:
 
       # Create a tag
       - name: Create Tag
+        id: create_tag
         run: |
-          TAG_NAME="v$(date +'%Y.%m.%d')"  # Generate a timestamp-based tag
+          TAG_NAME="v$(date +'%Y.%m.%d')"
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
           git tag $TAG_NAME
           git push origin $TAG_NAME
 
@@ -47,8 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v$(date +'%Y.%m.%d')
-          release_name: Release v$(date +'%Y.%m.%d')
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
           body: |
             ## Changelog
             $(cat CHANGELOG.md)
