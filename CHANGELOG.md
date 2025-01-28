@@ -19,3 +19,11 @@
 - Update changelog (b177300) by GitHub Actions Bot
 - Adds tag name to the github env (78c42bf) by Jon Psaila
 
+## Changelog
+### From v2025.01.26 to HEAD
+
+- Bump solid_cable from 3.0.5 to 3.0.7 (#70) (bb3c212) by dependabot[bot]
+- Bump actions/checkout from 3 to 4 (#71) (77b71b0) by dependabot[bot]
+- Update version tags and release generation (#67) (a0b12a1) by Jon
+- Release 20250126 (#66) (43e3897) by Jon
+
