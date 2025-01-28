@@ -27,3 +27,11 @@
 - Update version tags and release generation (#67) (a0b12a1) by Jon
 - Release 20250126 (#66) (43e3897) by Jon
 
+## Changelog
+### From v2025.01.26 to HEAD
+
+- XMDEV-ADHOC: Updates release workflow to correctly enter changelog release notes (#73) (1f234bc) by Jon
+- Release bump versions (#72) (275b476) by Jon
+- Update version tags and release generation (#67) (a0b12a1) by Jon
+- Release 20250126 (#66) (43e3897) by Jon
+
