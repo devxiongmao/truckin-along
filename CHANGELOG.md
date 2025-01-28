@@ -67,3 +67,9 @@
 - Fix GHAs to include tags (#60) (ddd8787) by Jon
 - XMDEV-91: Adds release and changelog management (#59) (b953e9f) by Jon
 
+## Changelog
+### From v0.0.4 to HEAD
+
+- XMDEV-98: Adds comprehensive specs for testing non admin users for admin only areas (#69) (110e0f1) by Jon
+- XMDEV-95: Moves truck management to within the admin menu (#68) (32e500a) by Jon
+
