@@ -35,3 +35,18 @@
 - Update version tags and release generation (#67) (a0b12a1) by Jon
 - Release 20250126 (#66) (43e3897) by Jon
 
+## Changelog
+### From v0.0.0 to HEAD
+
+- Tagging test (#75) (63f5165) by Jon
+- Release v0.0.2 (130bf13) by GitHub Actions
+- XMDEV-ADHOC: Updates release workflow to correctly enter changelog release notes (#73) (f0ce99a) by Jon
+- Release bump versions (#72) (275b476) by Jon
+- Update version tags and release generation (#67) (a0b12a1) by Jon
+- Release 20250126 (#66) (43e3897) by Jon
+- Release 20250126 (#64) (79fea83) by Jon
+- Oops (#62) (503b17f) by Jon
+- Update permissions for GHA (#61) (6a324d4) by Jon
+- Fix GHAs to include tags (#60) (ddd8787) by Jon
+- XMDEV-91: Adds release and changelog management (#59) (b953e9f) by Jon
+
