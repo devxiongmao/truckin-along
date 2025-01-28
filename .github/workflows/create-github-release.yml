@@ -47,20 +47,16 @@ jobs:
           make determine-app-version
           echo "App Version Determined."
 
-      - name: Create Tag
-        id: create_tag
+      - name: Commit Changelog and Version Updates
         run: |
           TAG_NAME="v$(cat VERSION)"
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
-          git tag $TAG_NAME
-          git push origin $TAG_NAME
-
-      - name: Commit Changelog and Version Updates
-        run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add CHANGELOG.md VERSION
-          git commit -m "Release ${{ env.TAG_NAME }}"
+          git commit -m "Release $TAG_NAME"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
           git push origin ${{ github.head_ref }}
 
       - name: Read Changelog
