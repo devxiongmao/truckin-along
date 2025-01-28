@@ -63,6 +63,13 @@ jobs:
           git commit -m "Release ${{ env.TAG_NAME }}"
           git push origin ${{ github.head_ref }}
 
+      - name: Read Changelog
+        id: read_changelog
+        run: |
+          echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
+          cat CHANGELOG.md >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -72,6 +79,7 @@ jobs:
           release_name: Release ${{ env.TAG_NAME }}
           body: |
             ## Changelog
-            $(cat CHANGELOG.md)
+
+            ${{ env.CHANGELOG_CONTENT }}
           draft: false
           prerelease: false
