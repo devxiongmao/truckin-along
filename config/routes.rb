@@ -4,12 +4,17 @@ Rails.application.routes.draw do
   }
   resources :admin, only: [ :index ]
 
-  resources :deliveries, only: [ :index ]
+  resources :deliveries, only: [ :index ] do
+    collection do
+      get :truck_loading
+    end
+  end
   resources :companies, only: %i[new create edit update]
   resources :shipment_statuses, only: %i[new create edit update destroy]
   resources :shipments do
     collection do
       post :assign
+      post :assign_shipments_to_truck
     end
   end
   resources :trucks, only: %i[show new create edit update destroy]
