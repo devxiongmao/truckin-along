@@ -1,0 +1,49 @@
+<h1>Deliveries</h1>
+
+<h2>Truck Loading</h2>
+<% if @unassigned_shipments.any? %>
+  <%= form_with url: assign_shipments_to_truck_shipments_path, method: :post do |f| %>
+
+    <div class="form-group">
+      <%= f.label :truck_id, 'Truck', class: 'form-label' %>
+      <%= f.collection_select :truck_id, @trucks ||= [], :id, :display_name, { prompt: "Please select a truck" }, { class: 'form-input' } %>
+    </div>
+
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Status</th>
+          <th>Name</th>
+          <th>Sender</th>
+          <th>Receiver</th>
+          <th>Weight</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @unassigned_shipments.each do |shipment| %>
+          <tr>
+            <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
+            <td><%= shipment.status %></td>
+            <td><%= shipment.name %></td>
+            <td><%= shipment.sender_name %></td>
+            <td><%= shipment.receiver_name %></td>
+            <td><%= shipment.weight %></td>
+            <td>
+              <%= link_to 'Show', shipment, class: 'action-link' %> |
+              <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |
+              <%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= submit_tag "Add to Truck", class: "button primary-button" %>
+
+  <% end %>
+<% else %>
+  <p>No unassigned shipments available.</p>
+<% end %>
+

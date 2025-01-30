@@ -61,6 +61,18 @@ class ShipmentsController < ApplicationController
     redirect_to deliveries_path
   end
 
+  def assign_shipments_to_truck
+    truck = Truck.find_by(id: params[:truck_id])
+    shipment_ids = params[:shipment_ids]
+
+    if truck && shipment_ids.present?
+      Shipment.for_company(current_company).where(id: shipment_ids).update_all(truck_id: truck.id)
+      redirect_to shipments_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
+    else
+      redirect_to shipments_path, alert: "Please select a truck and at least one shipment."
+    end
+  end
+
   private
 
     def set_company_resources
