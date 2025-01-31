@@ -73,3 +73,11 @@
 - XMDEV-98: Adds comprehensive specs for testing non admin users for admin only areas (#69) (110e0f1) by Jon
 - XMDEV-95: Moves truck management to within the admin menu (#68) (32e500a) by Jon
 
+## Changelog
+### From v0.0.5 to HEAD
+
+- XMDEV-92: Adds truck loading endpoint (#87) (b1ba81a) by Jon
+- Bump puma from 6.5.0 to 6.6.0 (#85) (6abce56) by dependabot[bot]
+- Bump solid_queue from 1.1.2 to 1.1.3 (#86) (64912b2) by dependabot[bot]
+- Bump solid_queue from 1.1.2 to 1.1.3 (#84) (ac4134b) by dependabot[bot]
+
