@@ -71,6 +71,22 @@ RSpec.describe User, type: :model do
       valid_driver.password_confirmation = "123456"
       expect(valid_driver).to be_valid
     end
+
+    it "is valid with a blank home_address" do
+      valid_driver.home_address = ""
+      expect(valid_driver).to be_valid
+    end
+
+    it "is valid when home_address is within 255 characters" do
+      valid_driver.home_address = "A" * 255
+      expect(valid_driver).to be_valid
+    end
+
+    it "is invalid when home_address exceeds 255 characters" do
+      valid_driver.home_address = "A" * 256
+      expect(valid_driver).not_to be_valid
+      expect(valid_driver.errors[:home_address]).to include("is too long (maximum is 255 characters)")
+    end
   end
 
   ## Enum Tests
