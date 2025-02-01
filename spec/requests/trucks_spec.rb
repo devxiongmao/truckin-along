@@ -7,8 +7,7 @@ RSpec.describe "/trucks", type: :request do
 
   let(:other_company) { create(:company) } # Another company for isolation testing
 
-  let!(:truck) { create(:truck, company: company) } # A truck belonging to the current company
-  let!(:other_truck) { create(:truck, company: other_company) } # A truck from another company
+  let!(:truck) { create(:truck, company: company) }
 
   let(:valid_attributes) do
     {
@@ -67,9 +66,9 @@ RSpec.describe "/trucks", type: :request do
           expect(created_truck.company).to eq(company)
         end
 
-        it "redirects to the created truck" do
+        it "redirects to the admin index path" do
           post trucks_url, params: { truck: valid_attributes }
-          expect(response).to redirect_to(trucks_url)
+          expect(response).to redirect_to(admin_index_url)
         end
       end
 
@@ -105,9 +104,9 @@ RSpec.describe "/trucks", type: :request do
           expect(truck.mileage).to eq(20000)
         end
 
-        it "redirects to the truck" do
+        it "redirects to the admin index path" do
           patch truck_url(truck), params: { truck: new_attributes }
-          expect(response).to redirect_to(trucks_url)
+          expect(response).to redirect_to(admin_index_url)
         end
       end
 

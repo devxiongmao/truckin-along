@@ -1,15 +1,17 @@
 <h2 class="page-title">Edit <%= resource_name.to_s.humanize %></h2>
 
-<div class="form-container">
-  <h2 class="company-name"><%= resource.company.name %></h2>
-  <p class="company-address"><%= resource.company.address %></p>
-  <% if resource.admin? %>
-    <div>
-      <%= link_to 'Edit Company', edit_company_path(resource.company), class: "primary-button" %>
-    </div>
-  <% end %>
-</div>
-<br />
+<% if resource.company %>
+  <div class="form-container">
+    <h2 class="company-name"><%= resource.company.name %></h2>
+    <p class="company-address"><%= resource.company.address %></p>
+    <% if resource.admin? %>
+      <div>
+        <%= link_to 'Edit Company', edit_company_path(resource.company), class: "primary-button" %>
+      </div>
+    <% end %>
+  </div>
+  <br />
+<% end %>
 
 <div class="form-container">
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'styled-form' }) do |f| %>
@@ -25,10 +27,12 @@
       <%= f.text_field :last_name, class: 'form-input', autocomplete: "family-name" %>
     </div>
 
-    <div class="form-group">
-      <%= f.label :drivers_license, "Driver's License", class: 'form-label' %>
-      <%= f.text_field :drivers_license, class: 'form-input' %>
-    </div>
+    <% unless resource.role == "customer" %>
+      <div class="form-group">
+        <%= f.label :drivers_license, "Driver's License", class: 'form-label' %>
+        <%= f.text_field :drivers_license, class: 'form-input' %>
+      </div>
+    <% end %>
 
     <div class="form-group">
       <%= f.label :email, class: 'form-label' %>

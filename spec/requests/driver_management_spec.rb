@@ -14,8 +14,7 @@ RSpec.describe "/driver_managements", type: :request do
       drivers_license: "ALFT2864",
       email: "john.doe@gmail.com",
       password: "password123",
-      password_confirmation: "password123",
-      company_id: company.id
+      password_confirmation: "password123"
     }
   end
 
@@ -50,6 +49,11 @@ RSpec.describe "/driver_managements", type: :request do
           created_driver = User.last
           expect(created_driver.company).to eq(company)
           expect(created_driver.role).to eq("driver")
+        end
+
+        it 'assigns the drivers company to the current_users company' do
+          post driver_managements_url, params: { user: valid_attributes }
+          expect(User.last.company).to eq(company)
         end
 
         it "redirects to the admin index" do
