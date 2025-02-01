@@ -18,6 +18,7 @@ class User < ApplicationRecord
   # Validations
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
+  validates :home_address, length: { maximum: 255 }, allow_blank: true
   validates :drivers_license,
     presence: true,
     uniqueness: true,
