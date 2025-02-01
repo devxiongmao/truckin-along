@@ -229,3 +229,8 @@ button, .primary-button, .secondary-button, .danger-button {
   margin-top: 1rem;
   text-align: right;
 }
+
+.alternative-button {
+  background-color: #4CAF50;
+  color: white;
+}

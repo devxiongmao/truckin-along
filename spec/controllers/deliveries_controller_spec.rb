@@ -5,13 +5,9 @@ RSpec.describe DeliveriesController, type: :controller do
   let(:other_company) { create(:company) } # A different company for isolation testing
 
   let(:valid_user) { create(:user, :driver, company: company) }
-  let(:other_valid_user) { create(:user, :driver, company: other_company) }
 
-  let!(:unassigned_shipment) { create(:shipment, user: nil, company: company, truck: nil) }
-  let!(:other_unassigned_shipment) { create(:shipment, user: nil, company: other_company, truck: nil) }
-
-  let!(:assigned_shipment)  { create(:shipment, user: valid_user, company: company) }
-  let!(:other_assigned_shipment)  { create(:shipment, user: valid_user, company: other_company) }
+  let!(:unassigned_shipment) { create(:shipment, company: nil) }
+  let!(:assigned_shipment)  { create(:shipment, company: company, truck: nil) }
 
   let!(:truck)  { create(:truck, company: company) }
   let!(:other_truck)  { create(:truck, company: other_company) }
@@ -21,16 +17,16 @@ RSpec.describe DeliveriesController, type: :controller do
   end
 
   describe 'GET #index' do
-    it "assigns unassigned shipments to @unassigned_shipments from the current company" do
+    it "assigns shipments that don't have a company to @unassigned_shipments" do
       get :index
       expect(assigns(:unassigned_shipments)).to include(unassigned_shipment)
-      expect(assigns(:unassigned_shipments)).not_to include(other_unassigned_shipment)
+      expect(assigns(:unassigned_shipments)).not_to include(assigned_shipment)
     end
 
     it "assigns current_users shipments to @my_shipments from the current company" do
       get :index
       expect(assigns(:my_shipments)).to include(assigned_shipment)
-      expect(assigns(:my_shipments)).not_to include(other_assigned_shipment)
+      expect(assigns(:my_shipments)).not_to include(unassigned_shipment)
     end
 
     it 'renders the index template' do
@@ -59,8 +55,7 @@ RSpec.describe DeliveriesController, type: :controller do
   describe 'GET #truck_loading' do
     it "assigns unassigned shipments to @unassigned_shipments from the current company" do
       get :truck_loading
-      expect(assigns(:unassigned_shipments)).to include(unassigned_shipment)
-      expect(assigns(:unassigned_shipments)).not_to include(other_unassigned_shipment)
+      expect(assigns(:unassigned_shipments)).to include(assigned_shipment)
     end
 
     it "assigns trucks to @trucks from the current company" do

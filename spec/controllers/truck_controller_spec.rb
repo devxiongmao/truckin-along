@@ -106,9 +106,9 @@ RSpec.describe TrucksController, type: :controller do
           }.to change(Truck, :count).by(1)
         end
 
-        it "redirects to the created truck" do
+        it "redirects to the admin index" do
           post :create, params: { truck: valid_attributes }
-          expect(response).to redirect_to(trucks_path)
+          expect(response).to redirect_to(admin_index_path)
         end
       end
 
@@ -145,9 +145,9 @@ RSpec.describe TrucksController, type: :controller do
           expect(truck.mileage).to eq(15000)
         end
 
-        it "redirects to the truck" do
+        it "redirects to the admin index" do
           patch :update, params: { id: truck.id, truck: new_attributes }
-          expect(response).to redirect_to(trucks_path)
+          expect(response).to redirect_to(admin_index_path)
         end
       end
 

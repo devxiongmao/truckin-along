@@ -9,9 +9,16 @@ RSpec.describe "Users::RegistrationsController", type: :request do
     { email: "", password: "password", password_confirmation: "password" } # Invalid because email is blank
   }
 
+  describe "GET /users/sign_up/customer" do
+    it "renders a successful response" do
+      get new_customer_registration_url
+      expect(response).to be_successful
+    end
+  end
+
   describe "POST /users" do
     context "with valid parameters" do
-      it "creates a new user with admin role" do
+      it "creates a new user" do
         expect {
           post user_registration_path, params: { user: valid_attributes }
         }.to change(User, :count).by(1)

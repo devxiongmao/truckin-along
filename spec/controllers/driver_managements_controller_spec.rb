@@ -16,8 +16,7 @@ RSpec.describe DriverManagementsController, type: :controller do
       drivers_license: "87654321",
       email: "jane@example.com",
       password: "password",
-      password_confirmation: "password",
-      company_id: company.id
+      password_confirmation: "password"
     }
   end
 
@@ -63,6 +62,11 @@ RSpec.describe DriverManagementsController, type: :controller do
         it 'redirects to the admin page' do
           post :create, params: { user: valid_attributes }
           expect(response).to redirect_to(admin_index_path)
+        end
+
+        it 'assigns the drivers company to the current_users company' do
+          post :create, params: { user: valid_attributes }
+          expect(User.last.company).to eq(company)
         end
 
         it 'has the appropriate flash message' do

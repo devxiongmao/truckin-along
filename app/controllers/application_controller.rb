@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   private
 
   def redirect_unless_company_registered
+    return if user_signed_in? && current_user.customer?
     return if devise_controller? || controller_name.in?(%w[companies welcome])
 
     if user_signed_in? && !current_user.has_company?
@@ -27,7 +28,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :first_name, :last_name, :drivers_license ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :first_name, :last_name, :drivers_license ])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :first_name, :last_name, :drivers_license, :role ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :first_name, :last_name, :drivers_license, :role ])
   end
 end

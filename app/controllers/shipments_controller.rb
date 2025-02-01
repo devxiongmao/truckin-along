@@ -1,11 +1,10 @@
 class ShipmentsController < ApplicationController
-  before_action :set_company_resources, only: [ :new, :edit ]
   before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
 
   # GET /shipments
   def index
-    @shipments = Shipment.for_company(current_company)
+    @shipments = Shipment.where(user_id: current_user.id)
   end
 
   # GET /shipments/1
@@ -24,6 +23,8 @@ class ShipmentsController < ApplicationController
   # POST /shipments
   def create
     @shipment = Shipment.new(shipment_params)
+    @shipment.shipment_status = ShipmentStatus.find_by(name: "Ready")
+    @shipment.user = current_user
 
     if @shipment.save
       redirect_to @shipment, notice: "Shipment was successfully created."
@@ -75,20 +76,13 @@ class ShipmentsController < ApplicationController
 
   private
 
-    def set_company_resources
-      @drivers  = User.for_company(current_company)
-      @trucks   = Truck.for_company(current_company)
-      @statuses = ShipmentStatus.for_company(current_company)
-    end
-
     def set_shipment
-      @shipment = Shipment.for_company(current_company).find(params.expect(:id))
+      @shipment = Shipment.find(params.expect(:id))
     end
 
     def shipment_params
       params.require(:shipment).permit(
         :name,
-        :shipment_status_id,
         :sender_name,
         :sender_address,
         :receiver_name,
@@ -97,9 +91,7 @@ class ShipmentsController < ApplicationController
         :length,
         :width,
         :height,
-        :boxes,
-        :truck_id,
-        :user_id,
-        :company_id)
+        :boxes
+        )
     end
 end

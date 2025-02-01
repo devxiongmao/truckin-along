@@ -16,5 +16,9 @@ FactoryBot.define do
     trait :driver do
       role { :driver }
     end
+
+    trait :customer do
+      role { :customer }
+    end
   end
 end
