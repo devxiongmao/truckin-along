@@ -21,7 +21,7 @@ class TrucksController < ApplicationController
     @truck = Truck.new(truck_params)
 
     if @truck.save
-      redirect_to trucks_path, notice: "Truck was successfully created."
+      redirect_to admin_index_path, notice: "Truck was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class TrucksController < ApplicationController
   # PATCH/PUT /trucks/1
   def update
     if @truck.update(truck_params)
-      redirect_to trucks_path, notice: "Truck was successfully updated."
+      redirect_to admin_index_path, notice: "Truck was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end

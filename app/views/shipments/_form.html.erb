@@ -10,16 +10,9 @@
     </div>
   <% end %>
 
-  <%= form.hidden_field :company_id, value: current_user.company_id %>
-
   <div class="form-group">
     <%= form.label :name, class: 'form-label' %>
     <%= form.text_field :name, class: 'form-input' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :shipment_status_id, 'Shipment Status', class: 'form-label' %>
-    <%= form.collection_select :shipment_status_id, @statuses ||= [], :id, :name, { }, { class: 'form-input' } %>
   </div>
 
   <div class="form-group">
@@ -65,16 +58,6 @@
   <div class="form-group">
     <%= form.label :boxes, class: 'form-label' %>
     <%= form.number_field :boxes, class: 'form-input' %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :truck_id, 'Truck', class: 'form-label' %>
-    <%= form.collection_select :truck_id, @trucks ||= [], :id, :display_name, { prompt: "Please select a truck" }, { class: 'form-input' } %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :user_id, 'Driver', class: 'form-label' %>
-    <%= form.collection_select :user_id, @drivers ||= [], :id, :display_name, { prompt: "Please select a driver" }, { class: 'form-input' } %>
   </div>
 
   <div class="form-actions">

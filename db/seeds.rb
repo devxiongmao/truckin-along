@@ -27,7 +27,7 @@ user1 = User.create!(
   first_name: "John",
   last_name: "Doe",
   drivers_license: "D1234567",
-  role: 1,
+  role: 0,
   company: company1
 )
 
@@ -37,7 +37,7 @@ user2 = User.create!(
   first_name: "Jane",
   last_name: "Smith",
   drivers_license: "S7654321",
-  role: 0,
+  role: 1,
   company: company1
 )
 
@@ -48,7 +48,7 @@ user3 = User.create!(
   first_name: "Michael",
   last_name: "Jordan",
   drivers_license: "MJ123456",
-  role: 0,
+  role: 1,
   company: company1
 )
 
@@ -58,7 +58,7 @@ user4 = User.create!(
   first_name: "Sarah",
   last_name: "Connor",
   drivers_license: "SC654321",
-  role: 0,
+  role: 1,
   company: company1
 )
 
@@ -68,8 +68,17 @@ user5 = User.create!(
   first_name: "Peter",
   last_name: "Parker",
   drivers_license: "PP987654",
-  role: 0,
-  company: company1
+  role: 2,
+  company: nil
+)
+
+user6 = User.create!(
+  email: "clark.kent@example.com",
+  password: "password123",
+  first_name: "Clark",
+  last_name: "Kent",
+  role: 2,
+  company: nil
 )
 
 # Create trucks
@@ -156,7 +165,7 @@ Shipment.create!(
   height: 100.0,
   truck: truck1,
   shipment_status: status1,
-  user: user1,
+  user: user5,
   company: company1
 )
 
@@ -173,7 +182,7 @@ Shipment.create!(
   height: 200.0,
   truck: truck2,
   shipment_status: status2,
-  user: user2,
+  user: user5,
   company: company1
 )
 
@@ -188,9 +197,9 @@ Shipment.create!(
   length: 200.5,
   width: 100.2,
   height: 100.5,
-  truck: truck1,
+  truck: nil,
   shipment_status: status1,
-  user: nil,
+  user: user5,
   company: company1
 )
 
@@ -205,10 +214,10 @@ Shipment.create!(
   length: 300.5,
   width: 200.0,
   height: 200.5,
-  truck: truck1,
+  truck: nil,
   shipment_status: status1,
-  user: nil,
-  company: company1
+  user: user5,
+  company: nil
 )
 
 Shipment.create!(
@@ -222,10 +231,10 @@ Shipment.create!(
   length: 200.2,
   width: 100.5,
   height: 100.2,
-  truck: truck1,
+  truck: nil,
   shipment_status: status1,
-  user: nil,
-  company: company1
+  user: user5,
+  company: nil
 )
 
 Shipment.create!(
@@ -241,7 +250,7 @@ Shipment.create!(
   height: 100.0,
   truck: nil,
   shipment_status: status1,
-  user: nil,
+  user: user5,
   company: company1
 )
 
@@ -258,7 +267,7 @@ Shipment.create!(
   height: 100.0,
   truck: nil,
   shipment_status: status1,
-  user: nil,
+  user: user5,
   company: company1
 )
 
@@ -275,7 +284,7 @@ Shipment.create!(
   height: 100.5,
   truck: nil,
   shipment_status: status1,
-  user: nil,
+  user: user5,
   company: company1
 )
 
@@ -292,7 +301,7 @@ Shipment.create!(
   height: 200.0,
   truck: nil,
   shipment_status: status1,
-  user: nil,
+  user: user5,
   company: company1
 )
 
@@ -309,8 +318,25 @@ Shipment.create!(
   height: 100.3,
   truck: nil,
   shipment_status: status1,
-  user: nil,
-  company: company1
+  user: user5,
+  company: nil
+)
+
+Shipment.create!(
+  name: "Action Figures",
+  sender_name: "ToyFactory",
+  sender_address: "101 Fun St, Minneapolis, USA",
+  receiver_name: "KidsLand",
+  receiver_address: "555 Happy Blvd, Charlotte, USA",
+  weight: 140.9,
+  boxes: 2,
+  length: 200.0,
+  width: 100.2,
+  height: 100.3,
+  truck: nil,
+  shipment_status: status1,
+  user: user6,
+  company: nil
 )
 
 puts "Seeding complete!"

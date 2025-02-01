@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_23_015838) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_01_025551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,7 +42,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_23_015838) do
     t.datetime "updated_at", null: false
     t.bigint "shipment_status_id", null: false
     t.bigint "user_id"
-    t.bigint "company_id", null: false
+    t.bigint "company_id"
     t.decimal "length"
     t.decimal "width"
     t.decimal "height"

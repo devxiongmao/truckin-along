@@ -6,8 +6,8 @@ RSpec.describe "/deliveries", type: :request do
 
   let(:valid_user) { create(:user, company: company) }
 
-  let!(:unassigned_shipment) { create(:shipment, user: nil, company: company, truck: nil) }
-  let!(:assigned_shipment) { create(:shipment, user: valid_user, company: company) }
+  let!(:unassigned_shipment) { create(:shipment, company: nil) }
+  let!(:assigned_shipment) { create(:shipment, company: company, truck: nil) }
 
   let!(:truck) { create(:truck, company: company) }
   let!(:other_truck) { create(:truck, company: other_company) }
@@ -48,8 +48,7 @@ RSpec.describe "/deliveries", type: :request do
 
     it "assigns unassigned shipments to @unassigned_shipments" do
       get truck_loading_deliveries_url
-      expect(assigns(:unassigned_shipments)).to include(unassigned_shipment)
-      expect(assigns(:unassigned_shipments)).not_to include(assigned_shipment)
+      expect(assigns(:unassigned_shipments)).to include(assigned_shipment)
     end
 
     it "assigns current companies trucks to @trucks" do

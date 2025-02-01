@@ -3,6 +3,15 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   # Define a valid user object for reuse
   let(:valid_user) { create(:user, :driver) }
+  let(:valid_driver) { build(:user, role: "driver", drivers_license: "AB123456") }
+  let(:valid_admin) { build(:user, role: "admin", drivers_license: "CD789012") }
+  let(:valid_customer) { build(:user, role: "customer", drivers_license: nil) }
+
+  ## Association Tests
+  describe "associations" do
+    it { is_expected.to have_many(:shipments) }
+    it { should belong_to(:company).optional }
+  end
 
   ## Association Tests
   describe "associations" do
@@ -12,37 +21,55 @@ RSpec.describe User, type: :model do
 
   ## Validation Tests
   describe "validations" do
-    subject { valid_user } # Use a valid user as the baseline for testing
+    context "when user is a driver or admin" do
+      it { is_expected.to validate_presence_of(:drivers_license) }
+      it { is_expected.to validate_uniqueness_of(:drivers_license) }
+      it { is_expected.to validate_length_of(:drivers_license).is_equal_to(8) }
+
+      it "is valid with a properly formatted drivers_license" do
+        expect(valid_driver).to be_valid
+        expect(valid_admin).to be_valid
+      end
+
+      it "is invalid with an incorrectly formatted drivers_license" do
+        invalid_user = build(:user, role: "driver", drivers_license: "abc123")
+        expect(invalid_user).not_to be_valid
+      end
+
+      it "is invalid without a drivers_license" do
+        invalid_user = build(:user, role: "driver", drivers_license: nil)
+        expect(invalid_user).not_to be_valid
+      end
+    end
+
+    context "when user is a customer" do
+      it "is valid without a drivers_license" do
+        expect(valid_customer).to be_valid
+      end
+    end
 
     # Presence Validations
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
-    it { is_expected.to validate_presence_of(:drivers_license) }
-    it { is_expected.to validate_uniqueness_of(:drivers_license) }
-    it { is_expected.to validate_length_of(:drivers_license).is_equal_to(8) }
-    it do
-      is_expected.to allow_value("AB123456").for(:drivers_license)
-      should_not allow_value("abc123").for(:drivers_license)
-    end
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:password) }
 
     # Email Format Validation
     it "is invalid with an incorrectly formatted email" do
-      valid_user.email = "invalid_email"
-      expect(valid_user).not_to be_valid
+      valid_driver.email = "invalid_email"
+      expect(valid_driver).not_to be_valid
     end
 
     # Password Length Validation
     it "is invalid with a password shorter than 6 characters" do
-      valid_user.password = "12345"
-      expect(valid_user).not_to be_valid
+      valid_driver.password = "12345"
+      expect(valid_driver).not_to be_valid
     end
 
     it "is valid with a password of 6 or more characters" do
-      valid_user.password = "123456"
-      valid_user.password_confirmation = "123456"
-      expect(valid_user).to be_valid
+      valid_driver.password = "123456"
+      valid_driver.password_confirmation = "123456"
+      expect(valid_driver).to be_valid
     end
   end
 
@@ -53,6 +80,9 @@ RSpec.describe User, type: :model do
       expect(valid_user).to be_valid
 
       valid_user.role = :admin
+      expect(valid_user).to be_valid
+
+      valid_user.role = :customer
       expect(valid_user).to be_valid
     end
 
@@ -83,8 +113,9 @@ RSpec.describe User, type: :model do
 
   ## Scope Tests
   describe "scopes" do
-    let!(:driver_user) { create(:user, email: "driver@example.com", role: "driver") }
-    let!(:admin_user) { create(:user, email: "admin@example.com", role: "admin") }
+    let! (:company) { create(:company) }
+    let!(:driver_user) { create(:user, email: "driver@example.com", role: "driver", company: company) }
+    let!(:admin_user) { create(:user, email: "admin@example.com", role: "admin", company: nil) }
 
     describe ".drivers" do
       it "includes only users with the driver role" do
@@ -97,6 +128,13 @@ RSpec.describe User, type: :model do
       it "includes only users with the admin role" do
         expect(User.admins).to include(admin_user)
         expect(User.admins).not_to include(driver_user)
+      end
+    end
+
+    describe ".for_company" do
+      it "includes users who belong to the company" do
+        expect(User.for_company(company)).to include(driver_user)
+        expect(User.for_company(company)).not_to include(admin_user)
       end
     end
   end
@@ -133,6 +171,18 @@ RSpec.describe User, type: :model do
     end
 
     it "returns false if the user's role is admin" do
+      valid_user.role = :admin
+      expect(valid_user.driver?).to eq(false)
+    end
+  end
+
+  describe "#customer?" do
+    it "returns true if the user's role is customer" do
+      valid_user.role = :customer
+      expect(valid_user.customer?).to eq(true)
+    end
+
+    it "returns false if the user's role is anything else" do
       valid_user.role = :admin
       expect(valid_user.driver?).to eq(false)
     end
