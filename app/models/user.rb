@@ -18,6 +18,12 @@ class User < ApplicationRecord
   # Validations
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
+  validates :drivers_license,
+    presence: true,
+    uniqueness: true,
+    length: { is: 8 },
+    format: { with: /\A[A-Z0-9]+\z/, message: "only allows uppercase letters and numbers" },
+    if: -> { role != "customer" }
 
   # Instance Methods
   def display_name

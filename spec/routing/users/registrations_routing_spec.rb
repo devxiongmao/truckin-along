@@ -6,6 +6,10 @@ RSpec.describe Users::RegistrationsController, type: :routing do
       expect(get: "/users/sign_up").to route_to("users/registrations#new")
     end
 
+    it "routes to #new (customer page)" do
+      expect(get: "/users/sign_up/customer").to route_to("users/registrations#new_customer")
+    end
+
     it "routes to #create (signup action)" do
       expect(post: "/users").to route_to("users/registrations#create")
     end
