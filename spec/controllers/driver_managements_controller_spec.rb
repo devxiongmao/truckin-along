@@ -14,6 +14,7 @@ RSpec.describe DriverManagementsController, type: :controller do
       first_name: "Jane",
       last_name: "Smith",
       drivers_license: "87654321",
+      home_address: "1035 Wildwood Dr",
       email: "jane@example.com",
       password: "password",
       password_confirmation: "password"
