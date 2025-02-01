@@ -11,6 +11,7 @@ class DriverManagementsController < ApplicationController
     def create
       @driver = User.new(driver_params)
       @driver.role = "driver"
+      @driver.company = current_user.company
       if @driver.save
         redirect_to admin_index_path, notice: "Driver account created successfully."
       else

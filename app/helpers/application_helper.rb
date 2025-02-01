@@ -1,7 +1,7 @@
 module ApplicationHelper
   def show_nav_link?(link)
     return false unless user_signed_in?
-    
+
     case link
     when :admin
       current_user.admin?

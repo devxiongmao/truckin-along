@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable
 
-  enum :role, { driver: 0, admin: 1, customer: 2 }
+  enum :role, { admin: 0, driver: 1, customer: 2 }
 
   scope :for_company, ->(company) { where(company_id: company.id) }
 

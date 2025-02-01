@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   }
 
   devise_scope :user do
-    get 'users/sign_up/customer', to: 'users/registrations#new_customer', as: :new_customer_registration
+    get "users/sign_up/customer", to: "users/registrations#new_customer", as: :new_customer_registration
   end
-  
+
   resources :admin, only: [ :index ]
 
   resources :deliveries, only: [ :index ] do

@@ -2,6 +2,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super do |resource|
       if resource.persisted?
+        byebug
         resource.role = params.dig(:user, :role) || "admin"
         resource.save
       end
@@ -10,6 +11,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def new_customer
     @user = User.new(role: "customer")
-    render :new 
+    render :new
   end
 end
