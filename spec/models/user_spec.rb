@@ -17,7 +17,6 @@ RSpec.describe User, type: :model do
     # Presence Validations
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
-    it { is_expected.to validate_presence_of(:drivers_license) }
     it { is_expected.to validate_uniqueness_of(:drivers_license) }
     it { is_expected.to validate_length_of(:drivers_license).is_equal_to(8) }
     it do

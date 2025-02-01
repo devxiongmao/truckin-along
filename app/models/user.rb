@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable
 
-  enum :role, { driver: 0, admin: 1 }
+  enum :role, { driver: 0, admin: 1, customer: 2 }
 
   scope :for_company, ->(company) { where(company_id: company.id) }
 
@@ -18,7 +18,6 @@ class User < ApplicationRecord
   # Validations
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
-  validates :drivers_license, presence: true, uniqueness: true, length: { is: 8 }, format: { with: /\A[A-Z0-9]+\z/, message: "only allows uppercase letters and numbers" }
 
   # Instance Methods
   def display_name
@@ -31,6 +30,10 @@ class User < ApplicationRecord
 
   def driver?
     role == "driver"
+  end
+
+  def customer?
+    role == "customer"
   end
 
   def has_company?
