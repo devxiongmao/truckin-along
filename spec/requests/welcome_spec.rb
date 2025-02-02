@@ -6,5 +6,10 @@ RSpec.describe "/", type: :request do
       get root_url
       expect(response).to be_successful
     end
+
+    it 'renders the index template' do
+      get root_url
+      expect(response).to render_template(:index)
+    end
   end
 end

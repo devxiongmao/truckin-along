@@ -15,7 +15,6 @@ RSpec.describe ShipmentsController, type: :controller do
   let(:valid_attributes) do
     {
       name: "New Shipment",
-      shipment_status_id: shipment_status.id,
       sender_name: "Sender",
       sender_address: "123 Street",
       receiver_name: "Receiver",
@@ -38,6 +37,12 @@ RSpec.describe ShipmentsController, type: :controller do
       receiver_address: nil,
       weight: nil,
       boxes: nil
+    }
+  end
+
+  let(:new_attributes) do
+    {
+      name: "Toys"
     }
   end
 
@@ -146,6 +151,8 @@ RSpec.describe ShipmentsController, type: :controller do
     describe "POST #create" do
       context "with valid parameters" do
         it 'creates a new shipment' do
+          byebug
+
           expect {
             post :create, params: { shipment: valid_attributes }
           }.to change(Shipment, :count).by(1)
@@ -153,7 +160,7 @@ RSpec.describe ShipmentsController, type: :controller do
 
         it 'creates a new shipment and redirects to the show page' do
           post :create, params: { shipment: valid_attributes }
-          expect(response).to redirect_to(shipment_path(assigns(:shipment)))
+          expect(response).to redirect_to(shipment_path(Shipment.last))
         end
       end
 
@@ -173,12 +180,6 @@ RSpec.describe ShipmentsController, type: :controller do
     end
 
     describe "PATCH #update" do
-      let(:new_attributes) do
-        {
-          name: "Toys"
-        }
-      end
-
       context "when the shipment belongs to the user" do
         context "with valid parameters" do
           it "updates the requested shipment" do
@@ -435,12 +436,6 @@ RSpec.describe ShipmentsController, type: :controller do
     end
 
     describe "PATCH #update" do
-      let(:new_attributes) do
-        {
-          name: "Toys"
-        }
-      end
-
       context "with valid parameters" do
         context "when the shipment is unclaimed" do
           let!(:shipment) { create(:shipment, user: valid_user, company: nil) }
