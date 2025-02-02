@@ -88,15 +88,21 @@ RSpec.describe DriverManagementsController, type: :controller do
         expect(response).to render_template(:edit)
       end
 
-      it "raises ActiveRecord::RecordNotFound for a driver from another company" do
-        expect {
-          get :edit, params: { id: other_non_admin_user.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
       it "responds successfully" do
         get :edit, params: { id: non_admin_user.id }
         expect(response).to have_http_status(:ok)
+      end
+
+      context "when the driver is from another company" do
+        it 'redirects to the root path' do
+          get :edit, params: { id: other_non_admin_user.id }
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          get :edit, params: { id: other_non_admin_user.id }
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
       end
     end
 
