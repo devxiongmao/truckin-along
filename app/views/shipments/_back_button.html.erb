@@ -1,0 +1,13 @@
+<% if current_user.customer? %>
+    <%= link_to 'Back', shipments_path, class: 'button secondary-button' %>
+<% else %>
+    <% if shipment.claimed? %>
+        <%= link_to 'Back', truck_loading_deliveries_path, class: 'button secondary-button' %>
+    <% else %>
+        <%= link_to 'Back', deliveries_path, class: 'button secondary-button' %>
+    <% end %>
+<% end %>
+
+
+
+
