@@ -54,15 +54,21 @@ RSpec.describe ShipmentStatusesController, type: :controller do
         expect(response).to render_template(:edit)
       end
 
-      it "raises ActiveRecord::RecordNotFound for a shipment_statuses from another company" do
-        expect {
-          get :edit, params: { id: other_shipment_status.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
       it "responds successfully" do
         get :edit, params: { id: shipment_status.id }
         expect(response).to have_http_status(:ok)
+      end
+
+      context "when the shipment status belongs to another company" do
+        it 'redirects to the root path' do
+          get :edit, params: { id: other_shipment_status.id }
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          get :edit, params: { id: other_shipment_status.id }
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
       end
     end
 
@@ -149,10 +155,16 @@ RSpec.describe ShipmentStatusesController, type: :controller do
         expect(response).to redirect_to(admin_index_path)
       end
 
-      it "raises ActiveRecord::RecordNotFound for a shipment_status from another company" do
-        expect {
+      context "when the shipment status belongs to another company" do
+        it 'redirects to the root path' do
           delete :destroy, params: { id: other_shipment_status.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          delete :destroy, params: { id: other_shipment_status.id }
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
       end
     end
   end
