@@ -15,4 +15,8 @@ class Shipment < ApplicationRecord
   def status
     shipment_status&.name
   end
+
+  def claimed?
+    !company.nil?
+  end
 end

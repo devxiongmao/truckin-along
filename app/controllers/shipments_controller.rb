@@ -1,6 +1,9 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: %i[ show edit update destroy ]
+  before_action :set_shipment, only: %i[show edit update destroy]
   before_action :authenticate_user!
+  before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
+  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck ]
+  before_action :authorize_edit_update, only: [ :edit, :update ]
 
   # GET /shipments
   def index
@@ -50,11 +53,11 @@ class ShipmentsController < ApplicationController
 
   def assign
     shipment_ids = params[:shipment_ids] || []
-    shipments = Shipment.for_company(current_company).where(id: shipment_ids, user_id: nil)
-    shipments.update_all(user_id: current_user.id)
+    shipments = Shipment.where(id: shipment_ids)
+    shipments.update_all(company_id: current_company.id)
 
     if shipment_ids.any?
-      flash[:notice] = "Selected shipments have been assigned to you."
+      flash[:notice] = "Selected shipments have been assigned to your company."
     else
       flash[:alert] = "No shipments were selected."
     end
@@ -68,16 +71,51 @@ class ShipmentsController < ApplicationController
 
     if truck && shipment_ids.present?
       Shipment.for_company(current_company).where(id: shipment_ids).update_all(truck_id: truck.id)
-      redirect_to shipments_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
+      redirect_to truck_loading_deliveries_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
     else
-      redirect_to shipments_path, alert: "Please select a truck and at least one shipment."
+      redirect_to truck_loading_deliveries_path, alert: "Please select a truck and at least one shipment."
     end
   end
 
   private
 
     def set_shipment
-      @shipment = Shipment.find(params.expect(:id))
+      @shipment = Shipment.find(params[:id])
+
+      if current_user.customer?
+        unless @shipment.user_id == current_user.id
+          flash[:alert] = "You are not authorized to access this shipment."
+          redirect_to shipments_path
+        end
+      else
+        if @shipment.claimed? && @shipment.company_id != current_user.company_id
+          flash[:alert] = "You are not authorized to access this shipment."
+          redirect_to deliveries_path
+        end
+      end
+    end
+
+    def authorize_edit_update
+      return if current_user.customer?
+
+      unless @shipment.company_id == current_user.company_id
+        flash[:alert] = "You are not authorized to modify this shipment."
+        redirect_to deliveries_path
+      end
+    end
+
+    def authorize_customer
+      unless current_user&.role == "customer"
+        flash[:alert] = "You are not authorized to perform this action."
+        redirect_to root_path
+      end
+    end
+
+    def authorize_driver
+      if current_user&.role == "customer"
+        flash[:alert] = "You are not authorized to perform this action."
+        redirect_to root_path
+      end
     end
 
     def shipment_params
