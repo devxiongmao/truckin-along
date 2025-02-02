@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: %i[show edit update destroy]
+  before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
   before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
   before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck ]

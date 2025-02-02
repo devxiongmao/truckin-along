@@ -95,14 +95,14 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     it "permits custom parameters for sign_up" do
-      expect(sanitizer).to receive(:permit).with(:sign_up, keys: [ :first_name, :last_name, :drivers_license, :role ])
+      expect(sanitizer).to receive(:permit).with(:sign_up, keys: [ :first_name, :last_name, :drivers_license, :role, :home_address ])
       allow(sanitizer).to receive(:permit) # To handle other calls without error
 
       controller.send(:configure_permitted_parameters)
     end
 
     it "permits custom parameters for account_update" do
-      expect(sanitizer).to receive(:permit).with(:account_update, keys: [ :first_name, :last_name, :drivers_license, :role ])
+      expect(sanitizer).to receive(:permit).with(:account_update, keys: [ :first_name, :last_name, :drivers_license, :role, :home_address ])
       allow(sanitizer).to receive(:permit) # To handle other calls without error
 
       controller.send(:configure_permitted_parameters)
