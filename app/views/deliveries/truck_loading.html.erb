@@ -32,8 +32,7 @@
             <td><%= shipment.weight %></td>
             <td>
               <%= link_to 'Show', shipment, class: 'action-link' %> |
-              <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |
-              <%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+              <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
             </td>
           </tr>
         <% end %>
