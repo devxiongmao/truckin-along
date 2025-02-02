@@ -51,10 +51,16 @@ RSpec.describe TrucksController, type: :controller do
         expect(response).to have_http_status(:ok)
       end
 
-      it "raises ActiveRecord::RecordNotFound for a truck from another company" do
-        expect {
+      context "when the truck belongs to another company" do
+        it 'redirects to the root path' do
           get :show, params: { id: other_truck.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          get :show, params: { id: other_truck.id }
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
       end
     end
 
@@ -86,15 +92,21 @@ RSpec.describe TrucksController, type: :controller do
         expect(response).to render_template(:edit)
       end
 
-      it "raises ActiveRecord::RecordNotFound for a truck from another company" do
-        expect {
-          get :edit, params: { id: other_truck.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
       it "responds successfully" do
         get :edit, params: { id: truck.id }
         expect(response).to have_http_status(:ok)
+      end
+
+      context "when the truck belongs to another company" do
+        it 'redirects to the root path' do
+          get :edit, params: { id: other_truck.id }
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          get :edit, params: { id: other_truck.id }
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
       end
     end
 
@@ -185,10 +197,16 @@ RSpec.describe TrucksController, type: :controller do
         expect(response).to redirect_to(admin_index_path)
       end
 
-      it "raises ActiveRecord::RecordNotFound for a truck from another company" do
-        expect {
+      context "when the truck belongs to another company" do
+        it 'redirects to the root path' do
           delete :destroy, params: { id: other_truck.id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          delete :destroy, params: { id: other_truck.id }
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
       end
     end
   end
