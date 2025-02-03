@@ -22,21 +22,35 @@ RSpec.describe "/deliveries", type: :request do
       expect(response).to be_successful
     end
 
-    it "assigns unassigned shipments to @unassigned_shipments" do
-      get deliveries_url
-      expect(assigns(:unassigned_shipments)).to include(unassigned_shipment)
-      expect(assigns(:unassigned_shipments)).not_to include(assigned_shipment)
-    end
-
-    it "assigns current_user's shipments to @my_shipments" do
-      get deliveries_url
-      expect(assigns(:my_shipments)).to include(assigned_shipment)
-      expect(assigns(:my_shipments)).not_to include(unassigned_shipment)
-    end
-
     it "renders the correct template" do
       get deliveries_url
       expect(response).to render_template(:index)
+    end
+
+    context 'when no shipments exist' do
+      before do
+        Shipment.destroy_all
+      end
+
+      it "shows the correct data for my shipments" do
+        get deliveries_url
+        expect(response.body).to include("You have no shipments assigned to you.")
+      end
+
+      it "shows the correct data for unassigned shipments" do
+        get deliveries_url
+        expect(response.body).to include("No unassigned shipments available.")
+      end
+
+      it "renders the correct template" do
+        get deliveries_url
+        expect(response).to render_template(:index)
+      end
+
+      it 'responds successfully' do
+        get deliveries_url
+        expect(response).to be_successful
+      end
     end
   end
 
@@ -46,20 +60,44 @@ RSpec.describe "/deliveries", type: :request do
       expect(response).to be_successful
     end
 
-    it "assigns unassigned shipments to @unassigned_shipments" do
+    it "assigns current companies shipments that don't have a truck to @unassigned_shipments" do
       get truck_loading_deliveries_url
-      expect(assigns(:unassigned_shipments)).to include(assigned_shipment)
+      expect(response.body).to include(assigned_shipment.name)
+      expect(response.body).not_to include(unassigned_shipment.name)
     end
 
     it "assigns current companies trucks to @trucks" do
       get truck_loading_deliveries_url
-      expect(assigns(:trucks)).to include(truck)
-      expect(assigns(:trucks)).not_to include(other_truck)
+      expect(response.body).to include(truck.make)
+      expect(response.body).not_to include(other_truck.make)
     end
 
     it "renders the correct template" do
       get truck_loading_deliveries_url
       expect(response).to render_template(:truck_loading)
+    end
+
+
+
+    context 'when no shipments exist' do
+      before do
+        Shipment.destroy_all
+      end
+
+      it "shows the correct data for shipments" do
+        get truck_loading_deliveries_url
+        expect(response.body).to include("No unassigned shipments available.")
+      end
+
+      it "renders the correct template" do
+        get truck_loading_deliveries_url
+        expect(response).to render_template(:truck_loading)
+      end
+
+      it 'responds successfully' do
+        get truck_loading_deliveries_url
+        expect(response).to be_successful
+      end
     end
   end
 end

@@ -1,15 +1,16 @@
 FactoryBot.define do
   factory :shipment do
-    name { "Test Shipment" }
-    sender_name { "John Doe" }
-    sender_address { "123 Sender St, Sender City" }
-    receiver_name { "Jane Smith" }
-    receiver_address { '456 Receiver Ave, Receiver City' }
-    weight { 100.5 }
-    length { 12.5 }
-    width { 7.5 }
-    height { 10.0 }
-    boxes { 10 }
+    name { Faker::Commerce.product_name }
+    sender_name { Faker::Name.name }
+    sender_address { Faker::Address.full_address }
+    receiver_name { Faker::Name.name }
+    receiver_address { Faker::Address.full_address }
+    weight { Faker::Number.decimal(l_digits: 3, r_digits: 1) }
+    length { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
+    width { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
+    height { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
+    boxes { Faker::Number.between(from: 1, to: 100) }
+
     association :truck
     association :shipment_status
     association :user
