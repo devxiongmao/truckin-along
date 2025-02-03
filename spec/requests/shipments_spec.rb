@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "/shipments", type: :request do
-  let(:valid_user) { create(:user, :customer) }
-  let(:other_user) { create(:user, :customer) }
+  let!(:valid_user) { create(:user, :customer) }
+  let!(:other_user) { create(:user, :customer) }
 
-  let(:company) { create(:company) }
+  let!(:company) { create(:company) }
 
   let(:admin_user) { create(:user, :admin, company: company) }
-  let(:shipment_status) { create(:shipment_status) }
+  let(:shipment_status) { create(:shipment_status, name: "Ready") }
 
   let!(:shipment) { create(:shipment, user: valid_user) }
   let!(:other_shipment) { create(:shipment, user: other_user) }
@@ -15,6 +15,7 @@ RSpec.describe "/shipments", type: :request do
   let(:valid_attributes) do
     {
       name: "New Shipment",
+      shipment_status_id: shipment_status.id,
       sender_name: "Sender",
       sender_address: "123 Street",
       receiver_name: "Receiver",
@@ -30,7 +31,6 @@ RSpec.describe "/shipments", type: :request do
   let(:invalid_attributes) do
     {
       name: nil,
-      shipment_status_id: nil,
       sender_name: nil,
       sender_address: nil,
       receiver_name: nil,
@@ -72,29 +72,29 @@ RSpec.describe "/shipments", type: :request do
     describe 'GET #show' do
       context "when the shipment belongs to the user" do
         it 'assigns the requested shipment to @shipment' do
-          get shipments_url(shipment)
+          get shipment_url(shipment)
           expect(response.body).to include(shipment.name)
         end
 
         it "renders the show template" do
-          get shipments_url(shipment)
+          get shipment_url(shipment)
           expect(response).to render_template(:show)
         end
 
         it "responds successfully" do
-          get shipments_url(shipment)
+          get shipment_url(shipment)
           expect(response).to be_successful
         end
       end
 
       context "when the shipment does not belong to the user" do
         it "redirects to the shipments index" do
-          get shipments_url(other_shipment)
+          get shipment_url(other_shipment)
           expect(response).to redirect_to(shipments_path)
         end
 
         it "shows an alert saying not authorized" do
-          get shipments_url(other_shipment)
+          get shipment_url(other_shipment)
           expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
         end
       end
@@ -308,17 +308,17 @@ RSpec.describe "/shipments", type: :request do
         let!(:shipment) { create(:shipment, user: valid_user, company: nil) }
 
         it 'assigns the requested shipment to @shipment' do
-          get shipments_url(shipment)
+          get shipment_url(shipment)
           expect(response.body).to include(shipment.name)
         end
 
         it "renders the show template" do
-          get shipments_url(shipment)
+          get shipment_url(shipment)
           expect(response).to render_template(:show)
         end
 
         it "responds successfully" do
-          get shipments_url(shipment)
+          get shipment_url(shipment)
           expect(response).to be_successful
         end
       end
@@ -328,17 +328,17 @@ RSpec.describe "/shipments", type: :request do
           let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company) }
 
           it 'assigns the requested shipment to @shipment' do
-            get shipments_url(claimed_shipment)
+            get shipment_url(claimed_shipment)
             expect(assigns(:shipment)).to eq(claimed_shipment)
           end
 
           it "renders the show template" do
-            get shipments_url(claimed_shipment)
+            get shipment_url(claimed_shipment)
             expect(response).to render_template(:show)
           end
 
           it "responds successfully" do
-            get shipments_url(claimed_shipment)
+            get shipment_url(claimed_shipment)
             expect(response).to be_successful
           end
         end
@@ -348,12 +348,12 @@ RSpec.describe "/shipments", type: :request do
           let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company2) }
 
           it 'redirects to the deliveries page' do
-            get shipments_url(claimed_shipment)
+            get shipment_url(claimed_shipment)
             expect(response).to redirect_to(deliveries_path)
           end
 
           it "shows an alert saying not authorized" do
-            get shipments_url(claimed_shipment)
+            get shipment_url(claimed_shipment)
             expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
           end
         end
@@ -598,7 +598,7 @@ RSpec.describe "/shipments", type: :request do
       end
 
       it "shows an alert if no shipments are selected" do
-        post assign_shipments_url, params: { shipment_ids: [] }
+        post assign_shipments_url, params: { shipment_ids: nil }
         expect(flash[:alert]).to eq("No shipments were selected.")
       end
     end

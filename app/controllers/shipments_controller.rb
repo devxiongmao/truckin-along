@@ -53,10 +53,10 @@ class ShipmentsController < ApplicationController
 
   def assign
     shipment_ids = params[:shipment_ids] || []
-    shipments = Shipment.where(id: shipment_ids)
-    shipments.update_all(company_id: current_company.id)
 
     if shipment_ids.any?
+      shipments = Shipment.where(id: shipment_ids)
+      shipments.update_all(company_id: current_company.id)
       flash[:notice] = "Selected shipments have been assigned to your company."
     else
       flash[:alert] = "No shipments were selected."
@@ -83,7 +83,7 @@ class ShipmentsController < ApplicationController
       @shipment = Shipment.find(params[:id])
 
       if current_user.customer?
-        unless @shipment.user_id == current_user.id
+        if @shipment.user_id != current_user.id
           flash[:alert] = "You are not authorized to access this shipment."
           redirect_to shipments_path
         end
