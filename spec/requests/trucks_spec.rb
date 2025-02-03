@@ -22,7 +22,7 @@ RSpec.describe "/trucks", type: :request do
       width: 200.0,
       height: 220.5,
       license_plate: "AXY-1234",
-      vin: "WDBRF61J43F234567"
+      vin: "WDBRF61J43F765432"
     }
   end
 
