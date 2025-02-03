@@ -20,7 +20,9 @@ RSpec.describe "/trucks", type: :request do
       weight: 2000.0,
       length: 5050.0,
       width: 200.0,
-      height: 220.5
+      height: 220.5,
+      license_plate: "AXY-1234",
+      vin: "WDBRF61J43F234567"
     }
   end
 

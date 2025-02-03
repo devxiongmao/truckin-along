@@ -92,7 +92,9 @@ truck1 = Truck.create!(
   weight: 18000, # in kilograms
   length: 1000.5,
   height: 300.9,
-  width: 200.5
+  width: 200.5,
+  vin: "1HGCM82633A004352",
+  license_plate: "ABC-1234"
 )
 
 truck2 = Truck.create!(
@@ -104,7 +106,9 @@ truck2 = Truck.create!(
   weight: 19000, # in kilograms
   length: 1100.0,
   height: 400.0,
-  width: 200.5
+  width: 200.5,
+  vin: "2C3KA53G76H123456",
+  license_plate: "XYZ-9876"
 )
 
 truck3 = Truck.create!(
@@ -116,7 +120,9 @@ truck3 = Truck.create!(
   weight: 18500, # in kilograms
   length: 1000.8,
   height: 300.8,
-  width: 200.5
+  width: 200.5,
+  vin: "5N1AR18B98C765432",
+  license_plate: "LMN-4567"
 )
 
 truck4 = Truck.create!(
@@ -128,7 +134,9 @@ truck4 = Truck.create!(
   weight: 18700, # in kilograms
   length: 1000.6,
   height: 300.9,
-  width: 200.5
+  width: 200.5,
+  vin: "JH4KA9650MC012345",
+  license_plate: "QWE-8523"
 )
 
 truck5 = Truck.create!(
@@ -140,7 +148,9 @@ truck5 = Truck.create!(
   weight: 18300, # in kilograms
   length: 1100.2,
   height: 300.95,
-  width: 200.5
+  width: 200.5,
+  vin: "WDBRF61J43F234567",
+  license_plate: "JKL-3698"
 )
 
 

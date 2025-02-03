@@ -8,6 +8,8 @@ FactoryBot.define do
     length { Faker::Number.decimal(l_digits: 3, r_digits: 1) }
     width { Faker::Number.decimal(l_digits: 3, r_digits: 1) }
     height { Faker::Number.decimal(l_digits: 3, r_digits: 1) }
+    vin { Faker::Vehicle.vin }
+    license_plate { Faker::Vehicle.license_plate }
     association :company
   end
 end

@@ -70,6 +70,7 @@
       <th>Model</th>
       <th>Year</th>
       <th>Mileage</th>
+      <th>License Plate</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -80,6 +81,7 @@
         <td><%= truck.model %></td>
         <td><%= truck.year %></td>
         <td><%= truck.mileage %></td>
+        <td><%= truck.license_plate %></td>
         <td>
           <%= link_to 'Show', truck, class: 'action-link' %> |
           <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |

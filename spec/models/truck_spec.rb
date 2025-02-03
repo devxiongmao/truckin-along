@@ -14,6 +14,9 @@ RSpec.describe Truck, type: :model do
   describe "validations" do
     subject { valid_truck } # Use a valid truck as the baseline for testing
 
+    # Uniqueness Validations
+    it { is_expected.to validate_uniqueness_of(:vin) }
+
     # Presence Validations
     it { is_expected.to validate_presence_of(:make) }
     it { is_expected.to validate_presence_of(:model) }
@@ -21,6 +24,8 @@ RSpec.describe Truck, type: :model do
     it { is_expected.to validate_presence_of(:width) }
     it { is_expected.to validate_presence_of(:height) }
     it { is_expected.to validate_presence_of(:weight) }
+    it { is_expected.to validate_presence_of(:license_plate) }
+    it { is_expected.to validate_presence_of(:vin) }
 
     # Numericality Validations
     it { is_expected.to validate_numericality_of(:length).is_greater_than(0) }
@@ -31,6 +36,8 @@ RSpec.describe Truck, type: :model do
     it { is_expected.to validate_numericality_of(:year).is_greater_than_or_equal_to(1900) }
     it { is_expected.to validate_numericality_of(:mileage).only_integer }
     it { is_expected.to validate_numericality_of(:mileage).is_greater_than_or_equal_to(0) }
+
+    it { is_expected.to validate_length_of(:vin).is_equal_to(17) }
   end
 
   ## Valid Truck Test
@@ -84,14 +91,16 @@ RSpec.describe Truck, type: :model do
   ## Custom Method Tests
   describe "#display_name" do
     it "returns a string formatted as make-model-year" do
-      expect(valid_truck.display_name).to eq("#{valid_truck.make}-#{valid_truck.model}-#{valid_truck.year}")
+      expect(valid_truck.display_name).to eq("#{valid_truck.make}-#{valid_truck.model}-#{valid_truck.year}(#{valid_truck.license_plate})")
     end
 
     it "handles nil values gracefully" do
       valid_truck.make = nil
       valid_truck.model = nil
       valid_truck.year = nil
-      expect(valid_truck.display_name).to eq("--")
+      valid_truck.license_plate = nil
+
+      expect(valid_truck.display_name).to eq("--()")
     end
   end
 end
