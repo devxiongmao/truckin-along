@@ -13,7 +13,7 @@
         <th></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="my-shipments">
       <% @my_shipments.each do |shipment| %>
         <tr>
           <td><%= shipment.status %></td>
@@ -48,7 +48,7 @@
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="unassigned-shipments">
         <% @unassigned_shipments.each do |shipment| %>
           <tr>
             <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>

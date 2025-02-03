@@ -84,7 +84,7 @@ RSpec.describe Truck, type: :model do
   ## Custom Method Tests
   describe "#display_name" do
     it "returns a string formatted as make-model-year" do
-      expect(valid_truck.display_name).to eq("Volvo-VNL-2021")
+      expect(valid_truck.display_name).to eq("#{valid_truck.make}-#{valid_truck.model}-#{valid_truck.year}")
     end
 
     it "handles nil values gracefully" do

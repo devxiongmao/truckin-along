@@ -43,6 +43,7 @@ RSpec.configure do |config|
     Faker::UniqueGenerator.clear
   end
 
+  config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::ControllerHelpers, type: :controller
 

@@ -2,68 +2,67 @@ require 'rails_helper'
 
 RSpec.describe "/admin", type: :request do
   let(:company) { create(:company) }
+  let(:other_company) { create(:company) }
 
   let(:admin_user) { create(:user, :admin, company: company) }
   let(:non_admin_user) { create(:user, company: company) }
 
   let!(:driver) { create(:user, :driver, company: company) }
-  let!(:other_driver) { create(:user, :driver, company: create(:company)) }
+  let!(:other_driver) { create(:user, :driver, company: other_company) }
 
   let!(:shipment_status) { create(:shipment_status, company: company) }
-  let!(:other_shipment_status) { create(:shipment_status, company: create(:company)) }
+  let!(:other_shipment_status) { create(:shipment_status, company: other_company) }
 
   let!(:truck) { create(:truck, company: company) }
-  let!(:other_truck) { create(:truck, company: create(:company)) }
+  let!(:other_truck) { create(:truck, company: other_company) }
 
-  before do
-    sign_in admin_user, scope: :user
-  end
-
-  describe "GET /index" do
+  describe "GET /admin" do
     context "when the user is an admin" do
-      it "renders a successful response" do
-        get admin_index_url
-        expect(response).to be_successful
+      before do
+        sign_in admin_user, scope: :user
       end
 
-      it "assigns drivers from the current company to @drivers" do
-        get admin_index_url
-        expect(assigns(:drivers)).to include(driver)
-        expect(assigns(:drivers)).not_to include(other_driver)
+      it "includes only drivers from the admin's company" do
+        get admin_index_path
+        expect(response.body).to include(driver.email)
+        expect(response.body).not_to include(other_driver.email)
       end
 
-      it "assigns shipment statuses from the current company to @shipment_statuses" do
-        get admin_index_url
-        expect(assigns(:shipment_statuses)).to include(shipment_status)
-        expect(assigns(:shipment_statuses)).not_to include(other_shipment_status)
+      it "includes only shipment statuses from the admin's company" do
+        get admin_index_path
+        expect(response.body).to include(shipment_status.name)
+        expect(response.body).not_to include(other_shipment_status.name)
       end
 
-      it "assigns trucks from the current company to @trucks" do
-        get admin_index_url
-        expect(assigns(:trucks)).to include(truck)
-        expect(assigns(:trucks)).not_to include(other_truck)
+      it "includes only trucks from the admin's company" do
+        get admin_index_path
+        expect(response.body).to include(truck.make)
+        expect(response.body).not_to include(other_truck.make)
       end
 
-      it "renders the correct template" do
-        get admin_index_url
+      it "renders the index template" do
+        get admin_index_path
         expect(response).to render_template(:index)
       end
 
-      it "returns a successfull response" do
-        get admin_index_url
-        expect(response).to be_successful
+      it "responds successfully" do
+        get admin_index_path
+        expect(response).to have_http_status(:ok)
       end
     end
 
     context "when the user is not an admin" do
       before do
-        sign_out admin_user
-        sign_in non_admin_user, scope: :user
+        sign_in non_admin_user
       end
 
-      it "redirects to the root path with an error message" do
-        get admin_index_url
+      it "redirects to the root path" do
+        get admin_index_path
         expect(response).to redirect_to(root_path)
+      end
+
+      it "renders an error message" do
+        get admin_index_path
         expect(flash[:alert]).to eq("Not authorized.")
       end
     end
