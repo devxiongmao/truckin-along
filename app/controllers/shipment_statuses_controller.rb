@@ -1,7 +1,7 @@
 class ShipmentStatusesController < ApplicationController
-    before_action :set_shipment_status, only: %i[edit update destroy]
     before_action :authenticate_user!
     before_action :ensure_admin
+    before_action :set_shipment_status, only: %i[edit update destroy]
 
     def new
       @shipment_status = ShipmentStatus.new
@@ -38,6 +38,8 @@ class ShipmentStatusesController < ApplicationController
     end
 
     def shipment_status_params
-      params.require(:shipment_status).permit(:company_id, :name)
+      params.require(:shipment_status).permit(:company_id, :name, :locked_for_customers).tap do |whitelisted|
+        whitelisted[:locked_for_customers] = ActiveRecord::Type::Boolean.new.cast(whitelisted[:locked_for_customers])
+      end
     end
 end

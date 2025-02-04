@@ -6,6 +6,7 @@
 <table class="styled-table">
   <thead>
     <tr>
+      <th>Company</th>
       <th>Status</th>
       <th>Name</th>
       <th>Sender</th>
@@ -17,6 +18,7 @@
   <tbody>
     <% @shipments.each do |shipment| %>
       <tr>
+        <td><%= shipment&.company&.name %></td>
         <td><%= shipment.status %></td>
         <td><%= shipment.name %></td>
         <td><%= shipment.sender_name %></td>
