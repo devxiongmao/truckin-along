@@ -156,9 +156,9 @@ truck5 = Truck.create!(
 
 # Create shipment statuses
 puts "Creating shipment statuses..."
-status1 = ShipmentStatus.create!(name: "Ready", company: company1)
-status2 = ShipmentStatus.create!(name: "In Transit", company: company1)
-status3 = ShipmentStatus.create!(name: "Delivered", company: company1)
+status1 = ShipmentStatus.create!(name: "Ready", company: company1, locked_for_customers: false)
+status2 = ShipmentStatus.create!(name: "In Transit", company: company1, locked_for_customers: true)
+status3 = ShipmentStatus.create!(name: "Delivered", company: company1, locked_for_customers: true)
 
 # Create shipments
 puts "Creating shipments..."
@@ -174,7 +174,7 @@ Shipment.create!(
   width: 100.2,
   height: 100.0,
   truck: truck1,
-  shipment_status: status1,
+  shipment_status: nil,
   user: user5,
   company: company1
 )
@@ -225,7 +225,7 @@ Shipment.create!(
   width: 200.0,
   height: 200.5,
   truck: nil,
-  shipment_status: status1,
+  shipment_status: nil,
   user: user5,
   company: nil
 )
@@ -242,7 +242,7 @@ Shipment.create!(
   width: 100.5,
   height: 100.2,
   truck: nil,
-  shipment_status: status1,
+  shipment_status: nil,
   user: user5,
   company: nil
 )
@@ -327,7 +327,7 @@ Shipment.create!(
   width: 100.2,
   height: 100.3,
   truck: nil,
-  shipment_status: status1,
+  shipment_status: nil,
   user: user5,
   company: nil
 )
@@ -344,7 +344,7 @@ Shipment.create!(
   width: 100.2,
   height: 100.3,
   truck: nil,
-  shipment_status: status1,
+  shipment_status: nil,
   user: user6,
   company: nil
 )
