@@ -7,6 +7,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th class="center-text">Locked for Customers?</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -14,6 +15,13 @@
     <% @shipment_statuses.each do |status| %>
       <tr>
         <td><%= status.name %></td>
+        <td class="center-text">
+          <% if status.locked_for_customers %>
+            ✔️
+          <% else %>
+            ❌
+          <% end %>
+        </td>
         <td>
           <%= link_to 'Edit', edit_shipment_status_path(status), class: 'action-link' %> |
           <%= link_to 'Destroy', status, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>

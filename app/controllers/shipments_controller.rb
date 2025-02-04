@@ -1,6 +1,6 @@
 class ShipmentsController < ApplicationController
-  before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
+  before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
   before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck ]
   before_action :authorize_edit_update, only: [ :edit, :update ]
@@ -21,12 +21,12 @@ class ShipmentsController < ApplicationController
 
   # GET /shipments/1/edit
   def edit
+    @statuses = current_user.role == "customer" ? [] : ShipmentStatus.for_company(current_company)
   end
 
   # POST /shipments
   def create
     @shipment = Shipment.new(shipment_params)
-    @shipment.shipment_status = ShipmentStatus.find_by(name: "Ready")
     @shipment.user = current_user
 
     if @shipment.save
@@ -120,6 +120,7 @@ class ShipmentsController < ApplicationController
 
     def shipment_params
       params.require(:shipment).permit(
+        :shipment_status_id,
         :name,
         :sender_name,
         :sender_address,

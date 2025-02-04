@@ -11,7 +11,7 @@ RSpec.describe Shipment, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:truck).optional }
     it { is_expected.to belong_to(:user).optional }
-    it { is_expected.to belong_to(:shipment_status) }
+    it { is_expected.to belong_to(:shipment_status).optional }
     it { is_expected.to belong_to(:company).optional }
   end
 

@@ -2,7 +2,7 @@ class Shipment < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :company, optional: true
   belongs_to :truck, optional: true
-  belongs_to :shipment_status
+  belongs_to :shipment_status, optional: true
 
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, :boxes, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }

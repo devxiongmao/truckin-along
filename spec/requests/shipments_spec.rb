@@ -7,7 +7,6 @@ RSpec.describe "/shipments", type: :request do
   let!(:company) { create(:company) }
 
   let(:admin_user) { create(:user, :admin, company: company) }
-  let(:shipment_status) { create(:shipment_status, name: "Ready") }
 
   let!(:shipment) { create(:shipment, user: valid_user) }
   let!(:other_shipment) { create(:shipment, user: other_user) }
@@ -15,7 +14,6 @@ RSpec.describe "/shipments", type: :request do
   let(:valid_attributes) do
     {
       name: "New Shipment",
-      shipment_status_id: shipment_status.id,
       sender_name: "Sender",
       sender_address: "123 Street",
       receiver_name: "Receiver",
