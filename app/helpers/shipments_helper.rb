@@ -8,7 +8,7 @@ module ShipmentsHelper
   end
 
   def auto_select_address(shipment)
-    if current_user && current_user.role == "customer"
+    if current_user && current_user.role == "customer" && shipment.sender_address.blank?
       current_user&.home_address
     else
       shipment.sender_address
@@ -16,6 +16,7 @@ module ShipmentsHelper
   end
 
   def locked_fields?(shipment_status)
+    return true if shipment_status&.closed
     if current_user && current_user.role == "customer" && shipment_status&.locked_for_customers
       true
     else

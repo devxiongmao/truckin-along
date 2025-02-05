@@ -69,6 +69,7 @@ user5 = User.create!(
   last_name: "Parker",
   drivers_license: "PP987654",
   role: 2,
+  home_address: "101 Tech Blvd, Silicon Valley, USA",
   company: nil
 )
 
@@ -78,6 +79,7 @@ user6 = User.create!(
   first_name: "Clark",
   last_name: "Kent",
   role: 2,
+  home_address: "101 Fun St, Minneapolis, USA",
   company: nil
 )
 
@@ -156,9 +158,9 @@ truck5 = Truck.create!(
 
 # Create shipment statuses
 puts "Creating shipment statuses..."
-status1 = ShipmentStatus.create!(name: "Ready", company: company1, locked_for_customers: false)
-status2 = ShipmentStatus.create!(name: "In Transit", company: company1, locked_for_customers: true)
-status3 = ShipmentStatus.create!(name: "Delivered", company: company1, locked_for_customers: true)
+status1 = ShipmentStatus.create!(name: "Ready", company: company1, locked_for_customers: false, closed: false)
+status2 = ShipmentStatus.create!(name: "In Transit", company: company1, locked_for_customers: true, closed: false)
+status3 = ShipmentStatus.create!(name: "Delivered", company: company1, locked_for_customers: true, closed: true)
 
 # Create shipments
 puts "Creating shipments..."

@@ -14,7 +14,8 @@ RSpec.describe "/shipment_statuses", type: :request do
     {
       name: "In Transit",
       company_id: company.id,
-      locked_for_customers: true
+      locked_for_customers: true,
+      closed: false
     }
   end
 
@@ -27,7 +28,8 @@ RSpec.describe "/shipment_statuses", type: :request do
   let(:new_attributes) do
     {
       name: "Delivered",
-      locked_for_customers: true
+      locked_for_customers: true,
+      closed: true
     }
   end
 

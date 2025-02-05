@@ -38,8 +38,9 @@ class ShipmentStatusesController < ApplicationController
     end
 
     def shipment_status_params
-      params.require(:shipment_status).permit(:company_id, :name, :locked_for_customers).tap do |whitelisted|
+      params.require(:shipment_status).permit(:company_id, :name, :locked_for_customers, :closed).tap do |whitelisted|
         whitelisted[:locked_for_customers] = ActiveRecord::Type::Boolean.new.cast(whitelisted[:locked_for_customers])
+        whitelisted[:closed] = ActiveRecord::Type::Boolean.new.cast(whitelisted[:closed])
       end
     end
 end

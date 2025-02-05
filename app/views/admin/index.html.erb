@@ -8,6 +8,7 @@
     <tr>
       <th>Name</th>
       <th class="center-text">Locked for Customers?</th>
+      <th class="center-text">Closed</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -17,6 +18,13 @@
         <td><%= status.name %></td>
         <td class="center-text">
           <% if status.locked_for_customers %>
+            ✔️
+          <% else %>
+            ❌
+          <% end %>
+        </td>
+        <td class="center-text">
+          <% if status.closed %>
             ✔️
           <% else %>
             ❌
