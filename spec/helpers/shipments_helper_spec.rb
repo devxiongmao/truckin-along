@@ -6,6 +6,8 @@ RSpec.describe ShipmentsHelper, type: :helper do
   let(:admin) { create(:user, role: "admin") }
   let(:shipment_status_locked) { create(:shipment_status, locked_for_customers: true) }
   let(:shipment_status_unlocked) { create(:shipment_status, locked_for_customers: false) }
+  let(:shipment_status_closed) { create(:shipment_status, closed: true) }
+
 
   describe "#auto_select_sender" do
     context "when the current user is a customer" do
@@ -34,10 +36,11 @@ RSpec.describe ShipmentsHelper, type: :helper do
   end
 
   describe "#auto_select_address" do
-    context "when the current user is a customer" do
+    context "when all conditions are met" do
       before { allow(helper).to receive(:current_user).and_return(customer) }
 
       it "returns the home_address of the customer" do
+        shipment.sender_address = ""
         expect(helper.auto_select_address(shipment)).to eq("456 Customer St")
       end
     end
@@ -60,19 +63,27 @@ RSpec.describe ShipmentsHelper, type: :helper do
   end
 
   describe "#locked_fields?" do
-    context "when the current user is a customer and the shipment status is locked" do
-      before { allow(helper).to receive(:current_user).and_return(customer) }
-
+    context "when the status is closed" do
       it "returns true" do
-        expect(helper.locked_fields?(shipment_status_locked)).to be_truthy
+        expect(helper.locked_fields?(shipment_status_closed)).to be_truthy
       end
     end
 
-    context "when the current user is a customer and the shipment status is unlocked" do
-      before { allow(helper).to receive(:current_user).and_return(customer) }
+    context "when the current user is a customer" do
+      context "when the shipment status is locked" do
+        before { allow(helper).to receive(:current_user).and_return(customer) }
 
-      it "returns false" do
-        expect(helper.locked_fields?(shipment_status_unlocked)).to be_falsey
+        it "returns true" do
+            expect(helper.locked_fields?(shipment_status_locked)).to be_truthy
+        end
+      end
+
+      context "when the shipment status is unlocked" do
+        before { allow(helper).to receive(:current_user).and_return(customer) }
+
+        it "returns false" do
+            expect(helper.locked_fields?(shipment_status_unlocked)).to be_falsey
+        end
       end
     end
 
