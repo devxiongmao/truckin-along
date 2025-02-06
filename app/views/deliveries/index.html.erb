@@ -1,38 +1,5 @@
 <h1>Deliveries</h1>
 
-<h2>My Shipments</h2>
-<% if @my_shipments.any? %>
-  <table class="styled-table">
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>Name</th>
-        <th>Sender</th>
-        <th>Receiver</th>
-        <th>Weight</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="my-shipments">
-      <% @my_shipments.each do |shipment| %>
-        <tr>
-          <td><%= shipment.status %></td>
-          <td><%= shipment.name %></td>
-          <td><%= shipment.sender_name %></td>
-          <td><%= shipment.receiver_name %></td>
-          <td><%= shipment.weight %></td>
-          <td>
-            <%= link_to 'Show', shipment, class: 'action-link' %> |
-            <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> 
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <p>You have no shipments assigned to you.</p>
-<% end %>
-
 <h2>Unassigned Shipments</h2>
 <% if @unassigned_shipments.any? %>
   <%= form_with url: assign_shipments_path, method: :post do |f| %>
@@ -68,4 +35,38 @@
   <% end %>
 <% else %>
   <p>No unassigned shipments available.</p>
+<% end %>
+
+
+<h2>My Shipments</h2>
+<% if @my_shipments.any? %>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Weight</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="my-shipments">
+      <% @my_shipments.each do |shipment| %>
+        <tr>
+          <td><%= shipment.status %></td>
+          <td><%= shipment.name %></td>
+          <td><%= shipment.sender_name %></td>
+          <td><%= shipment.receiver_name %></td>
+          <td><%= shipment.weight %></td>
+          <td>
+            <%= link_to 'Show', shipment, class: 'action-link' %> |
+            <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> 
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>You have no shipments assigned to you.</p>
 <% end %>
