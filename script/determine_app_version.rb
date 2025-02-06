@@ -29,11 +29,11 @@ class AutoVersionBumper
 
     major, minor, patch = current_version.split('.').map(&:to_i)
 
-    if commits.any? { |msg| msg.match?(/\b(breaking|major):\b/i) }
+    if commits.any? { |msg| msg.match?(/(?:\b|\()?(breaking|major)(?:\b|\))?/i) }
       major += 1
       minor = 0
       patch = 0
-    elsif commits.any? { |msg| msg.match?(/\b(feature|minor):\b/i) }
+    elsif commits.any? { |msg| msg.match?(/(?:\b|\()?(feature|minor)(?:\b|\))?/i) }
       minor += 1
       patch = 0
     else
