@@ -81,3 +81,17 @@
 - Bump solid_queue from 1.1.2 to 1.1.3 (#86) (64912b2) by dependabot[bot]
 - Bump solid_queue from 1.1.2 to 1.1.3 (#84) (ac4134b) by dependabot[bot]
 
+## Changelog
+### From v0.0.6 to HEAD
+
+- Bump kamal from 2.4.0 to 2.5.0 (#101) (e96a1c8) by dependabot[bot]
+- XMDEV-125: Renames Deliveries to Shipment Marketplace (#103) (1c2c3e4) by Jon
+- XMDEV-124: Adds closed attribute to shipment_status (#102) (e740c90) by Jon
+- XMDEV-110: Refactor ShipmentStatus and add locked_for_customers attribute (#100) (263642a) by Jon
+- XMDEV-119: Adds VIN and license plate to truck model (breaking) (#99) (bf77cc2) by Jon
+- XMDEV-114: Updates all legacy controller specs to request specs (#96) (#97) (367958b) by Jon
+- XMDEV-113: Handles recordNotFound errors gracefully (#95) (ee2f12b) by Jon
+- XMDEV-112: For shared views make back button reflect appropriate path based on logic (#94) (c29fbcb) by Jon
+- XMDEV-104: Adds home_address to user model (#92) (04e6162) by Jon
+- XMDEV-100: Creates customer view and refactors logic (major) (#91) (8e20515) by Jon
+
