@@ -95,3 +95,10 @@
 - XMDEV-104: Adds home_address to user model (#92) (04e6162) by Jon
 - XMDEV-100: Creates customer view and refactors logic (major) (#91) (8e20515) by Jon
 
+## Changelog
+### From v1.0.0 to HEAD
+
+- Bump solid_cache from 1.0.6 to 1.0.7 (#107) (710e38a) by dependabot[bot]
+- Bump rspec-rails from 7.1.0 to 7.1.1 (#109) (73bd81c) by dependabot[bot]
+- Bump kamal from 2.4.0 to 2.5.2 (#110) (000ebaf) by dependabot[bot]
+
