@@ -23,14 +23,15 @@ namespace :generate do
     end
 
     changelog_content = <<~CHANGELOG
-      ## Changelog
       ### From #{latest_tag} to HEAD
 
       #{changelog}
 
+      Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
+
     CHANGELOG
 
-    File.open("CHANGELOG.md", "a") do |file|
+    File.open("CHANGELOG.md", "w") do |file|
       file.puts changelog_content
     end
 
