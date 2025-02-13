@@ -15,7 +15,7 @@ RSpec.describe "User Authentication", type: :system do
     click_button "Log in"
 
     expect(page).to have_content("Signed in successfully")
-    expect(page).to have_current_path(root_path) 
+    expect(page).to have_current_path(root_path)
   end
 
   it "rejects invalid credentials" do
@@ -29,10 +29,10 @@ RSpec.describe "User Authentication", type: :system do
   end
 
   it "allows a user to sign out" do
-    sign_in user 
+    sign_in user
     visit root_path
 
-    click_link "Sign Out" 
+    click_link "Sign Out"
 
     expect(page).to have_content("Signed out successfully")
     expect(page).to have_current_path(root_path)
