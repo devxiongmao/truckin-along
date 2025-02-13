@@ -9,6 +9,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 require 'rails-controller-testing'
+require 'capybara/rspec'
 
 require 'shoulda/matchers'
 
@@ -42,7 +43,7 @@ RSpec.configure do |config|
   config.after(:suite) do
     Faker::UniqueGenerator.clear
   end
-
+  config.include Devise::Test::IntegrationHelpers, type: :system
   config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::ControllerHelpers, type: :controller
