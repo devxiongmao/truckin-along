@@ -2,6 +2,7 @@ class Truck < ApplicationRecord
   belongs_to :company
 
   has_many :shipments
+  has_many :deliveries
 
   validates :make, :model, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }

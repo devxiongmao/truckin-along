@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_05_031952) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_21_025119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_05_031952) do
     t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "deliveries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "truck_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["truck_id"], name: "index_deliveries_on_truck_id"
+    t.index ["user_id"], name: "index_deliveries_on_user_id"
   end
 
   create_table "shipment_statuses", force: :cascade do |t|
@@ -90,6 +99,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_05_031952) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "deliveries", "trucks"
+  add_foreign_key "deliveries", "users"
   add_foreign_key "shipment_statuses", "companies"
   add_foreign_key "shipments", "companies"
   add_foreign_key "shipments", "shipment_statuses"

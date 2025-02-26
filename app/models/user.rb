@@ -14,6 +14,7 @@ class User < ApplicationRecord
   belongs_to :company, optional: true
 
   has_many :shipments, dependent: :nullify
+  has_many :deliveries
 
   # Validations
   validates :first_name, presence: true, length: { maximum: 50 }
