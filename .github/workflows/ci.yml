@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -74,7 +74,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          tags: true   
+          tags: true
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -84,7 +84,7 @@ jobs:
 
       - name: Install dependencies
         run: bundle install
-      
+
       - name: Wait for PostgreSQL
         run: |
           for i in {1..10}; do
@@ -98,11 +98,17 @@ jobs:
           echo "PostgreSQL did not start in time";
           exit 1;
 
-      - name: Run tests
+      - name: Setup Parallel Databases
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: bin/rails db:setup spec
+        run: bundle exec rake parallel:setup
+
+      - name: Run Parallel RSpec Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bundle exec parallel_test spec/ --type rspec
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
