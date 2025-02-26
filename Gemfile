@@ -43,7 +43,7 @@ gem "thruster", require: false
 ## Manually added Gems
 gem "devise"
 
-gem 'parallel_tests', group: [:development, :test]
+gem "parallel_tests", group: [ :development, :test ]
 
 
 group :development, :test do
