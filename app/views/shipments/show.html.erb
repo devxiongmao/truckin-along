@@ -12,7 +12,7 @@
   <p><strong>Receiver Address:</strong> <span class="detail-value"><%= @shipment.receiver_address %></span></p>
   <p><strong>Weight:</strong> <span class="detail-value"><%= @shipment.weight %> kg</span></p>
   <p><strong>Boxes:</strong> <span class="detail-value"><%= @shipment.boxes %></span></p>
-  <% if @shipment.truck %>
+  <% if @shipment.truck && !@current_user.customer? %>
     <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.display_name, @shipment.truck %></span></p>
   <% end %>
 </div>
