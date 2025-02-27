@@ -5,9 +5,9 @@ RSpec.describe "/trucks", type: :request do
   let(:user) { create(:user, :admin, company: company) } # Create a user tied to the company
   let(:non_admin_user) { create(:user, company: company) }
 
-  let(:other_company) { create(:company) } # Another company for isolation testing
+  let(:other_company) { create(:company, name: "Jons Truck Co.") } # Another company for isolation testing
 
-  let!(:truck) { create(:truck, company: company) }
+  let!(:truck) { create(:truck, company: company, make: "J-go") }
   let!(:other_truck) { create(:truck, company: other_company) } # Truck from another company
 
   let(:valid_attributes) do
