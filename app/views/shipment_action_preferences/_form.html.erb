@@ -1,31 +1,7 @@
-<div class="page-header">
-  <h1 class="page-title">Edit Shipment Status Preference</h1>
-  <%= link_to 'Back', admin_index_path, class: 'button secondary-button' %>
-</div>
-
-<h1>Shipment Status Preferences</h1>
-
-<% ShipmentActionPreference::ACTIONS.each do |action| %>
-<% preference = current_company.shipment_action_preferences.find_by(action: action) %>
-
-<div class="preference-setting">
-  <p>When a shipment is <%= action.humanize.downcase %>, set status to:</p>
-
-  <%= form_tag shipment_action_preferences_path, method: :post do %>
-  <%= hidden_field_tag :action_name, action %>
-  <%= select_tag :status, 
-                     options_for_select(ShipmentActionPreference::STATUSES, preference&.status),
-                     include_blank: "-- Select Status --" %>
-  <%= submit_tag "Save" %>
-  <% end %>
-</div>
-<% end %>
-
-
 <%= form_with(model: preference, local: true, class: 'styled-form') do |form| %>
 <% if preference.errors.any? %>
 <div class="error-messages">
-  <h2><%= pluralize(@preference.errors.count, 'error') %> prohibited this preference from being saved:</h2>
+  <h2><%= pluralize(@preference.errors.count, 'error') %> prohibited this shipment status from being saved:</h2>
   <ul>
     <% preference.errors.full_messages.each do |message| %>
     <li><%= message %></li>
@@ -37,23 +13,24 @@
 <%= form.hidden_field :company_id, value: current_user.company_id %>
 
 <div class="form-group">
-  <%= form.label :name, class: 'form-label' %>
-  <%= form.text_field :name, class: 'form-input' %>
+  <%= form.label :action, class: 'form-label' %>
+  <%= form.text_field :action, 
+        value: "When #{preference.action.gsub('_', ' ')}", 
+        class: 'form-input', 
+        disabled: true %>
 </div>
 
+<% unless statuses.empty? %>
 <div class="form-group">
-  <%= form.label :locked_for_customers, 'Lock for Customers?', class: 'form-label' %>
-  <%= form.check_box :locked_for_customers, class: 'form-checkbox' %>
-  <small class="help-text">If checked, customers will not be able to update shipments with this status.</small>
+  <%= form.label :shipment_status_id, "Shipment Status", class: 'form-label' %>
+  <%= form.select :shipment_status_id, 
+                      options_from_collection_for_select(statuses, :id, :name, preference.shipment_status_id), 
+                      { include_blank: "Don't change status" }, 
+                      { class: 'form-input'} %>
 </div>
-
-<div class="form-group">
-  <%= form.label :closed, 'Mark as Closed?', class: 'form-label' %>
-  <%= form.check_box :closed, class: 'form-checkbox' %>
-  <small class="help-text">If checked, this shipment will be considered closed and no further updates will be allowed.</small>
-</div>
+<% end %>
 
 <div class="actions">
-  <%= form.submit 'Save Shipment Status', class: 'button primary-button' %>
+  <%= form.submit 'Update', class: 'button primary-button' %>
 </div>
 <% end %>

@@ -4,5 +4,5 @@
 </div>
 
 <div class="form-container">
-  <%= render 'form', preference: @preference %>
+  <%= render 'form', preference: @preference, statuses: @shipment_statuses || []  %>
 </div>

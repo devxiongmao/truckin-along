@@ -52,16 +52,16 @@ class ShipmentsController < ApplicationController
   end
 
   def assign
-    shipment_ids = params[:shipment_ids] || []
-
+    shipment_ids = params[:shipment_ids].presence || []
+    preference = current_company.shipment_action_preferences.find_by(action: "claimed_by_company")
     if shipment_ids.any?
       shipments = Shipment.where(id: shipment_ids)
       shipments.update_all(company_id: current_company.id)
+      shipments.update_all(shipment_status_id: preference.shipment_status_id) if preference&.shipment_status_id
       flash[:notice] = "Selected shipments have been assigned to your company."
     else
       flash[:alert] = "No shipments were selected."
     end
-
     redirect_to deliveries_path
   end
 
@@ -69,8 +69,12 @@ class ShipmentsController < ApplicationController
     truck = Truck.find_by(id: params[:truck_id])
     shipment_ids = params[:shipment_ids]
 
+    preference = current_company.shipment_action_preferences.find_by(action: "loaded_onto_truck")
+
     if truck && shipment_ids.present?
-      Shipment.for_company(current_company).where(id: shipment_ids).update_all(truck_id: truck.id)
+      shipments = Shipment.for_company(current_company).where(id: shipment_ids)
+      shipments.update_all(truck_id: truck.id)
+      shipments.update_all(shipment_status_id: preference.shipment_status_id) if preference&.shipment_status_id
       redirect_to truck_loading_deliveries_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
     else
       redirect_to truck_loading_deliveries_path, alert: "Please select a truck and at least one shipment."

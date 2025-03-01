@@ -1,6 +1,6 @@
 class ShipmentActionPreference < ApplicationRecord
   belongs_to :company
-  belongs_to :shipment_status
+  belongs_to :shipment_status, optional: true
 
   # List of possible actions
   ACTIONS = [
