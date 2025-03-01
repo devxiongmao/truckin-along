@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   end
   resources :companies, only: %i[new create edit update]
   resources :shipment_statuses, only: %i[new create edit update destroy]
+  resources :shipment_action_preferences, only: %i[edit update]
+
   resources :shipments do
     collection do
       post :assign

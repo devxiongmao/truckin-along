@@ -2,71 +2,71 @@
 
 <h2>Unassigned Shipments</h2>
 <% if @unassigned_shipments.any? %>
-  <%= form_with url: assign_shipments_path, method: :post do |f| %>
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Status</th>
-          <th>Name</th>
-          <th>Sender</th>
-          <th>Receiver</th>
-          <th>Weight</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="unassigned-shipments">
-        <% @unassigned_shipments.each do |shipment| %>
-          <tr>
-            <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
-            <td><%= shipment.status %></td>
-            <td><%= shipment.name %></td>
-            <td><%= shipment.sender_name %></td>
-            <td><%= shipment.receiver_name %></td>
-            <td><%= shipment.weight %></td>
-            <td>
-              <%= link_to 'Show Details', shipment, class: 'action-link' %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <%= submit_tag "Assign to Me", class: "button primary-button" %>
-  <% end %>
+<%= form_with url: assign_shipments_path, method: :post do |f| %>
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Weight</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="unassigned-shipments">
+    <% @unassigned_shipments.each do |shipment| %>
+    <tr>
+      <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
+      <td><%= shipment.status %></td>
+      <td><%= shipment.name %></td>
+      <td><%= shipment.sender_name %></td>
+      <td><%= shipment.receiver_name %></td>
+      <td><%= shipment.weight %></td>
+      <td>
+        <%= link_to 'Show Details', shipment, class: 'action-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= submit_tag "Assign to Me", class: "button primary-button" %>
+<% end %>
 <% else %>
-  <p>No unassigned shipments available.</p>
+<p>No unassigned shipments available.</p>
 <% end %>
 
 
 <h2>My Current Shipments</h2>
 <% if @my_shipments.any? %>
-  <table class="styled-table">
-    <thead>
-      <tr>
-        <th>Status</th>
-        <th>Name</th>
-        <th>Sender</th>
-        <th>Receiver</th>
-        <th>Weight</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="my-shipments">
-      <% @my_shipments.each do |shipment| %>
-        <tr>
-          <td><%= shipment.status %></td>
-          <td><%= shipment.name %></td>
-          <td><%= shipment.sender_name %></td>
-          <td><%= shipment.receiver_name %></td>
-          <td><%= shipment.weight %></td>
-          <td>
-            <%= link_to 'Show', shipment, class: 'action-link' %> |
-            <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> 
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Weight</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="my-shipments">
+    <% @my_shipments.each do |shipment| %>
+    <tr>
+      <td><%= shipment.status %></td>
+      <td><%= shipment.name %></td>
+      <td><%= shipment.sender_name %></td>
+      <td><%= shipment.receiver_name %></td>
+      <td><%= shipment.weight %></td>
+      <td>
+        <%= link_to 'Show', shipment, class: 'action-link' %> |
+        <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 <% else %>
-  <p>You have no shipments assigned to you.</p>
+<p>You have no shipments assigned to you.</p>
 <% end %>

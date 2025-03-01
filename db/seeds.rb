@@ -162,6 +162,12 @@ status1 = ShipmentStatus.create!(name: "Ready", company: company1, locked_for_cu
 status2 = ShipmentStatus.create!(name: "In Transit", company: company1, locked_for_customers: true, closed: false)
 status3 = ShipmentStatus.create!(name: "Delivered", company: company1, locked_for_customers: true, closed: true)
 
+# Create shipment statuses
+puts "Creating shipment action preferences..."
+ShipmentActionPreference.create!(action: "claimed_by_company", company: company1, shipment_status_id: nil)
+ShipmentActionPreference.create!(action: "loaded_onto_truck", company: company1, shipment_status_id: nil)
+ShipmentActionPreference.create!(action: "out_for_delivery", company: company1, shipment_status: status2)
+
 # Create shipments
 puts "Creating shipments..."
 Shipment.create!(
