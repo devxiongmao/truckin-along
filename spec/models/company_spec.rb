@@ -5,6 +5,8 @@ RSpec.describe Company, type: :model do
   it { should have_many(:shipments) }
   it { should have_many(:shipment_statuses) }
   it { should have_many(:trucks) }
+  it { should have_many(:shipment_action_preferences) }
+
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:address) }

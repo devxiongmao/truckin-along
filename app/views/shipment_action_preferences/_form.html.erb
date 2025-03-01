@@ -1,0 +1,36 @@
+<%= form_with(model: preference, local: true, class: 'styled-form') do |form| %>
+<% if preference.errors.any? %>
+<div class="error-messages">
+  <h2><%= pluralize(@preference.errors.count, 'error') %> prohibited this shipment status from being saved:</h2>
+  <ul>
+    <% preference.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<%= form.hidden_field :company_id, value: current_user.company_id %>
+
+<div class="form-group">
+  <%= form.label :action, class: 'form-label' %>
+  <%= form.text_field :action, 
+        value: "When #{preference.action.gsub('_', ' ')}", 
+        class: 'form-input', 
+        disabled: true %>
+</div>
+
+<% unless statuses.empty? %>
+<div class="form-group">
+  <%= form.label :shipment_status_id, "Shipment Status", class: 'form-label' %>
+  <%= form.select :shipment_status_id, 
+                      options_from_collection_for_select(statuses, :id, :name, preference.shipment_status_id), 
+                      { include_blank: "Don't change status" }, 
+                      { class: 'form-input'} %>
+</div>
+<% end %>
+
+<div class="actions">
+  <%= form.submit 'Update', class: 'button primary-button' %>
+</div>
+<% end %>

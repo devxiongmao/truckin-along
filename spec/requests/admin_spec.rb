@@ -16,6 +16,9 @@ RSpec.describe "/admin", type: :request do
   let!(:truck) { create(:truck, company: company) }
   let!(:other_truck) { create(:truck, company: other_company) }
 
+  let!(:preference) { create(:shipment_action_preference, company: company, shipment_status: shipment_status, action: "loaded_onto_truck") }
+  let!(:other_preference) { create(:shipment_action_preference, company: other_company, shipment_status: other_shipment_status) }
+
   describe "GET /admin" do
     context "when the user is an admin" do
       before do
@@ -38,6 +41,12 @@ RSpec.describe "/admin", type: :request do
         get admin_index_path
         expect(response.body).to include(truck.make)
         expect(response.body).not_to include(other_truck.make)
+      end
+
+      it "includes only shipment action preferences from the admin's company" do
+        get admin_index_path
+        expect(response.body).to include("Loaded onto truck")
+        expect(response.body).not_to include("Claimed by company")
       end
 
       it "renders the index template" do

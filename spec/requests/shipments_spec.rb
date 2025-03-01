@@ -599,6 +599,18 @@ RSpec.describe "/shipments", type: :request do
         post assign_shipments_url, params: { shipment_ids: nil }
         expect(flash[:alert]).to eq("No shipments were selected.")
       end
+
+      describe "when a shipment action preference exists" do
+        let(:shipment_status) { create(:shipment_status, company: company) }
+        let!(:company_preference) { create(:shipment_action_preference, action: "claimed_by_company", company: company, shipment_status: shipment_status) }
+
+        it "updates the shipments to have that status" do
+          shipment_ids = unassigned_shipments.map(&:id)
+          post assign_shipments_url, params: { shipment_ids: shipment_ids }
+          shipment = Shipment.find(shipment_ids.last)
+          expect(shipment.shipment_status_id).to eq(shipment_status.id)
+        end
+      end
     end
 
     describe "POST #assign_shipments_to_truck" do
@@ -633,6 +645,17 @@ RSpec.describe "/shipments", type: :request do
         it "shows the appropriate alert" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
           expect(flash[:notice]).to eq("Shipments successfully assigned to truck #{truck.display_name}.")
+        end
+
+        describe "when a shipment action preference exists" do
+          let(:shipment_status) { create(:shipment_status, company: company) }
+          let!(:company_preference) { create(:shipment_action_preference, action: "loaded_onto_truck", company: company, shipment_status: shipment_status) }
+
+          it "updates the shipments to have that status" do
+            post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
+            claimed_shipment.reload
+            expect(claimed_shipment.shipment_status_id).to eq(shipment_status.id)
+          end
         end
       end
     end
