@@ -4,9 +4,9 @@ class ShipmentActionPreference < ApplicationRecord
 
   # List of possible actions
   ACTIONS = [
-    'claimed_by_company',
-    'loaded_onto_truck',
-    'out_for_delivery',
+    "claimed_by_company",
+    "loaded_onto_truck",
+    "out_for_delivery"
   ]
 
   validates :action, inclusion: { in: ACTIONS }

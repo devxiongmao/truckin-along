@@ -50,10 +50,10 @@ class CompaniesController < ApplicationController
   def setup_company_defaults(company)
     ## Create default shipment statuses
     ShipmentStatus.create!({ name: "Ready", locked_for_customers: false, closed: false, company_id: company.id })
-    transit_status = ShipmentStatus.create!({ name: "In-Transit",locked_for_customers: true, closed: false, company_id: company.id })
+    transit_status = ShipmentStatus.create!({ name: "In-Transit", locked_for_customers: true, closed: false, company_id: company.id })
     ShipmentStatus.create!({ name: "Delivered", locked_for_customers: true, closed: true, company_id: company.id })
-    
+
     # Create default shipment action preferences
-    company.shipment_action_preferences.create({ action: "out_for_delivery", shipment_status_id: transit_status.id})
+    company.shipment_action_preferences.create([ { action: "claimed_by_company", shipment_status_id: nil }, { action: "loaded_onto_truck", shipment_status_id: nil }, { action: "out_for_delivery", shipment_status_id: transit_status.id } ])
   end
 end
