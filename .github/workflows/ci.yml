@@ -23,7 +23,8 @@ jobs:
       - name: Determine labels based on changes
         id: determine-labels
         run: |
-          LABELS=()
+          # Create empty array to store labels
+          declare -a LABELS=()
 
           if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'app/controllers\|app/models\|app/helpers\|app/jobs\|app/mailers'; then
             LABELS+=("backend")
@@ -65,16 +66,35 @@ jobs:
             LABELS+=("release")
           fi
 
-          # Output labels as JSON array for the next step
-          echo "labels=$(printf '%s\n' "${LABELS[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
+          # Check if we have any labels
+          if [ ${#LABELS[@]} -eq 0 ]; then
+            echo "has_labels=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Use newline delimiter for multiline output
+          delimiter="$(openssl rand -hex 8)"
+          echo "has_labels=true" >> $GITHUB_OUTPUT
+          echo "labels<<$delimiter" >> $GITHUB_OUTPUT
+          for label in "${LABELS[@]}"; do
+            echo "$label" >> $GITHUB_OUTPUT
+          done
+          echo "$delimiter" >> $GITHUB_OUTPUT
 
       - name: Add Labels to PR
-        if: github.event_name == 'pull_request' && steps.determine-labels.outputs.labels != '[]'
-        uses: actions-ecosystem/action-add-labels@v1
+        if: github.event_name == 'pull_request' && steps.determine-labels.outputs.has_labels == 'true'
+        uses: actions/github-script@v6
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: ${{ steps.determine-labels.outputs.labels }}
-          number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = `${{ steps.determine-labels.outputs.labels }}`.trim().split('\n');
+              
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: labels
+            });
 
   scan_ruby:
     runs-on: ubuntu-latest
