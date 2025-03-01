@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :shipment_action_preference do
-    action { "departing_warehouse" }
+    action { "claimed_by_company" }
     association :company
     association :shipment_status
   end

@@ -71,6 +71,18 @@ RSpec.describe "/companies", type: :request do
           post companies_url, params: { company: valid_attributes }
           expect(flash[:notice]).to eq("Company created successfully.")
         end
+
+        it 'creates the default shipment statuses' do
+          expect {
+            post companies_url, params: { company: valid_attributes }
+          }.to change(ShipmentStatus, :count).by(3)
+        end
+
+        it 'creates the default shipment action preferences' do
+          expect {
+            post companies_url, params: { company: valid_attributes }
+          }.to change(ShipmentActionPreference, :count).by(3)
+        end
       end
 
       context "with invalid parameters" do
@@ -93,6 +105,18 @@ RSpec.describe "/companies", type: :request do
         it 'renders the correct flash message' do
           post companies_url, params: { company: invalid_attributes }
           expect(flash[:alert]).to eq("Failed to create company.")
+        end
+
+        it 'does not create the default shipment statuses' do
+          expect {
+            post companies_url, params: { company: invalid_attributes }
+          }.to change(ShipmentStatus, :count).by(0)
+        end
+
+        it 'does not create the default shipment action preferences' do
+          expect {
+            post companies_url, params: { company: invalid_attributes }
+          }.to change(ShipmentActionPreference, :count).by(0)
         end
       end
     end

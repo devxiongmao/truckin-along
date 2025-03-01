@@ -8,6 +8,7 @@ RSpec.describe ShipmentStatus, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:shipments).dependent(:destroy) }
     it { is_expected.to belong_to(:company) }
+    it { should have_many(:shipment_action_preferences).dependent(:nullify) }
   end
 
   ## Validation Tests

@@ -22,6 +22,6 @@ class ShipmentActionPreferencesController < ApplicationController
     end
 
     def set_preference
-      @preference = ShipmentActionPreference.find(params[:id])
+      @preference = ShipmentActionPreference.for_company(current_company).find(params[:id])
     end
 end

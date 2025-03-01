@@ -13,4 +13,6 @@ class ShipmentActionPreference < ApplicationRecord
 
   # Ensure each company can only have one preference per action
   validates :action, uniqueness: { scope: :company_id }
+
+  scope :for_company, ->(company) { where(company_id: company.id) }
 end
