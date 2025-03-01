@@ -65,7 +65,9 @@ jobs:
             LABELS+=("release")
           fi
 
-          echo "LABELS=${LABELS[*]}" >> $GITHUB_ENV
+          # Convert array to comma-separated string
+          LABELS_STRING=$(IFS=,; echo "${LABELS[*]}")
+          echo "LABELS=$LABELS_STRING" >> $GITHUB_ENV
 
       - name: Add Labels to PR
         if: github.event_name == 'pull_request' && env.LABELS != ''
