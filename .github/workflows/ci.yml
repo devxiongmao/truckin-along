@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+# Ensure we don't run duplicate workflows on the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   pull-requests: write
@@ -12,9 +17,44 @@ permissions:
 jobs:
   analyze_changes:
     runs-on: ubuntu-latest
+    outputs:
+      backend_changes: ${{ steps.filter.outputs.backend }}
+      frontend_changes: ${{ steps.filter.outputs.frontend }}
+      has_labels: ${{ steps.determine-labels.outputs.has_labels }}
+      labels: ${{ steps.determine-labels.outputs.labels }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for git history and better file change detection
+
+      - name: Filter changes
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'app/controllers/**'
+              - 'app/models/**'
+              - 'app/helpers/**'
+              - 'app/jobs/**'
+              - 'app/mailers/**'
+              - 'db/migrate/**'
+              - 'config/**'
+              - 'lib/**'
+              - 'Gemfile'
+              - 'Gemfile.lock'
+            frontend:
+              - 'app/javascript/**'
+              - 'app/assets/**'
+              - 'package.json'
+              - 'yarn.lock'
+              - 'importmap.rb'
+            docs:
+              - '**/*.md'
+              - '**/*.txt'
+              - '**/*.mermaid'
+              - 'docs/**'
 
       - name: Get changed files
         id: changed-files
@@ -26,11 +66,11 @@ jobs:
           # Create empty array to store labels
           declare -a LABELS=()
 
-          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'app/controllers\|app/models\|app/helpers\|app/jobs\|app/mailers'; then
+          if [[ "${{ steps.filter.outputs.backend }}" == "true" ]]; then
             LABELS+=("backend")
           fi
 
-          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'app/javascript\|app/assets'; then
+          if [[ "${{ steps.filter.outputs.frontend }}" == "true" ]]; then
             LABELS+=("frontend")
           fi
 
@@ -46,7 +86,7 @@ jobs:
             LABELS+=("github_actions")
           fi
 
-          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q '\.mermaid\|\.md\|\.txt\|^docs/'; then
+          if [[ "${{ steps.filter.outputs.docs }}" == "true" ]]; then
             LABELS+=("documentation")
           fi
 
@@ -98,7 +138,10 @@ jobs:
 
   scan_ruby:
     runs-on: ubuntu-latest
+    # Only run if backend files changed
     needs: analyze_changes
+    if: needs.analyze_changes.outputs.backend_changes == 'true'
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -114,7 +157,10 @@ jobs:
 
   scan_js:
     runs-on: ubuntu-latest
+    # Only run if frontend files changed
     needs: analyze_changes
+    if: needs.analyze_changes.outputs.frontend_changes == 'true'
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -130,7 +176,10 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    # Only run if backend files changed
     needs: analyze_changes
+    if: needs.analyze_changes.outputs.backend_changes == 'true'
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -146,7 +195,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    # Only run if backend files changed
     needs: analyze_changes
+    if: needs.analyze_changes.outputs.backend_changes == 'true'
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres
@@ -173,8 +225,16 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Install dependencies
-        run: bundle install
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      - name: Cache Chrome Driver
+        uses: actions/cache@v3
+        with:
+          path: ~/.chromedriver-helper
+          key: chromedriver-${{ runner.os }}
 
       - name: Wait for PostgreSQL
         run: |
