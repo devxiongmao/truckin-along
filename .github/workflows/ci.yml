@@ -46,7 +46,7 @@ jobs:
             LABELS+=("github_actions")
           fi
 
-          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q '\.mermaid$\|\.md$\|\.txt$'; then
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q '\.mermaid\|\.md\|\.txt\|^docs/'; then
             LABELS+=("documentation")
           fi
 
