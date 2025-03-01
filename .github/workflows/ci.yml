@@ -65,16 +65,15 @@ jobs:
             LABELS+=("release")
           fi
 
-          # Convert array to comma-separated string
-          LABELS_STRING=$(IFS=,; echo "${LABELS[*]}")
-          echo "LABELS=$LABELS_STRING" >> $GITHUB_ENV
+          # Output labels as JSON array for the next step
+          echo "labels=$(printf '%s\n' "${LABELS[@]}" | jq -R . | jq -s .)" >> $GITHUB_OUTPUT
 
       - name: Add Labels to PR
-        if: github.event_name == 'pull_request' && env.LABELS != ''
+        if: github.event_name == 'pull_request' && steps.determine-labels.outputs.labels != '[]'
         uses: actions-ecosystem/action-add-labels@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: ${{ env.LABELS }}
+          labels: ${{ steps.determine-labels.outputs.labels }}
           number: ${{ github.event.pull_request.number }}
 
   scan_ruby:
