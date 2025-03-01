@@ -1,109 +1,141 @@
 <div class="page-header">
-    <h1 class="page-title">Shipment Statuses</h1>
-    <%= link_to 'New Shipment Status', new_shipment_status_path, class: 'button primary-button' %>
+  <h1 class="page-title">Shipment Statuses</h1>
+  <%= link_to 'New Shipment Status', new_shipment_status_path, class: 'button primary-button' %>
 </div>
 
 <table class="styled-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th class="center-text">Locked for Customers?</th>
-            <th class="center-text">Closed</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @shipment_statuses.each do |status| %>
-        <tr>
-            <td><%= status.name %></td>
-            <td class="center-text">
-                <% if status.locked_for_customers %>
-                ✔️
-                <% else %>
-                ❌
-                <% end %>
-            </td>
-            <td class="center-text">
-                <% if status.closed %>
-                ✔️
-                <% else %>
-                ❌
-                <% end %>
-            </td>
-            <td>
-                <%= link_to 'Edit', edit_shipment_status_path(status), class: 'action-link' %> |
-                <%= link_to 'Destroy', status, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
-            </td>
-        </tr>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="center-text">Locked for Customers?</th>
+      <th class="center-text">Closed</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shipment_statuses.each do |status| %>
+    <tr>
+      <td><%= status.name %></td>
+      <td class="center-text">
+        <% if status.locked_for_customers %>
+        ✔️
+        <% else %>
+        ❌
         <% end %>
-    </tbody>
+      </td>
+      <td class="center-text">
+        <% if status.closed %>
+        ✔️
+        <% else %>
+        ❌
+        <% end %>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_shipment_status_path(status), class: 'action-link' %> |
+        <%= link_to 'Destroy', status, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
 </table>
 <br />
 
 <div class="page-header">
-    <h1 class="page-title">Drivers</h1>
-    <%= link_to "Create New Driver", new_driver_management_path, class: 'button primary-button' %>
+  <h1 class="page-title">Manage Statuses Workflows</h1>
 </div>
 
-
 <table class="styled-table">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Driver's License</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @drivers.each do |driver| %>
-        <tr>
-            <td><%= driver.first_name %></td>
-            <td><%= driver.last_name %></td>
-            <td><%= driver.email %></td>
-            <td><%= driver.drivers_license %></td>
-            <td><%= driver.created_at.strftime("%Y-%m-%d") %></td>
-            <td>
-                <%= link_to 'Edit', edit_driver_management_path(driver), class: 'action-link' %>
-            </td>
-        </tr>
+  <thead>
+    <tr>
+      <th>When...</th>
+      <th class="center-text">Auto set the shipment status to....</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @preferences.each do |preference| %>
+    <tr>
+      <td><%= preference.action.gsub('_', ' ').capitalize %></td>
+      <td class="center-text">
+        <% if preference.shipment_status %>
+        <%= preference.shipment_status.name %>
+        <% else %>
+        Don't update the status
         <% end %>
-    </tbody>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_shipment_status_path(status), class: 'action-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
 </table>
 <br />
 
 <div class="page-header">
-    <h1 class="page-title">Trucks</h1>
-    <%= link_to 'New Truck', new_truck_path, class: 'button primary-button' %>
+  <h1 class="page-title">Drivers</h1>
+  <%= link_to "Create New Driver", new_driver_management_path, class: 'button primary-button' %>
+</div>
+
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Driver's License</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @drivers.each do |driver| %>
+    <tr>
+      <td><%= driver.first_name %></td>
+      <td><%= driver.last_name %></td>
+      <td><%= driver.email %></td>
+      <td><%= driver.drivers_license %></td>
+      <td><%= driver.created_at.strftime("%Y-%m-%d") %></td>
+      <td>
+        <%= link_to 'Edit', edit_driver_management_path(driver), class: 'action-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<br />
+
+<div class="page-header">
+  <h1 class="page-title">Trucks</h1>
+  <%= link_to 'New Truck', new_truck_path, class: 'button primary-button' %>
 </div>
 
 <table class="styled-table">
-    <thead>
-        <tr>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Mileage</th>
-            <th>License Plate</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @trucks.each do |truck| %>
-        <tr>
-            <td><%= truck.make %></td>
-            <td><%= truck.model %></td>
-            <td><%= truck.year %></td>
-            <td><%= truck.mileage %></td>
-            <td><%= truck.license_plate %></td>
-            <td>
-                <%= link_to 'Show', truck, class: 'action-link' %> |
-                <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |
-                <%= link_to 'Destroy', truck, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
-            </td>
-        </tr>
-        <% end %>
-    </tbody>
+  <thead>
+    <tr>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Year</th>
+      <th>Mileage</th>
+      <th>License Plate</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @trucks.each do |truck| %>
+    <tr>
+      <td><%= truck.make %></td>
+      <td><%= truck.model %></td>
+      <td><%= truck.year %></td>
+      <td><%= truck.mileage %></td>
+      <td><%= truck.license_plate %></td>
+      <td>
+        <%= link_to 'Show', truck, class: 'action-link' %> |
+        <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |
+        <%= link_to 'Destroy', truck, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
 </table>
