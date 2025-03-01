@@ -6,9 +6,73 @@ on:
     branches: [main]
 
 jobs:
+  analyze_changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+
+      - name: Determine labels based on changes
+        id: determine-labels
+        run: |
+          LABELS=()
+
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'app/controllers\|app/models\|app/helpers\|app/jobs\|app/mailers'; then
+            LABELS+=("backend")
+          fi
+
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'app/javascript\|app/assets'; then
+            LABELS+=("frontend")
+          fi
+
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'db/migrate'; then
+            LABELS+=("migration")
+          fi
+
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q 'Gemfile.lock\|package.json\|Gemfile'; then
+            LABELS+=("dependencies")
+          fi
+
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q '.github/workflows\|.kamal/hooks'; then
+            LABELS+=("github_actions")
+          fi
+
+          if echo "${{ steps.changed-files.outputs.all_changed_files }}" | grep -q '\.md$\|\.txt$'; then
+            LABELS+=("documentation")
+          fi
+
+          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'Add|add|create|Create'; then
+            LABELS+=("enhancement")
+          fi
+
+          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq '\bfix(|es|ed|ing)\b'; then
+            LABELS+=("bug")
+          fi
+
+          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'refactor|Refactor|Update|update'; then
+            LABELS+=("refactor")
+          fi
+
+          if [[ "${{ github.head_ref }}" == release-* ]]; then
+            LABELS+=("release")
+          fi
+
+          echo "LABELS=${LABELS[*]}" >> $GITHUB_ENV
+
+      - name: Add Labels to PR
+        if: github.event_name == 'pull_request' && env.LABELS != ''
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: ${{ env.LABELS }}
+
   scan_ruby:
     runs-on: ubuntu-latest
-
+    needs: analyze_changes
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,7 +88,7 @@ jobs:
 
   scan_js:
     runs-on: ubuntu-latest
-
+    needs: analyze_changes
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,6 +104,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: analyze_changes
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,7 +120,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-
+    needs: analyze_changes
     services:
       postgres:
         image: postgres
