@@ -54,6 +54,9 @@ class CompaniesController < ApplicationController
     ShipmentStatus.create!({ name: "Delivered", locked_for_customers: true, closed: true, company_id: company.id })
 
     # Create default shipment action preferences
-    company.shipment_action_preferences.create([ { action: "claimed_by_company", shipment_status_id: nil }, { action: "loaded_onto_truck", shipment_status_id: nil }, { action: "out_for_delivery", shipment_status_id: transit_status.id } ])
+    company.shipment_action_preferences.create([
+      { action: "claimed_by_company", shipment_status_id: nil },
+      { action: "loaded_onto_truck", shipment_status_id: nil },
+      { action: "out_for_delivery", shipment_status_id: transit_status.id } ])
   end
 end
