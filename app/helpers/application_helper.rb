@@ -7,7 +7,7 @@ module ApplicationHelper
       current_user.admin?
     when :shipments
       current_user.customer?
-    when :deliveries, :truck_loading
+    when :deliveries, :truck_loading, :start_delivery
       current_user.admin? || current_user.driver?
     else
       false

@@ -9,9 +9,10 @@ Rails.application.routes.draw do
 
   resources :admin, only: [ :index ]
 
-  resources :deliveries, only: [ :index ] do
+  resources :deliveries, only: [ :index, :create ] do
     collection do
       get :truck_loading
+      get :start_delivery
     end
   end
   resources :companies, only: %i[new create edit update]
