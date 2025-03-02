@@ -7,8 +7,8 @@ RSpec.describe "/deliveries", type: :request do
   let(:valid_user) { create(:user, company: company) }
   let(:non_org_user) { create(:user, :customer, company: company) }
 
-  let!(:unassigned_shipment) { create(:shipment, company: nil) }
-  let!(:assigned_shipment) { create(:shipment, company: company, truck: nil) }
+  let!(:unassigned_shipment) { create(:shipment, company: nil, name: "Cosmetics") }
+  let!(:assigned_shipment) { create(:shipment, company: company, truck: nil, name: "Toys") }
 
   let!(:truck) { create(:truck, company: company) }
   let!(:other_truck) { create(:truck, company: other_company) }

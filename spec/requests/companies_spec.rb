@@ -4,7 +4,7 @@ RSpec.describe "/companies", type: :request do
   let(:valid_user) { create(:user, role: "admin") }
   let(:non_admin_user) { create(:user) }
 
-  let(:company) { create(:company) }
+  let(:company) { create(:company, name: "SpeedyFast Shippin") }
 
   let(:valid_attributes) {
     {
