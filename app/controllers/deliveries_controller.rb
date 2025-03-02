@@ -1,5 +1,6 @@
 class DeliveriesController < ApplicationController
   before_action :authenticate_user!
+  before_action :authorize_driver
 
   def index
     @unassigned_shipments = Shipment.where(company_id: nil)
