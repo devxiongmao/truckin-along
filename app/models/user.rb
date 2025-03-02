@@ -47,4 +47,14 @@ class User < ApplicationRecord
   def has_company?
     company.present?
   end
+
+  # Check if user is available (not on active delivery)
+  def available?
+    deliveries.active.none?
+  end
+
+  # Get the user's active delivery if any
+  def active_delivery
+    deliveries.active.first
+  end
 end
