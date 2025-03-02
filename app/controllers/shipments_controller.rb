@@ -75,9 +75,9 @@ class ShipmentsController < ApplicationController
       shipments = Shipment.for_company(current_company).where(id: shipment_ids)
       shipments.update_all(truck_id: truck.id)
       shipments.update_all(shipment_status_id: preference.shipment_status_id) if preference&.shipment_status_id
-      redirect_to truck_loading_deliveries_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
+      redirect_to load_truck_deliveries_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
     else
-      redirect_to truck_loading_deliveries_path, alert: "Please select a truck and at least one shipment."
+      redirect_to load_truck_deliveries_path, alert: "Please select a truck and at least one shipment."
     end
   end
 

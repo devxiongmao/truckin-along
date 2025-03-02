@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   resources :deliveries, only: [ :index ] do
     collection do
-      get :truck_loading
+      get :load_truck
       get :start_delivery
     end
   end

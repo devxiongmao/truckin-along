@@ -12,7 +12,7 @@ RSpec.describe ApplicationHelper, type: :helper do
         expect(helper.show_nav_link?(:admin)).to be(false)
         expect(helper.show_nav_link?(:shipments)).to be(false)
         expect(helper.show_nav_link?(:deliveries)).to be(false)
-        expect(helper.show_nav_link?(:truck_loading)).to be(false)
+        expect(helper.show_nav_link?(:load_truck)).to be(false)
         expect(helper.show_nav_link?(:start_delivery)).to be(false)
       end
     end
@@ -37,8 +37,8 @@ RSpec.describe ApplicationHelper, type: :helper do
           expect(helper.show_nav_link?(:deliveries)).to be(true)
         end
 
-        it 'returns true for truck_loading' do
-          expect(helper.show_nav_link?(:truck_loading)).to be(true)
+        it 'returns true for load_truck' do
+          expect(helper.show_nav_link?(:load_truck)).to be(true)
         end
 
         it 'returns true for start_delivery' do
@@ -61,8 +61,8 @@ RSpec.describe ApplicationHelper, type: :helper do
           expect(helper.show_nav_link?(:deliveries)).to be(false)
         end
 
-        it 'returns false for truck_loading' do
-          expect(helper.show_nav_link?(:truck_loading)).to be(false)
+        it 'returns false for load_truck' do
+          expect(helper.show_nav_link?(:load_truck)).to be(false)
         end
 
         it 'returns false for start_delivery' do
@@ -85,8 +85,8 @@ RSpec.describe ApplicationHelper, type: :helper do
           expect(helper.show_nav_link?(:deliveries)).to be(true)
         end
 
-        it 'returns true for truck_loading' do
-          expect(helper.show_nav_link?(:truck_loading)).to be(true)
+        it 'returns true for load_truck' do
+          expect(helper.show_nav_link?(:load_truck)).to be(true)
         end
 
         it 'returns true for start_delivery' do

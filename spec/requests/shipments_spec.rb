@@ -615,9 +615,9 @@ RSpec.describe "/shipments", type: :request do
 
     describe "POST #assign_shipments_to_truck" do
       context "with invalid params" do
-        it 'redirects to the truck_loading_path' do
+        it 'redirects to the load_truck_path' do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [], truck_id: nil }
-          expect(response).to redirect_to(truck_loading_deliveries_path)
+          expect(response).to redirect_to(load_truck_deliveries_path)
         end
 
         it "shows an alert saying not authorized" do
@@ -637,9 +637,9 @@ RSpec.describe "/shipments", type: :request do
           expect(claimed_shipment.truck_id).to eq(truck.id)
         end
 
-        it "redirects to the truck_loading path" do
+        it "redirects to the load_truck path" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
-          expect(response).to redirect_to(truck_loading_deliveries_path)
+          expect(response).to redirect_to(load_truck_deliveries_path)
         end
 
         it "shows the appropriate alert" do
