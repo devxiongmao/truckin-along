@@ -52,7 +52,7 @@ class User < ApplicationRecord
   def available?
     deliveries.active.none?
   end
-  
+
   # Get the user's active delivery if any
   def active_delivery
     deliveries.active.first
