@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_02_165112) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_02_201310) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -30,6 +30,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_02_165112) do
     t.index ["status"], name: "index_deliveries_on_status"
     t.index ["truck_id"], name: "index_deliveries_on_truck_id"
     t.index ["user_id"], name: "index_deliveries_on_user_id"
+  end
+
+  create_table "delivery_shipments", force: :cascade do |t|
+    t.bigint "delivery_id", null: false
+    t.bigint "shipment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["delivery_id"], name: "index_delivery_shipments_on_delivery_id"
+    t.index ["shipment_id"], name: "index_delivery_shipments_on_shipment_id"
   end
 
   create_table "shipment_action_preferences", force: :cascade do |t|
@@ -113,6 +122,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_02_165112) do
 
   add_foreign_key "deliveries", "trucks"
   add_foreign_key "deliveries", "users"
+  add_foreign_key "delivery_shipments", "deliveries"
+  add_foreign_key "delivery_shipments", "shipments"
   add_foreign_key "shipment_action_preferences", "companies"
   add_foreign_key "shipment_action_preferences", "shipment_statuses"
   add_foreign_key "shipment_statuses", "companies"

@@ -13,6 +13,8 @@ RSpec.describe Shipment, type: :model do
     it { is_expected.to belong_to(:user).optional }
     it { is_expected.to belong_to(:shipment_status).optional }
     it { is_expected.to belong_to(:company).optional }
+    it { is_expected.to have_many(:delivery_shipments) }
+    it { is_expected.to have_many(:deliveries).through(:delivery_shipments) }
   end
 
   ## Validation Tests
