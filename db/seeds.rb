@@ -28,6 +28,7 @@ user1 = User.create!(
   last_name: "Doe",
   drivers_license: "D1234567",
   role: 0,
+  home_address: "505 Developer Way, Palo Alto, USA",
   company: company1
 )
 
@@ -38,6 +39,7 @@ user2 = User.create!(
   last_name: "Smith",
   drivers_license: "S7654321",
   role: 1,
+  home_address: "202 Innovation Ave, Silicon Valley, USA",
   company: company1
 )
 
@@ -49,6 +51,7 @@ user3 = User.create!(
   last_name: "Jordan",
   drivers_license: "MJ123456",
   role: 1,
+  home_address: "303 Startup St, San Francisco, USA",
   company: company1
 )
 
@@ -59,6 +62,7 @@ user4 = User.create!(
   last_name: "Connor",
   drivers_license: "SC654321",
   role: 1,
+  home_address: "404 Code Lane, Mountain View, USA",
   company: company1
 )
 
