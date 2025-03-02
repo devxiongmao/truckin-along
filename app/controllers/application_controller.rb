@@ -27,6 +27,20 @@ class ApplicationController < ActionController::Base
       redirect_to(root_path, alert: "Not authorized.") unless current_user&.admin?
     end
 
+    def authorize_customer
+      unless current_user&.role == "customer"
+        flash[:alert] = "You are not authorized to perform this action."
+        redirect_to root_path
+      end
+    end
+
+    def authorize_driver
+      if current_user&.role == "customer"
+        flash[:alert] = "You are not authorized to perform this action."
+        redirect_to root_path
+      end
+    end
+
     def handle_record_not_found
       redirect_to(root_path, alert: "Not authorized.")
     end

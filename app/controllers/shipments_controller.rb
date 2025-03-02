@@ -108,20 +108,6 @@ class ShipmentsController < ApplicationController
       end
     end
 
-    def authorize_customer
-      unless current_user&.role == "customer"
-        flash[:alert] = "You are not authorized to perform this action."
-        redirect_to root_path
-      end
-    end
-
-    def authorize_driver
-      if current_user&.role == "customer"
-        flash[:alert] = "You are not authorized to perform this action."
-        redirect_to root_path
-      end
-    end
-
     def shipment_params
       params.require(:shipment).permit(
         :shipment_status_id,
