@@ -104,4 +104,34 @@ RSpec.describe Truck, type: :model do
       expect(valid_truck.display_name).to eq("--()")
     end
   end
+
+  describe "#available?" do
+    describe "when there is an active delivery" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+      it "returns false" do
+        expect(valid_truck.available?).to eq(false)
+      end
+    end
+
+    describe "when there is not an active delivery" do
+      it "returns true" do
+        expect(valid_truck.available?).to eq(true)
+      end
+    end
+  end
+
+  describe "#active_delivery" do
+    describe "when there is an active delivery" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+      it "returns the delivery" do
+        expect(valid_truck.active_delivery).to eq(delivery)
+      end
+    end
+
+    describe "when there is not an active delivery" do
+      it "returns nil" do
+        expect(valid_truck.active_delivery).to be_nil
+      end
+    end
+  end
 end

@@ -17,4 +17,14 @@ class Truck < ApplicationRecord
   def display_name
     "#{make}-#{model}-#{year}(#{license_plate})"
   end
+
+  # Check if truck is available
+  def available?
+    deliveries.active.none?
+  end
+
+  # Get the truck's active delivery if any
+  def active_delivery
+    deliveries.active.first
+  end
 end
