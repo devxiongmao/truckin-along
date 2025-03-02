@@ -6,8 +6,8 @@ RSpec.describe DeliveriesController, type: :routing do
       expect(get: "/deliveries").to route_to("deliveries#index")
     end
 
-    it "routes to #truck_loading" do
-      expect(get: "/deliveries/truck_loading").to route_to("deliveries#truck_loading")
+    it "routes to #load_truck" do
+      expect(get: "/deliveries/load_truck").to route_to("deliveries#load_truck")
     end
 
     it "routes to #start_delivery" do

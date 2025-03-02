@@ -54,27 +54,27 @@ RSpec.describe "/deliveries", type: :request do
     end
   end
 
-  describe "GET /truck_loading" do
+  describe "GET /load_truck" do
     it "renders a successful response" do
-      get truck_loading_deliveries_url
+      get load_truck_deliveries_url
       expect(response).to be_successful
     end
 
     it "assigns current companies shipments that don't have a truck to @unassigned_shipments" do
-      get truck_loading_deliveries_url
+      get load_truck_deliveries_url
       expect(response.body).to include(assigned_shipment.name)
       expect(response.body).not_to include(unassigned_shipment.name)
     end
 
     it "assigns current companies trucks to @trucks" do
-      get truck_loading_deliveries_url
+      get load_truck_deliveries_url
       expect(response.body).to include(truck.make)
       expect(response.body).not_to include(other_truck.make)
     end
 
     it "renders the correct template" do
-      get truck_loading_deliveries_url
-      expect(response).to render_template(:truck_loading)
+      get load_truck_deliveries_url
+      expect(response).to render_template(:load_truck)
     end
 
 
@@ -85,17 +85,17 @@ RSpec.describe "/deliveries", type: :request do
       end
 
       it "shows the correct data for shipments" do
-        get truck_loading_deliveries_url
+        get load_truck_deliveries_url
         expect(response.body).to include("No unassigned shipments available.")
       end
 
       it "renders the correct template" do
-        get truck_loading_deliveries_url
-        expect(response).to render_template(:truck_loading)
+        get load_truck_deliveries_url
+        expect(response).to render_template(:load_truck)
       end
 
       it 'responds successfully' do
-        get truck_loading_deliveries_url
+        get load_truck_deliveries_url
         expect(response).to be_successful
       end
     end

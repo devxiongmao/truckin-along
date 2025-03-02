@@ -6,7 +6,7 @@ class DeliveriesController < ApplicationController
     @my_shipments = Shipment.where(company_id: current_company)
   end
 
-  def truck_loading
+  def load_truck
     @unassigned_shipments = Shipment.for_company(current_company).where(truck_id: nil)
     @trucks = Truck.for_company(current_company)
   end
