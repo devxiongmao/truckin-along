@@ -100,4 +100,43 @@ RSpec.describe "/deliveries", type: :request do
       end
     end
   end
+
+  describe "GET /start_delivery" do
+    it "renders a successful response" do
+      get start_delivery_deliveries_url
+      expect(response).to be_successful
+    end
+
+    it "assigns current companies trucks to @trucks" do
+      get start_delivery_deliveries_url
+      expect(response.body).to include(truck.make)
+      expect(response.body).not_to include(other_truck.make)
+    end
+
+    it "renders the correct template" do
+      get start_delivery_deliveries_url
+      expect(response).to render_template(:start_delivery)
+    end
+
+    context 'when no trucks exist' do
+      before do
+        Truck.destroy_all
+      end
+
+      it "shows the correct data for trucks" do
+        get start_delivery_deliveries_url
+        expect(response.body).to include("You don't have any trucks.")
+      end
+
+      it "renders the correct template" do
+        get start_delivery_deliveries_url
+        expect(response).to render_template(:start_delivery)
+      end
+
+      it 'responds successfully' do
+        get start_delivery_deliveries_url
+        expect(response).to be_successful
+      end
+    end
+  end
 end
