@@ -47,6 +47,7 @@ jobs:
             frontend:
               - 'app/javascript/**'
               - 'app/assets/**'
+              - 'app/views/**'
               - 'package.json'
               - 'yarn.lock'
               - 'importmap.rb'
