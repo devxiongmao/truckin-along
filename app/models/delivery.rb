@@ -2,7 +2,7 @@ class Delivery < ApplicationRecord
   belongs_to :user
   belongs_to :truck
 
-  enum status: {
+  enum :status, {
     scheduled: 0,
     in_progress: 1,
     completed: 2,
