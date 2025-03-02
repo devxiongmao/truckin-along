@@ -1,69 +1,77 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "Truckin Along" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
 
-    <%= yield :head %>
+<head>
+  <title><%= content_for(:title) || "Truckin Along" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <%= yield :head %>
 
-    <%= favicon_link_tag 'favicon.png', rel: 'icon', type: 'image/png', sizes: '32x32' %>
+  <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+  <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+  <%= favicon_link_tag 'favicon.png', rel: 'icon', type: 'image/png', sizes: '32x32' %>
 
-  <body>
-    <header>
-      <nav class="navbar">
-        <div class="navbar-title">TRUCKIN' ALONG</div>
-        <% if show_nav_link?(:admin) %>
-          <div class="navbar-links">
-            <%= link_to 'Admin', admin_index_path, class: 'nav-link' %>
-          </div>
+  <%# Includes all stylesheet files in app/assets/stylesheets %>
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="navbar-title">TRUCKIN' ALONG</div>
+      <% if show_nav_link?(:admin) %>
+      <div class="navbar-links">
+        <%= link_to 'Admin', admin_index_path, class: 'nav-link' %>
+      </div>
+      <% end %>
+
+      <% if show_nav_link?(:shipments) %>
+      <div class="navbar-links">
+        <%= link_to 'My Shipments', shipments_path, class: 'nav-link' %>
+      </div>
+      <% end %>
+
+      <% if show_nav_link?(:deliveries) %>
+      <div class="navbar-links">
+        <%= link_to 'Shipment Marketplace', deliveries_path, class: 'nav-link' %>
+      </div>
+      <% end %>
+
+      <% if show_nav_link?(:truck_loading) %>
+      <div class="navbar-links">
+        <%= link_to 'Truck Loading', truck_loading_deliveries_path, class: 'nav-link' %>
+      </div>
+      <% end %>
+
+      <% if show_nav_link?(:start_delivery) %>
+      <div class="navbar-links">
+        <%= link_to 'Deliveries', start_delivery_deliveries_path, class: 'nav-link' %>
+      </div>
+      <% end %>
+
+      <div class="navbar-links">
+        <% if user_signed_in? %>
+        <%= link_to 'Edit Profile', edit_user_registration_path, class: 'nav-link' %>
+        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+        <% else %>
+        <%= link_to 'Sign In', new_user_session_path, class: 'nav-link' %>
+        <%= link_to 'Sign Up', root_path, class: 'nav-link' %>
         <% end %>
+      </div>
+    </nav>
+  </header>
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
 
-        <% if show_nav_link?(:shipments) %>
-          <div class="navbar-links">
-            <%= link_to 'My Shipments', shipments_path, class: 'nav-link' %>
-          </div>
-        <% end %>
+  <main class="main-content">
+    <%= yield %>
+  </main>
+</body>
 
-        <% if show_nav_link?(:deliveries) %>
-          <div class="navbar-links">
-            <%= link_to 'Shipment Marketplace', deliveries_path, class: 'nav-link' %>
-          </div>
-        <% end %>
-
-        <% if show_nav_link?(:truck_loading) %>
-          <div class="navbar-links">
-            <%= link_to 'Truck Loading', truck_loading_deliveries_path, class: 'nav-link' %>
-          </div>
-        <% end %>
-
-        <div class="navbar-links">
-          <% if user_signed_in? %>
-            <%= link_to 'Edit Profile', edit_user_registration_path, class: 'nav-link' %>
-            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-link' %>
-          <% else %>
-            <%= link_to 'Sign In', new_user_session_path, class: 'nav-link' %>
-            <%= link_to 'Sign Up', root_path, class: 'nav-link' %>
-          <% end %>
-        </div>
-      </nav>
-    </header>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
-    <main class="main-content">
-      <%= yield %>
-    </main>
-  </body>
 </html>
