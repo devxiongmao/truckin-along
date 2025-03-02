@@ -1,0 +1,37 @@
+<h1>And we're off!</h1>
+
+<h2>My active delivery</h2>
+<% if @active_delivery %>
+<h3>Truck: <%= @active_delivery.truck.display_name %></h3>
+<% else %>
+<p>Not currently on a delivery.</p>
+<% end %>
+
+
+<h2>All trucks</h2>
+<% if @trucks.any? %>
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th class="center-text">Available?</th>
+    </tr>
+  </thead>
+  <tbody id="my-shipments">
+    <% @trucks.each do |truck| %>
+    <tr>
+      <td><%= truck.display_name %></td>
+      <td class="center-text">
+        <% if truck.available? %>
+        ✔️
+        <% else %>
+        ❌
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p>You don't have any trucks.</p>
+<% end %>
