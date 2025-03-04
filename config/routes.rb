@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :admin, only: [ :index ]
 
-  resources :deliveries, only: [ :index ] do
+  resources :deliveries, only: [ :index, :show ] do
     collection do
       get :load_truck
       get :start_delivery

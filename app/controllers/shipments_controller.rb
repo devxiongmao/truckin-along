@@ -82,10 +82,14 @@ class ShipmentsController < ApplicationController
   end
 
   def initiate_delivery
-    if InitiateDelivery.new(params, current_company).run
-      redirect_to start_delivery_deliveries_path, notice: "Delivery successfully started!"
+    service = InitiateDelivery.new(params, current_user, current_company)
+
+    if service.run
+      redirect_to service.delivery, notice: "Delivery was successfully created with #{service.delivery.shipments.count} shipments."
     else
-      redirect_to start_delivery_deliveries_path, notice: "Something went wrong."
+      @delivery = Delivery.new(user_id: current_user.id, truck_id: params[:truck_id])
+      flash.now[:alert] = service.errors
+      render :new, status: :unprocessable_entity
     end
   end
 

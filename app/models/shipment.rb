@@ -23,7 +23,7 @@ class Shipment < ApplicationRecord
     !company.nil?
   end
 
-  def open
+  def open?
     !shipment_status&.closed
   end
 end
