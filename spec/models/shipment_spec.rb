@@ -105,4 +105,62 @@ RSpec.describe Shipment, type: :model do
       expect(valid_shipment).not_to be_valid
     end
   end
+
+  ## Custom Method Tests
+  describe "#status" do
+    describe "when shipment_status is set" do
+      it "returns the status name" do
+        valid_shipment.shipment_status = shipment_status
+        expect(valid_shipment.status).to eq(shipment_status.name)
+      end
+    end
+
+    describe "when shipment_status is nil" do
+      it "returns nil" do
+        valid_shipment.shipment_status = nil
+        expect(valid_shipment.status).to be_nil
+      end
+    end
+  end
+
+  describe "#claimed?" do
+    describe "when the company is set" do
+      it "returns true" do
+        expect(valid_shipment.claimed?).to eq(true)
+      end
+    end
+
+    describe "when the company is not set" do
+      it "returns false" do
+        valid_shipment.company = nil
+        expect(valid_shipment.claimed?).to eq(false)
+      end
+    end
+  end
+
+  describe "#open?" do
+    describe "when the shipment_status is not set" do
+      it "returns true" do
+        valid_shipment.shipment_status = nil
+        expect(valid_shipment.open?).to eq(true)
+      end
+    end
+
+    describe "when the shipment_status is set" do
+      describe "when shipment_status.closed is true" do
+        let(:closed_status) { create(:shipment_status, closed: true) }
+        it "returns false" do
+          valid_shipment.shipment_status = closed_status
+          expect(valid_shipment.open?).to eq(false)
+        end
+      end
+
+      describe "when shipment_status.closed is false" do
+        it "returns false" do
+          shipment_status.closed = false
+          expect(valid_shipment.open?).to eq(true)
+        end
+      end
+    end
+  end
 end
