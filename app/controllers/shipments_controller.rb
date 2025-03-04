@@ -81,6 +81,14 @@ class ShipmentsController < ApplicationController
     end
   end
 
+  def initiate_delivery
+    if InitiateDelivery.new(params, current_company).run
+      redirect_to start_delivery_deliveries_path, notice: "Delivery successfully started!"
+    else
+      redirect_to start_delivery_deliveries_path, notice: "Something went wrong."
+    end
+  end
+
   private
 
     def set_shipment

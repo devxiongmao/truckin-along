@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     collection do
       post :assign
       post :assign_shipments_to_truck
+      post :initiate_delivery
     end
   end
   resources :trucks, only: %i[show new create edit update destroy]
