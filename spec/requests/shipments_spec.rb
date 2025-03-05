@@ -9,7 +9,7 @@ RSpec.describe "/shipments", type: :request do
   let(:admin_user) { create(:user, :admin, company: company) }
 
   let!(:shipment) { create(:shipment, user: valid_user) }
-  let!(:other_shipment) { create(:shipment, user: other_user) }
+  let!(:other_shipment) { create(:shipment, user: other_user, name: "Toys") }
 
   let(:valid_attributes) do
     {
