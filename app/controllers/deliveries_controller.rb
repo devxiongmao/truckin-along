@@ -16,7 +16,7 @@ class DeliveriesController < ApplicationController
     @trucks = Truck.for_company(current_company).select(&:available?)
   end
 
-  def start_delivery
+  def start
     @trucks = Truck.for_company(current_company)
     @active_delivery = current_user.active_delivery
   end
