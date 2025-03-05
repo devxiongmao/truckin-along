@@ -31,6 +31,10 @@ RSpec.describe ShipmentsController, type: :routing do
       expect(post: "/shipments/assign_shipments_to_truck").to route_to("shipments#assign_shipments_to_truck")
     end
 
+    it "routes to #initiate_delivery" do
+      expect(post: "/shipments/initiate_delivery").to route_to("shipments#initiate_delivery")
+    end
+
     it "routes to #update via PUT" do
       expect(put: "/shipments/1").to route_to("shipments#update", id: "1")
     end

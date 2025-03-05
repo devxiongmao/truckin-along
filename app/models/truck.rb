@@ -2,7 +2,7 @@ class Truck < ApplicationRecord
   belongs_to :company
 
   has_many :shipments, dependent: :nullify
-  has_many :deliveries
+  has_many :deliveries, dependent: :destroy
 
   validates :make, :model, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }

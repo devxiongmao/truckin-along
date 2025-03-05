@@ -282,6 +282,18 @@ RSpec.describe "/shipments", type: :request do
         expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
+
+    describe "POST #initiate_delivery" do
+      it 'redirects to the root' do
+        post initiate_delivery_shipments_url, params: { truck_id: 1 }
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "shows an alert saying not authorized" do
+        post initiate_delivery_shipments_url, params: { truck_id: 1 }
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
   end
 
   context "when user is not a customer" do
@@ -656,6 +668,43 @@ RSpec.describe "/shipments", type: :request do
             claimed_shipment.reload
             expect(claimed_shipment.shipment_status_id).to eq(shipment_status.id)
           end
+        end
+      end
+    end
+
+    describe "POST #initiate_delivery" do
+      context "with invalid params" do
+        it 'redirects to the load_truck_path' do
+          post initiate_delivery_shipments_url, params: { truck_id: nil }
+          expect(response).to redirect_to(start_delivery_deliveries_path)
+        end
+
+        it "shows an alert saying not authorized" do
+          post initiate_delivery_shipments_url, params: { truck_id: nil }
+          expect(flash[:alert]).to eq([ "Failed to create delivery: Validation failed: Truck must exist" ])
+        end
+      end
+
+
+      context "with valid params" do
+        let(:truck) { create(:truck, company: company) }
+        let!(:sample_shipment) { create(:shipment, company: company, truck: truck) }
+
+        before do
+          allow(InitiateDelivery).to receive(:new).and_call_original
+        end
+
+        it "calls the InitiateDelivery service" do
+          post initiate_delivery_shipments_url, params: { truck_id: truck.id }
+          expect(InitiateDelivery).to have_received(:new).with(instance_of(ActionController::Parameters), admin_user, company)
+        end
+
+        it "redirects to the created delivery with a success notice" do
+          post initiate_delivery_shipments_url, params: { truck_id: truck.id }
+
+          delivery = Delivery.last
+          expect(response).to redirect_to(delivery)
+          expect(flash[:notice]).to eq("Delivery was successfully created with #{delivery.shipments.count} shipments.")
         end
       end
     end

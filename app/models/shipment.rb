@@ -22,4 +22,8 @@ class Shipment < ApplicationRecord
   def claimed?
     !company.nil?
   end
+
+  def open?
+    !shipment_status&.closed
+  end
 end
