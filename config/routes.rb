@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :admin, only: [ :index ]
 
-  resources :deliveries, only: [ :index ] do
+  resources :deliveries, only: [ :index, :show ] do
     collection do
       get :load_truck
       get :start_delivery
@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     collection do
       post :assign
       post :assign_shipments_to_truck
+      post :initiate_delivery
     end
   end
   resources :trucks, only: %i[show new create edit update destroy]

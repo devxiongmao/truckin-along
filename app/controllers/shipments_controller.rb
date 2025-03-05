@@ -2,7 +2,7 @@ class ShipmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
-  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck ]
+  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery ]
   before_action :authorize_edit_update, only: [ :edit, :update ]
 
   # GET /shipments
@@ -78,6 +78,17 @@ class ShipmentsController < ApplicationController
       redirect_to load_truck_deliveries_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
     else
       redirect_to load_truck_deliveries_path, alert: "Please select a truck and at least one shipment."
+    end
+  end
+
+  def initiate_delivery
+    service = InitiateDelivery.new(params, current_user, current_company)
+
+    if service.run
+      redirect_to service.delivery, notice: "Delivery was successfully created with #{service.delivery.shipments.count} shipments."
+    else
+      flash[:alert] = service.errors
+      redirect_to start_delivery_deliveries_path
     end
   end
 
