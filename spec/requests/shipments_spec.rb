@@ -676,7 +676,7 @@ RSpec.describe "/shipments", type: :request do
       context "with invalid params" do
         it 'redirects to the load_truck_path' do
           post initiate_delivery_shipments_url, params: { truck_id: nil }
-          expect(response).to redirect_to(start_delivery_deliveries_path)
+          expect(response).to redirect_to(start_deliveries_path)
         end
 
         it "shows an alert saying not authorized" do
