@@ -82,12 +82,12 @@ class ShipmentsController < ApplicationController
   end
 
   def initiate_delivery
-    service = InitiateDelivery.new(delivery_params, current_user, current_company)
+    service = InitiateDelivery.new(params, current_user, current_company)
 
     if service.run
       redirect_to service.delivery, notice: "Delivery was successfully created with #{service.delivery.shipments.count} shipments."
     else
-      flash.now[:alert] = service.errors
+      flash[:alert] = service.errors
       redirect_to start_delivery_deliveries_path
     end
   end
@@ -133,9 +133,5 @@ class ShipmentsController < ApplicationController
         :height,
         :boxes
         )
-    end
-
-    def delivery_params
-      params.permit(:truck_id)
     end
 end
