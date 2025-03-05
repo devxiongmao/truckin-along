@@ -16,6 +16,8 @@ class Delivery < ApplicationRecord
 
   scope :active, -> { where(status: [ :scheduled, :in_progress ]) }
   scope :inactive, -> { where(status: [ :completed, :cancelled ]) }
+  scope :for_user, ->(user) { where(user_id: user.id) }
+
 
   def active?
     scheduled? || in_progress?
