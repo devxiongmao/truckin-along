@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :deliveries, only: [ :index, :show ] do
     collection do
       get :load_truck
-      get :start_delivery
+      get :start
     end
   end
   resources :companies, only: %i[new create edit update]

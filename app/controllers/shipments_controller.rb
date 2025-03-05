@@ -88,7 +88,7 @@ class ShipmentsController < ApplicationController
       redirect_to service.delivery, notice: "Delivery was successfully created with #{service.delivery.shipments.count} shipments."
     else
       flash[:alert] = service.errors
-      redirect_to start_delivery_deliveries_path
+      redirect_to start_deliveries_path
     end
   end
 
