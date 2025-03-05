@@ -15,8 +15,8 @@ RSpec.describe "/deliveries", type: :request do
   let!(:truck) { create(:truck, company: company) }
   let!(:other_truck) { create(:truck, company: other_company) }
 
-  let!(:delivery) {create(:delivery, user: valid_user)}
-  let!(:other_delivery) {create(:delivery, user: other_user, truck: other_truck)}
+  let!(:delivery) { create(:delivery, user: valid_user) }
+  let!(:other_delivery) { create(:delivery, user: other_user, truck: other_truck) }
 
   describe "when user is not a customer" do
     before do
@@ -112,9 +112,9 @@ RSpec.describe "/deliveries", type: :request do
 
       it "renders only available trucks" do
         allow_any_instance_of(DeliveriesController).to receive(:load_truck).and_call_original
-      
+
         get load_truck_deliveries_url
-      
+
         expect(controller.instance_variable_get(:@trucks)).to contain_exactly(truck)
       end
 
