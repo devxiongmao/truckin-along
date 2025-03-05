@@ -1,1 +1,33 @@
-<h1>Bug</h1>
+<div class="page-header">
+  <h1 class="page-title">Delivery Details</h1>
+  <%= link_to 'Back', start_delivery_deliveries_path, class: 'button secondary-button' %>
+</div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Weight</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @delivery.shipments.each do |shipment| %>
+    <tr>
+      <td><%= shipment&.company&.name %></td>
+      <td><%= shipment.status %></td>
+      <td><%= shipment.name %></td>
+      <td><%= shipment.sender_name %></td>
+      <td><%= shipment.receiver_name %></td>
+      <td><%= shipment.weight %></td>
+      <td>
+        <%= link_to 'Show', shipment, class: 'action-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

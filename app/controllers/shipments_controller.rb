@@ -2,7 +2,7 @@ class ShipmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_shipment, only: %i[ show edit update destroy ]
   before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
-  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck ]
+  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery ]
   before_action :authorize_edit_update, only: [ :edit, :update ]
 
   # GET /shipments
@@ -82,14 +82,13 @@ class ShipmentsController < ApplicationController
   end
 
   def initiate_delivery
-    service = InitiateDelivery.new(params, current_user, current_company)
+    service = InitiateDelivery.new(delivery_params, current_user, current_company)
 
     if service.run
       redirect_to service.delivery, notice: "Delivery was successfully created with #{service.delivery.shipments.count} shipments."
     else
-      @delivery = Delivery.new(user_id: current_user.id, truck_id: params[:truck_id])
       flash.now[:alert] = service.errors
-      render :new, status: :unprocessable_entity
+      redirect_to start_delivery_deliveries_path
     end
   end
 
@@ -134,5 +133,9 @@ class ShipmentsController < ApplicationController
         :height,
         :boxes
         )
+    end
+
+    def delivery_params
+      params.permit(:truck_id)
     end
 end
