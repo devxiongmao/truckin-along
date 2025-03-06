@@ -82,6 +82,11 @@ class ShipmentsController < ApplicationController
   end
 
   def initiate_delivery
+    if current_user.active_delivery.present?
+      flash[:alert] = "Already on an active delivery"
+      return redirect_to start_deliveries_path
+    end
+
     service = InitiateDelivery.new(params, current_user, current_company)
 
     if service.run
