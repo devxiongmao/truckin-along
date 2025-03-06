@@ -685,6 +685,18 @@ RSpec.describe "/shipments", type: :request do
         end
       end
 
+      context "when user already has an active delivery" do
+        let!(:delivery) { create(:delivery, user: admin_user) }
+        it "redirects to the start deliveries page" do
+          post initiate_delivery_shipments_url, params: { truck_id: 1 }
+          expect(response).to redirect_to(start_deliveries_path)
+        end
+
+        it "shows the correct alert" do
+          post initiate_delivery_shipments_url, params: { truck_id: 1 }
+          expect(flash[:alert]).to eq("Already on an active delivery")
+        end
+      end
 
       context "with valid params" do
         let(:truck) { create(:truck, company: company) }
