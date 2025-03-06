@@ -66,9 +66,17 @@
       </div>
     </nav>
   </header>
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <% if notice.present? %>
+  <% Array(notice).each do |msg| %>
+  <p class="notice"><%= msg %></p>
+  <% end %>
+  <% end %>
 
+  <% if alert.present? %>
+  <% Array(alert).each do |msg| %>
+  <p class="alert"><%= msg %></p>
+  <% end %>
+  <% end %>
   <main class="main-content">
     <%= yield %>
   </main>
