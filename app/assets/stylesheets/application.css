@@ -238,3 +238,21 @@ button, .primary-button, .secondary-button, .danger-button {
 .center-text {
   text-align: center;
 }
+
+.notice {
+  background-color: #28a745; /* Rich green */
+  color: #ffffff; /* White text */
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.alert {
+  background-color: #dc3545; /* Red */
+  color: #000000; /* Black text */
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
