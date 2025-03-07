@@ -2,7 +2,11 @@
 
 <h2>My active delivery</h2>
 <% if @active_delivery %>
-<h3>Truck: <%= @active_delivery.truck.display_name %></h3>
+<h4>Truck: <%= @active_delivery.truck.display_name %></h4>
+<h4>Shipments: <%= @active_delivery.shipments.count %></h4>
+<p>
+  <%= link_to "View Delivery", delivery_path(@active_delivery), class: "btn btn-primary" %>
+</p>
 <% else %>
 <p>Not currently on a delivery.</p>
 <% end %>
