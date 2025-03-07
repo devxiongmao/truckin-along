@@ -5,7 +5,13 @@
 
 <div class="details-container">
   <p><strong>Name:</strong> <span class="detail-value"><%= @shipment.name %></span></p>
-  <p><strong>Status:</strong> <span class="detail-value"><%= @shipment.status %></span></p>
+  <p><strong>Status: </strong>
+    <% if @shipment.shipment_status_id %>
+    <span class="detail-value"><%= @shipment.status %></span>
+    <% else %>
+    <span class="detail-value">No Current Status</span>
+    <% end %>
+  </p>
   <p><strong>Sender Name:</strong> <span class="detail-value"><%= @shipment.sender_name %></span></p>
   <p><strong>Sender Address:</strong> <span class="detail-value"><%= @shipment.sender_address %></span></p>
   <p><strong>Receiver Name:</strong> <span class="detail-value"><%= @shipment.receiver_name %></span></p>
@@ -13,7 +19,7 @@
   <p><strong>Weight:</strong> <span class="detail-value"><%= @shipment.weight %> kg</span></p>
   <p><strong>Boxes:</strong> <span class="detail-value"><%= @shipment.boxes %></span></p>
   <% if @shipment.truck && !@current_user.customer? %>
-    <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.display_name, @shipment.truck %></span></p>
+  <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.display_name, @shipment.truck %></span></p>
   <% end %>
 </div>
 
