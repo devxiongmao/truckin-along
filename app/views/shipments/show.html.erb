@@ -6,11 +6,7 @@
 <div class="details-container">
   <p><strong>Name:</strong> <span class="detail-value"><%= @shipment.name %></span></p>
   <p><strong>Status: </strong>
-    <% if @shipment.shipment_status_id %>
-    <span class="detail-value"><%= @shipment.status %></span>
-    <% else %>
-    <span class="detail-value">No Current Status</span>
-    <% end %>
+    <span class="detail-value"><%= @shipment.shipment_status_id ? @shipment.status : "No Current Status"%></span>
   </p>
   <p><strong>Sender Name:</strong> <span class="detail-value"><%= @shipment.sender_name %></span></p>
   <p><strong>Sender Address:</strong> <span class="detail-value"><%= @shipment.sender_address %></span></p>
