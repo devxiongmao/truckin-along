@@ -657,7 +657,7 @@ RSpec.describe "/shipments", type: :request do
           expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
         end
 
-        it "redirects to the root page" do
+        it "redirects to the deliveries index page" do
           post close_shipment_url(other_shipment)
           expect(response).to redirect_to(deliveries_url)
         end
