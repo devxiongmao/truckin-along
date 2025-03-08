@@ -1,7 +1,7 @@
 class DeliveriesController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_driver
-  before_action :set_delivery, only: :show
+  before_action :set_delivery, only: [ :show, :close ]
 
   def index
     @unassigned_shipments = Shipment.where(company_id: nil)
@@ -9,6 +9,15 @@ class DeliveriesController < ApplicationController
   end
 
   def show
+  end
+
+  def close
+    if @delivery.can_be_closed?
+      @delivery.update!(status: :completed)
+      return redirect_to start_deliveries_path, notice: "Delivery complete!"
+    end
+    
+    redirect_to delivery_path(@delivery)
   end
 
   def load_truck

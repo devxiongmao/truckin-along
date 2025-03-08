@@ -22,4 +22,8 @@ class Delivery < ApplicationRecord
   def active?
     scheduled? || in_progress?
   end
+
+  def can_be_closed?
+    shipments.all? { |shipment| !shipment.open?}
+  end
 end

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :admin, only: [ :index ]
 
   resources :deliveries, only: [ :index, :show ] do
+    member do
+      post :close
+    end
     collection do
       get :load_truck
       get :start

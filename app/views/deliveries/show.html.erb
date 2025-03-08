@@ -1,5 +1,8 @@
 <div class="page-header">
   <h1 class="page-title">Delivery Details</h1>
+  <% if @delivery.can_be_closed? %>
+  <%= link_to "Mark Complete", close_delivery_path(@delivery), class: 'button primary-button', method: :post, data: { confirm: 'All shipments are successfully closed?' } %>
+  <% end %>
   <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
 </div>
 
