@@ -648,6 +648,20 @@ RSpec.describe "/shipments", type: :request do
           expect(response).to redirect_to(delivery_url(claimed_shipment.active_delivery))
         end
       end
+
+      context "when the shipment is claimed by another company" do
+        let(:company2) { create(:company) }
+        let!(:other_shipment) { create(:shipment, company: company2) }
+        it "shows the correct alert" do
+          post close_shipment_url(other_shipment)
+          expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
+        end
+
+        it "redirects to the root page" do
+          post close_shipment_url(other_shipment)
+          expect(response).to redirect_to(deliveries_url)
+        end
+      end
     end
 
     describe "DELETE #destroy" do
