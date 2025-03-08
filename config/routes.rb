@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :shipment_action_preferences, only: %i[edit update]
 
   resources :shipments do
-    member do 
+    member do
       post :close
     end
     collection do

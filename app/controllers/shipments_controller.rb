@@ -51,7 +51,7 @@ class ShipmentsController < ApplicationController
     redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
   end
 
-  def close 
+  def close
     preference = current_company.shipment_action_preferences.find_by(action: "successfully_delivered")
     @shipment.update!(shipment_status_id: preference.shipment_status_id) if preference&.shipment_status_id
     redirect_to delivery_path(@shipment.active_delivery)
