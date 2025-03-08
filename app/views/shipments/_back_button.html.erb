@@ -1,9 +1,3 @@
-<% if current_user.customer? %>
-<%= link_to 'Back', shipments_path, class: 'button secondary-button' %>
-<% else %>
-<% if shipment.claimed? %>
-<%= link_to 'Back', load_truck_deliveries_path, class: 'button secondary-button' %>
-<% else %>
-<%= link_to 'Back', deliveries_path, class: 'button secondary-button' %>
-<% end %>
-<% end %>
+<% back_path = request.referrer.present? && URI(request.referrer).host == request.host ? request.referrer : root_path %>
+
+<%= link_to 'Back', back_path, class: 'button secondary-button' %>
