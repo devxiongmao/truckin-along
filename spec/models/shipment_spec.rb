@@ -163,4 +163,20 @@ RSpec.describe Shipment, type: :model do
       end
     end
   end
+
+  describe "#active_delivery" do
+    describe "when there is an active delivery" do
+      let!(:delivery) { create(:delivery) }
+      let!(:delivery_shipment) { create(:delivery_shipment, delivery: delivery, shipment: valid_shipment) }
+      it "returns the delivery" do
+        expect(valid_shipment.active_delivery).to eq(delivery)
+      end
+    end
+
+    describe "when there is not an active delivery" do
+      it "returns nil" do
+        expect(valid_shipment.active_delivery).to be_nil
+      end
+    end
+  end
 end

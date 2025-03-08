@@ -26,4 +26,8 @@ class Shipment < ApplicationRecord
   def open?
     !shipment_status&.closed
   end
+
+  def active_delivery
+    deliveries.active.first
+  end
 end

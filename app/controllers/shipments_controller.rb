@@ -1,8 +1,8 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_shipment, only: %i[ show edit update destroy ]
+  before_action :set_shipment, only: %i[ show edit update destroy close]
   before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
-  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery ]
+  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery, :close ]
   before_action :authorize_edit_update, only: [ :edit, :update ]
 
   # GET /shipments
@@ -49,6 +49,20 @@ class ShipmentsController < ApplicationController
   def destroy
     @shipment.destroy!
     redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
+  end
+
+  def close
+    preference = current_company.shipment_action_preferences.find_by(action: "successfully_delivered")
+    unless preference&.shipment_status_id
+      return redirect_to delivery_path(@shipment.active_delivery), alert: "No preference set."
+    end
+
+    if preference.shipment_status_id == @shipment.shipment_status_id
+      return redirect_to delivery_path(@shipment.active_delivery), alert: "Shipment is already closed."
+    end
+
+    @shipment.update!(shipment_status_id: preference.shipment_status_id)
+    redirect_to delivery_path(@shipment.active_delivery), notice: "Shipment successfully closed."
   end
 
   def assign
