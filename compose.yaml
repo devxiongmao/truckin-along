@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  truckin_along:
+    container_name: truckin_along
+    image: truckin_along
+    restart: always
+    tty: true
+    stdin_open: true
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.dev
+    depends_on:
+      - truckin_along_db
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+    environment:
+      POSTGRES_DB_USER: postgres
+      POSTGRES_DB_HOST: truckin_along_db
+      POSTGRES_DB_NAME: truckin_along_db_development
+      RAILS_ENV: development
+
+  truckin_along_db:
+    container_name: truckin_along_db
+    restart: always
+    image: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - truckin_along_db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: truckin_along_db_development
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+volumes:
+  truckin_along_db_volume:
+    external: true
+
