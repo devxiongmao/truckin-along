@@ -18,6 +18,9 @@ RSpec.describe ShipmentsController, type: :routing do
       expect(get: "/shipments/1/edit").to route_to("shipments#edit", id: "1")
     end
 
+    it "routes to #close" do
+      expect(post: "/shipments/1/close").to route_to("shipments#close", id: "1")
+    end
 
     it "routes to #create" do
       expect(post: "/shipments").to route_to("shipments#create")

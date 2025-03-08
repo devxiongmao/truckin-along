@@ -154,7 +154,7 @@ RSpec.describe "/shipments", type: :request do
           }.to change(Shipment, :count).by(1)
         end
 
-        it 'creates a new shipment and redirects to the show page' do
+        it 'redirects to the show page' do
           post shipments_url, params: { shipment: valid_attributes }
           expect(response).to redirect_to(shipment_path(Shipment.last))
         end
@@ -254,6 +254,32 @@ RSpec.describe "/shipments", type: :request do
 
         it "shows an alert saying not authorized" do
           delete shipment_url(other_shipment)
+          expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
+        end
+      end
+    end
+
+    describe "POST #close" do
+      context "when the shipment belongs to the user" do
+        it "redirects to the shipments index" do
+          post close_shipment_url(shipment)
+          expect(response).to redirect_to(root_path)
+        end
+
+        it "shows an alert saying not authorized" do
+          post close_shipment_url(shipment)
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+        end
+      end
+
+      context "when the shipment does not belong to the user" do
+        it "redirects to the shipments index" do
+          post close_shipment_url(other_shipment)
+          expect(response).to redirect_to(shipments_path)
+        end
+
+        it "shows an alert saying not authorized" do
+          post close_shipment_url(other_shipment)
           expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
         end
       end
@@ -564,6 +590,62 @@ RSpec.describe "/shipments", type: :request do
               expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
             end
           end
+        end
+      end
+    end
+
+    describe "POST #close" do
+      let!(:claimed_shipment) { create(:shipment, company: company) }
+      let!(:delivery) { create(:delivery) }
+      let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery) }
+      let!(:shipment_status) { create(:shipment_status, company: company) }
+
+      context "when there is a preference set" do
+        let!(:company_preference) { create(:shipment_action_preference, action: "successfully_delivered", company: company, shipment_status: shipment_status) }
+        it "shows the correct notice" do
+          post close_shipment_url(claimed_shipment)
+          expect(flash[:notice]).to eq("Shipment successfully closed.")
+        end
+
+        it "redirects to the delivery show page" do
+          post close_shipment_url(claimed_shipment)
+          expect(response).to redirect_to(delivery_url(claimed_shipment.active_delivery))
+        end
+
+        it 'updates the a shipment status' do
+          post close_shipment_url(claimed_shipment)
+          expect(claimed_shipment.reload.shipment_status_id).to eq(shipment_status.id)
+        end
+      end
+
+      context "when there is no preference set" do
+        it "shows the correct alert" do
+          post close_shipment_url(claimed_shipment)
+          expect(flash[:alert]).to eq("No preference set.")
+        end
+
+        it "redirects to the delivery show page" do
+          post close_shipment_url(claimed_shipment)
+          expect(response).to redirect_to(delivery_url(claimed_shipment.active_delivery))
+        end
+      end
+
+      context "when the status is already set" do
+        let!(:preference) { create(:shipment_action_preference,
+          action: "successfully_delivered",
+          shipment_status: shipment_status,
+          company: company)}
+
+        it "shows the correct alert" do
+          claimed_shipment.shipment_status = shipment_status
+          claimed_shipment.save
+          post close_shipment_url(claimed_shipment)
+          expect(flash[:alert]).to eq("Shipment is already closed.")
+        end
+
+        it "redirects to the delivery show page" do
+          post close_shipment_url(claimed_shipment)
+          expect(response).to redirect_to(delivery_url(claimed_shipment.active_delivery))
         end
       end
     end
