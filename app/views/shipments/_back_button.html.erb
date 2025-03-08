@@ -1,1 +1,3 @@
-<%= link_to 'Back', request.referrer, class: 'button secondary-button' %>
+<% back_path = request.referrer.present? && URI(request.referrer).host == request.host ? request.referrer : root_path %>
+
+<%= link_to 'Back', back_path, class: 'button secondary-button' %>
