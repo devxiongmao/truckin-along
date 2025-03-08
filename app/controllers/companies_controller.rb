@@ -57,6 +57,7 @@ class CompaniesController < ApplicationController
     company.shipment_action_preferences.create([
       { action: "claimed_by_company", shipment_status_id: nil },
       { action: "loaded_onto_truck", shipment_status_id: nil },
-      { action: "out_for_delivery", shipment_status_id: transit_status.id } ])
+      { action: "out_for_delivery", shipment_status_id: transit_status.id },
+      { action: "successfully_delivered", shipment_status_id: nil } ])
   end
 end

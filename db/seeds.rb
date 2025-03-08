@@ -14,6 +14,7 @@ ShipmentStatus.destroy_all
 Truck.destroy_all
 User.destroy_all
 Company.destroy_all
+ShipmentActionPreference.destroy_all
 
 # Create companies
 puts "Creating companies..."
@@ -267,10 +268,13 @@ puts "Creating shipment action preferences..."
 ShipmentActionPreference.create!(action: "claimed_by_company", company: company1, shipment_status_id: nil)
 ShipmentActionPreference.create!(action: "loaded_onto_truck", company: company1, shipment_status_id: nil)
 ShipmentActionPreference.create!(action: "out_for_delivery", company: company1, shipment_status: status2)
+ShipmentActionPreference.create!(action: "successfully_delivered", company: company1, shipment_status: status3)
 
 ShipmentActionPreference.create!(action: "claimed_by_company", company: company2, shipment_status_id: status4)
 ShipmentActionPreference.create!(action: "loaded_onto_truck", company: company2, shipment_status_id: nil)
 ShipmentActionPreference.create!(action: "out_for_delivery", company: company2, shipment_status: status2)
+ShipmentActionPreference.create!(action: "successfully_delivered", company: company2, shipment_status: status6)
+
 
 # Create shipments
 puts "Creating shipments..."
