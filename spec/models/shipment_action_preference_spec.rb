@@ -66,7 +66,8 @@ RSpec.describe ShipmentActionPreference, type: :model do
       expected_actions = [
         "claimed_by_company",
         "loaded_onto_truck",
-        "out_for_delivery"
+        "out_for_delivery",
+        "successfully_delivered"
       ]
       expect(ShipmentActionPreference::ACTIONS).to match_array(expected_actions)
     end

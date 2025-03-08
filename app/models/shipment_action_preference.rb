@@ -6,7 +6,8 @@ class ShipmentActionPreference < ApplicationRecord
   ACTIONS = [
     "claimed_by_company",
     "loaded_onto_truck",
-    "out_for_delivery"
+    "out_for_delivery",
+    "successfully_delivered"
   ]
 
   validates :action, inclusion: { in: ACTIONS }

@@ -81,7 +81,7 @@ RSpec.describe "/companies", type: :request do
         it 'creates the default shipment action preferences' do
           expect {
             post companies_url, params: { company: valid_attributes }
-          }.to change(ShipmentActionPreference, :count).by(3)
+          }.to change(ShipmentActionPreference, :count).by(4)
         end
       end
 
