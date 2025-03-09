@@ -144,6 +144,37 @@ RSpec.describe "/shipments", type: :request do
       end
     end
 
+    describe 'GET #copy' do
+      context "when the shipment belongs to the user" do
+        it 'assigns the requested shipment to @shipment' do
+          get copy_shipment_url(shipment)
+          expect(response.body).to include(shipment.name)
+        end
+
+        it "renders the show template" do
+          get copy_shipment_url(shipment)
+          expect(response).to render_template(:copy)
+        end
+
+        it "responds successfully" do
+          get copy_shipment_url(shipment)
+          expect(response).to be_successful
+        end
+      end
+
+      context "when the shipment does not belong to the user" do
+        it "redirects to the shipments index" do
+          get copy_shipment_url(other_shipment)
+          expect(response).to redirect_to(shipments_path)
+        end
+
+        it "shows an alert saying not authorized" do
+          get copy_shipment_url(other_shipment)
+          expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
+        end
+      end
+    end
+
     describe "POST #create" do
       context "with valid parameters" do
         it 'creates a new shipment' do
@@ -455,6 +486,20 @@ RSpec.describe "/shipments", type: :request do
             expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
           end
         end
+      end
+    end
+
+    describe "GET #copy" do
+      let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company, name: "Test Shipment") }
+
+      it 'redirects to the root page' do
+        get copy_shipment_url(claimed_shipment)
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "shows an alert saying not authorized" do
+        get copy_shipment_url(claimed_shipment)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 

@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1 class="page-title">Copy Shipment</h1>
+  <%= render 'back_button', shipment: @shipment%>
+</div>
+
+<div class="form-container">
+  <%= render 'form', shipment: @shipment, statuses: @statuses || [] %>
+</div>

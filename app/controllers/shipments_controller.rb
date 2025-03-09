@@ -1,7 +1,7 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_shipment, only: %i[ show edit update destroy close]
-  before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
+  before_action :set_shipment, only: %i[ show edit update destroy copy close]
+  before_action :authorize_customer, only: [ :new, :create, :destroy, :copy, :index ]
   before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery, :close ]
   before_action :authorize_edit_update, only: [ :edit, :update ]
 
@@ -49,6 +49,15 @@ class ShipmentsController < ApplicationController
   def destroy
     @shipment.destroy!
     redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
+  end
+
+  def copy
+    @new_shipment = @shipment.dup
+    @new_shipment.name = "Copy of #{@shipment.name}"
+    @new_shipment.truck_id = nil
+    @new_shipment.shipment_status_id = nil
+    @new_shipment.company_id = nil
+    @shipment = @new_shipment
   end
 
   def close
