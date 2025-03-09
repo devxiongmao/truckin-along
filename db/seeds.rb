@@ -284,8 +284,7 @@ Shipment.create!(
   sender_address: "101 Tech Blvd, Silicon Valley, USA",
   receiver_name: "GadgetCo",
   receiver_address: "789 Innovation St, New York, USA",
-  weight: 35.0,
-  boxes: 10,
+  weight: 3.5,
   length: 60.0,
   width: 40.0,
   height: 30.0,
@@ -301,8 +300,7 @@ Shipment.create!(
   sender_address: "456 Home Decor Ave, Chicago, USA",
   receiver_name: "DecoLuxe",
   receiver_address: "321 Style St, Boston, USA",
-  weight: 250.0,
-  boxes: 5,
+  weight: 50.0,
   length: 200.0,
   width: 100.0,
   height: 80.0,
@@ -318,8 +316,7 @@ Shipment.create!(
   sender_address: "123 Wellness St, Denver, USA",
   receiver_name: "MediCenter",
   receiver_address: "456 Care Rd, Austin, USA",
-  weight: 120.0,  # Medical equipment can be heavy but not extreme
-  boxes: 15,
+  weight: 8.0,
   length: 80.0,
   width: 60.0,
   height: 50.0,
@@ -335,8 +332,7 @@ Shipment.create!(
   sender_address: "789 Home Ln, Seattle, USA",
   receiver_name: "CozyLiving",
   receiver_address: "321 Comfort Blvd, Boston, USA",
-  weight: 320.0,  # 8 boxes of furniture
-  boxes: 8,
+  weight: 40.0,
   length: 220.0,
   width: 120.0,
   height: 90.0,
@@ -352,8 +348,7 @@ Shipment.create!(
   sender_address: "100 Style Ave, Miami, USA",
   receiver_name: "Trendy Threads",
   receiver_address: "200 Chic St, Los Angeles, USA",
-  weight: 60.0,   # Clothing is relatively light
-  boxes: 20,
+  weight: 3.0,
   length: 60.0,
   width: 40.0,
   height: 30.0,
@@ -369,8 +364,7 @@ Shipment.create!(
   sender_address: "55 Tech St, San Francisco, USA",
   receiver_name: "ElectroWorld",
   receiver_address: "77 Digital Rd, Dallas, USA",
-  weight: 45.0,   # Accessories are lighter than main electronics
-  boxes: 30,
+  weight: 3.0,
   length: 50.0,
   width: 40.0,
   height: 30.0,
@@ -386,8 +380,7 @@ Shipment.create!(
   sender_address: "123 Read Blvd, Portland, USA",
   receiver_name: "City Library",
   receiver_address: "456 Knowledge Ave, Chicago, USA",
-  weight: 400.0,  # Books are very heavy (40 boxes)
-  boxes: 40,
+  weight: 10.0,
   length: 40.0,
   width: 30.0,
   height: 25.0,
@@ -403,8 +396,7 @@ Shipment.create!(
   sender_address: "99 Game Rd, Orlando, USA",
   receiver_name: "PlayNation",
   receiver_address: "88 Fitness Blvd, Atlanta, USA",
-  weight: 90.0,   # Varied equipment weights
-  boxes: 12,
+  weight: 7.5,
   length: 80.0,
   width: 60.0,
   height: 50.0,
@@ -420,8 +412,7 @@ Shipment.create!(
   sender_address: "67 Power Ln, Houston, USA",
   receiver_name: "HomeTech",
   receiver_address: "34 Comfort Rd, Philadelphia, USA",
-  weight: 350.0,  # Appliances are heavy
-  boxes: 18,
+  weight: 19.44,
   length: 90.0,
   width: 70.0,
   height: 80.0,
@@ -437,8 +428,7 @@ Shipment.create!(
   sender_address: "101 Fun St, Minneapolis, USA",
   receiver_name: "KidsLand",
   receiver_address: "555 Happy Blvd, Charlotte, USA",
-  weight: 75.0,   # Toys vary in weight but generally lighter
-  boxes: 25,
+  weight: 3.0,
   length: 60.0,
   width: 50.0,
   height: 40.0,
@@ -454,8 +444,7 @@ Shipment.create!(
   sender_address: "101 Fun St, Minneapolis, USA",
   receiver_name: "KidsLand",
   receiver_address: "555 Happy Blvd, Charlotte, USA",
-  weight: 5.0,    # Action figures are very light
-  boxes: 2,
+  weight: 2.5,
   length: 40.0,
   width: 30.0,
   height: 20.0,
@@ -467,33 +456,33 @@ Shipment.create!(
 
 
 Shipment.create!([
-  { name: "Electronics", sender_name: "ElectroCorp", sender_address: "500 Circuit Ave, San Jose, USA", receiver_name: "TechMart", receiver_address: "222 Innovation Dr, Austin, USA", weight: 160.0, boxes: 45, length: 60.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user5, company: nil },
+  { name: "Electronics", sender_name: "ElectroCorp", sender_address: "500 Circuit Ave, San Jose, USA", receiver_name: "TechMart", receiver_address: "222 Innovation Dr, Austin, USA", weight: 3.55, length: 60.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user5, company: nil },
 
-  { name: "Books", sender_name: "ReadMore", sender_address: "88 Library Ln, Boston, USA", receiver_name: "BookWorld", receiver_address: "777 Novel St, Seattle, USA", weight: 300.0, boxes: 30, length: 40.0, width: 30.0, height: 25.0, truck: nil, shipment_status: nil, user: user5, company: company2 },
+  { name: "Books", sender_name: "ReadMore", sender_address: "88 Library Ln, Boston, USA", receiver_name: "BookWorld", receiver_address: "777 Novel St, Seattle, USA", weight: 10.0, length: 40.0, width: 30.0, height: 25.0, truck: nil, shipment_status: nil, user: user5, company: company2 },
 
-  { name: "Furniture", sender_name: "HomeComfort", sender_address: "99 Cozy Rd, Chicago, USA", receiver_name: "HouseStyle", receiver_address: "333 Living Way, Miami, USA", weight: 380.0, boxes: 15, length: 200.0, width: 120.0, height: 90.0, truck: nil, shipment_status: nil, user: user5, company: company2 },
+  { name: "Furniture", sender_name: "HomeComfort", sender_address: "99 Cozy Rd, Chicago, USA", receiver_name: "HouseStyle", receiver_address: "333 Living Way, Miami, USA", weight: 25.0, length: 200.0, width: 120.0, height: 90.0, truck: nil, shipment_status: nil, user: user5, company: company2 },
 
-  { name: "Clothing", sender_name: "FashionHub", sender_address: "123 Trendy Ave, New York, USA", receiver_name: "WearItAll", receiver_address: "444 Runway St, Los Angeles, USA", weight: 150.0, boxes: 50, length: 60.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user5, company: nil },
+  { name: "Clothing", sender_name: "FashionHub", sender_address: "123 Trendy Ave, New York, USA", receiver_name: "WearItAll", receiver_address: "444 Runway St, Los Angeles, USA", weight: 3.0, length: 60.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user5, company: nil },
 
-  { name: "Sports Equipment", sender_name: "AthletiCo", sender_address: "456 Fit St, Denver, USA", receiver_name: "ActiveZone", receiver_address: "888 Play Blvd, Phoenix, USA", weight: 140.0, boxes: 20, length: 80.0, width: 60.0, height: 50.0, truck: nil, shipment_status: nil, user: user5, company: nil },
+  { name: "Sports Equipment", sender_name: "AthletiCo", sender_address: "456 Fit St, Denver, USA", receiver_name: "ActiveZone", receiver_address: "888 Play Blvd, Phoenix, USA", weight: 7.0, length: 80.0, width: 60.0, height: 50.0, truck: nil, shipment_status: nil, user: user5, company: nil },
 
-  { name: "Appliances", sender_name: "KitchenPro", sender_address: "789 Cook Ln, Houston, USA", receiver_name: "HomeNeeds", receiver_address: "666 Utility Rd, Dallas, USA", weight: 400.0, boxes: 10, length: 90.0, width: 80.0, height: 70.0, truck: nil, shipment_status: nil, user: user5, company: nil },
+  { name: "Appliances", sender_name: "KitchenPro", sender_address: "789 Cook Ln, Houston, USA", receiver_name: "HomeNeeds", receiver_address: "666 Utility Rd, Dallas, USA", weight: 40.0, length: 90.0, width: 80.0, height: 70.0, truck: nil, shipment_status: nil, user: user5, company: nil },
 
-  { name: "Garden Tools", sender_name: "GreenThumb", sender_address: "321 Bloom Dr, Portland, USA", receiver_name: "GrowMore", receiver_address: "111 Nature St, San Diego, USA", weight: 120.0, boxes: 18, length: 70.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user6, company: nil },
+  { name: "Garden Tools", sender_name: "GreenThumb", sender_address: "321 Bloom Dr, Portland, USA", receiver_name: "GrowMore", receiver_address: "111 Nature St, San Diego, USA", weight: 6.67, length: 70.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user6, company: nil },
 
-  { name: "Medical Supplies", sender_name: "MediCare", sender_address: "654 Health St, Atlanta, USA", receiver_name: "Wellness Center", receiver_address: "999 Recovery Rd, Nashville, USA", weight: 130.0, boxes: 25, length: 70.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user6, company: nil },
+  { name: "Medical Supplies", sender_name: "MediCare", sender_address: "654 Health St, Atlanta, USA", receiver_name: "Wellness Center", receiver_address: "999 Recovery Rd, Nashville, USA", weight: 5.2, length: 70.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user6, company: nil },
 
-  { name: "Toys", sender_name: "ToyFactory", sender_address: "101 Fun St, Minneapolis, USA", receiver_name: "KidsLand", receiver_address: "555 Happy Blvd, Charlotte, USA", weight: 75.0, boxes: 25, length: 60.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user5, company: nil },
+  { name: "Toys", sender_name: "ToyFactory", sender_address: "101 Fun St, Minneapolis, USA", receiver_name: "KidsLand", receiver_address: "555 Happy Blvd, Charlotte, USA", weight: 3.0, length: 60.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user5, company: nil },
 
-  { name: "Office Supplies", sender_name: "OfficeMart", sender_address: "987 Work Ave, Philadelphia, USA", receiver_name: "BizSupply", receiver_address: "121 Productivity Blvd, Las Vegas, USA", weight: 110.0, boxes: 35, length: 50.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user6, company: nil },
+  { name: "Office Supplies", sender_name: "OfficeMart", sender_address: "987 Work Ave, Philadelphia, USA", receiver_name: "BizSupply", receiver_address: "121 Productivity Blvd, Las Vegas, USA", weight: 3.14, length: 50.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user6, company: nil },
 
-  { name: "Bicycles", sender_name: "CycleWorks", sender_address: "222 Pedal Rd, Columbus, USA", receiver_name: "RideFast", receiver_address: "333 Trail Ln, Memphis, USA", weight: 180.0, boxes: 12, length: 150.0, width: 30.0, height: 80.0, truck: nil, shipment_status: nil, user: user6, company: company2 },
+  { name: "Bicycles", sender_name: "CycleWorks", sender_address: "222 Pedal Rd, Columbus, USA", receiver_name: "RideFast", receiver_address: "333 Trail Ln, Memphis, USA", weight: 15.0, length: 150.0, width: 30.0, height: 80.0, truck: nil, shipment_status: nil, user: user6, company: company2 },
 
-  { name: "Groceries", sender_name: "FreshFoods", sender_address: "555 Market St, Omaha, USA", receiver_name: "DailyMart", receiver_address: "444 Grocery Ln, Kansas City, USA", weight: 250.0, boxes: 50, length: 50.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user6, company: nil },
+  { name: "Groceries", sender_name: "FreshFoods", sender_address: "555 Market St, Omaha, USA", receiver_name: "DailyMart", receiver_address: "444 Grocery Ln, Kansas City, USA", weight: 5.0, length: 50.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user6, company: nil },
 
-  { name: "Pet Supplies", sender_name: "PawPalace", sender_address: "789 Bark Blvd, St. Louis, USA", receiver_name: "FurryFriends", receiver_address: "888 Woof Way, Indianapolis, USA", weight: 90.0, boxes: 22, length: 60.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user6, company: company2 },
+  { name: "Pet Supplies", sender_name: "PawPalace", sender_address: "789 Bark Blvd, St. Louis, USA", receiver_name: "FurryFriends", receiver_address: "888 Woof Way, Indianapolis, USA", weight: 4.1, length: 60.0, width: 50.0, height: 40.0, truck: nil, shipment_status: nil, user: user6, company: company2 },
 
-  { name: "Cosmetics", sender_name: "BeautyGlow", sender_address: "234 Glam Ave, Detroit, USA", receiver_name: "MakeUpMart", receiver_address: "777 Chic St, Louisville, USA", weight: 70.0, boxes: 28, length: 50.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user6, company: company2 }
+  { name: "Cosmetics", sender_name: "BeautyGlow", sender_address: "234 Glam Ave, Detroit, USA", receiver_name: "MakeUpMart", receiver_address: "777 Chic St, Louisville, USA", weight: 2.5, length: 50.0, width: 40.0, height: 30.0, truck: nil, shipment_status: nil, user: user6, company: company2 }
 ])
 
 

@@ -21,8 +21,7 @@ RSpec.describe "/shipments", type: :request do
       weight: 50.0,
       length: 50.0,
       width: 20.0,
-      height: 22.5,
-      boxes: 5
+      height: 22.5
     }
   end
 
@@ -33,8 +32,7 @@ RSpec.describe "/shipments", type: :request do
       sender_address: nil,
       receiver_name: nil,
       receiver_address: nil,
-      weight: nil,
-      boxes: nil
+      weight: nil
     }
   end
 
