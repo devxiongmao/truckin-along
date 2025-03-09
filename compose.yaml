@@ -19,7 +19,7 @@ services:
     environment:
       POSTGRES_DB_USER: postgres
       POSTGRES_DB_HOST: truckin_along_db
-      POSTGRES_DB_NAME: truckin_along_db_development
+      POSTGRES_DB_NAME: truckin_along_development
       RAILS_ENV: development
 
   truckin_along_db:
@@ -31,7 +31,7 @@ services:
     volumes:
       - truckin_along_db_volume:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: truckin_along_db_development
+      POSTGRES_DB: truckin_along_development
       POSTGRES_HOST_AUTH_METHOD: "trust"
 volumes:
   truckin_along_db_volume:
