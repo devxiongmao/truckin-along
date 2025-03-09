@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   resources :shipments do
     member do
+      get :copy
       post :close
     end
     collection do
