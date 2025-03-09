@@ -26,4 +26,12 @@ class Delivery < ApplicationRecord
   def can_be_closed?
     shipments.all? { |shipment| !shipment.open? }
   end
+
+  def volume
+    shipments.reduce(0.0) { |curr_volume, shipment| curr_volume + shipment.volume }
+  end
+
+  def weight
+    shipments.reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
+  end
 end

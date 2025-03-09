@@ -19,3 +19,30 @@
 <div class="details-actions">
   <%= link_to 'Edit', edit_truck_path(@truck), class: 'button primary-button' %>
 </div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Delivery Date</th>
+      <th># of Shipments</th>
+      <th>Delivery Volume</th>
+      <th>Delivery Weight</th>
+      <th>Actions</>
+    </tr>
+  </thead>
+  <tbody id="my-shipments">
+    <% @truck.deliveries.each do |delivery| %>
+    <tr>
+      <td><%= delivery.status.gsub('_', ' ').capitalize %></td>
+      <td><%= delivery.created_at.strftime("%Y-%m-%d") %></td>
+      <td><%= delivery.shipments.count%></td>
+      <td><%= delivery.volume / 1_000_000 %> m<sup>3</sup> / <%=@truck.volume / 1_000_000%>m<sup>3</sup></td>
+      <td><%= delivery.weight %> kg / <%=@truck.weight%> kg</td>
+      <td>
+        <%= link_to "View Delivery", delivery_path(delivery), class: "btn btn-primary" %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
