@@ -16,8 +16,8 @@ class DeliveriesController < ApplicationController
       @delivery.update!(status: :completed)
       return redirect_to start_deliveries_path, notice: "Delivery complete!"
     end
-    
-    redirect_to delivery_path(@delivery)
+
+    redirect_to delivery_path(@delivery), alert: "Delivery still has open shipments. It cannot be closed at this time."
   end
 
   def load_truck

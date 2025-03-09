@@ -24,6 +24,6 @@ class Delivery < ApplicationRecord
   end
 
   def can_be_closed?
-    shipments.all? { |shipment| !shipment.open?}
+    shipments.all? { |shipment| !shipment.open? }
   end
 end

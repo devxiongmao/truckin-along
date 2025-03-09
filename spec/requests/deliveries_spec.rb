@@ -87,6 +87,71 @@ RSpec.describe "/deliveries", type: :request do
       end
     end
 
+    describe 'POST /close' do
+      context "when the delivery belongs to the user" do
+        let!(:status) { create(:shipment_status, closed: true) }
+        let!(:shipment1) { create(:shipment, shipment_status: status) }
+
+        context "when all shipments are closed" do
+          let!(:shipment2) { create(:shipment, shipment_status: status) }
+          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+          it "redirects to the delivery start page" do
+            post close_delivery_url(delivery)
+            expect(response).to redirect_to(start_deliveries_url)
+          end
+
+          it "shows an notice saying delivery is closed" do
+            post close_delivery_url(delivery)
+            expect(flash[:notice]).to eq("Delivery complete!")
+          end
+
+          it "Updates the delivery status" do
+            post close_delivery_url(delivery)
+            expect(delivery.reload.active?).to be(false)
+          end
+        end
+
+        context "when not all shipments are closed" do
+          let!(:open_status) { create(:shipment_status, closed: false) }
+          let!(:shipment2) { create(:shipment, shipment_status: open_status) }
+          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+          it "redirects to the delivery show page" do
+            post close_delivery_url(delivery)
+            expect(response).to redirect_to(delivery_url(delivery))
+          end
+
+          it "shows an alert saying shipments are still open" do
+            post close_delivery_url(delivery)
+            expect(flash[:alert]).to eq("Delivery still has open shipments. It cannot be closed at this time.")
+          end
+
+          it "does not close the delivery" do
+            post close_delivery_url(delivery)
+            expect(delivery.active?).to be(true)
+          end
+        end
+      end
+
+      context "when the delivery does not belong to the users company" do
+        it "redirects to the root" do
+          post close_delivery_url(other_delivery)
+          expect(response).to redirect_to(root_path)
+        end
+
+        it "shows an alert saying not authorized" do
+          post close_delivery_url(other_delivery)
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
+
+        it "does not close the delivery" do
+          post close_delivery_url(other_delivery)
+          expect(other_delivery.active?).to be(true)
+        end
+      end
+    end
+
     describe "GET /load_truck" do
       it "renders a successful response" do
         get load_truck_deliveries_url
@@ -205,6 +270,18 @@ RSpec.describe "/deliveries", type: :request do
 
       it "renders the correct flash alert" do
         get deliveries_url(delivery)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+
+    describe "POST /close" do
+      it "redirects to the root path" do
+        post close_delivery_url(delivery)
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "renders the correct flash alert" do
+        post close_delivery_url(delivery)
         expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end

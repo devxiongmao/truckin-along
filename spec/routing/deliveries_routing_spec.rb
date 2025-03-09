@@ -10,6 +10,10 @@ RSpec.describe DeliveriesController, type: :routing do
       expect(get: "/deliveries/1").to route_to("deliveries#show", id: "1")
     end
 
+    it "routes to #close" do
+      expect(post: "/deliveries/1/close").to route_to("deliveries#close", id: "1")
+    end
+
     it "routes to #load_truck" do
       expect(get: "/deliveries/load_truck").to route_to("deliveries#load_truck")
     end
