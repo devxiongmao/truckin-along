@@ -144,6 +144,17 @@ RSpec.describe Truck, type: :model do
     end
   end
 
+  describe "#current_shipments" do
+    let!(:open_status) { create(:shipment_status, closed: false) }
+    let!(:closed_status) { create(:shipment_status, closed: true) }
+
+    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: open_status) }
+    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: closed_status) }
+    it "returns the open shipments" do
+      expect(valid_truck.current_shipments).to eq([ shipment1 ])
+    end
+  end
+
   describe "#current_volume" do
     let!(:shipment_status) { create(:shipment_status, closed: false) }
     let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }

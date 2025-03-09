@@ -32,11 +32,15 @@ class Truck < ApplicationRecord
     length * width * height
   end
 
+  def current_shipments
+    shipments.select(&:open?)
+  end
+
   def current_volume
-    shipments.select(&:open?).reduce(0.0) { |curr_volume, shipment| curr_volume + shipment.volume }
+    current_shipments.reduce(0.0) { |curr_volume, shipment| curr_volume + shipment.volume }
   end
 
   def current_weight
-    shipments.select(&:open?).reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
+    current_shipments.reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
   end
 end

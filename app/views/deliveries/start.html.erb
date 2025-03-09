@@ -18,6 +18,9 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th># of Shipments</th>
+      <th>Current Volume</th>
+      <th>Current Weight</th>
       <th class="center-text">Available?</th>
       <th>Actions</>
     </tr>
@@ -26,6 +29,9 @@
     <% @trucks.each do |truck| %>
     <tr>
       <td><%= truck.display_name %></td>
+      <td><%= truck.current_shipments.count%></td>
+      <td><%= truck.current_volume / 1_000_000 %> m<sup>3</sup> / <%=truck.volume / 1_000_000%>m<sup>3</sup></td>
+      <td><%= truck.current_weight %> kg / <%=truck.weight%> kg</td>
       <td class="center-text">
         <% if truck.available? %>
         ✔️
