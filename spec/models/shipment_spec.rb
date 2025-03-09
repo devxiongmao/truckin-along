@@ -161,4 +161,13 @@ RSpec.describe Shipment, type: :model do
       end
     end
   end
+
+  describe "#volume" do
+    it "calculates the volume of the shipment" do
+      valid_shipment.length = 10
+      valid_shipment.width  = 25
+      valid_shipment.height = 15
+      expect(valid_shipment.volume).to eq(3750)
+    end
+  end
 end

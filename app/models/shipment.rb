@@ -29,4 +29,8 @@ class Shipment < ApplicationRecord
   def active_delivery
     deliveries.active.first
   end
+
+  def volume
+    length * width * height
+  end
 end

@@ -27,4 +27,16 @@ class Truck < ApplicationRecord
   def active_delivery
     deliveries.active.first
   end
+
+  def volume
+    length * width * height
+  end
+
+  def current_volume
+    shipments.select(&:open?).reduce(0.0) { |curr_volume, shipment| curr_volume + shipment.volume }
+  end
+
+  def current_weight
+    shipments.select(&:open?).reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
+  end
 end
