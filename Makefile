@@ -67,3 +67,15 @@ d_stop:
 .PHONY: d_migrate
 d_migrate:
 	docker compose exec truckin_along rails db:migrate
+
+.PHONY: d_console
+d_console:
+	docker compose exec truckin_along rails console
+
+.PHONY: d_logs
+d_logs:
+	docker compose logs -f
+
+.PHONY: d_test
+d_test:
+	docker compose exec truckin_along bundle exec rspec
