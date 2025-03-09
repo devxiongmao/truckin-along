@@ -491,7 +491,7 @@ RSpec.describe "/shipments", type: :request do
 
     describe "GET #copy" do
       let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company, name: "Test Shipment") }
-      
+
       it 'redirects to the root page' do
         get copy_shipment_url(claimed_shipment)
         expect(response).to redirect_to(root_path)
