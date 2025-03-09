@@ -32,7 +32,7 @@ RSpec.describe "/shipments", type: :request do
       sender_address: nil,
       receiver_name: nil,
       receiver_address: nil,
-      weight: nil,
+      weight: nil
     }
   end
 
