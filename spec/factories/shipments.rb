@@ -9,7 +9,6 @@ FactoryBot.define do
     length { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
     width { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
     height { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
-    boxes { Faker::Number.between(from: 1, to: 100) }
 
     association :truck
     association :shipment_status

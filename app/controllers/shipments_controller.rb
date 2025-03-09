@@ -149,8 +149,6 @@ class ShipmentsController < ApplicationController
         :weight,
         :length,
         :width,
-        :height,
-        :boxes
-        )
+        :height)
     end
 end
