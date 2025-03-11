@@ -17,10 +17,18 @@ module ShipmentsHelper
 
   def locked_fields?(shipment_status)
     return true if shipment_status&.closed
-    if current_user && current_user.role == "customer" && shipment_status&.locked_for_customers
-      true
-    else
-      false
-    end
+    return true if current_user && current_user.role == "customer" && shipment_status&.locked_for_customers
+    false
+  end
+
+  def lock_fields_by_role(field)
+    whitelisted_fields = {
+      customer: %i[name sender_name sender_address receiver_name receiver_address weight length width height],
+      admin: %i[shipment_status_id sender_address receiver_address weight length width height],
+      driver: %i[shipment_status_id weight length width height]
+    }
+
+    current_user_role = current_user.role.to_sym
+    !whitelisted_fields.fetch(current_user_role, []).include?(field)
   end
 end

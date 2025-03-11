@@ -38,7 +38,8 @@ RSpec.describe "/shipments", type: :request do
 
   let(:new_attributes) do
     {
-      name: "Toys"
+      name: "Toys",
+      weight: 100
     }
   end
 
@@ -211,6 +212,48 @@ RSpec.describe "/shipments", type: :request do
     describe "PATCH #update" do
       context "when the shipment belongs to the user" do
         context "with valid parameters" do
+          context "with a shipment_status that is closed" do
+            let!(:closed_status) { create(:shipment_status, closed: true) }
+            let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company, shipment_status_id: closed_status.id) }
+
+            it "redirects to the shipment show path" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(response).to redirect_to(shipment_path(claimed_shipment))
+            end
+
+            it "does not update the shipment" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              claimed_shipment.reload
+              expect(claimed_shipment.name).not_to eq("Toys")
+            end
+
+            it "shows the correct alert" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(flash[:alert]).to eq("Shipment is closed, and currently locked for edits.")
+            end
+          end
+
+          context "with a shipment_status that is locked_for_customers" do
+            let!(:closed_status) { create(:shipment_status, locked_for_customers: true) }
+            let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company, shipment_status_id: closed_status.id) }
+
+            it "redirects to the shipment show path" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(response).to redirect_to(shipment_path(claimed_shipment))
+            end
+
+            it "does not update the shipment" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              claimed_shipment.reload
+              expect(claimed_shipment.name).not_to eq("Toys")
+            end
+
+            it "shows the correct alert" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(flash[:alert]).to eq("Shipment is currently locked for edits.")
+            end
+          end
+
           it "updates the requested shipment" do
             patch shipment_url(shipment), params: { shipment: new_attributes }
             shipment.reload
@@ -251,6 +294,11 @@ RSpec.describe "/shipments", type: :request do
         it "redirects to the shipments index" do
           patch shipment_url(other_shipment), params: { shipment: new_attributes }
           expect(response).to redirect_to(shipments_path)
+        end
+
+        it "does not update the shipment" do
+          patch shipment_url(other_shipment), params: { shipment: new_attributes }
+          expect(shipment.name).not_to eq("Toys")
         end
 
         it "shows an alert saying not authorized" do
@@ -531,6 +579,11 @@ RSpec.describe "/shipments", type: :request do
             expect(flash[:alert]).to eq("You are not authorized to modify this shipment.")
           end
 
+          it "does not update the shipment" do
+            patch shipment_url(shipment), params: { shipment: new_attributes }
+            expect(shipment.name).not_to eq("Toys")
+          end
+
           it "redirects to the deliveries path" do
             patch shipment_url(shipment), params: { shipment: new_attributes }
             expect(response).to redirect_to(deliveries_path)
@@ -538,18 +591,45 @@ RSpec.describe "/shipments", type: :request do
         end
 
         context "when the shipment is claimed" do
+          context "with a shipment_status that is closed" do
+            let!(:closed_status) { create(:shipment_status, closed: true) }
+            let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company, shipment_status_id: closed_status.id) }
+
+            it "redirects to the shipment show path" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(response).to redirect_to(shipment_path(claimed_shipment))
+            end
+
+            it "does not update the shipment" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              claimed_shipment.reload
+              expect(claimed_shipment.name).not_to eq("Toys")
+            end
+
+            it "shows the correct alert" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(flash[:alert]).to eq("Shipment is closed, and currently locked for edits.")
+            end
+          end
+
           context "by the users company" do
             let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company) }
 
-            it 'updates the shipment' do
+            it 'updates the fields the user has access to within the shipment' do
               patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
               claimed_shipment.reload
-              expect(claimed_shipment.name).to eq("Toys")
+              expect(claimed_shipment.name).not_to eq("Toys")
+              expect(claimed_shipment.weight).to eq(100)
             end
 
             it "redirects to the shipments show path" do
               patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
               expect(response).to redirect_to(shipment_path(claimed_shipment))
+            end
+
+            it "shows the correct notice" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(flash[:notice]).to eq("Shipment was successfully updated.")
             end
           end
 
@@ -560,6 +640,11 @@ RSpec.describe "/shipments", type: :request do
             it "shows an alert saying not authorized" do
               patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
               expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
+            end
+
+            it "does not update the shipment" do
+              patch shipment_url(claimed_shipment), params: { shipment: new_attributes }
+              expect(shipment.name).not_to eq("Toys")
             end
 
             it "redirects to the deliveries path" do
