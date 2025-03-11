@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :admin, only: [ :index ]
 
   resources :deliveries, only: [ :index, :show ] do
+    member do
+      post :close
+    end
     collection do
       get :load_truck
       get :start
@@ -20,6 +23,10 @@ Rails.application.routes.draw do
   resources :shipment_action_preferences, only: %i[edit update]
 
   resources :shipments do
+    member do
+      get :copy
+      post :close
+    end
     collection do
       post :assign
       post :assign_shipments_to_truck

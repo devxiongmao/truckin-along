@@ -134,4 +134,42 @@ RSpec.describe Truck, type: :model do
       end
     end
   end
+
+  describe "#volume" do
+    it "calculates the volume of the truck bed" do
+      valid_truck.length = 13600
+      valid_truck.height = 2800
+      valid_truck.width = 2550
+      expect(valid_truck.volume).to eq(97104000000)
+    end
+  end
+
+  describe "#current_shipments" do
+    let!(:open_status) { create(:shipment_status, closed: false) }
+    let!(:closed_status) { create(:shipment_status, closed: true) }
+
+    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: open_status) }
+    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: closed_status) }
+    it "returns the open shipments" do
+      expect(valid_truck.current_shipments).to eq([ shipment1 ])
+    end
+  end
+
+  describe "#current_volume" do
+    let!(:shipment_status) { create(:shipment_status, closed: false) }
+    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
+    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
+    it "calculates the current volume of the truck bed" do
+      expect(valid_truck.current_volume).to eq(shipment1.volume + shipment2.volume)
+    end
+  end
+
+  describe "#current_weight" do
+    let!(:shipment_status) { create(:shipment_status, closed: false) }
+    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
+    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
+    it "calculates the current volume of the truck bed" do
+      expect(valid_truck.current_weight).to eq(shipment1.weight + shipment2.weight)
+    end
+  end
 end

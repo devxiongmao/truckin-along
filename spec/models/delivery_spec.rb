@@ -76,4 +76,75 @@ RSpec.describe Delivery, type: :model do
       expect(delivery.active?).to be false
     end
   end
+
+  describe "#can_be_closed?" do
+    let!(:delivery) { create(:delivery) }
+    let!(:status) { create(:shipment_status, closed: true) }
+    let!(:shipment1) { create(:shipment, shipment_status: status) }
+
+
+    context "when all shipments are closed" do
+      let!(:shipment2) { create(:shipment, shipment_status: status) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+
+      it "returns true" do
+        expect(delivery.can_be_closed?).to be(true)
+      end
+    end
+
+    context "when shipments are open" do
+      let!(:open_status) { create(:shipment_status, closed: false) }
+      let!(:shipment2) { create(:shipment, shipment_status: open_status) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+
+      it "returns false" do
+        expect(delivery.can_be_closed?).to be(false)
+      end
+    end
+
+    context "when there are no shipments" do
+      it "returns true" do
+        expect(delivery.can_be_closed?).to be(true)
+      end
+    end
+  end
+
+  describe "#volume" do
+    context "when there are 0 shipments" do
+      it "outputs 0" do
+        expect(valid_delivery.volume).to eq(0)
+      end
+    end
+
+    context "when there are shipments" do
+      let!(:shipment1) { create(:shipment) }
+      let!(:shipment2) { create(:shipment) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment2) }
+
+      it "outputs the summed volume of the shipments" do
+        expect(valid_delivery.volume).to eq(shipment1.volume + shipment2.volume)
+      end
+    end
+  end
+
+  describe "#weight" do
+    context "when there are 0 shipments" do
+      it "outputs 0" do
+        expect(valid_delivery.weight).to eq(0)
+      end
+    end
+
+    context "when there are shipments" do
+      let!(:shipment1) { create(:shipment) }
+      let!(:shipment2) { create(:shipment) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment2) }
+      it "outputs the summed weight of the shipments" do
+        expect(valid_delivery.weight).to eq(shipment1.weight + shipment2.weight)
+      end
+    end
+  end
 end

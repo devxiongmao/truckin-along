@@ -1,88 +1,83 @@
 <% disabled = locked_fields?(shipment.shipment_status) %>
 
 <% if shipment.company %>
-  <div class="form-group">
-    <p>Shipment has been claimed by <%= shipment.company.name %>.
-      <% if disabled %>
-        No further updates are allowed.
-      <% end %>
-    </p>
-  </div>
+<div class="form-group">
+  <p>Shipment has been claimed by <%= shipment.company.name %>.
+    <% if disabled %>
+    No further updates are allowed.
+    <% end %>
+  </p>
+</div>
 <% end %>
 
 <%= form_with(model: shipment, local: true, class: 'styled-form') do |form| %>
-  <% if shipment.errors.any? %>
-    <div class="error-messages">
-      <h2><%= pluralize(shipment.errors.count, "error") %> prohibited this shipment from being saved:</h2>
-      <ul>
-        <% shipment.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% if shipment.errors.any? %>
+<div class="error-messages">
+  <h2><%= pluralize(shipment.errors.count, "error") %> prohibited this shipment from being saved:</h2>
+  <ul>
+    <% shipment.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
 
-  <% unless statuses.empty? %>
-    <div class="form-group">
-      <%= form.label :shipment_status_id, "Shipment Status", class: 'form-label' %>
-      <%= form.select :shipment_status_id, 
+<% unless statuses.empty? %>
+<div class="form-group">
+  <%= form.label :shipment_status_id, "Shipment Status", class: 'form-label' %>
+  <%= form.select :shipment_status_id, 
                       options_from_collection_for_select(statuses, :id, :name, shipment.shipment_status_id), 
                       { include_blank: "Select a Status" }, 
-                      { class: 'form-input', disabled: current_user.role == "customer" || disabled } %>
-    </div>
-  <% end %>
+                      { class: 'form-input', disabled: disabled || lock_fields_by_role(:shipment_status_id) } %>
+</div>
+<% end %>
 
-  <div class="form-group">
-    <%= form.label :name, class: 'form-label' %>
-    <%= form.text_field :name, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :name, class: 'form-label' %>
+  <%= form.text_field :name, class: 'form-input', disabled: disabled || lock_fields_by_role(:name)%>
+</div>
 
-  <div class="form-group">
-    <%= form.label :sender_name, class: 'form-label' %>
-    <%= form.text_field :sender_name, class: 'form-input', value: auto_select_sender(shipment), disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :sender_name, class: 'form-label' %>
+  <%= form.text_field :sender_name, class: 'form-input', value: auto_select_sender(shipment), disabled: disabled || lock_fields_by_role(:sender_name) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :sender_address, class: 'form-label' %>
-    <%= form.text_area :sender_address, class: 'form-input', value: auto_select_address(shipment), disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :sender_address, class: 'form-label' %>
+  <%= form.text_area :sender_address, class: 'form-input', value: auto_select_address(shipment), disabled: disabled || lock_fields_by_role(:sender_address) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :receiver_name, class: 'form-label' %>
-    <%= form.text_field :receiver_name, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :receiver_name, class: 'form-label' %>
+  <%= form.text_field :receiver_name, class: 'form-input', disabled: disabled || lock_fields_by_role(:receiver_name) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :receiver_address, class: 'form-label' %>
-    <%= form.text_area :receiver_address, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :receiver_address, class: 'form-label' %>
+  <%= form.text_area :receiver_address, class: 'form-input', disabled: disabled || lock_fields_by_role(:receiver_address) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :weight, class: 'form-label' %>
-    <%= form.text_field :weight, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :weight, "Weight (kg)", class: 'form-label' %>
+  <%= form.text_field :weight, class: 'form-input', disabled: disabled || lock_fields_by_role(:weight) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :length, class: 'form-label' %>
-    <%= form.text_field :length, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :length, "Length (cm)", class: 'form-label' %>
+  <%= form.text_field :length, class: 'form-input', disabled: disabled || lock_fields_by_role(:length) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :width, class: 'form-label' %>
-    <%= form.text_field :width, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :width, "Width (cm)", class: 'form-label' %>
+  <%= form.text_field :width, class: 'form-input', disabled: disabled || lock_fields_by_role(:width) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :height, class: 'form-label' %>
-    <%= form.text_field :height, class: 'form-input', disabled: disabled %>
-  </div>
+<div class="form-group">
+  <%= form.label :height, "Height (cm)", class: 'form-label' %>
+  <%= form.text_field :height, class: 'form-input', disabled: disabled || lock_fields_by_role(:height) %>
+</div>
 
-  <div class="form-group">
-    <%= form.label :boxes, class: 'form-label' %>
-    <%= form.number_field :boxes, class: 'form-input', disabled: disabled %>
-  </div>
-
-  <div class="form-actions">
-    <%= form.submit 'Save Shipment', class: 'button primary-button', disabled: disabled %>
-  </div>
+<div class="form-actions">
+  <%= form.submit 'Save Shipment', class: 'button primary-button', disabled: disabled %>
+</div>
 <% end %>

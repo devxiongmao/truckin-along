@@ -4,6 +4,7 @@ RSpec.describe ShipmentsHelper, type: :helper do
   let(:shipment) { create(:shipment, sender_name: "John Doe", sender_address: "123 Main St") }
   let(:customer) { create(:user, role: "customer", home_address: "456 Customer St") }
   let(:admin) { create(:user, role: "admin") }
+  let(:driver) { create(:user, role: "driver") }
   let(:shipment_status_locked) { create(:shipment_status, locked_for_customers: true) }
   let(:shipment_status_unlocked) { create(:shipment_status, locked_for_customers: false) }
   let(:shipment_status_closed) { create(:shipment_status, closed: true) }
@@ -102,6 +103,57 @@ RSpec.describe ShipmentsHelper, type: :helper do
       it "returns false" do
         expect(helper.locked_fields?(shipment_status_locked)).to be_falsey
         expect(helper.locked_fields?(shipment_status_unlocked)).to be_falsey
+      end
+    end
+  end
+
+  describe "#lock_fields_by_role" do
+    context "when user is a customer" do
+      before { allow(helper).to receive(:current_user).and_return(customer) }
+
+      it "does not lock whitelisted fields for customers" do
+        %i[name sender_name sender_address receiver_name receiver_address weight length width height].each do |field|
+          expect(helper.lock_fields_by_role(field)).to eq(false)
+        end
+      end
+
+      it "locks non-whitelisted fields for customers" do
+        expect(helper.lock_fields_by_role(:shipment_status_id)).to eq(true)
+        expect(helper.lock_fields_by_role(:truck_id)).to eq(true)
+      end
+    end
+
+    context "when user is an admin" do
+      before { allow(helper).to receive(:current_user).and_return(admin) }
+
+      it "does not lock whitelisted fields for admins" do
+        %i[shipment_status_id sender_address receiver_address weight length width height].each do |field|
+          expect(helper.lock_fields_by_role(field)).to eq(false)
+        end
+      end
+
+      it "locks non-whitelisted fields for admins" do
+        expect(helper.lock_fields_by_role(:name)).to eq(true)
+        expect(helper.lock_fields_by_role(:sender_name)).to eq(true)
+        expect(helper.lock_fields_by_role(:receiver_name)).to eq(true)
+      end
+    end
+
+    context "when user is a driver" do
+      before { allow(helper).to receive(:current_user).and_return(driver) }
+
+      it "does not lock whitelisted fields for drivers" do
+        %i[shipment_status_id weight length width height].each do |field|
+          expect(helper.lock_fields_by_role(field)).to eq(false)
+        end
+      end
+
+      it "locks non-whitelisted fields for drivers" do
+        expect(helper.lock_fields_by_role(:name)).to eq(true)
+        expect(helper.lock_fields_by_role(:sender_name)).to eq(true)
+        expect(helper.lock_fields_by_role(:sender_address)).to eq(true)
+        expect(helper.lock_fields_by_role(:receiver_name)).to eq(true)
+        expect(helper.lock_fields_by_role(:receiver_address)).to eq(true)
       end
     end
   end

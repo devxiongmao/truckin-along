@@ -1,8 +1,8 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_shipment, only: %i[ show edit update destroy ]
-  before_action :authorize_customer, only: [ :new, :create, :destroy, :index ]
-  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery ]
+  before_action :set_shipment, only: %i[ show edit update destroy copy close]
+  before_action :authorize_customer, only: [ :new, :create, :destroy, :copy, :index ]
+  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery, :close ]
   before_action :authorize_edit_update, only: [ :edit, :update ]
 
   # GET /shipments
@@ -38,6 +38,14 @@ class ShipmentsController < ApplicationController
 
   # PATCH/PUT /shipments/1
   def update
+    if @shipment.shipment_status&.closed
+      return redirect_to @shipment, alert: "Shipment is closed, and currently locked for edits."
+    end
+
+    if current_user.customer? && @shipment.shipment_status&.locked_for_customers
+      return redirect_to @shipment, alert: "Shipment is currently locked for edits."
+    end
+
     if @shipment.update(shipment_params)
       redirect_to @shipment, notice: "Shipment was successfully updated."
     else
@@ -49,6 +57,29 @@ class ShipmentsController < ApplicationController
   def destroy
     @shipment.destroy!
     redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
+  end
+
+  def copy
+    @new_shipment = @shipment.dup
+    @new_shipment.name = "Copy of #{@shipment.name}"
+    @new_shipment.truck_id = nil
+    @new_shipment.shipment_status_id = nil
+    @new_shipment.company_id = nil
+    @shipment = @new_shipment
+  end
+
+  def close
+    preference = current_company.shipment_action_preferences.find_by(action: "successfully_delivered")
+    unless preference&.shipment_status_id
+      return redirect_to delivery_path(@shipment.active_delivery), alert: "No preference set."
+    end
+
+    if preference.shipment_status_id == @shipment.shipment_status_id
+      return redirect_to delivery_path(@shipment.active_delivery), alert: "Shipment is already closed."
+    end
+
+    @shipment.update!(shipment_status_id: preference.shipment_status_id)
+    redirect_to delivery_path(@shipment.active_delivery), notice: "Shipment successfully closed."
   end
 
   def assign
@@ -125,18 +156,35 @@ class ShipmentsController < ApplicationController
     end
 
     def shipment_params
-      params.require(:shipment).permit(
-        :shipment_status_id,
-        :name,
-        :sender_name,
-        :sender_address,
-        :receiver_name,
-        :receiver_address,
-        :weight,
-        :length,
-        :width,
-        :height,
-        :boxes
-        )
+      if current_user.customer?
+        params.require(:shipment).permit(
+          :name,
+          :sender_name,
+          :sender_address,
+          :receiver_name,
+          :receiver_address,
+          :weight,
+          :length,
+          :width,
+          :height)
+      elsif current_user.admin?
+        params.require(:shipment).permit(
+          :shipment_status_id,
+          :sender_address,
+          :receiver_address,
+          :weight,
+          :length,
+          :width,
+          :height)
+      elsif current_user.driver?
+        params.require(:shipment).permit(
+          :shipment_status_id,
+          :weight,
+          :length,
+          :width,
+          :height)
+      else
+        {}
+      end
     end
 end

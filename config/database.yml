@@ -18,6 +18,11 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Additionally added for docker
+  host: <%= ENV['POSTGRES_DB_HOST'] %>
+  port: <%= ENV['POSTGRES_DB_PORT'] %>
+  username: <%= ENV['POSTGRES_DB_USER'] %>
+  password: <%= ENV['POSTGRES_DB_PASSWORD'] %>
 
 development:
   <<: *default

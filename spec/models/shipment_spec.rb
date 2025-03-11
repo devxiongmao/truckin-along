@@ -31,15 +31,12 @@ RSpec.describe Shipment, type: :model do
     it { is_expected.to validate_presence_of(:length) }
     it { is_expected.to validate_presence_of(:width) }
     it { is_expected.to validate_presence_of(:height) }
-    it { is_expected.to validate_presence_of(:boxes) }
 
     # Numericality Validations
     it { is_expected.to validate_numericality_of(:weight).is_greater_than(0) }
     it { is_expected.to validate_numericality_of(:length).is_greater_than(0) }
     it { is_expected.to validate_numericality_of(:width).is_greater_than(0) }
     it { is_expected.to validate_numericality_of(:height).is_greater_than(0) }
-    it { is_expected.to validate_numericality_of(:boxes).only_integer }
-    it { is_expected.to validate_numericality_of(:boxes).is_greater_than_or_equal_to(0) }
   end
 
   ## Valid Shipment Test
@@ -65,11 +62,6 @@ RSpec.describe Shipment, type: :model do
       valid_shipment.weight = 0
       expect(valid_shipment).not_to be_valid
     end
-
-    it "is invalid with a negative number of boxes" do
-      valid_shipment.boxes = -1
-      expect(valid_shipment).not_to be_valid
-    end
   end
 
   ## Scope Tests
@@ -90,19 +82,9 @@ RSpec.describe Shipment, type: :model do
 
   ## Edge Case Tests
   describe "edge cases" do
-    it "allows zero boxes" do
-      valid_shipment.boxes = 0
-      expect(valid_shipment).to be_valid
-    end
-
     it "handles extremely large weights" do
       valid_shipment.weight = 10_000.99
       expect(valid_shipment).to be_valid
-    end
-
-    it "does not allow non-integer values for boxes" do
-      valid_shipment.boxes = 5.5
-      expect(valid_shipment).not_to be_valid
     end
   end
 
@@ -161,6 +143,31 @@ RSpec.describe Shipment, type: :model do
           expect(valid_shipment.open?).to eq(true)
         end
       end
+    end
+  end
+
+  describe "#active_delivery" do
+    describe "when there is an active delivery" do
+      let!(:delivery) { create(:delivery) }
+      let!(:delivery_shipment) { create(:delivery_shipment, delivery: delivery, shipment: valid_shipment) }
+      it "returns the delivery" do
+        expect(valid_shipment.active_delivery).to eq(delivery)
+      end
+    end
+
+    describe "when there is not an active delivery" do
+      it "returns nil" do
+        expect(valid_shipment.active_delivery).to be_nil
+      end
+    end
+  end
+
+  describe "#volume" do
+    it "calculates the volume of the shipment" do
+      valid_shipment.length = 10
+      valid_shipment.width  = 25
+      valid_shipment.height = 15
+      expect(valid_shipment.volume).to eq(3750)
     end
   end
 end

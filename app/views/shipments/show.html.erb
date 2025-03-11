@@ -13,7 +13,9 @@
   <p><strong>Receiver Name:</strong> <span class="detail-value"><%= @shipment.receiver_name %></span></p>
   <p><strong>Receiver Address:</strong> <span class="detail-value"><%= @shipment.receiver_address %></span></p>
   <p><strong>Weight:</strong> <span class="detail-value"><%= @shipment.weight %> kg</span></p>
-  <p><strong>Boxes:</strong> <span class="detail-value"><%= @shipment.boxes %></span></p>
+  <p><strong>Length:</strong> <span class="detail-value"><%= @shipment.length %> cm</span></p>
+  <p><strong>Width:</strong> <span class="detail-value"><%= @shipment.width %> cm</span></p>
+  <p><strong>Height:</strong> <span class="detail-value"><%= @shipment.height %> cm</span></p>
   <% if @shipment.truck && !@current_user.customer? %>
   <p><strong>Truck:</strong> <span class="detail-value"><%= link_to @shipment.truck.display_name, @shipment.truck %></span></p>
   <% end %>

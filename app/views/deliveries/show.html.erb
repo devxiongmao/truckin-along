@@ -1,5 +1,8 @@
 <div class="page-header">
   <h1 class="page-title">Delivery Details</h1>
+  <% if @delivery.can_be_closed? %>
+  <%= link_to "Mark Complete", close_delivery_path(@delivery), class: 'button primary-button', method: :post, data: { confirm: 'All shipments are successfully closed?' } %>
+  <% end %>
   <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
 </div>
 
@@ -25,6 +28,10 @@
       <td><%= shipment.receiver_name %></td>
       <td><%= shipment.weight %></td>
       <td>
+        <%= link_to 'Quick Close', close_shipment_path(shipment), 
+            class: 'action-link', 
+            method: :post, 
+            data: { confirm: 'Was this shipment successfully delivered?' } %> |
         <%= link_to 'Show', shipment, class: 'action-link' %>
       </td>
     </tr>
