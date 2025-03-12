@@ -1,12 +1,10 @@
 class ShipmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_shipment, only: %i[ show edit update destroy copy close]
-  before_action :authorize_customer, only: [ :new, :create, :destroy, :copy, :index ]
-  before_action :authorize_driver, only: [ :assign, :assign_shipments_to_truck, :initiate_delivery, :close ]
-  before_action :authorize_edit_update, only: [ :edit, :update ]
 
   # GET /shipments
   def index
+    authorize Shipment
     @shipments = Shipment.where(user_id: current_user.id)
   end
 
@@ -17,10 +15,12 @@ class ShipmentsController < ApplicationController
   # GET /shipments/new
   def new
     @shipment = Shipment.new
+    authorize @shipment
   end
 
   # GET /shipments/1/edit
   def edit
+    authorize @shipment
     @statuses = current_user.role == "customer" ? [] : ShipmentStatus.for_company(current_company)
   end
 
@@ -29,6 +29,7 @@ class ShipmentsController < ApplicationController
     @shipment = Shipment.new(shipment_params)
     @shipment.user = current_user
 
+    authorize @shipment
     if @shipment.save
       redirect_to @shipment, notice: "Shipment was successfully created."
     else
@@ -38,6 +39,7 @@ class ShipmentsController < ApplicationController
 
   # PATCH/PUT /shipments/1
   def update
+    authorize @shipment
     if @shipment.shipment_status&.closed
       return redirect_to @shipment, alert: "Shipment is closed, and currently locked for edits."
     end
@@ -55,6 +57,7 @@ class ShipmentsController < ApplicationController
 
   # DELETE /shipments/1
   def destroy
+    authorize @shipment
     @shipment.destroy!
     redirect_to shipments_path, status: :see_other, notice: "Shipment was successfully destroyed."
   end
@@ -66,9 +69,11 @@ class ShipmentsController < ApplicationController
     @new_shipment.shipment_status_id = nil
     @new_shipment.company_id = nil
     @shipment = @new_shipment
+    authorize @shipment
   end
 
   def close
+    authorize Shipment
     preference = current_company.shipment_action_preferences.find_by(action: "successfully_delivered")
     unless preference&.shipment_status_id
       return redirect_to delivery_path(@shipment.active_delivery), alert: "No preference set."
@@ -83,6 +88,7 @@ class ShipmentsController < ApplicationController
   end
 
   def assign
+    authorize Shipment
     shipment_ids = params[:shipment_ids].presence || []
     preference = current_company.shipment_action_preferences.find_by(action: "claimed_by_company")
     if shipment_ids.any?
@@ -97,6 +103,7 @@ class ShipmentsController < ApplicationController
   end
 
   def assign_shipments_to_truck
+    authorize Shipment
     truck = Truck.find_by(id: params[:truck_id])
     shipment_ids = params[:shipment_ids]
 
@@ -113,6 +120,7 @@ class ShipmentsController < ApplicationController
   end
 
   def initiate_delivery
+    authorize Shipment
     if current_user.active_delivery.present?
       flash[:alert] = "Already on an active delivery"
       return redirect_to start_deliveries_path
@@ -143,15 +151,6 @@ class ShipmentsController < ApplicationController
           flash[:alert] = "You are not authorized to access this shipment."
           redirect_to deliveries_path
         end
-      end
-    end
-
-    def authorize_edit_update
-      return if current_user.customer?
-
-      unless @shipment.company_id == current_user.company_id
-        flash[:alert] = "You are not authorized to modify this shipment."
-        redirect_to deliveries_path
       end
     end
 

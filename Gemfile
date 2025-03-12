@@ -42,6 +42,7 @@ gem "thruster", require: false
 
 ## Manually added Gems
 gem "devise"
+gem "pundit" # For access control
 
 gem "parallel_tests", group: [ :development, :test ]
 

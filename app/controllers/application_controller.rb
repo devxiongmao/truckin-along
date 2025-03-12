@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :redirect_unless_company_registered
 
+  include Pundit::Authorization
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   def current_company
@@ -27,22 +30,13 @@ class ApplicationController < ActionController::Base
       redirect_to(root_path, alert: "Not authorized.") unless current_user&.admin?
     end
 
-    def authorize_customer
-      unless current_user&.role == "customer"
-        flash[:alert] = "You are not authorized to perform this action."
-        redirect_to root_path
-      end
-    end
-
-    def authorize_driver
-      if current_user&.role == "customer"
-        flash[:alert] = "You are not authorized to perform this action."
-        redirect_to root_path
-      end
-    end
-
     def handle_record_not_found
       redirect_to(root_path, alert: "Not authorized.")
+    end
+
+    def user_not_authorized
+      flash[:alert] = "You are not authorized to perform this action."
+      redirect_to(request.referrer || root_path)
     end
 
   protected

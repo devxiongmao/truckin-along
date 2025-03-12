@@ -282,7 +282,7 @@ RSpec.describe "/deliveries", type: :request do
 
       it "renders the correct flash alert" do
         post close_delivery_url(delivery)
-        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+        expect(flash[:alert]).to eq("Not authorized.")
       end
     end
 
