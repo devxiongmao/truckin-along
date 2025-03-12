@@ -489,14 +489,14 @@ RSpec.describe "/shipments", type: :request do
       context "when the shipment is unclaimed" do
         let!(:shipment) { create(:shipment, user: valid_user, company: nil) }
 
-        it 'redirects to the deliveries page' do
+        it 'redirects to the root page' do
           get edit_shipment_url(shipment)
-          expect(response).to redirect_to(deliveries_path)
+          expect(response).to redirect_to(root_path)
         end
 
         it "shows an alert saying not authorized" do
           get edit_shipment_url(shipment)
-          expect(flash[:alert]).to eq("You are not authorized to modify this shipment.")
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
         end
       end
 
@@ -576,7 +576,7 @@ RSpec.describe "/shipments", type: :request do
 
           it "shows an alert saying not authorized" do
             patch shipment_url(shipment), params: { shipment: new_attributes }
-            expect(flash[:alert]).to eq("You are not authorized to modify this shipment.")
+            expect(flash[:alert]).to eq("You are not authorized to perform this action.")
           end
 
           it "does not update the shipment" do
@@ -584,9 +584,9 @@ RSpec.describe "/shipments", type: :request do
             expect(shipment.name).not_to eq("Toys")
           end
 
-          it "redirects to the deliveries path" do
+          it "redirects to the root path" do
             patch shipment_url(shipment), params: { shipment: new_attributes }
-            expect(response).to redirect_to(deliveries_path)
+            expect(response).to redirect_to(root_path)
           end
         end
 
@@ -665,14 +665,14 @@ RSpec.describe "/shipments", type: :request do
             expect(shipment.name).not_to eq(nil)
           end
 
-          it 'redirects to the deliveries page' do
+          it 'redirects to the root page' do
             patch shipment_url(shipment), params: { shipment: invalid_attributes }
-            expect(response).to redirect_to(deliveries_path)
+            expect(response).to redirect_to(root_path)
           end
 
           it "shows an alert saying not authorized" do
             patch shipment_url(shipment), params: { shipment: invalid_attributes }
-            expect(flash[:alert]).to eq("You are not authorized to modify this shipment.")
+            expect(flash[:alert]).to eq("You are not authorized to perform this action.")
           end
         end
 
