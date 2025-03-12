@@ -41,6 +41,7 @@ jobs:
               - 'app/mailers/**'
               - 'db/migrate/**'
               - 'config/**'
+              - 'spec/**'
               - 'lib/**'
               - 'Gemfile'
               - 'Gemfile.lock'
