@@ -231,6 +231,8 @@ GEM
     public_suffix (6.0.1)
     puma (6.6.0)
       nio4r (~> 2.0)
+    pundit (2.5.0)
+      activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.11)
@@ -428,6 +430,7 @@ DEPENDENCIES
   propshaft
   pry
   puma (>= 5.0)
+  pundit
   rails (~> 8.0.1)
   rails-controller-testing
   rspec-rails (~> 7.1)
