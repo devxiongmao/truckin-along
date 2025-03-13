@@ -1,15 +1,15 @@
 class CompaniesController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_admin
   before_action :set_company, only: %i[edit update]
 
   def new
     @company = Company.new
+    authorize @company
   end
 
   def create
     @company = Company.new(company_params)
-
+    authorize @company
     if @company.save
       current_user.company = @company
       current_user.save
@@ -22,9 +22,12 @@ class CompaniesController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    authorize @company
+  end
 
   def update
+    authorize @company
     if @company.update(company_params)
       flash[:notice] = "Company updated successfully."
       redirect_to root_path

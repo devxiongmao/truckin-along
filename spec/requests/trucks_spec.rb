@@ -232,7 +232,7 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         get truck_url(truck)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -244,7 +244,7 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         get new_truck_url
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -256,7 +256,7 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         get truck_url(truck)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -274,7 +274,7 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         post trucks_url, params: { truck: valid_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -292,7 +292,7 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         patch truck_url(truck), params: { truck: new_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -310,7 +310,7 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         delete truck_url(truck)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
   end

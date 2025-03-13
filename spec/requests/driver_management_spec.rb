@@ -182,7 +182,7 @@ RSpec.describe "/driver_managements", type: :request do
 
       it "renders the correct flash alert" do
         get new_driver_management_url
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -200,7 +200,7 @@ RSpec.describe "/driver_managements", type: :request do
 
       it "renders the correct flash alert" do
         post driver_managements_url, params: { user: valid_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -212,7 +212,7 @@ RSpec.describe "/driver_managements", type: :request do
 
       it "renders the correct flash alert" do
         get edit_driver_management_url(driver)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -230,7 +230,7 @@ RSpec.describe "/driver_managements", type: :request do
 
       it "renders the correct flash alert" do
         patch driver_management_url(driver), params: { user: new_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
   end

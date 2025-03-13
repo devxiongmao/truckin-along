@@ -1,13 +1,14 @@
 class ShipmentActionPreferencesController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_admin
   before_action :set_preference
 
   def edit
+    authorize @preference
     @shipment_statuses = ShipmentStatus.for_company(current_company)
   end
 
   def update
+    authorize @preference
     if @preference.update(preference_params)
       redirect_to admin_index_path, notice: "Preference was successfully updated."
     else

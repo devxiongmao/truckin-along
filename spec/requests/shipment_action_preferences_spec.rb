@@ -107,7 +107,7 @@ RSpec.describe "/shipment_action_preferences", type: :request do
 
       it "renders the correct flash alert" do
         get edit_shipment_action_preference_url(company_preference)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -125,7 +125,7 @@ RSpec.describe "/shipment_action_preferences", type: :request do
 
       it "renders the correct flash alert" do
         patch shipment_action_preference_url(company_preference), params: { shipment_action_preference: new_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
   end
