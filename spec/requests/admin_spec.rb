@@ -72,7 +72,7 @@ RSpec.describe "/admin", type: :request do
 
       it "renders an error message" do
         get admin_index_path
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
   end

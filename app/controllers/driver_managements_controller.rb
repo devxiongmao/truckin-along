@@ -1,14 +1,14 @@
 class DriverManagementsController < ApplicationController
     before_action :authenticate_user!
-    before_action :ensure_admin
-
     before_action :set_driver, only: %i[edit update]
 
     def new
+      authorize :driver_management, :new?
       @driver = User.new(role: "driver")
     end
 
     def create
+      authorize :driver_management, :create?
       @driver = User.new(driver_params)
       @driver.role = "driver"
       @driver.company = current_user.company
@@ -19,9 +19,12 @@ class DriverManagementsController < ApplicationController
       end
     end
 
-    def edit; end
+    def edit
+      authorize :driver_management, :edit?
+    end
 
     def update
+      authorize :driver_management, :update?
       if @driver.update(driver_params)
         redirect_to admin_index_path, notice: "Driver was successfully updated."
       else
