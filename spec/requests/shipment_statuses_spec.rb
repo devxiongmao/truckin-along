@@ -183,7 +183,7 @@ RSpec.describe "/shipment_statuses", type: :request do
 
       it "renders the correct flash alert" do
         get new_shipment_status_url
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -195,7 +195,7 @@ RSpec.describe "/shipment_statuses", type: :request do
 
       it "renders the correct flash alert" do
         get edit_shipment_status_url(shipment_status)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -213,7 +213,7 @@ RSpec.describe "/shipment_statuses", type: :request do
 
       it "renders the correct flash alert" do
         post shipment_statuses_url, params: { shipment_status: valid_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -231,7 +231,7 @@ RSpec.describe "/shipment_statuses", type: :request do
 
       it "renders the correct flash alert" do
         patch shipment_status_url(shipment_status), params: { shipment_status: new_attributes }
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -249,7 +249,7 @@ RSpec.describe "/shipment_statuses", type: :request do
 
       it "renders the correct flash alert" do
         delete shipment_status_url(shipment_status)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
   end

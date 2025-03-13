@@ -1,14 +1,15 @@
 class ShipmentStatusesController < ApplicationController
     before_action :authenticate_user!
-    before_action :ensure_admin
     before_action :set_shipment_status, only: %i[edit update destroy]
 
     def new
       @shipment_status = ShipmentStatus.new
+      authorize @shipment_status
     end
 
     def create
       @shipment_status = ShipmentStatus.new(shipment_status_params)
+      authorize @shipment_status
       if @shipment_status.save
         redirect_to admin_index_path, notice: "Shipment status was successfully created."
       else
@@ -16,9 +17,12 @@ class ShipmentStatusesController < ApplicationController
       end
     end
 
-    def edit; end
+    def edit
+      authorize @shipment_status
+    end
 
     def update
+      authorize @shipment_status
       if @shipment_status.update(shipment_status_params)
         redirect_to admin_index_path, notice: "Shipment status was successfully updated."
       else
@@ -27,6 +31,7 @@ class ShipmentStatusesController < ApplicationController
     end
 
     def destroy
+      authorize @shipment_status
       @shipment_status.destroy
       redirect_to admin_index_path, notice: "Shipment status was successfully destroyed."
     end

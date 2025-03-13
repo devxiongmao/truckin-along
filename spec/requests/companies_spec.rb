@@ -208,7 +208,7 @@ RSpec.describe "/companies", type: :request do
 
       it 'renders with an error message' do
         get new_company_url
-        expect(flash[:alert]).to eq('Not authorized.')
+        expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
@@ -226,7 +226,7 @@ RSpec.describe "/companies", type: :request do
 
       it 'renders with an error message' do
         post companies_url, params: { company: valid_attributes }
-        expect(flash[:alert]).to eq('Not authorized.')
+        expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
@@ -240,7 +240,7 @@ RSpec.describe "/companies", type: :request do
 
       it 'renders with an error message' do
         get edit_company_url(company)
-        expect(flash[:alert]).to eq('Not authorized.')
+        expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
 
@@ -264,7 +264,7 @@ RSpec.describe "/companies", type: :request do
 
       it 'renders with an error message' do
         patch company_url(company), params: { company: new_attributes }
-        expect(flash[:alert]).to eq('Not authorized.')
+        expect(flash[:alert]).to eq('You are not authorized to perform this action.')
       end
     end
   end
