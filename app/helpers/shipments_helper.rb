@@ -31,4 +31,12 @@ module ShipmentsHelper
     current_user_role = current_user.role.to_sym
     !whitelisted_fields.fetch(current_user_role, []).include?(field)
   end
+
+  def back_link_path(user, shipment)
+    return shipments_path if user.customer?
+    return load_truck_deliveries_path if shipment.claimed? && shipment.truck_id.nil?
+    return start_deliveries_path if shipment.claimed? && !shipment.truck_id.nil?
+
+    deliveries_path
+  end
 end

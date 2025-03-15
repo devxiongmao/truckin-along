@@ -157,4 +157,36 @@ RSpec.describe ShipmentsHelper, type: :helper do
       end
     end
   end
+
+  describe "#back_link_path" do
+    context "when user is a customer" do
+      it "returns the correct path" do
+        expect(helper.back_link_path(customer, shipment)).to eq(shipments_path)
+      end
+    end
+
+    context "when user is not a customer" do
+      context "when the shipment is not claimed" do
+        it "returns the correct path" do
+          shipment.company_id = nil
+          expect(helper.back_link_path(admin, shipment)).to eq(deliveries_path)
+        end
+      end
+
+      context "when the shipment is claimed" do
+        context "when the shipment is not tied to a truck" do
+          it "returns the correct path" do
+            shipment.truck_id = nil
+            expect(helper.back_link_path(admin, shipment)).to eq(load_truck_deliveries_path)
+          end
+        end
+
+        context "when the shipment is tied to a truck" do
+          it "returns the correct path" do
+            expect(helper.back_link_path(admin, shipment)).to eq(start_deliveries_path)
+          end
+        end
+      end
+    end
+  end
 end
