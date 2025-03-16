@@ -33,6 +33,6 @@ class TruckPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin?
+    user.admin? && truck.active_delivery.nil?
   end
 end

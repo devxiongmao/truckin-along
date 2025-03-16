@@ -7,7 +7,7 @@ RSpec.describe Truck, type: :model do
   ## Association Tests
   describe "associations" do
     it { is_expected.to have_many(:shipments) }
-    it { is_expected.to have_many(:deliveries).dependent(:destroy) }
+    it { is_expected.to have_many(:deliveries).dependent(:nullify) }
     it { is_expected.to belong_to(:company) }
   end
 

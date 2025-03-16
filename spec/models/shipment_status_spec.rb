@@ -6,7 +6,7 @@ RSpec.describe ShipmentStatus, type: :model do
 
   ## Association Tests
   describe "associations" do
-    it { is_expected.to have_many(:shipments).dependent(:destroy) }
+    it { is_expected.to have_many(:shipments).dependent(:nullify) }
     it { is_expected.to belong_to(:company) }
     it { should have_many(:shipment_action_preferences).dependent(:nullify) }
   end
@@ -39,12 +39,18 @@ RSpec.describe ShipmentStatus, type: :model do
     end
   end
 
-  ## Dependent Destroy Tests
-  describe "dependent destroy" do
+  ## Dependent Nullify Tests
+  describe "dependent nullify" do
     let!(:shipment) { create(:shipment, shipment_status_id: shipment_status.id, company: company) }
 
-    it "destroys associated shipments when destroyed" do
-      expect { shipment_status.destroy }.to change(Shipment, :count).by(-1)
+    it "does not destroy associated shipments when destroyed" do
+      expect { shipment_status.destroy }.to change(Shipment, :count).by(0)
+    end
+
+    it "nullifies the column in the shipment" do
+      shipment_status.destroy
+      shipment.reload
+      expect(shipment.shipment_status_id).to be_nil
     end
   end
 
