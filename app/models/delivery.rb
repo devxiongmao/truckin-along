@@ -2,7 +2,7 @@ class Delivery < ApplicationRecord
   belongs_to :user
   belongs_to :truck
 
-  has_many :delivery_shipments
+  has_many :delivery_shipments, dependent: :nullify
   has_many :shipments, through: :delivery_shipments
 
   enum :status, {
