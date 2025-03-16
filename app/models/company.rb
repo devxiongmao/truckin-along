@@ -1,9 +1,10 @@
 class Company < ApplicationRecord
-  has_many :users, dependent: :nullify
-  has_many :shipments
-  has_many :shipment_statuses
-  has_many :trucks
-  has_many :shipment_action_preferences
+  has_many :shipments, dependent: :nullify
+
+  has_many :users, dependent: :destroy
+  has_many :shipment_statuses, dependent: :destroy
+  has_many :trucks, dependent: :destroy
+  has_many :shipment_action_preferences, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :address, presence: true
