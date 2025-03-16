@@ -1,7 +1,7 @@
 class ShipmentStatus < ApplicationRecord
   belongs_to :company
 
-  has_many :shipments, dependent: :destroy
+  has_many :shipments, dependent: :nullify
   has_many :shipment_action_preferences, dependent: :nullify
 
   validates :name, presence: true

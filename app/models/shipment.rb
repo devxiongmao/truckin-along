@@ -4,7 +4,7 @@ class Shipment < ApplicationRecord
   belongs_to :truck, optional: true
   belongs_to :shipment_status, optional: true
 
-  has_many :delivery_shipments
+  has_many :delivery_shipments, dependent: :nullify
   has_many :deliveries, through: :delivery_shipments
 
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, presence: true
