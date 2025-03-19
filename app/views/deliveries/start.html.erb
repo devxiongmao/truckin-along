@@ -5,49 +5,326 @@
 <h4>Truck: <%= @active_delivery.truck&.display_name %></h4>
 <h4>Shipments: <%= @active_delivery.shipments.count %></h4>
 <p>
-  <%= link_to "View Delivery", delivery_path(@active_delivery), class: "btn btn-primary" %>
+  <%= link_to "View Delivery", delivery_path(@active_delivery), class: "button secondary-button" %>
 </p>
 <% else %>
 <p>Not currently on a delivery.</p>
 <% end %>
+<div data-controller="modal">
+  <div id="initiate-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Pre-Delivery Inspection Checklist</h3>
 
+      <form id="initiate-form" method="post" data-action="modal#submitForm">
+        <p>Before initiating delivery, please confirm all safety checks:</p>
 
-<h2>All trucks</h2>
-<% if @trucks.any? %>
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th># of Shipments</th>
-      <th>Current Volume</th>
-      <th>Current Weight</th>
-      <th class="center-text">Available?</th>
-      <th>Actions</>
-    </tr>
-  </thead>
-  <tbody id="my-shipments">
-    <% @trucks.each do |truck| %>
-    <tr>
-      <td><%= truck.display_name %></td>
-      <td><%= truck.current_shipments.count%></td>
-      <td><%= truck.current_volume / 1_000_000 %> m<sup>3</sup> / <%=truck.volume / 1_000_000%>m<sup>3</sup></td>
-      <td><%= truck.current_weight %> kg / <%=truck.weight%> kg</td>
-      <td class="center-text">
-        <% if truck.available? %>
-        ✔️
-        <% else %>
-        ❌
-        <% end %>
-      </td>
-      <td>
-        <%= link_to 'Initiate', initiate_delivery_shipments_path(truck_id: truck.id), 
-            class: 'action-link', method: :post, 
-            data: { confirm: "Are you sure you want to initiate the delivery?" } %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-<% else %>
-<p>You don't have any trucks.</p>
-<% end %>
+        <div class="inspection-section">
+          <h4>Exterior Inspection</h4>
+
+          <div class="checklist-group">
+            <h5>1. General Condition</h5>
+            <label>
+              <input type="checkbox" name="truck_body" required>
+              Truck body free of visible damage or defects
+            </label>
+            <label>
+              <input type="checkbox" name="trailer_body" required>
+              Trailer body free of visible damage or defects
+            </label>
+            <label>
+              <input type="checkbox" name="license_plates" required>
+              License plates visible, clean, and securely attached
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>2. Lights and Reflectors</h5>
+            <label>
+              <input type="checkbox" name="headlights" required>
+              Headlights (low and high beam) operational
+            </label>
+            <label>
+              <input type="checkbox" name="turn_signals" required>
+              Turn signals (front and rear) operational
+            </label>
+            <label>
+              <input type="checkbox" name="brake_lights" required>
+              Brake lights operational
+            </label>
+            <label>
+              <input type="checkbox" name="reverse_lights" required>
+              Reverse lights operational
+            </label>
+            <label>
+              <input type="checkbox" name="clearance_lights" required>
+              Clearance lights and reflectors clean and functional
+            </label>
+            <label>
+              <input type="checkbox" name="hazard_lights" required>
+              Hazard lights operational
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>3. Tires and Wheels</h5>
+            <label>
+              <input type="checkbox" name="tread_depth" required>
+              Adequate tread depth (minimum 4/32" for steer tires, 2/32" for others)
+            </label>
+            <label>
+              <input type="checkbox" name="tire_inflation" required>
+              Proper tire inflation (check PSI levels)
+            </label>
+            <label>
+              <input type="checkbox" name="tire_damage" required>
+              No cuts, bulges, or visible damage
+            </label>
+            <label>
+              <input type="checkbox" name="lug_nuts" required>
+              Lug nuts secure, no rust streaks indicating looseness
+            </label>
+            <label>
+              <input type="checkbox" name="wheels" required>
+              Wheels free of cracks or dents
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>4. Windshield and Mirrors</h5>
+            <label>
+              <input type="checkbox" name="windshield" required>
+              Windshield clean and free of cracks or chips
+            </label>
+            <label>
+              <input type="checkbox" name="wipers" required>
+              Wipers operational, with clean and intact blades
+            </label>
+            <label>
+              <input type="checkbox" name="mirrors" required>
+              Mirrors properly adjusted, clean, and intact
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>5. Fluid Leaks</h5>
+            <label>
+              <input type="checkbox" name="fluid_leaks" required>
+              No visible leaks under the truck or trailer
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>6. Coupling Devices</h5>
+            <label>
+              <input type="checkbox" name="trailer_hitch" required>
+              Trailer hitch secure and operational
+            </label>
+            <label>
+              <input type="checkbox" name="safety_chains" required>
+              Safety chains attached and in good condition
+            </label>
+            <label>
+              <input type="checkbox" name="electrical_connections" required>
+              Electrical connections secure and functional
+            </label>
+            <label>
+              <input type="checkbox" name="air_lines" required>
+              Air lines connected and free of leaks
+            </label>
+          </div>
+        </div>
+
+        <div class="inspection-section">
+          <h4>Interior Inspection</h4>
+
+          <div class="checklist-group">
+            <h5>1. Brakes</h5>
+            <label>
+              <input type="checkbox" name="service_brake" required>
+              Service brake operational
+            </label>
+            <label>
+              <input type="checkbox" name="parking_brake" required>
+              Parking brake holds the vehicle securely
+            </label>
+            <label>
+              <input type="checkbox" name="trailer_brakes" required>
+              Trailer brakes operational (if applicable)
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>2. Steering</h5>
+            <label>
+              <input type="checkbox" name="steering" required>
+              Steering wheel operates smoothly with no excessive play
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>3. Gauges and Indicators</h5>
+            <label>
+              <input type="checkbox" name="fuel_gauge" required>
+              Fuel gauge operational
+            </label>
+            <label>
+              <input type="checkbox" name="oil_pressure" required>
+              Oil pressure gauge operational
+            </label>
+            <label>
+              <input type="checkbox" name="coolant_temp" required>
+              Coolant temperature gauge operational
+            </label>
+            <label>
+              <input type="checkbox" name="air_pressure" required>
+              Air pressure gauge operational (for air brakes)
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>4. Horn and Warning Devices</h5>
+            <label>
+              <input type="checkbox" name="horn" required>
+              Horn operational
+            </label>
+            <label>
+              <input type="checkbox" name="backup_alarm" required>
+              Back-up alarm operational (if equipped)
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>5. Emergency Equipment</h5>
+            <label>
+              <input type="checkbox" name="fire_extinguisher" required>
+              Fire extinguisher present and fully charged
+            </label>
+            <label>
+              <input type="checkbox" name="spare_fuses" required>
+              Spare fuses or circuit breakers available
+            </label>
+            <label>
+              <input type="checkbox" name="reflective_triangles" required>
+              Reflective triangles or road flares present
+            </label>
+          </div>
+        </div>
+
+        <div class="inspection-section">
+          <h4>Trailer-Specific Checks</h4>
+
+          <div class="checklist-group">
+            <h5>1. Trailer Doors</h5>
+            <label>
+              <input type="checkbox" name="trailer_doors" required>
+              Doors and latches secure and operational
+            </label>
+            <label>
+              <input type="checkbox" name="seals" required>
+              Seals intact to prevent leakage of cargo
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>2. Cargo Securement</h5>
+            <label>
+              <input type="checkbox" name="cargo_loaded" required>
+              Cargo properly loaded and secured
+            </label>
+            <label>
+              <input type="checkbox" name="load_balanced" required>
+              Load balanced to prevent shifting during transit
+            </label>
+          </div>
+        </div>
+
+        <div class="inspection-section">
+          <h4>Additional Checks</h4>
+
+          <div class="checklist-group">
+            <h5>1. Exhaust System</h5>
+            <label>
+              <input type="checkbox" name="exhaust" required>
+              No visible damage, leaks, or excessive noise
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>2. Suspension System</h5>
+            <label>
+              <input type="checkbox" name="suspension" required>
+              No broken, damaged, or missing components
+            </label>
+          </div>
+
+          <div class="checklist-group">
+            <h5>3. Documentation</h5>
+            <label>
+              <input type="checkbox" name="registration" required>
+              Vehicle registration and insurance on board
+            </label>
+            <label>
+              <input type="checkbox" name="inspection_docs" required>
+              Inspection documentation on board
+            </label>
+          </div>
+        </div>
+
+        <!-- Hidden field for truck_id -->
+        <input type="hidden" name="truck_id" id="modal-truck-id">
+
+        <div class="form-actions">
+          <label class="confirm-all">
+            <input type="checkbox" id="confirm-all" name="confirm_all" required>
+            <strong>I confirm all items have been checked and the vehicle is safe for delivery</strong>
+          </label>
+
+          <div class="modal-buttons">
+            <button type="button" class="btn btn-secondary" data-action="modal#close">Cancel</button>
+            <button type="submit" class="btn btn-primary">Confirm & Start Delivery</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <h2>All trucks</h2>
+  <% if @trucks.any? %>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th># of Shipments</th>
+        <th>Current Volume</th>
+        <th>Current Weight</th>
+        <th class="center-text">Available?</th>
+        <th>Actions</>
+      </tr>
+    </thead>
+    <tbody id="my-shipments">
+      <% @trucks.each do |truck| %>
+      <tr>
+        <td><%= truck.display_name %></td>
+        <td><%= truck.current_shipments.count%></td>
+        <td><%= truck.current_volume / 1_000_000 %> m<sup>3</sup> / <%=truck.volume / 1_000_000%>m<sup>3</sup></td>
+        <td><%= truck.current_weight %> kg / <%=truck.weight%> kg</td>
+        <td class="center-text">
+          <% if truck.available? %>
+          ✔️
+          <% else %>
+          ❌
+          <% end %>
+        </td>
+        <td>
+          <button class="action-link" data-action="click->modal#open" data-modal-truck-id-value="<%= truck.id %>">
+            Initiate
+          </button>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% else %>
+  <p>You don't have any trucks.</p>
+  <% end %>
+</div>
