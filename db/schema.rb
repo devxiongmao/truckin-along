@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_16_161838) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_20_020038) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -39,6 +39,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_161838) do
     t.datetime "updated_at", null: false
     t.index ["delivery_id"], name: "index_delivery_shipments_on_delivery_id"
     t.index ["shipment_id"], name: "index_delivery_shipments_on_shipment_id"
+  end
+
+  create_table "forms", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "company_id", null: false
+    t.string "title", null: false
+    t.string "form_type", null: false
+    t.jsonb "content", default: {}, null: false
+    t.datetime "submitted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_forms_on_company_id"
+    t.index ["user_id"], name: "index_forms_on_user_id"
   end
 
   create_table "shipment_action_preferences", force: :cascade do |t|
@@ -77,6 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_161838) do
     t.decimal "length"
     t.decimal "width"
     t.decimal "height"
+    t.datetime "deleted_at"
     t.index ["company_id"], name: "index_shipments_on_company_id"
     t.index ["shipment_status_id"], name: "index_shipments_on_shipment_status_id"
     t.index ["truck_id"], name: "index_shipments_on_truck_id"
@@ -97,6 +111,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_161838) do
     t.decimal "weight"
     t.string "vin", null: false
     t.string "license_plate", null: false
+    t.datetime "deleted_at"
     t.index ["company_id"], name: "index_trucks_on_company_id"
   end
 
@@ -123,6 +138,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_16_161838) do
   add_foreign_key "deliveries", "users"
   add_foreign_key "delivery_shipments", "deliveries"
   add_foreign_key "delivery_shipments", "shipments"
+  add_foreign_key "forms", "companies"
+  add_foreign_key "forms", "users"
   add_foreign_key "shipment_action_preferences", "companies"
   add_foreign_key "shipment_action_preferences", "shipment_statuses"
   add_foreign_key "shipment_statuses", "companies"
