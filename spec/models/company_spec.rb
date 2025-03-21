@@ -7,7 +7,7 @@ RSpec.describe Company, type: :model do
   it { should have_many(:shipment_statuses).dependent(:destroy) }
   it { should have_many(:trucks).dependent(:destroy) }
   it { should have_many(:shipment_action_preferences).dependent(:destroy) }
-
+  it { should have_many(:forms).dependent(:destroy) }
 
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:address) }
