@@ -11,6 +11,7 @@ RSpec.describe User, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:shipments) }
     it { is_expected.to have_many(:deliveries).dependent(:nullify) }
+    it { is_expected.to have_many(:forms).dependent(:nullify) }
     it { should belong_to(:company).optional }
   end
 
