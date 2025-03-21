@@ -1,8 +1,8 @@
-### From v1.2.5 to HEAD
+### From v1.2.6 to HEAD
 
-- Bump solid_queue from 1.1.3 to 1.1.4 (#185) (5776eb2) by dependabot[bot]
-- XMDEV-219: Updates CI to include a test_js step (773bb1a) by Jon Psaila
-- XMDEV-25: Adds inspection check for drivers before initiating a delivery (ede0266) by Jon Psaila
+- XMDEV-220: Adds pre-delivery inspection form on delivery start (#190) (da04dc0) by Jon
+- XMDEV-221: Adds truck id to forms (optionally) (#189) (1d73128) by Jon
+- XMDEV-163: Creates form table, form model and associated specs (#188) (9fbc4a2) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
