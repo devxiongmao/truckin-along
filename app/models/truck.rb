@@ -3,6 +3,7 @@ class Truck < ApplicationRecord
 
   has_many :shipments, dependent: :nullify
   has_many :deliveries, dependent: :nullify
+  has_many :forms, dependent: :nullify
 
   validates :make, :model, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }

@@ -8,6 +8,7 @@ RSpec.describe Truck, type: :model do
   describe "associations" do
     it { is_expected.to have_many(:shipments) }
     it { is_expected.to have_many(:deliveries).dependent(:nullify) }
+    it { is_expected.to have_many(:forms).dependent(:nullify) }
     it { is_expected.to belong_to(:company) }
   end
 

@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
   has_many :shipments, dependent: :nullify
   has_many :deliveries, dependent: :nullify
+  has_many :forms, dependent: :nullify
 
   # Validations
   validates :first_name, presence: true, length: { maximum: 50 }
