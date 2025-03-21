@@ -26,6 +26,10 @@ RSpec.describe InitiateDelivery, type: :service do
         expect { subject.run }.to change(Delivery, :count).by(1)
       end
 
+      it "creates a form" do
+        expect { subject.run }.to change(Form, :count).by(1)
+      end
+
       it "associates shipments with the delivery" do
         subject.run
         expect(subject.delivery.shipments).to match_array([ shipment1, shipment2 ])
