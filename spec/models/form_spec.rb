@@ -121,6 +121,27 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "with Pre-delivery Inspection form type" do
+      let(:form) do
+        Form.new(valid_attributes.merge(
+          form_type: "Pre-delivery Inspection",
+          content: {
+            start_time: ""
+          }
+        ))
+      end
+
+      it "is valid with all required fields" do
+        expect(form).to be_valid
+      end
+
+      it "is invalid when missing required fields" do
+        form.content = form.content.except("start_time")
+        expect(form).not_to be_valid
+        expect(form.errors[:content]).to include("is missing required fields: start_time")
+      end
+    end
+
     context "with unknown form type" do
       let(:form) do
         Form.new(valid_attributes.merge(
