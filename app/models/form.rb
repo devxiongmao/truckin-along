@@ -15,6 +15,7 @@ class Form < ApplicationRecord
 
   # Define expected fields for each form type
   FORM_TEMPLATES = {
+    "Pre-delivery Inspection" => %w[start_time],
     "Delivery" => %w[destination start_time items],
     "Maintenance" => %w[mileage oil_changed tire_pressure_checked notes],
     "Hazmat" => %w[shipment_id hazardous_materials inspection_passed]

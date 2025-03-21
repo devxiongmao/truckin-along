@@ -12,6 +12,7 @@ class InitiateDelivery < ApplicationService
     success = false
 
     ActiveRecord::Base.transaction do
+      create_delivery_form
       create_delivery
       open_shipments = find_open_shipments
 
@@ -29,6 +30,22 @@ class InitiateDelivery < ApplicationService
   end
 
   private
+
+  def create_delivery_form
+    @form = Form.create!({
+      user_id: @current_user.id,
+      company_id: @current_company.id,
+      truck_id: @truck_id,
+      title: "Pre Delivery Inspection",
+      form_type: "Pre-delivery Inspection",
+      content: {
+        start_time: Time.now
+      }
+    })
+  rescue ActiveRecord::RecordInvalid => e
+    @errors << "Failed to create Pre delivery inspection form: #{e.message}"
+    raise ActiveRecord::Rollback
+  end
 
   def create_delivery
     @delivery = Delivery.create!({

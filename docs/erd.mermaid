@@ -4,12 +4,15 @@ erDiagram
     Companies ||--o{ Shipments : manages
     Companies ||--o{ ShipmentStatuses : defines
     Companies ||--o{ ShipmentActionPreferences : configures
+    Companies ||--o{ Forms : owns
     
     Users ||--o{ Deliveries : performs
     Users ||--o{ Shipments : handles
+    Users ||--o{ Forms : submits
     
     Trucks ||--o{ Deliveries : assigned_to
     Trucks ||--o{ Shipments : carries
+    Trucks ||--o{ Forms : relates_to
     
     Shipments }o--|| ShipmentStatuses : has_status
     
@@ -111,6 +114,19 @@ erDiagram
         string action
         bigint company_id FK
         bigint shipment_status_id FK
+        datetime created_at
+        datetime updated_at
+    }
+    
+    Forms {
+        bigint id PK
+        bigint user_id FK
+        bigint company_id FK
+        bigint truck_id FK
+        string title
+        string form_type
+        jsonb content
+        datetime submitted_at
         datetime created_at
         datetime updated_at
     }
