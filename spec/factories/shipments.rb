@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :shipment do
-    name { Faker::Commerce.product_name }
+    name { "#{Faker::Commerce.product_name} #{SecureRandom.uuid}" }
     sender_name { Faker::Name.name }
     sender_address { Faker::Address.full_address }
     receiver_name { Faker::Name.name }
