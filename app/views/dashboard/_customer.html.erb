@@ -1,0 +1,33 @@
+<h3>My Customer Shipments</h3>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Status</th>
+      <th>Name</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Weight</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shipments.each do |shipment| %>
+    <tr>
+      <td><%= shipment&.company&.name %></td>
+      <td><%= shipment.status %></td>
+      <td><%= shipment.name %></td>
+      <td><%= shipment.sender_name %></td>
+      <td><%= shipment.receiver_name %></td>
+      <td><%= shipment.weight %></td>
+      <td>
+        <%= link_to 'Show', shipment, class: 'action-link' %> |
+        <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |
+        <%= link_to 'Copy', copy_shipment_path(shipment), class: 'action-link' %> |
+        <%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

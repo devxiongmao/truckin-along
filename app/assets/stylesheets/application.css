@@ -422,3 +422,9 @@ button, .primary-button, .secondary-button, .danger-button {
   font-size: 1.2em;
   margin-right: 8px;
 }
+
+.nav-no-style-link {
+  text-decoration: none;
+  color: inherit;
+  font: inherit; 
+}

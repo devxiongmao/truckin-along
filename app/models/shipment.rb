@@ -10,7 +10,7 @@ class Shipment < ApplicationRecord
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }
 
-  scope :unassigned, -> { where(user_id: nil) }
+  scope :for_user, ->(user) { where(user_id: user.id) }
 
   scope :for_company, ->(company) { where(company_id: company.id) }
 

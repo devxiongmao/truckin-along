@@ -1,0 +1,26 @@
+<h3>Completed Trips</h3>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th># of Shipments</th>
+      <th>Current Volume</th>
+      <th>Current Weight</th>
+      <th>Actions</>
+    </tr>
+  </thead>
+  <tbody id="my-shipments">
+    <% @deliveries.each do |delivery| %>
+    <tr>
+      <td><%= delivery.status.gsub('_', ' ').capitalize %></td>
+      <td><%= delivery.shipments.count%></td>
+      <td><%= delivery.volume / 1_000_000 %> m<sup>3</sup></td>
+      <td><%= delivery.weight %> kg</td>
+      <td>
+        <%= link_to 'Show', delivery, class: 'action-link' %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
