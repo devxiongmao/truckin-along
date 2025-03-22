@@ -1,0 +1,7 @@
+<h1>My Dashboard</h1>
+
+<% if current_user.customer? %>
+<%= render 'customer' %>
+<% else %>
+<%= render 'driver' %>
+<% end %>
