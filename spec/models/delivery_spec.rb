@@ -33,11 +33,14 @@ RSpec.describe Delivery, type: :model do
 
   ## Scope Tests
   describe "scopes" do
+    let!(:user) { create(:user) }
+    let!(:other_user) { create(:user) }
+
     before do
-      @scheduled_delivery = create(:delivery, status: :scheduled)
-      @in_progress_delivery = create(:delivery, status: :in_progress)
-      @completed_delivery = create(:delivery, status: :completed)
-      @cancelled_delivery = create(:delivery, status: :cancelled)
+      @scheduled_delivery = create(:delivery, status: :scheduled, user: user)
+      @in_progress_delivery = create(:delivery, status: :in_progress, user: other_user)
+      @completed_delivery = create(:delivery, status: :completed, user: user)
+      @cancelled_delivery = create(:delivery, status: :cancelled, user: other_user)
     end
 
     describe ".active" do
@@ -51,6 +54,13 @@ RSpec.describe Delivery, type: :model do
       it "includes completed and cancelled deliveries" do
         expect(Delivery.inactive).to include(@completed_delivery, @cancelled_delivery)
         expect(Delivery.inactive).not_to include(@scheduled_delivery, @in_progress_delivery)
+      end
+    end
+
+    describe ".for_user" do
+      it "includes trucks that belong to the company" do
+        expect(Delivery.for_user(user)).to include(@scheduled_delivery, @completed_delivery)
+        expect(Delivery.for_user(user)).not_to include(@in_progress_delivery, @cancelled_delivery)
       end
     end
   end

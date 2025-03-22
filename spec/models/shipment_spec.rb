@@ -65,6 +65,26 @@ RSpec.describe Shipment, type: :model do
   end
 
   ## Scope Tests
+  describe "scopes" do
+    let!(:user) { create(:user) }
+    let!(:company) { create(:company) }
+    let!(:shipment) { create(:shipment, company: company, user: user) }
+    let!(:other_shipment) { create(:shipment, company: nil, user: nil) }
+
+    describe ".for_company" do
+      it "includes shipments that belong to the company" do
+        expect(Shipment.for_company(company)).to include(shipment)
+        expect(Shipment.for_company(company)).not_to include(other_shipment)
+      end
+    end
+
+    describe ".for_user" do
+      it "includes shipments that belong to the user" do
+        expect(Shipment.for_user(user)).to include(shipment)
+        expect(Shipment.for_user(user)).not_to include(other_shipment)
+      end
+    end
+  end
 
 
   ## Edge Case Tests

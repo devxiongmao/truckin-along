@@ -61,6 +61,22 @@ RSpec.describe ShipmentActionPreference, type: :model do
     end
   end
 
+  ## Scope Tests
+  describe "scopes" do
+    let!(:company) { create(:company) }
+    let!(:other_company) { create(:company) }
+
+    let!(:pref) { create(:shipment_action_preference, company: company) }
+    let!(:other_pref) { create(:shipment_action_preference, company: other_company) }
+
+    describe ".for_company" do
+      it "includes trucks that belong to the company" do
+        expect(ShipmentActionPreference.for_company(company)).to include(pref)
+        expect(ShipmentActionPreference.for_company(company)).not_to include(other_pref)
+      end
+    end
+  end
+
   describe "constants" do
     it "defines the expected ACTIONS" do
       expected_actions = [
