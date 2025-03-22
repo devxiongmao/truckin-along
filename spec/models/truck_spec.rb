@@ -90,6 +90,22 @@ RSpec.describe Truck, type: :model do
     end
   end
 
+  ## Scope Tests
+  describe "scopes" do
+    let!(:company) { create(:company) }
+    let!(:other_company) { create(:company) }
+
+    let!(:truck) { create(:truck, company: company) }
+    let!(:other_truck) { create(:truck, company: other_company) }
+
+    describe ".for_company" do
+      it "includes trucks that belong to the company" do
+        expect(Truck.for_company(company)).to include(truck)
+        expect(Truck.for_company(company)).not_to include(other_truck)
+      end
+    end
+  end
+
   ## Custom Method Tests
   describe "#display_name" do
     it "returns a string formatted as make-model-year" do
