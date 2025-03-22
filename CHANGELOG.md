@@ -1,8 +1,8 @@
-### From v1.2.6 to HEAD
+### From v1.2.7 to HEAD
 
-- XMDEV-220: Adds pre-delivery inspection form on delivery start (#190) (da04dc0) by Jon
-- XMDEV-221: Adds truck id to forms (optionally) (#189) (1d73128) by Jon
-- XMDEV-163: Creates form table, form model and associated specs (#188) (9fbc4a2) by Jon
+- XMDEV-223: Adds quick option for users to see pre-delivery-checklist (#194) (f7846d6) by Jon
+- XMDEV-224: Adds deliveries to forms (#193) (65eba07) by Jon
+- XMDEV-222: Move pre delivery form to dedicated partial (#192) (a2eb96b) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
