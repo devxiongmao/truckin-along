@@ -415,3 +415,10 @@ button, .primary-button, .secondary-button, .danger-button {
     font-size: 0.9rem;
   }
 }
+
+.checkmark {
+  color: green;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 8px;
+}

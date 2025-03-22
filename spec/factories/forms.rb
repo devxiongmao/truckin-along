@@ -5,6 +5,8 @@ FactoryBot.define do
     title { Faker::Lorem.sentence(word_count: 3) }
     form_type { %w[Delivery Maintenance Hazmat].sample }
     submitted_at { Faker::Time.between(from: 30.days.ago, to: Time.current) }
+    association :truck
+    association :delivery
 
     # Dynamic JSON content based on form_type
     content do
