@@ -24,7 +24,9 @@
 <body>
   <header>
     <nav class="navbar">
-      <div class="navbar-title">TRUCKIN' ALONG</div>
+      <div class="navbar-title">
+        <%= link_to "TRUCKIN' ALONG", dashboard_path, class: 'nav-no-style-link' %>
+      </div>
       <% if show_nav_link?(:admin) %>
       <div class="navbar-links">
         <%= link_to 'Admin', admin_index_path, class: 'nav-link' %>

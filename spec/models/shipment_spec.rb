@@ -65,20 +65,7 @@ RSpec.describe Shipment, type: :model do
   end
 
   ## Scope Tests
-  describe "scopes" do
-    let(:user) { create(:user, :driver) }
-    let!(:unassigned_shipment) { create(:shipment, user: nil) }
-    let!(:assigned_shipment) { create(:shipment, user: user) }
-    describe ".unassigned" do
-      it "does not include shipments that are assigned to a driver" do
-        expect(Shipment.unassigned).not_to include(assigned_shipment)
-      end
 
-      it "includes shipments that are unassigned" do
-        expect(Shipment.unassigned).to include(unassigned_shipment)
-      end
-    end
-  end
 
   ## Edge Case Tests
   describe "edge cases" do

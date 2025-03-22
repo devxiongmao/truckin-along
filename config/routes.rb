@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     get "users/sign_up/customer", to: "users/registrations#new_customer", as: :new_customer_registration
   end
 
+  get "dashboard" => "dashboard#index"
+
   resources :admin, only: [ :index ]
 
   resources :deliveries, only: [ :index, :show ] do
