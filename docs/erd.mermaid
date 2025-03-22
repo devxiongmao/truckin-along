@@ -19,6 +19,8 @@ erDiagram
     ShipmentStatuses ||--o{ ShipmentActionPreferences : used_in
     
     Deliveries ||--o{ DeliveryShipments : has
+    Deliveries ||--o{ Forms : has
+    
     Shipments ||--o{ DeliveryShipments : included_in
     
     Companies {
@@ -123,6 +125,7 @@ erDiagram
         bigint user_id FK
         bigint company_id FK
         bigint truck_id FK
+        bigint delivery_id FK
         string title
         string form_type
         jsonb content
