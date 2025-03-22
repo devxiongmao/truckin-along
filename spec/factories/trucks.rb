@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :truck do
-    make { Faker::Vehicle.manufacture }
+    make { "#{Faker::Vehicle.manufacture} #{SecureRandom.uuid}" }
     model { Faker::Vehicle.model }
     year { Faker::Vehicle.year }
     mileage { Faker::Number.between(from: 10_000, to: 500_000) }
