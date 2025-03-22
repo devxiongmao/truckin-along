@@ -1,3 +1,16 @@
+<% if !@delivery.active? %>
+<% if @delivery.completed? %>
+<div class="notice">
+  Delivery is complete. No further edits are possible
+</div>
+<% else %>
+<div class="alert">
+  Delivery has been cancelled. No further edits are possible
+</div>
+<% end %>
+<% end %>
+</div>
+<br />
 <div data-controller="show-pre-delivery">
   <div class="page-header">
     <h1 class="page-title">Delivery Details</h1>
