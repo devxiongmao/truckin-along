@@ -6,7 +6,9 @@
 
 <div class="form-group">
   <%= f.label :truck_id, 'Truck', class: 'form-label' %>
-  <%= f.collection_select :truck_id, @trucks ||= [], :id, :display_name, { prompt: "Please select a truck" }, { class: 'form-input' } %>
+  <%= f.collection_select :truck_id, @trucks, :id, ->(truck) { truck.display_name.to_s }, 
+  { prompt: "Please select a truck" }, 
+  { class: 'form-select', title: "Choose a truck" } %>
 </div>
 
 <table class="styled-table">

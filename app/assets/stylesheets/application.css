@@ -164,10 +164,22 @@ button, .primary-button, .secondary-button, .danger-button {
   border-radius: 5px;
 }
 
+.form-select {
+  width: auto; /* Adjust width as needed */
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
 .form-input:focus {
   border-color: #09e80d;
   outline: none;
   box-shadow: 0 0 5px rgba(9, 232, 13, 0.5);
+}
+
+.form-select option {
+  white-space: normal; 
+  overflow: visible;
 }
 
 /* Messages */

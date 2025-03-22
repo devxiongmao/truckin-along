@@ -93,14 +93,10 @@ RSpec.describe Delivery, type: :model do
     let!(:status) { create(:shipment_status, closed: true) }
     let!(:shipment1) { create(:shipment, shipment_status: status) }
 
-
-    context "when all shipments are closed" do
-      let!(:shipment2) { create(:shipment, shipment_status: status) }
-      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
-      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
-
-      it "returns true" do
-        expect(delivery.can_be_closed?).to be(true)
+    context "when the delivery is already closed" do
+      it "returns false" do
+        delivery.status = :completed
+        expect(delivery.can_be_closed?).to be(false)
       end
     end
 
@@ -112,6 +108,16 @@ RSpec.describe Delivery, type: :model do
 
       it "returns false" do
         expect(delivery.can_be_closed?).to be(false)
+      end
+    end
+
+    context "when all conditions are met" do
+      let!(:shipment2) { create(:shipment, shipment_status: status) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+
+      it "returns true" do
+        expect(delivery.can_be_closed?).to be(true)
       end
     end
 
