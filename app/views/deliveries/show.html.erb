@@ -1,40 +1,47 @@
-<div class="page-header">
-  <h1 class="page-title">Delivery Details</h1>
-  <% if @delivery.can_be_closed? %>
-  <%= link_to "Mark Complete", close_delivery_path(@delivery), class: 'button primary-button', method: :post, data: { confirm: 'All shipments are successfully closed?' } %>
-  <% end %>
-  <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
-</div>
+<div data-controller="show-pre-delivery">
+  <div class="page-header">
+    <h1 class="page-title">Delivery Details</h1>
+    <% if @delivery.can_be_closed? %>
+    <%= link_to "Mark Complete", close_delivery_path(@delivery), class: 'button primary-button', method: :post, data: { confirm: 'All shipments are successfully closed?' } %>
+    <% end %>
+    <button class="action-link" data-action="click->show-pre-delivery#open">
+      Pre-delivery Inspection
+    </button>
+    <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
+  </div>
 
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Company</th>
-      <th>Status</th>
-      <th>Name</th>
-      <th>Sender</th>
-      <th>Receiver</th>
-      <th>Weight</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @delivery.shipments.each do |shipment| %>
-    <tr>
-      <td><%= shipment&.company&.name %></td>
-      <td><%= shipment.status %></td>
-      <td><%= shipment.name %></td>
-      <td><%= shipment.sender_name %></td>
-      <td><%= shipment.receiver_name %></td>
-      <td><%= shipment.weight %></td>
-      <td>
-        <%= link_to 'Quick Close', close_shipment_path(shipment), 
+  <%= render 'show_completed_inspection', form: @delivery.forms.first%>
+
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Weight</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @delivery.shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment&.company&.name %></td>
+        <td><%= shipment.status %></td>
+        <td><%= shipment.name %></td>
+        <td><%= shipment.sender_name %></td>
+        <td><%= shipment.receiver_name %></td>
+        <td><%= shipment.weight %></td>
+        <td>
+          <%= link_to 'Quick Close', close_shipment_path(shipment), 
             class: 'action-link', 
             method: :post, 
             data: { confirm: 'Was this shipment successfully delivered?' } %> |
-        <%= link_to 'Show', shipment, class: 'action-link' %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+          <%= link_to 'Show', shipment, class: 'action-link' %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -12,8 +12,8 @@ class InitiateDelivery < ApplicationService
     success = false
 
     ActiveRecord::Base.transaction do
-      create_delivery_form
       create_delivery
+      create_delivery_form
       open_shipments = find_open_shipments
 
       if open_shipments.empty?
@@ -36,8 +36,10 @@ class InitiateDelivery < ApplicationService
       user_id: @current_user.id,
       company_id: @current_company.id,
       truck_id: @truck_id,
+      delivery_id: @delivery.id,
       title: "Pre Delivery Inspection",
       form_type: "Pre-delivery Inspection",
+      submitted_at: Time.now,
       content: {
         start_time: Time.now
       }
