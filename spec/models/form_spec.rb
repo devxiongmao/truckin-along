@@ -22,6 +22,7 @@ RSpec.describe Form, type: :model do
     it { should belong_to(:user) }
     it { should belong_to(:company) }
     it { should belong_to(:truck).optional }
+    it { should belong_to(:delivery).optional }
   end
 
   describe "validations" do
