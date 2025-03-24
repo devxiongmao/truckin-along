@@ -1,11 +1,15 @@
 name: Create GitHub Release
 
 on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
   pull_request:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
+      - "docs/**"
     types:
       - opened
       - synchronize
@@ -20,7 +24,9 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
 
-    if: startsWith(github.head_ref, 'release-')
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.head_ref, 'release-')
 
     steps:
       - name: Checkout code
