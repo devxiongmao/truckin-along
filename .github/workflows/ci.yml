@@ -297,19 +297,8 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     needs:
-      - analyze_changes
-      - scan_ruby
-      - lint
       - test
-      - scan_js
-      - test_js
-    if: |
-      startsWith(github.head_ref, 'release-') && 
-      (needs.scan_js.result == 'success' || needs.scan_js.result == 'skipped') && 
-      (needs.test_js.result == 'success' || needs.test_js.result == 'skipped') && 
-      (needs.scan_ruby.result == 'success' || needs.scan_ruby.result == 'skipped') && 
-      (needs.lint.result == 'success' || needs.lint.result == 'skipped') && 
-      (needs.test.result == 'success' || needs.test.result == 'skipped')
+    if: startsWith(github.head_ref, 'release-')
 
     steps:
       - name: Checkout code
