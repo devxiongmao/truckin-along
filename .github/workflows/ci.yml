@@ -303,14 +303,13 @@ jobs:
       - test
       - scan_js
       - test_js
-    # Ensure it runs if any of the frontend jobs are skipped
     if: |
       startsWith(github.head_ref, 'release-') && 
-      (needs.scan_js.result == 'skipped' || needs.scan_js.result == 'success') &&
-      (needs.test_js.result == 'skipped' || needs.test_js.result == 'success') &&
-      (needs.scan_ruby.result == 'skipped' || needs.scan_ruby.result == 'success') &&
-      (needs.lint.result == 'skipped' || needs.lint.result == 'success') &&
-      (needs.test.result == 'skipped' || needs.test.result == 'success')
+      (needs.scan_js.result == 'success' || needs.scan_js.result == 'skipped') && 
+      (needs.test_js.result == 'success' || needs.test_js.result == 'skipped') && 
+      (needs.scan_ruby.result == 'success' || needs.scan_ruby.result == 'skipped') && 
+      (needs.lint.result == 'success' || needs.lint.result == 'skipped') && 
+      (needs.test.result == 'success' || needs.test.result == 'skipped')
 
     steps:
       - name: Checkout code
