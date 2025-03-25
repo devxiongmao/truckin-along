@@ -1,15 +1,10 @@
 name: Create GitHub Release
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - 'docs/**'
+  workflow_run:
+    workflows: ["CI"] # Ensures this runs only after the CI workflow
     types:
-      - opened
-      - synchronize
-      - reopened
+      - completed
 
 permissions:
   contents: write
@@ -20,14 +15,17 @@ jobs:
     name: Create GitHub Release
     runs-on: ubuntu-latest
 
-    if: startsWith(github.head_ref, 'release-')
+    # Ensure it only runs if CI was successful
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'release-')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.workflow_run.head_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
           tags: true
 
@@ -57,7 +55,7 @@ jobs:
           git commit -m "Release $TAG_NAME"
           git tag $TAG_NAME
           git push origin $TAG_NAME
-          git push origin ${{ github.head_ref }}
+          git push origin ${{ github.event.workflow_run.head_branch }}
 
       - name: Read Changelog
         id: read_changelog
