@@ -27,7 +27,8 @@ module TruckinAlong
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.after_initialize do
-      unless Rails.env.test?
+      # Remove production check when ready
+      unless Rails.env.test? || Rails.env.production?
         schedule_file = Rails.root.join("config/sidekiq.yml")
         if File.exist?(schedule_file)
           config = YAML.load_file(schedule_file)
