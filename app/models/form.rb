@@ -4,7 +4,6 @@ class Form < ApplicationRecord
   belongs_to :truck, optional: true
   belongs_to :delivery, optional: true
 
-
   # Common Validations
   validates :user_id, presence: true
   validates :company_id, presence: true
@@ -17,12 +16,31 @@ class Form < ApplicationRecord
 
   scope :maintenance_forms, -> { where(form_type: "Maintenance") }
 
-  # Define expected fields for each form type
-  FORM_TEMPLATES = {
-    "Pre-delivery Inspection" => %w[start_time],
-    "Delivery" => %w[destination start_time items],
-    "Maintenance" => %w[mileage oil_changed tire_pressure_checked last_inspection_date notes],
-    "Hazmat" => %w[shipment_id hazardous_materials inspection_passed]
+  # Define schema for each form type using dry-schema
+  FORM_SCHEMAS = {
+    "Pre-delivery Inspection" => Dry::Schema.Params do
+      required(:start_time).value(:date_time)
+    end,
+
+    "Delivery" => Dry::Schema.Params do
+      required(:destination).value(:string)
+      required(:start_time).value(:date_time)
+      required(:items).value(:array)
+    end,
+
+    "Maintenance" => Dry::Schema.Params do
+      required(:mileage).value(:integer)
+      required(:oil_changed).value(:bool)
+      required(:tire_pressure_checked).value(:bool)
+      required(:last_inspection_date).value(:date)
+      required(:notes).value(:string)
+    end,
+
+    "Hazmat" => Dry::Schema.Params do
+      required(:shipment_id).value(:integer)
+      required(:hazardous_materials).value(:array)
+      required(:inspection_passed).value(:bool)
+    end
   }.freeze
 
   private
@@ -30,12 +48,17 @@ class Form < ApplicationRecord
   def validate_content_structure
     return if content.nil? || !content.is_a?(Hash)
 
-    expected_keys = FORM_TEMPLATES[form_type]
-    return if expected_keys.nil?
+    schema = FORM_SCHEMAS[form_type]
+    return if schema.nil?
 
-    # Convert all content keys to strings for comparison
-    content_keys = content.keys.map(&:to_s)
-    missing_keys = expected_keys - content_keys
-    errors.add(:content, "is missing required fields: #{missing_keys.join(', ')}") if missing_keys.any?
+    # Validate content against schema
+    result = schema.call(content)
+
+    # Add errors if validation failed
+    unless result.success?
+      result.errors.each do |error|
+        errors.add(:content, "#{error.path.join('.')}: #{error.text}")
+      end
+    end
   end
 end

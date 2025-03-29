@@ -6,7 +6,7 @@ install:
 
 .PHONY: dev
 dev:
-	rails server
+	redis-server & sidekiq & rails s
 
 .PHONY: migrate
 migrate:

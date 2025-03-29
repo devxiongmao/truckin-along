@@ -25,7 +25,7 @@ class DeactivateTrucksJob < ApplicationJob
 
     return true if last_form.nil?
     return true if last_form.content["last_inspection_date"] < 6.months.ago # Trucks must be inspected every 6 months
-    return true if truck.mileage - last_form.content["mileage"] >= 25_000
+    return true if truck.mileage - last_form.content["mileage"].to_i >= 25_000
 
     false
   end

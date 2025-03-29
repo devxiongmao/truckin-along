@@ -25,5 +25,18 @@ module TruckinAlong
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.after_initialize do
+      # Remove production check when ready
+      unless Rails.env.test? || Rails.env.production?
+        schedule_file = Rails.root.join("config/sidekiq.yml")
+        if File.exist?(schedule_file)
+          config = YAML.load_file(schedule_file)
+          jobs = config["schedule"] || {}
+          Sidekiq::Cron::Job.load_from_hash(jobs)
+          puts "Cron jobs loaded: #{Sidekiq::Cron::Job.all.size}"
+        end
+      end
+    end
   end
 end

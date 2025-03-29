@@ -1,4 +1,8 @@
-:schedule:
+:queues:
+  - default
+
+schedule:
   deactivate_trucks_job:
-    cron: "0 0 * * *" # Midnight
+    cron: "0 0 * * *"
     class: "DeactivateTrucksJob"
+    queue: default
