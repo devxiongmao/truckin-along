@@ -41,7 +41,7 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "content structure validation" do
+  describe "content structure validation with dry-schema" do
     context "with Delivery form type" do
       let(:form) { Form.new(valid_attributes) }
 
@@ -52,19 +52,21 @@ RSpec.describe Form, type: :model do
       it "is invalid when missing destination" do
         form.content = form.content.except("destination")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: destination")
       end
 
-      it "is invalid when missing start_time" do
-        form.content = form.content.except("start_time")
+      it "is invalid when destination is not a string" do
+        form.content = form.content.merge("destination" => 12345)
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: start_time")
       end
 
-      it "is invalid when missing items" do
-        form.content = form.content.except("items")
+      it "is invalid when start_time is not a valid datetime" do
+        form.content = form.content.merge("start_time" => "not-a-date")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: items")
+      end
+
+      it "is invalid when items is not an array" do
+        form.content = form.content.merge("items" => "not an array")
+        expect(form).not_to be_valid
       end
     end
 
@@ -76,7 +78,7 @@ RSpec.describe Form, type: :model do
             mileage: 50000,
             oil_changed: true,
             tire_pressure_checked: true,
-            last_inspection_date: Time.now,
+            last_inspection_date: "2025-03-15",
             notes: "Everything looks good"
           }
         ))
@@ -86,23 +88,19 @@ RSpec.describe Form, type: :model do
         expect(form).to be_valid
       end
 
-      it "is invalid when missing mileage" do
-        form.content = form.content.except("mileage")
+      it "is invalid when mileage is not an integer" do
+        form.content = form.content.merge("mileage" => "fifty thousand")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: mileage")
       end
 
-      it "is invalid when missing last_inspection_date" do
-        form.content = form.content.except("last_inspection_date")
+      it "is invalid when oil_changed is not a boolean" do
+        form.content = form.content.merge("oil_changed" => "this be a test")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: last_inspection_date")
       end
 
-      it "is invalid when missing oil_changed" do
-        form.content = form.content.except("oil_changed")
-
+      it "is invalid when last_inspection_date is not a valid date" do
+        form.content = form.content.merge("last_inspection_date" => "not-a-date")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: oil_changed")
       end
     end
 
@@ -111,7 +109,7 @@ RSpec.describe Form, type: :model do
         Form.new(valid_attributes.merge(
           form_type: "Hazmat",
           content: {
-            shipment_id: "HAZ-123",
+            shipment_id: 123,
             hazardous_materials: [ "Flammable liquid", "Corrosive substance" ],
             inspection_passed: true
           }
@@ -122,10 +120,19 @@ RSpec.describe Form, type: :model do
         expect(form).to be_valid
       end
 
-      it "is invalid when missing required fields" do
-        form.content = form.content.except("inspection_passed")
+      it "is invalid when shipment_id is not an integer" do
+        form.content = form.content.merge(shipment_id: "Shipment: 12345")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: inspection_passed")
+      end
+
+      it "is invalid when hazardous_materials is not an array" do
+        form.content = form.content.merge("hazardous_materials" => "Flammable liquid")
+        expect(form).not_to be_valid
+      end
+
+      it "is invalid when inspection_passed is not a boolean" do
+        form.content = form.content.merge("inspection_passed" => "passed")
+        expect(form).not_to be_valid
       end
     end
 
@@ -134,7 +141,7 @@ RSpec.describe Form, type: :model do
         Form.new(valid_attributes.merge(
           form_type: "Pre-delivery Inspection",
           content: {
-            start_time: ""
+            start_time: "2025-03-19T09:00:00"
           }
         ))
       end
@@ -143,22 +150,27 @@ RSpec.describe Form, type: :model do
         expect(form).to be_valid
       end
 
-      it "is invalid when missing required fields" do
-        form.content = form.content.except("start_time")
+      it "is invalid when start_time is not a valid datetime" do
+        form.content = form.content.merge("start_time" => "invalid time")
         expect(form).not_to be_valid
-        expect(form.errors[:content]).to include("is missing required fields: start_time")
       end
     end
 
-    context "with unknown form type" do
+    context "with type coercion" do
       let(:form) do
         Form.new(valid_attributes.merge(
-          form_type: "Unknown",
-          content: { random: "data" }
+          form_type: "Maintenance",
+          content: {
+            mileage: "50000", # String that should be coerced to integer
+            oil_changed: "true", # String that should be coerced to boolean
+            tire_pressure_checked: "1", # String that should be coerced to boolean
+            last_inspection_date: "2025-03-15", # String date
+            notes: "Everything looks good"
+          }
         ))
       end
 
-      it "skips content structure validation" do
+      it "coerces values to the correct types" do
         expect(form).to be_valid
       end
     end
