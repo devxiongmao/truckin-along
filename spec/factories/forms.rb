@@ -19,7 +19,7 @@ FactoryBot.define do
       form_type { "Pre-delivery Inspection" }
       content do
         {
-          "start_time" => Faker::Time.between(from: 3.days.ago, to: Time.current)
+          "start_time" => Faker::Time.between(from: 3.days.ago, to: Time.current),
         }.merge(custom_content) # Merge user overrides
       end
     end
