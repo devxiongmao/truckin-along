@@ -180,7 +180,7 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "scopes" do 
+  describe "scopes" do
     describe ".maintenance_forms" do
       let!(:form) { create(:form, :maintenance) }
       let!(:other_form) { create(:form, :hazmat) }
