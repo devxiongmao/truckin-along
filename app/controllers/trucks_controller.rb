@@ -51,27 +51,19 @@ class TrucksController < ApplicationController
   def create_form
     authorize @truck
 
-    form = Form.new({
+    form = Form.new(form_params.merge(
       user_id: current_user.id,
       company_id: current_company.id,
       truck_id: @truck.id,
-      title: params[:title],
       form_type: "Maintenance",
-      submitted_at: Time.now,
-      content: {
-        last_inspection_date: params[:last_inspection_date],
-        mileage: params[:mileage],
-        oil_changed: !params[:oil_changed].blank?,
-        tire_pressure_checked: !params[:tire_pressure_checked].blank?,
-        notes: params[:additional_notes]
-      }
-    })
+      submitted_at: Time.current
+    ))
 
     if form.save
       @truck.update(active: true)
       redirect_to dashboard_path, notice: "Maintenance form successfully submitted."
     else
-      redirect_to request.referrer, alert: "Unable to save form."
+      redirect_to dashboard_path, alert: "Unable to save form."
     end
   end
 
@@ -83,5 +75,17 @@ class TrucksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def truck_params
       params.expect(truck: [ :make, :model, :year, :vin, :license_plate, :mileage, :weight, :length, :width, :height, :company_id ])
+    end
+
+    def form_params
+      params.permit(:title)
+            .to_h
+            .merge(content: {
+              last_inspection_date: params[:last_inspection_date],
+              mileage: params[:mileage],
+              oil_changed: params[:oil_changed].present?,
+              tire_pressure_checked: params[:tire_pressure_checked].present?,
+              notes: params[:additional_notes]
+            })
     end
 end

@@ -24,6 +24,10 @@ rubocop:
 b-test:
 	rspec
 
+.PHONY: f-test
+f-test:
+	yarn test
+
 .PHONY: scan-ruby
 scan-ruby:
 	bin/brakeman --no-pager --skip-files script/determine_app_version.rb

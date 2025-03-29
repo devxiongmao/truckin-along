@@ -4,15 +4,12 @@ export default class extends Controller {
   static values = { truckId: Number }
 
   connect() {
-    console.log("connected")
     this.modal = document.getElementById("initiate-modal");
     this.form = document.getElementById("initiate-form");
     this.truckIdInput = document.getElementById("modal-truck-id");
   }
 
   open(event) {
-    console.log("openned")
-
     event.preventDefault();
     const truckId = event.currentTarget.dataset.modalTruckIdValue;
     
@@ -22,15 +19,11 @@ export default class extends Controller {
   }
 
   close(event) {
-    console.log("closed")
-
     event.preventDefault();
     this.modal.classList.add("hidden");
   }
 
   submitForm(event) {
-    console.log("submit")
-
     event.preventDefault();
 
     // Get the truck ID

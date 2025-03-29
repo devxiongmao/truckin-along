@@ -3,15 +3,12 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="create-maintenance"
 export default class extends Controller {
   connect() {
-    console.log("connected")
     this.modal = document.getElementById("maintenance-modal");
     this.form = document.getElementById("maintenance-form");
     this.truckIdInput = document.getElementById("modal-truck-id");
   }
 
   open(event) {
-    console.log("openned")
-
     event.preventDefault();
     const truckId = event.currentTarget.dataset.modalTruckIdValue;
     
@@ -21,14 +18,11 @@ export default class extends Controller {
   }
 
   close(event) {
-    console.log("closed")
-
     event.preventDefault();
     this.modal.classList.add("hidden");
   }
 
   submitForm(event) {
-    console.log("submit");
     event.preventDefault();
   
     // Get the truck ID
