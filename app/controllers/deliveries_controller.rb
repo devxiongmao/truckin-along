@@ -25,12 +25,12 @@ class DeliveriesController < ApplicationController
   def load_truck
     authorize Delivery
     @unassigned_shipments = Shipment.for_company(current_company).where(truck_id: nil)
-    @trucks = Truck.for_company(current_company).select(&:available?)
+    @trucks = Truck.for_company(current_company).active?.select(&:available?)
   end
 
   def start
     authorize Delivery
-    @trucks = Truck.for_company(current_company)
+    @trucks = Truck.for_company(current_company).active?
     @active_delivery = current_user.active_delivery
   end
 

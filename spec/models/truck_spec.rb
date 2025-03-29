@@ -95,13 +95,20 @@ RSpec.describe Truck, type: :model do
     let!(:company) { create(:company) }
     let!(:other_company) { create(:company) }
 
-    let!(:truck) { create(:truck, company: company) }
-    let!(:other_truck) { create(:truck, company: other_company) }
+    let!(:truck) { create(:truck, company: company, active: true) }
+    let!(:other_truck) { create(:truck, company: other_company, active: false) }
 
     describe ".for_company" do
       it "includes trucks that belong to the company" do
         expect(Truck.for_company(company)).to include(truck)
         expect(Truck.for_company(company)).not_to include(other_truck)
+      end
+    end
+
+    describe ".active?" do
+      it "includes trucks that active" do
+        expect(Truck.active?).to include(truck)
+        expect(Truck.active?).not_to include(other_truck)
       end
     end
   end

@@ -14,6 +14,7 @@ class Truck < ApplicationRecord
   validates :license_plate, presence: true
 
   scope :for_company, ->(company) { where(company_id: company.id) }
+  scope :active?, -> { where(active: true) }
 
   def display_name
     "#{make}-#{model}-#{year}(#{license_plate})"
