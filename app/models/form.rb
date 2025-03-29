@@ -19,7 +19,7 @@ class Form < ApplicationRecord
   FORM_TEMPLATES = {
     "Pre-delivery Inspection" => %w[start_time],
     "Delivery" => %w[destination start_time items],
-    "Maintenance" => %w[mileage oil_changed tire_pressure_checked notes],
+    "Maintenance" => %w[mileage oil_changed tire_pressure_checked last_inspection_date notes],
     "Hazmat" => %w[shipment_id hazardous_materials inspection_passed]
   }.freeze
 

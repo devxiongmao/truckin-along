@@ -76,6 +76,7 @@ RSpec.describe Form, type: :model do
             mileage: 50000,
             oil_changed: true,
             tire_pressure_checked: true,
+            last_inspection_date: Time.now,
             notes: "Everything looks good"
           }
         ))
@@ -89,6 +90,12 @@ RSpec.describe Form, type: :model do
         form.content = form.content.except("mileage")
         expect(form).not_to be_valid
         expect(form.errors[:content]).to include("is missing required fields: mileage")
+      end
+
+      it "is invalid when missing last_inspection_date" do
+        form.content = form.content.except("last_inspection_date")
+        expect(form).not_to be_valid
+        expect(form.errors[:content]).to include("is missing required fields: last_inspection_date")
       end
 
       it "is invalid when missing oil_changed" do
