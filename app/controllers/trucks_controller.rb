@@ -49,7 +49,6 @@ class TrucksController < ApplicationController
 
   # POST /trucks/1/create_form
   def create_form
-    byebug
     authorize @truck
 
     form = Form.new({
@@ -60,6 +59,7 @@ class TrucksController < ApplicationController
       form_type: "Maintenance",
       submitted_at: Time.now,
       content: {
+        last_inspection_date: params[:last_inspection_date],
         mileage: params[:mileage],
         oil_changed: !params[:oil_changed].blank?,
         tire_pressure_checked: !params[:tire_pressure_checked].blank?,

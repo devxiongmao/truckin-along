@@ -18,6 +18,7 @@ RSpec.describe TruckPolicy, type: :policy do
       it { expect(subject.create?).to be true }
       it { expect(subject.update?).to be true }
       it { expect(subject.destroy?).to be true }
+      it { expect(subject.create_form?).to be true }
     end
 
     context 'when the user is a driver' do
@@ -30,6 +31,7 @@ RSpec.describe TruckPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.update?).to be false }
       it { expect(subject.destroy?).to be false }
+      it { expect(subject.create_form?).to be false }
     end
 
     context 'when the user is a customer' do
@@ -42,6 +44,7 @@ RSpec.describe TruckPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.update?).to be false }
       it { expect(subject.destroy?).to be false }
+      it { expect(subject.create_form?).to be false }
     end
   end
 end
