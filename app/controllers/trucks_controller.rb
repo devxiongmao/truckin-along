@@ -1,6 +1,6 @@
 class TrucksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_truck, only: %i[ show edit update destroy ]
+  before_action :set_truck, only: %i[ show edit update destroy create_form ]
 
   # GET /trucks/1
   def show
@@ -47,6 +47,26 @@ class TrucksController < ApplicationController
     redirect_to admin_index_path, status: :see_other, notice: "Truck was successfully destroyed."
   end
 
+  # POST /trucks/1/create_form
+  def create_form
+    authorize @truck
+
+    form = Form.new(form_params.merge(
+      user_id: current_user.id,
+      company_id: current_company.id,
+      truck_id: @truck.id,
+      form_type: "Maintenance",
+      submitted_at: Time.current
+    ))
+
+    if form.save
+      @truck.update(active: true)
+      redirect_to dashboard_path, notice: "Maintenance form successfully submitted."
+    else
+      redirect_to dashboard_path, alert: "Unable to save form."
+    end
+  end
+
   private
     def set_truck
       @truck = Truck.for_company(current_company).find(params.expect(:id))
@@ -55,5 +75,17 @@ class TrucksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def truck_params
       params.expect(truck: [ :make, :model, :year, :vin, :license_plate, :mileage, :weight, :length, :width, :height, :company_id ])
+    end
+
+    def form_params
+      params.permit(:title)
+            .to_h
+            .merge(content: {
+              last_inspection_date: params[:last_inspection_date],
+              mileage: params[:mileage],
+              oil_changed: params[:oil_changed].present?,
+              tire_pressure_checked: params[:tire_pressure_checked].present?,
+              notes: params[:additional_notes]
+            })
     end
 end

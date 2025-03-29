@@ -35,4 +35,8 @@ class TruckPolicy < ApplicationPolicy
   def destroy?
     user.admin? && truck.active_delivery.nil?
   end
+
+  def create_form?
+    user.admin?
+  end
 end

@@ -30,5 +30,9 @@ RSpec.describe TrucksController, type: :routing do
     it "routes to #destroy" do
       expect(delete: "/trucks/1").to route_to("trucks#destroy", id: "1")
     end
+
+    it "routes to #create_form" do
+      expect(post: "/trucks/1/create_form").to route_to("trucks#create_form", id: "1")
+    end
   end
 end

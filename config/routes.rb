@@ -35,7 +35,11 @@ Rails.application.routes.draw do
       post :initiate_delivery
     end
   end
-  resources :trucks, only: %i[show new create edit update destroy]
+  resources :trucks, only: %i[show new create edit update destroy] do
+    member do
+      post :create_form
+    end
+  end
   resources :driver_managements, only: [ :new, :create, :edit, :update ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
