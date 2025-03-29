@@ -40,6 +40,9 @@ scan-js:
 determine-app-version:
 	ruby script/determine_app_version.rb
 
+.PHONY: generate-changelog
+generate-changelog:
+	ruby script/generate_changelog.rb
 
 .PHONY: pre-commit-check
 pre-commit-check:
