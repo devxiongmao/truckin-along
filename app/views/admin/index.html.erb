@@ -111,31 +111,42 @@
   <%= link_to 'New Truck', new_truck_path, class: 'button primary-button' %>
 </div>
 
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Year</th>
-      <th>Mileage</th>
-      <th>License Plate</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @trucks.each do |truck| %>
-    <tr>
-      <td><%= truck.make %></td>
-      <td><%= truck.model %></td>
-      <td><%= truck.year %></td>
-      <td><%= truck.mileage %></td>
-      <td><%= truck.license_plate %></td>
-      <td>
-        <%= link_to 'Show', truck, class: 'action-link' %> |
-        <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |
-        <%= link_to 'Destroy', truck, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<div data-controller="create-maintenance">
+  <%= render 'forms/maintenance_form'%>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Mileage</th>
+        <th>License Plate</th>
+        <th>Actions</th>
+        <th>Maintenance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @trucks.each do |truck| %>
+      <tr>
+        <td><%= truck.make %></td>
+        <td><%= truck.model %></td>
+        <td><%= truck.year %></td>
+        <td><%= truck.mileage %></td>
+        <td><%= truck.license_plate %></td>
+        <td>
+          <%= link_to 'Show', truck, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |
+          <%= link_to 'Destroy', truck, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
+        </td>
+        <td>
+          <% if !truck.active %>
+          <button class="warning-link" data-action="click->create-maintenance#open" data-modal-truck-id-value="<%= truck.id %>">
+            Complete
+          </button>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

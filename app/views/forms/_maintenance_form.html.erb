@@ -1,0 +1,51 @@
+<div id="maintenance-modal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Maintenance Form</h3>
+
+    <form id="maintenance-form" method="post" data-action="create-maintenance#submitForm">
+      <p>Please complete the following maintenance information:</p>
+
+      <div class="inspection-section">
+        <h4>General Information</h4>
+
+        <div class="form-group">
+          <label for="form-title">Form Title:</label>
+          <input type="text" id="form-title" name="title" class="form-input" required>
+
+          <label for="form-title">Date of completion:</label>
+          <input type="text" id="form-title" name="last_inspection_date" class="form-input" required value=<%= Date.today %>>
+
+          <label for="form-title">Mileage:</label>
+          <input type="text" id="form-title" name="mileage" class="form-input" required>
+
+        </div>
+
+        <div class="checklist-group">
+          <h5>Maintenance Checks</h5>
+          <label>
+            <input type="checkbox" name="oil_changed" required>
+            Oil has been changed
+          </label>
+          <label>
+            <input type="checkbox" name="tire_pressure_checked" required>
+            Tire pressure has been checked
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="additional-notes">Additional Notes:</label>
+          <textarea id="additional-notes" name="additional_notes" class="form-input" rows="4"></textarea>
+        </div>
+      </div>
+
+      <input type="hidden" name="truck_id" id="modal-truck-id">
+
+      <div class="form-actions">
+        <div class="modal-buttons">
+          <button type="button" class="btn btn-secondary" data-action="create-maintenance#close">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm & Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

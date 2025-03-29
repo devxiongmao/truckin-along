@@ -13,6 +13,11 @@ a, .action-link {
   text-decoration: none;
 }
 
+.warning-link {
+  background-color: rgb(255, 140, 0);
+  text-decoration: none;
+}
+
 a:hover, .action-link:hover {
   text-decoration: underline;
 }

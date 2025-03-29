@@ -41,6 +41,28 @@ RSpec.describe "/trucks", type: :request do
     }
   end
 
+  let(:valid_form_attributes) do
+    {
+      title: "This is the title",
+      last_inspection_date: "2025-03-29",
+      mileage: 100232,
+      oil_changed: true,
+      tire_pressure_checked: true,
+      additional_notes: "This is the notes"
+    }
+  end
+
+  let(:invalid_form_attributes) do
+    {
+      # missing title
+      last_inspection_date: "2025-03-29",
+      mileage: 100232,
+      oil_changed: true,
+      tire_pressure_checked: true,
+      additional_notes: "This is the notes"
+    }
+  end
+
   describe "when the user is an admin" do
     before do
       sign_in user, scope: :user
@@ -217,6 +239,70 @@ RSpec.describe "/trucks", type: :request do
         end
       end
     end
+
+    describe "POST /create_form" do
+      let!(:truck) { create(:truck, company: company, active: false) }
+
+      context "with valid parameters" do
+        it "creates a new form" do
+          expect {
+            post create_form_truck_url(truck), params: valid_form_attributes
+          }.to change(Form, :count).by(1)
+        end
+
+        it "updates the truck to active" do
+          post create_form_truck_url(truck), params: valid_form_attributes
+          truck.reload
+          expect(truck.active).to be(true)
+        end
+
+        it "redirects to the dashboard path" do
+          post create_form_truck_url(truck), params: valid_form_attributes
+          expect(response).to redirect_to(dashboard_url)
+        end
+
+        it 'renders with the correct notice alert' do
+          post create_form_truck_url(truck), params: valid_form_attributes
+          expect(flash[:notice]).to eq("Maintenance form successfully submitted.")
+        end
+      end
+
+      context "with invalid parameters" do
+        it "does not create a new Form" do
+          expect {
+            post create_form_truck_url(truck), params: invalid_form_attributes
+          }.to change(Truck, :count).by(0)
+        end
+
+        it "does not update the truck to active" do
+          post create_form_truck_url(truck), params: invalid_form_attributes
+          truck.reload
+          expect(truck.active).to be(false)
+        end
+
+        it "redirects to the dashboard path" do
+          post create_form_truck_url(truck), params: invalid_form_attributes
+          expect(response).to redirect_to(dashboard_url)
+        end
+
+        it 'renders with an alert' do
+          post create_form_truck_url(truck), params: invalid_form_attributes
+          expect(flash[:alert]).to eq("Unable to save form.")
+        end
+      end
+
+      context "when the truck belongs to another company" do
+        it 'redirects to the root path' do
+          post create_form_truck_url(other_truck), params: valid_form_attributes
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          post create_form_truck_url(other_truck), params: valid_form_attributes
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
+      end
+    end
   end
 
   describe "when the user is not an admin" do
@@ -310,6 +396,26 @@ RSpec.describe "/trucks", type: :request do
 
       it "renders the correct flash alert" do
         delete truck_url(truck)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+
+    describe "POST /create_form" do
+      let!(:truck) { create(:truck, company: company, active: false) }
+
+      it "does not update the truck" do
+        post create_form_truck_url(truck), params: valid_form_attributes
+        truck.reload
+        expect(truck.active).not_to eq(true)
+      end
+
+      it "redirects to the root path" do
+        post create_form_truck_url(truck), params: valid_form_attributes
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "renders the correct flash alert" do
+        post create_form_truck_url(truck), params: valid_form_attributes
         expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
