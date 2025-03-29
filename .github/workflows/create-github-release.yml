@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
+      - "docs/**"
     types:
       - opened
       - synchronize
@@ -39,7 +39,7 @@ jobs:
 
       - name: Generate Changelog
         run: |
-          bin/rails generate:changelog
+          make generate-changelog
           echo "Changelog generated and updated."
 
       - name: Determine Version Number
