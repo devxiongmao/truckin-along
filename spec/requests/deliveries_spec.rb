@@ -13,6 +13,8 @@ RSpec.describe "/deliveries", type: :request do
   let!(:assigned_shipment) { create(:shipment, company: company, truck: nil) }
 
   let!(:truck) { create(:truck, company: company) }
+  let!(:inactive_truck) { create(:truck, company: company, active: false) }
+
   let!(:other_truck) { create(:truck, company: other_company) }
 
   let!(:delivery) { create(:delivery, user: valid_user) }

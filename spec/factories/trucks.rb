@@ -9,6 +9,7 @@ FactoryBot.define do
     width { Faker::Number.decimal(l_digits: 3, r_digits: 1) }
     height { Faker::Number.decimal(l_digits: 3, r_digits: 1) }
     vin { Faker::Vehicle.vin }
+    active { true }
     license_plate { Faker::Vehicle.license_plate }
     association :company
   end
