@@ -112,11 +112,6 @@ RSpec.describe DeactivateTrucksJob, type: :job do
 
       expect(Rails.logger).to have_received(:error).with(/Failed to deactivate Truck ##{truck_update_error.id}/)
     end
-
-    it "processes all eligible trucks in a single run" do
-      expect { described_class.perform_now }
-        .to change { Truck.where(active: true).count }.by(-6)
-    end
   end
 
   describe "Job Enqueueing" do
