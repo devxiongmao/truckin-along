@@ -179,4 +179,16 @@ RSpec.describe Form, type: :model do
       expect(form).to be_valid
     end
   end
+
+  describe "scopes" do
+    describe ".maintenance_forms" do
+      let!(:form) { create(:form, :maintenance) }
+      let!(:other_form) { create(:form, :hazmat) }
+
+      it "includes Maintenance forms" do
+        expect(Form.maintenance_forms).to include(form)
+        expect(Form.maintenance_forms).not_to include(other_form)
+      end
+    end
+  end
 end

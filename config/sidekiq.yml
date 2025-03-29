@@ -1,0 +1,4 @@
+:schedule:
+  deactivate_trucks_job:
+    cron: "0 0 * * *" # Midnight
+    class: "DeactivateTrucksJob"

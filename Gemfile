@@ -46,6 +46,9 @@ gem "pundit" # For access control
 
 gem "parallel_tests", group: [ :development, :test ]
 
+# For scheduling async jobs
+gem "sidekiq"
+gem "sidekiq-cron"
 
 group :development, :test do
   gem "pry"
