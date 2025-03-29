@@ -70,7 +70,7 @@ class TrucksController < ApplicationController
     if form.save
       @truck.update(active: true)
       redirect_to dashboard_path, notice: "Maintenance form successfully submitted."
-    else 
+    else
       redirect_to request.referrer, alert: "Unable to save form."
     end
   end
