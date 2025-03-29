@@ -15,6 +15,8 @@ class Form < ApplicationRecord
   # Custom validation for form content structure
   validate :validate_content_structure
 
+  scope :maintenance_forms, -> { where(form_type: "Maintenance") }
+
   # Define expected fields for each form type
   FORM_TEMPLATES = {
     "Pre-delivery Inspection" => %w[start_time],
