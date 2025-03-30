@@ -445,3 +445,31 @@ button, .primary-button, .secondary-button, .danger-button {
   color: inherit;
   font: inherit; 
 }
+
+/* Tab Styling */
+.tab-container {
+  margin-top: 20px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 5px;
+}
+
+.tab-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+  margin-top: 15px;
+}
+
+.tab-content.active {
+  display: block;
+}
