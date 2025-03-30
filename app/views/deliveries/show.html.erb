@@ -23,7 +23,7 @@
     <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
   </div>
 
-  <%= render 'show_completed_inspection', form: @delivery.forms.first%>
+  <%= render 'forms/show_completed_inspection', form: @delivery.forms.first%>
 
   <table class="styled-table">
     <thead>
