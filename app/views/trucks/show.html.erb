@@ -20,29 +20,115 @@
   <%= link_to 'Edit', edit_truck_path(@truck), class: 'button primary-button' %>
 </div>
 
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Status</th>
-      <th>Delivery Date</th>
-      <th># of Shipments</th>
-      <th>Delivery Volume</th>
-      <th>Delivery Weight</th>
-      <th>Actions</>
-    </tr>
-  </thead>
-  <tbody id="my-shipments">
-    <% @truck.deliveries.each do |delivery| %>
-    <tr>
-      <td><%= delivery.status.gsub('_', ' ').capitalize %></td>
-      <td><%= delivery.created_at.strftime("%Y-%m-%d") %></td>
-      <td><%= delivery.shipments.count%></td>
-      <td><%= delivery.volume / 1_000_000 %> m<sup>3</sup> / <%=@truck.volume / 1_000_000%>m<sup>3</sup></td>
-      <td><%= delivery.weight %> kg / <%=@truck.weight%> kg</td>
-      <td>
-        <%= link_to "View Delivery", delivery_path(delivery), class: "btn btn-primary" %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<!-- Tab Navigation -->
+<div class="tab-container">
+  <button class="tab-button active" data-tab="deliveries">Deliveries</button>
+  <button class="tab-button" data-tab="forms">Forms</button>
+</div>
+
+<!-- Deliveries Table -->
+<div id="deliveries" class="tab-content active">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Delivery Date</th>
+        <th># of Shipments</th>
+        <th>Delivery Volume</th>
+        <th>Delivery Weight</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @truck.deliveries.each do |delivery| %>
+      <tr>
+        <td><%= delivery.status.gsub('_', ' ').capitalize %></td>
+        <td><%= delivery.created_at.strftime("%Y-%m-%d") %></td>
+        <td><%= delivery.shipments.count%></td>
+        <td><%= delivery.volume / 1_000_000 %> m<sup>3</sup> / <%=@truck.volume / 1_000_000%>m<sup>3</sup></td>
+        <td><%= delivery.weight %> kg / <%=@truck.weight%> kg</td>
+        <td>
+          <%= link_to "View Delivery", delivery_path(delivery), class: "btn btn-primary" %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Forms Table -->
+<div id="forms" class="tab-content">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Form ID</th>
+        <th>Form Type</th>
+        <th>Created At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @truck.forms.each do |form| %>
+      <tr>
+        <td><%= form.id %></td>
+        <td><%= form.form_type.humanize %></td>
+        <td><%= form.created_at.strftime("%Y-%m-%d") %></td>
+        <td>
+          <%= link_to "View Form", '', class: "btn btn-primary" %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const tabs = document.querySelectorAll(".tab-button");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", function() {
+        let selectedTab = this.getAttribute("data-tab");
+
+        // Remove active classes
+        tabs.forEach(t => t.classList.remove("active"));
+        tabContents.forEach(content => content.classList.remove("active"));
+
+        // Add active classes to selected tab and content
+        this.classList.add("active");
+        document.getElementById(selectedTab).classList.add("active");
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Tab Styling */
+  .tab-container {
+    margin-top: 20px;
+  }
+
+  .tab-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 5px;
+  }
+
+  .tab-button.active {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .tab-content {
+    display: none;
+    margin-top: 15px;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+</style>
