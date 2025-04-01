@@ -332,6 +332,18 @@ button, .primary-button, .secondary-button, .danger-button {
   padding-bottom: 5px;
 }
 
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+
 .inspection-section {
   margin-bottom: 20px;
 }

@@ -54,31 +54,45 @@
     </table>
   </div>
 
-  <!-- Forms Table -->
-  <div id="forms" class="tab-content" data-tabs-target="content">
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th>Form ID</th>
-          <th>Form Type</th>
-          <th>Title</th>
-          <th>Created At</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @truck.forms.each do |form| %>
-        <tr>
-          <td><%= form.id %></td>
-          <td><%= form.form_type.humanize %></td>
-          <td><%= form.title.humanize %></td>
-          <td><%= form.created_at.strftime("%Y-%m-%d") %></td>
-          <td>
-            <%= link_to "View Form", '', class: "btn btn-primary" %>
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
+  <div data-controller="show-forms">
+    <!-- Forms Table -->
+    <div id="forms" class="tab-content" data-tabs-target="content">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Form ID</th>
+            <th>Form Type</th>
+            <th>Title</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @truck.forms.each do |form| %>
+          <tr>
+            <td><%= form.id %></td>
+            <td><%= form.form_type.humanize %></td>
+            <td><%= form.title.humanize %></td>
+            <td><%= form.created_at.strftime("%Y-%m-%d") %></td>
+            <td>
+              <%= button_tag "View Form", 
+              class: "view-form-btn", 
+              data: { 
+                action: "click->show-forms#open",
+                form_id: form.id,
+              } %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="form-modal" class="modal hidden">
+      <div class="modal-content">
+        <span data-action="click->show-forms#close" class="close">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
   </div>
 </div>
