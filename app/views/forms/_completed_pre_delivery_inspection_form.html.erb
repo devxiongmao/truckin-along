@@ -1,0 +1,181 @@
+<div class="modal-content">
+  <h3>Pre-Delivery Inspection Checklist</h3>
+
+  <p><strong>Signed By: </strong><%= form.user.display_name %></p>
+  <p><strong>Signed At: </strong><%= form.submitted_at %></p>
+
+  <div class="inspection-section">
+    <h4>Exterior Inspection</h4>
+
+    <div class="checklist-group">
+      <h5>1. General Condition</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Truck body free of visible damage or defects
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Trailer body free of visible damage or defects
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        License plates visible, clean, and securely attached
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>2. Lights and Reflectors</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Headlights (low and high beam) operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Turn signals (front and rear) operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Brake lights operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Reverse lights operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Clearance lights and reflectors clean and functional
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Hazard lights operational
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>3. Tires and Wheels</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Adequate tread depth (minimum 4/32" for steer tires, 2/32" for others)
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Proper tire inflation (check PSI levels)
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        No cuts, bulges, or visible damage
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Lug nuts secure, no rust streaks indicating looseness
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Wheels free of cracks or dents
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>4. Windshield and Mirrors</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Windshield clean and free of cracks or chips
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Wipers operational, with clean and intact blades
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Mirrors properly adjusted, clean, and intact
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>5. Fluid Leaks</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        No visible leaks under the truck or trailer
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>6. Coupling Devices</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Trailer hitch secure and operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Safety chains attached and in good condition
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Electrical connections secure and functional
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Air lines connected and free of leaks
+      </label>
+    </div>
+  </div>
+
+  <div class="inspection-section">
+    <h4>Interior Inspection</h4>
+
+    <div class="checklist-group">
+      <h5>1. Brakes</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Service brake operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Parking brake holds the vehicle securely
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Trailer brakes operational (if applicable)
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>2. Steering</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Steering wheel operates smoothly with no excessive play
+      </label>
+    </div>
+
+    <div class="checklist-group">
+      <h5>3. Gauges and Indicators</h5>
+      <label>
+        <span class="checkmark">✓</span>
+        Fuel gauge operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Oil pressure gauge operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Coolant temperature gauge operational
+      </label>
+      <label>
+        <span class="checkmark">✓</span>
+        Air pressure gauge operational (for air brakes)
+      </label>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <label class="confirm-all">
+      <span class="checkmark">✓</span>
+      <strong>I confirm all items have been checked and the vehicle is safe for delivery</strong>
+    </label>
+
+    <div class="modal-buttons">
+      <button type="button" class="btn btn-secondary" data-action="show-pre-delivery#close">Cancel</button>
+    </div>
+  </div>
+</div>

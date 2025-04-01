@@ -23,7 +23,9 @@
     <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
   </div>
 
-  <%= render 'forms/show_completed_inspection', form: @delivery.forms.first%>
+  <div id="initiate-modal" class="modal hidden">
+    <%= render 'forms/completed_pre_delivery_inspection_form', form: @delivery.forms.first%>
+  </div>
 
   <table class="styled-table">
     <thead>

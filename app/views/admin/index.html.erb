@@ -112,7 +112,9 @@
 </div>
 
 <div data-controller="create-maintenance">
-  <%= render 'forms/maintenance_form'%>
+  <div id="maintenance-modal" class="modal hidden">
+    <%= render 'forms/maintenance_form'%>
+  </div>
   <table class="styled-table">
     <thead>
       <tr>
