@@ -193,13 +193,23 @@ RSpec.describe Form, type: :model do
   end
 
   describe "scopes" do
-    describe ".maintenance_forms" do
-      let!(:form) { create(:form, :maintenance) }
-      let!(:other_form) { create(:form, :hazmat) }
+    let!(:company) { create(:company) }
+    let!(:other_company) { create(:company) }
 
+    let!(:form) { create(:form, :maintenance, company: company) }
+    let!(:other_form) { create(:form, :hazmat, company: other_company) }
+
+    describe ".maintenance_forms" do
       it "includes Maintenance forms" do
         expect(Form.maintenance_forms).to include(form)
         expect(Form.maintenance_forms).not_to include(other_form)
+      end
+    end
+
+    describe ".for_company" do
+      it "includes forms that belong to the company" do
+        expect(Form.for_company(company)).to include(form)
+        expect(Form.for_company(company)).not_to include(other_form)
       end
     end
   end

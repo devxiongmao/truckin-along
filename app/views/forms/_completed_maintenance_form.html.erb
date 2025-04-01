@@ -1,0 +1,47 @@
+<div class="modal-content">
+  <h3>Maintenance Form</h3>
+
+  <p><strong>Signed By: </strong><%= form.user.display_name %></p>
+  <p><strong>Signed At: </strong><%= form.submitted_at %></p>
+
+  <div id="maintenance-display">
+    <p>Maintenance information:</p>
+
+    <div class="inspection-section">
+      <h4>General Information</h4>
+
+      <div class="form-group">
+        <p><strong>Form Title:</strong> <%= form.title %></p>
+        <p><strong>Date of completion:</strong> <%= form.content["last_inspection_date"] %></p>
+        <p><strong>Mileage:</strong> <%= form.content["mileage"] %></p>
+      </div>
+
+      <div class="checklist-group">
+        <h5>Maintenance Checks</h5>
+        <p>
+          <strong>Oil changed:</strong>
+          <%if form.content["oil_changed"] %>
+          <span class="checkmark">✓</span>
+          <%else%>
+          <span class="x"> ❌</span>>
+          <%end %>
+        </p>
+        <p>
+          <strong>Tire pressure checked:</strong>
+          <%if form.content["tire_pressure_checked"] %>
+          <span class="checkmark">✓</span>
+          <%else%>
+          <span class="x"> ❌</span>>
+          <%end %>
+        </p>
+      </div>
+
+      <div class="form-group">
+        <p><strong>Additional Notes:</strong></p>
+        <div class="notes-content">
+          <%= form.content["additional_notes"].present? ? form.content["additional_notes"] : "None" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

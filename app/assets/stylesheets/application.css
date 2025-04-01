@@ -289,6 +289,11 @@ button, .primary-button, .secondary-button, .danger-button {
   padding: 20px 0;
 }
 
+.modal-container {
+  width: 100%;
+  max-width: 800px;
+}
+
 .modal-content {
   background-color: white;
   margin: 20px auto;
@@ -330,6 +335,18 @@ button, .primary-button, .secondary-button, .danger-button {
   font-size: 1.1rem;
   border-bottom: 1px dashed #ccc;
   padding-bottom: 5px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
 }
 
 .inspection-section {

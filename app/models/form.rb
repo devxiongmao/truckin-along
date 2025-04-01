@@ -14,6 +14,8 @@ class Form < ApplicationRecord
   # Custom validation for form content structure
   validate :validate_content_structure
 
+  scope :for_company, ->(company) { where(company_id: company.id) }
+
   scope :maintenance_forms, -> { where(form_type: "Maintenance") }
 
   # Define schema for each form type using dry-schema
