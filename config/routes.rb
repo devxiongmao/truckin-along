@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   resources :driver_managements, only: [ :new, :create, :edit, :update ]
 
   resources :forms do
-    get 'show_modal', on: :member
+    get "show_modal", on: :member
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
