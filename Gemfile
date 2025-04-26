@@ -52,7 +52,7 @@ gem "sidekiq"
 gem "sidekiq-cron"
 
 # Adds gem for geolocation
-gem 'geocoder'
+gem "geocoder"
 
 group :development, :test do
   gem "pry"
