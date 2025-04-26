@@ -51,6 +51,9 @@ gem "parallel_tests", group: [ :development, :test ]
 gem "sidekiq"
 gem "sidekiq-cron"
 
+# Adds gem for geolocation
+gem "geocoder"
+
 group :development, :test do
   gem "pry"
   gem "byebug"
