@@ -490,3 +490,170 @@ button, .primary-button, .secondary-button, .danger-button {
 .tab-content.active {
   display: block;
 }
+
+/* Page Header - Centered for Welcome Page */
+.welcome-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #09e80d;
+}
+
+/* Welcome Page Introduction */
+.welcome-intro {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 0 5%;
+}
+
+.welcome-intro h2 {
+  color: #07c20b;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.welcome-intro p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Roles Introduction Section */
+.roles-intro {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.roles-intro h2 {
+  color: #07c20b;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.roles-intro p {
+  font-size: 1.1rem;
+}
+
+/* Two-Column Layout */
+.two-columns {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .two-columns {
+    flex-direction: column;
+  }
+}
+
+/* Column Styles */
+.column {
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.customer-column {
+  background-color: #f0fff0; /* Light green tint matching existing theme */
+  border: 1px solid #09e80d;
+}
+
+.professional-column {
+  background-color: #e8f8e8; /* Slightly different green tint */
+  border: 1px solid #09e80d;
+}
+
+/* Column Header */
+.column-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #09e80d;
+}
+
+.column-header h2 {
+  font-size: 1.5rem;
+  color: #07c20b;
+  margin-bottom: 0.5rem;
+}
+
+.column-header p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Feature Sections */
+.feature-section {
+  margin-bottom: 1.5rem;
+}
+
+.feature-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #07c20b;
+  padding-left: 10px;
+  border-left: 3px solid #09e80d;
+}
+
+/* Feature Lists */
+.feature-list {
+  list-style-type: none;
+  padding-left: 10px;
+}
+
+.feature-list li {
+  margin-bottom: 0.8rem;
+  padding-left: 25px;
+  position: relative;
+  font-size: 1rem;
+}
+
+.feature-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #09e80d;
+  font-weight: bold;
+}
+
+/* Call to Action for Each Column */
+.column .call-to-action {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+/* Role-specific Buttons */
+.customer-button {
+  background-color: #09e80d;
+  color: white;
+}
+
+.customer-button:hover {
+  background-color: #07c20b;
+}
+
+.professional-button {
+  background-color: #09e80d;
+  color: white;
+}
+
+.professional-button:hover {
+  background-color: #07c20b;
+}
+
+/* Bottom Call to Action */
+.bottom-cta {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Add some additional spacing for clarity */
+.section-title {
+  color: #07c20b;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
