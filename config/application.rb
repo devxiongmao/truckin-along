@@ -17,6 +17,7 @@ module TruckinAlong
     config.autoload_lib(ignore: %w[assets tasks])
     config.autoload_paths += %W[#{config.root}/app/services]
     config.autoload_paths += %W[#{config.root}/app/validators]
+    config.autoload_paths << Rails.root.join('lib')
 
     # Configuration for the application, engines, and railties goes here.
     #
