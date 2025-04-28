@@ -37,7 +37,7 @@ class Shipment < ApplicationRecord
     length * width * height
   end
 
-  private 
+  private
 
   def geocode_sender
     result = Geocoder.search(sender_address).first
@@ -46,7 +46,7 @@ class Shipment < ApplicationRecord
       self.sender_longitude = result.longitude
     end
   end
-  
+
   def geocode_receiver
     result = Geocoder.search(receiver_address).first
     if result

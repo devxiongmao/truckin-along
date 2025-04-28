@@ -86,7 +86,6 @@ RSpec.describe Shipment, type: :model do
     end
   end
 
-
   ## Edge Case Tests
   describe "edge cases" do
     it "handles extremely large weights" do
@@ -175,6 +174,65 @@ RSpec.describe Shipment, type: :model do
       valid_shipment.width  = 25
       valid_shipment.height = 15
       expect(valid_shipment.volume).to eq(3750)
+    end
+  end
+
+  ## Geocoding Tests
+  describe "geocoding" do
+    describe "sender address geocoding" do
+      it "geocodes the sender address on create" do
+        new_shipment = build(:shipment, sender_address: "123 New Street, New York, NY")
+        new_shipment.save
+
+        expect(new_shipment.sender_latitude).to eq(40.7128)
+        expect(new_shipment.sender_longitude).to eq(-74.0060)
+      end
+
+      it "geocodes the sender address when sender_address changes" do
+        valid_shipment.sender_address = "456 Changed Street, New York, NY"
+        valid_shipment.save
+
+        expect(valid_shipment.sender_latitude).to eq(40.7128)
+        expect(valid_shipment.sender_longitude).to eq(-74.0060)
+      end
+
+      it "handles nil results from geocoder" do
+        allow(Geocoder).to receive(:search).and_return([])
+
+        valid_shipment.sender_address = "Invalid Address"
+        valid_shipment.save
+
+        expect(valid_shipment.sender_latitude).to be_nil
+        expect(valid_shipment.sender_longitude).to be_nil
+      end
+    end
+
+    describe "receiver address geocoding" do
+      it "geocodes the receiver address on create" do
+        new_shipment = build(:shipment, receiver_address: "123 New Street, New York, NY")
+        new_shipment.save
+
+        expect(new_shipment.receiver_latitude).to eq(40.7128)
+        expect(new_shipment.receiver_longitude).to eq(-74.0060)
+      end
+
+      it "geocodes the receiver address when receiver_address changes" do
+        valid_shipment.receiver_address = "456 Changed Street, New York, NY"
+        valid_shipment.save
+
+        expect(valid_shipment.receiver_latitude).to eq(40.7128)
+        expect(valid_shipment.receiver_longitude).to eq(-74.0060)
+      end
+
+      it "handles nil results from geocoder" do
+        allow(Geocoder).to receive(:search).and_return([])
+
+        valid_shipment.receiver_address = "Invalid Address"
+        valid_shipment.save
+
+        expect(valid_shipment.receiver_latitude).to be_nil
+        expect(valid_shipment.receiver_longitude).to be_nil
+      end
     end
   end
 end
