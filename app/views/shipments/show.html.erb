@@ -3,6 +3,10 @@
   <%= render 'back_button', shipment: @shipment%>
 </div>
 
+<div id="shipment-map" data-controller="show-shipment-map" data-show-shipment-map-sender-lat-value="<%= @shipment.sender_latitude %>" data-show-shipment-map-sender-lng-value="<%= @shipment.sender_longitude %>" data-show-shipment-map-receiver-lat-value="<%= @shipment.receiver_latitude %>" data-show-shipment-map-receiver-lng-value="<%= @shipment.receiver_longitude %>" data-show-shipment-map-sender-address-value="<%= @shipment.sender_address %>" data-show-shipment-map-receiver-address-value="<%= @shipment.receiver_address %>" style="height: 500px; width: 100%;">
+</div>
+<br />
+
 <div class="details-container">
   <p><strong>Name:</strong> <span class="detail-value"><%= @shipment.name %></span></p>
   <p><strong>Status: </strong>
