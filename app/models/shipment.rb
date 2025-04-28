@@ -10,6 +10,9 @@ class Shipment < ApplicationRecord
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }
 
+  after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? }
+  after_validation :geocode_receiver, if: ->(obj) { obj.receiver_address.present? && obj.receiver_address_changed? }
+
   scope :for_user, ->(user) { where(user_id: user.id) }
 
   scope :for_company, ->(company) { where(company_id: company.id) }
@@ -32,5 +35,23 @@ class Shipment < ApplicationRecord
 
   def volume
     length * width * height
+  end
+
+  private
+
+  def geocode_sender
+    result = Geocoder.search(sender_address).first
+    if result
+      self.sender_latitude = result.latitude
+      self.sender_longitude = result.longitude
+    end
+  end
+
+  def geocode_receiver
+    result = Geocoder.search(receiver_address).first
+    if result
+      self.receiver_latitude = result.latitude
+      self.receiver_longitude = result.longitude
+    end
   end
 end

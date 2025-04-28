@@ -48,6 +48,11 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::ControllerHelpers, type: :controller
 
+  config.before(:each) do
+    geocoder_result = double("Geocoder::Result", latitude: 40.7128, longitude: -74.0060)
+    allow(Geocoder).to receive(:search).and_return([ geocoder_result ])
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
