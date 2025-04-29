@@ -1,0 +1,21 @@
+name: Prevent Main Merge
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if source branch is not a release branch
+        run: |
+          echo "Source branch: ${{ github.head_ref }}"
+          echo "Target branch: ${{ github.base_ref }}"
+
+          # Only run this check when the target branch is main
+          if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != release-* ]]; then
+            echo "Error: Only branches starting with 'release-' can be merged into main."
+            exit 1
+          fi
