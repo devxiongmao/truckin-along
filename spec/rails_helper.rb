@@ -44,12 +44,12 @@ if defined?(Geocoder)
   # Set Geocoder to test mode if we're in a CI environment or in test mode
   if ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true'
     Geocoder.configure(lookup: :test, ip_lookup: :test)
-  
+
     # Define a default stub for all geocoding requests
     Geocoder::Lookup::Test.set_default_stub(
       [
         {
-          'coordinates'  => [40.7128, -74.0060],
+          'coordinates'  => [ 40.7128, -74.0060 ],
           'address'      => 'New York, NY, USA',
           'state'        => 'New York',
           'country'      => 'United States',
