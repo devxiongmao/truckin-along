@@ -9,8 +9,8 @@
       <th></th>
       <th>Status</th>
       <th>Name</th>
-      <th>Sender Address</th>
-      <th>Receiver Address</th>
+      <th>Sender</th>
+      <th>Receiver</th>
       <th>Weight</th>
       <th></th>
     </tr>
@@ -21,8 +21,8 @@
       <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
       <td><%= shipment.status %></td>
       <td><%= shipment.name %></td>
-      <td><%= shipment.sender_address %></td>
-      <td><%= shipment.receiver_address %></td>
+      <td><%= shipment.sender_name %></td>
+      <td><%= shipment.receiver_name %></td>
       <td><%= shipment.weight %></td>
       <td>
         <%= link_to 'Show Details', shipment, class: 'action-link' %>
@@ -45,8 +45,8 @@
     <tr>
       <th>Status</th>
       <th>Name</th>
-      <th>Sender Address</th>
-      <th>Receiver Address</th>
+      <th>Sender</th>
+      <th>Receiver</th>
       <th>Weight</th>
       <th></th>
     </tr>
@@ -56,8 +56,8 @@
     <tr>
       <td><%= shipment.status %></td>
       <td><%= shipment.name %></td>
-      <td><%= shipment.sender_address %></td>
-      <td><%= shipment.receiver_address %></td>
+      <td><%= shipment.sender_name %></td>
+      <td><%= shipment.receiver_name %></td>
       <td><%= shipment.weight %></td>
       <td>
         <%= link_to 'Show', shipment, class: 'action-link' %> |
