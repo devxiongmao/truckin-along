@@ -11,8 +11,11 @@ jobs:
     steps:
       - name: Fail if source branch is not a release branch
         run: |
-          echo "PR branch: ${{ github.head_ref }}"
-          if [[ "${{ github.head_ref }}" != release-* ]]; then
+          echo "Source branch: ${{ github.head_ref }}"
+          echo "Target branch: ${{ github.base_ref }}"
+
+          # Only run this check when the target branch is main
+          if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" != release-* ]]; then
             echo "Error: Only branches starting with 'release-' can be merged into main."
             exit 1
           fi
