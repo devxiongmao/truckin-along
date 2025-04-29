@@ -1,5 +1,7 @@
 <h1>Deliveries</h1>
 
+<div style="height: 500px; width: 100%;" data-controller="show-truck-loading-map" data-show-truck-loading-map-shipments-json-value='<%= raw @unassigned_shipments.to_json(only: [:id], methods: [:sender_latitude, :sender_longitude, :receiver_latitude, :receiver_longitude, :sender_address, :receiver_address]) %>'>
+</div>
 <h2>Truck Loading</h2>
 <% if @unassigned_shipments.any? %>
 <%= form_with url: assign_shipments_to_truck_shipments_path, method: :post do |f| %>
@@ -17,8 +19,8 @@
       <th></th>
       <th>Status</th>
       <th>Name</th>
-      <th>Sender</th>
-      <th>Receiver</th>
+      <th>Sender Address</th>
+      <th>Receiver Address</th>
       <th>Weight</th>
       <th>Actions</th>
     </tr>
@@ -29,8 +31,8 @@
       <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
       <td><%= shipment.status %></td>
       <td><%= shipment.name %></td>
-      <td><%= shipment.sender_name %></td>
-      <td><%= shipment.receiver_name %></td>
+      <td><%= shipment.sender_address %></td>
+      <td><%= shipment.receiver_address %></td>
       <td><%= shipment.weight %></td>
       <td>
         <%= link_to 'Show', shipment, class: 'action-link' %> |
