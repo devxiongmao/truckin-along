@@ -41,23 +41,42 @@ end
 
 # Configure Geocoder for testing
 if defined?(Geocoder)
-  # Set Geocoder to test mode if we're in a CI environment or in test mode
-  if ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true'
-    Geocoder.configure(lookup: :test, ip_lookup: :test)
+  # Make absolutely sure Geocoder is in test mode
+  Geocoder.configure(lookup: :test, ip_lookup: :test)
 
-    # Define a default stub for all geocoding requests
-    Geocoder::Lookup::Test.set_default_stub(
-      [
-        {
-          'coordinates'  => [ 40.7128, -74.0060 ],
-          'address'      => 'New York, NY, USA',
-          'state'        => 'New York',
-          'country'      => 'United States',
-          'country_code' => 'US'
-        }
-      ]
-    )
+  # Aggressively disable any network calls
+  module DisableGeocoderNetworkCalls
+    def http_request(*args)
+      nil # Return nil instead of making a network request
+    end
   end
+
+  # Apply to all lookups
+  Geocoder::Lookup.all_services.each do |service|
+    begin
+      lookup = Geocoder::Lookup.get(service)
+      if lookup
+        lookup.singleton_class.prepend(DisableGeocoderNetworkCalls)
+      end
+    rescue => e
+      # Ignore errors for lookups that can't be instantiated
+    end
+  end
+
+  # Define a default stub for all geocoding requests
+  Geocoder::Lookup::Test.set_default_stub(
+    [
+      {
+        'coordinates'  => [ 40.7128, -74.0060 ],
+        'address'      => 'New York, NY, USA',
+        'state'        => 'New York',
+        'country'      => 'United States',
+        'country_code' => 'US'
+      }
+    ]
+  )
+
+  puts "👋 Geocoder configured for test mode with network calls disabled"
 end
 
 RSpec.configure do |config|
