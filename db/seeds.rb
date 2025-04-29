@@ -22,48 +22,25 @@ if Rails.env.test? || ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true' || 
   # Configure test mode
   Geocoder.configure(lookup: :test, ip_lookup: :test)
 
-  # Create lookup class for handling unknown addresses
-  module Geocoder
-    module Lookup
-      class Test
-        class << self
-          alias_method :original_search_for_test, :search_for
+  # Add a fallback stub using a regex to match any unknown address
+  Geocoder::Lookup::Test.add_stub(
+    /.*/, lambda do |query|
+      # Create deterministic but unique coordinates
+      require 'digest/md5'
+      seed = Digest::MD5.hexdigest(query).to_i(16)
+      lat = 37.0 + (seed % 10000) / 10000.0
+      lng = -122.0 + (seed / 10000 % 10000) / 10000.0
 
-          def search_for(query, options = {})
-            # Get the normalized query
-            query_text = query.is_a?(String) ? query : query.to_s
-
-            # If we don't have this exact stub, create one on demand
-            unless @stubs.key?(query_text)
-              # Create deterministic but unique coordinates based on the address
-              require 'digest/md5'
-              seed = Digest::MD5.hexdigest(query_text).to_i(16)
-              lat = 37.0 + (seed % 10000) / 10000.0
-              lng = -122.0 + (seed / 10000 % 10000) / 10000.0
-
-              # Create new stub
-              add_stub(
-                query_text, [
-                  {
-                    'coordinates'  => [ lat, lng ],
-                    'address'      => query_text,
-                    'state'        => query_text.split(", ")[1] || 'Unknown State',
-                    'country'      => 'United States',
-                    'country_code' => 'US'
-                  }
-                ]
-              )
-
-              puts "  ✓ Created stub for '#{query_text}'"
-            end
-
-            # Call the original method now that we have the stub
-            original_search_for_test(query, options)
-          end
-        end
-      end
+      [{
+        'coordinates'  => [lat, lng],
+        'address'      => query,
+        'state'        => query.split(", ")[1] || 'Unknown State',
+        'country'      => 'United States',
+        'country_code' => 'US'
+      }]
     end
-  end
+  )
+
 
   # Add specific stubs for all the addresses we found
   seed_addresses.each do |address|
