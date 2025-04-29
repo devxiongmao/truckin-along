@@ -24,4 +24,8 @@ Geocoder.configure(
   #   expiration: 2.days,
   #   prefix: 'geocoder:'
   # }
+  if Rails.env.test?
+    lookup: :test,
+    ip_lookup: :test
+  end
 )

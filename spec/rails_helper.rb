@@ -38,6 +38,28 @@ begin
 rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
+
+# Configure Geocoder for testing
+if defined?(Geocoder)
+  # Set Geocoder to test mode if we're in a CI environment or in test mode
+  if ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true'
+    Geocoder.configure(lookup: :test, ip_lookup: :test)
+  
+    # Define a default stub for all geocoding requests
+    Geocoder::Lookup::Test.set_default_stub(
+      [
+        {
+          'coordinates'  => [40.7128, -74.0060],
+          'address'      => 'New York, NY, USA',
+          'state'        => 'New York',
+          'country'      => 'United States',
+          'country_code' => 'US'
+        }
+      ]
+    )
+  end
+end
+
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.after(:suite) do
@@ -49,6 +71,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.before(:each) do
+    # Stub Geocoder for each test
     geocoder_result = double("Geocoder::Result", latitude: 40.7128, longitude: -74.0060)
     allow(Geocoder).to receive(:search).and_return([ geocoder_result ])
   end
