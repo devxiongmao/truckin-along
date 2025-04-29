@@ -49,6 +49,7 @@ jobs:
               - 'app/javascript/**'
               - 'app/assets/**'
               - 'app/views/**'
+              - 'spec/javascripts/**'
               - 'package.json'
               - 'yarn.lock'
               - 'importmap.rb'
