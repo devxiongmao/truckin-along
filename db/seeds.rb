@@ -14,7 +14,7 @@ if Rails.env.test? || ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true' || 
 
   # Get list of addresses from this seed file
   seed_file_content = File.read(__FILE__)
-  address_matches = seed_file_content.scan(/"([^"]*(?:Blvd|St|Ave|Way|Road|Dr|Lane|Pkwy|Hwy)[^"]*)"/)
+  address_matches = seed_file_content.scan(/"([^"]*(?:Blvd|St|Ave|Way|Road|Rd|Dr|Lane|Pkwy|Hwy)[^"]*)"/)
   seed_addresses = address_matches.flatten.uniq
 
   puts "Found #{seed_addresses.count} potential addresses in seed data"
@@ -31,13 +31,13 @@ if Rails.env.test? || ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true' || 
       lat = 37.0 + (seed % 10000) / 10000.0
       lng = -122.0 + (seed / 10000 % 10000) / 10000.0
 
-      [{
-        'coordinates'  => [lat, lng],
+      [ {
+        'coordinates'  => [ lat, lng ],
         'address'      => query,
         'state'        => query.split(", ")[1] || 'Unknown State',
         'country'      => 'United States',
         'country_code' => 'US'
-      }]
+      } ]
     end
   )
 

@@ -46,7 +46,7 @@ namespace :geocoder do
       Geocoder::Lookup::Test.add_stub(
         /.*/, [
           {
-            "coordinates"  => [37.7749, -122.4194],
+            "coordinates"  => [ 37.7749, -122.4194 ],
             "address"      => "Default Address, Default City, US",
             "state"        => "Default State",
             "country"      => "United States",
