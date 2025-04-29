@@ -43,7 +43,7 @@ namespace :geocoder do
       end
 
       # Add a special handler for unknown addresses
-      Geocoder::Lookup::Test.stub.default_stub = [
+      Geocoder::Lookup::Test.stubs.default_stub = [
         {
           "coordinates"  => [ 37.7749, -122.4194 ], # Default to San Francisco
           "address"      => "Default Address, Default City, US",
