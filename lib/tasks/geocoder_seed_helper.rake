@@ -42,16 +42,18 @@ namespace :geocoder do
         puts "  ✓ Added stub for '#{address}'"
       end
 
-      # Add a special handler for unknown addresses
-      Geocoder::Lookup::Test.stubs.default_stub = [
-        {
-          "coordinates"  => [ 37.7749, -122.4194 ], # Default to San Francisco
-          "address"      => "Default Address, Default City, US",
-          "state"        => "Default State",
-          "country"      => "United States",
-          "country_code" => "US"
-        }
-      ]
+      # Add a fallback stub using a regex to match anything
+      Geocoder::Lookup::Test.add_stub(
+        /.*/, [
+          {
+            "coordinates"  => [37.7749, -122.4194],
+            "address"      => "Default Address, Default City, US",
+            "state"        => "Default State",
+            "country"      => "United States",
+            "country_code" => "US"
+          }
+        ]
+      )
 
       puts "✅ Geocoder configured for seed data"
     end
