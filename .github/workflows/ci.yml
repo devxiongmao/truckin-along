@@ -42,7 +42,6 @@ jobs:
               - 'db/migrate/**'
               - 'config/**'
               - 'spec/**'
-              - '!spec/javascripts/**' # Exclude JavaScript specs from backend
               - 'lib/**'
               - 'Gemfile'
               - 'Gemfile.lock'
