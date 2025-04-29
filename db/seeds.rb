@@ -8,6 +8,101 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# Set up Geocoder for seed data in test environment
+if Rails.env.test? || ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true' || ENV['GEOCODER_DISABLED'] == 'true'
+  puts "🌍 Setting up Geocoder test mode for seed data"
+
+  # Get list of addresses from this seed file
+  seed_file_content = File.read(__FILE__)
+  address_matches = seed_file_content.scan(/"([^"]*(?:Blvd|St|Ave|Way|Road|Dr|Lane|Pkwy|Hwy)[^"]*)"/)
+  seed_addresses = address_matches.flatten.uniq
+
+  puts "Found #{seed_addresses.count} potential addresses in seed data"
+
+  # Configure test mode
+  Geocoder.configure(lookup: :test, ip_lookup: :test)
+
+  # Create lookup class for handling unknown addresses
+  module Geocoder
+    module Lookup
+      class Test
+        class << self
+          alias_method :original_search_for_test, :search_for
+
+          def search_for(query, options = {})
+            # Get the normalized query
+            query_text = query.is_a?(String) ? query : query.to_s
+
+            # If we don't have this exact stub, create one on demand
+            unless @stubs.key?(query_text)
+              # Create deterministic but unique coordinates based on the address
+              require 'digest/md5'
+              seed = Digest::MD5.hexdigest(query_text).to_i(16)
+              lat = 37.0 + (seed % 10000) / 10000.0
+              lng = -122.0 + (seed / 10000 % 10000) / 10000.0
+
+              # Create new stub
+              add_stub(
+                query_text, [
+                  {
+                    'coordinates'  => [ lat, lng ],
+                    'address'      => query_text,
+                    'state'        => query_text.split(", ")[1] || 'Unknown State',
+                    'country'      => 'United States',
+                    'country_code' => 'US'
+                  }
+                ]
+              )
+
+              puts "  ✓ Created stub for '#{query_text}'"
+            end
+
+            # Call the original method now that we have the stub
+            original_search_for_test(query, options)
+          end
+        end
+      end
+    end
+  end
+
+  # Add specific stubs for all the addresses we found
+  seed_addresses.each do |address|
+    # Create deterministic but unique coordinates based on the address
+    require 'digest/md5'
+    seed = Digest::MD5.hexdigest(address).to_i(16)
+    lat = 37.0 + (seed % 10000) / 10000.0
+    lng = -122.0 + (seed / 10000 % 10000) / 10000.0
+
+    # Add the stub
+    Geocoder::Lookup::Test.add_stub(
+      address, [
+        {
+          'coordinates'  => [ lat, lng ],
+          'address'      => address,
+          'state'        => address.split(", ")[1] || 'Unknown State',
+          'country'      => 'United States',
+          'country_code' => 'US'
+        }
+      ]
+    )
+  end
+
+  # Add the specific address from your error message
+  Geocoder::Lookup::Test.add_stub(
+    "101 Tech Blvd, Silicon Valley, USA", [
+      {
+        'coordinates'  => [ 37.4489, -122.1602 ], # Silicon Valley-ish coordinates
+        'address'      => "101 Tech Blvd, Silicon Valley, USA",
+        'state'        => "Silicon Valley",
+        'country'      => 'United States',
+        'country_code' => 'US'
+      }
+    ]
+  )
+
+  puts "✅ Geocoder configured for seed data"
+end
+
 # Clear existing data
 Shipment.destroy_all
 ShipmentStatus.destroy_all

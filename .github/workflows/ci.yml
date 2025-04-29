@@ -292,7 +292,9 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           GEOCODER_DISABLED: true
-        run: bundle exec rake parallel:setup
+        run: |
+          bundle exec rake geocoder:prepare_for_seeds
+          bundle exec rake parallel:setup
 
       - name: Run Parallel RSpec Tests
         env:

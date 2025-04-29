@@ -26,6 +26,74 @@ if defined?(Geocoder) && (Rails.env.test? || ENV["CI"] == "true" || ENV["GITHUB_
     ]
   )
 
+  # Add common address stubs for seed data
+  common_addresses = [
+    "101 Tech Blvd, Silicon Valley, USA",
+    "123 Main St, Anytown, USA",
+    "456 Park Ave, Metropolis, USA",
+    "789 Broadway, New City, USA",
+    "10 Innovation Way, Tech Park, USA"
+  ]
+
+  # You can add more addresses from your seeds file here
+
+  # Add a catch-all handler for the Geocoder test adapter
+  module Geocoder
+    module Lookup
+      class Test
+        alias_method :original_search, :search
+
+        def search(query, options = {})
+          # Try the original search method first
+          begin
+            original_search(query, options)
+          rescue ArgumentError => e
+            # If not found, create a stub on-the-fly with randomized but consistent coordinates
+            if e.message.include?("unknown stub request")
+              # Hash the query string to get consistent but unique coordinates
+              query_hash = Digest::MD5.hexdigest(query.to_s).to_i(16)
+              lat = 30.0 + (query_hash % 10000) / 10000.0
+              lon = -100.0 + (query_hash / 10000 % 10000) / 10000.0
+
+              # Create a new stub for this query
+              add_stub(
+                query.to_s, [
+                  {
+                    "coordinates"  => [ lat, lon ],
+                    "address"      => query.to_s,
+                    "state"        => "Unknown State",
+                    "country"      => "United States",
+                    "country_code" => "US"
+                  }
+                ]
+              )
+
+              # Try again with the new stub
+              original_search(query, options)
+            else
+              raise e
+            end
+          end
+        end
+      end
+    end
+  end
+
+  # Add individual stubs for each common address
+  common_addresses.each do |address|
+    Geocoder::Lookup::Test.add_stub(
+      address, [
+        {
+          "coordinates"  => [ 37.7749 + rand(-0.1..0.1), -122.4194 + rand(-0.1..0.1) ],
+          "address"      => address,
+          "state"        => address.split(", ")[1],
+          "country"      => "United States",
+          "country_code" => "US"
+        }
+      ]
+    )
+  end
+
   # Aggressively stub all Geocoder methods that might make network calls
   module DisableGeocoderRequests
     def http_request(*args)
