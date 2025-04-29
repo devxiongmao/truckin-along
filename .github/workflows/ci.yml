@@ -224,6 +224,13 @@ jobs:
     needs: analyze_changes
     if: needs.analyze_changes.outputs.backend_changes == 'true' || startsWith(github.head_ref, 'release-')
     timeout-minutes: 30
+    env:
+      CI: true
+      DISABLE_GEOCODER: true
+      RAILS_ENV: test
+      # Increase test database timeout if necessary
+      DATABASE_TIMEOUT: 30000
+
     services:
       postgres:
         image: postgres
@@ -274,11 +281,20 @@ jobs:
           echo "PostgreSQL did not start in time";
           exit 1;
 
+      - name: Disable Geocoder for tests
+        run: |
+          echo "Disabling Geocoder for CI run..."
+          mkdir -p tmp
+          echo "GEOCODER_DISABLED=true" >> .env.test
+
       - name: Setup Parallel Databases
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: bundle exec rake parallel:setup
+          GEOCODER_DISABLED: true
+        run: |
+          bundle exec rake geocoder:prepare_for_seeds
+          bundle exec rake parallel:setup
 
       - name: Run Parallel RSpec Tests
         env:
