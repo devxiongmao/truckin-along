@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_27_164722) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_02_232749) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -37,6 +37,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_27_164722) do
     t.bigint "shipment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "sender_address"
+    t.text "receiver_address"
+    t.float "sender_latitude"
+    t.float "sender_longitude"
+    t.float "receiver_latitude"
+    t.float "receiver_longitude"
     t.index ["delivery_id"], name: "index_delivery_shipments_on_delivery_id"
     t.index ["shipment_id"], name: "index_delivery_shipments_on_shipment_id"
   end
