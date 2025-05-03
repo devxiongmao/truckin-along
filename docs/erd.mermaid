@@ -18,10 +18,10 @@ erDiagram
     
     ShipmentStatuses ||--o{ ShipmentActionPreferences : used_in
     
-    Deliveries ||--o{ DeliveryShipments : has
+    Deliveries |o--o{ DeliveryShipments : has
     Deliveries ||--o{ Forms : has
     
-    Shipments ||--o{ DeliveryShipments : included_in
+    Shipments |o--o{ DeliveryShipments : included_in
     
     Companies {
         bigint id PK
