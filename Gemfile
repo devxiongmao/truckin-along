@@ -83,4 +83,4 @@ group :test do
   gem "shoulda-matchers"
 end
 
-gem "rspec-rails", "~> 7.1"
+gem "rspec-rails", "~> 8.0"
