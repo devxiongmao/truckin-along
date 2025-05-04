@@ -4,7 +4,7 @@ class DeliveriesController < ApplicationController
 
   def index
     authorize Delivery
-    @unassigned_shipments = Shipment.where(company_id: nil)
+    @unassigned_shipments = Shipment.where(company_id: nil).without_active_delivery
     @my_shipments = Shipment.where(company_id: current_company)
   end
 

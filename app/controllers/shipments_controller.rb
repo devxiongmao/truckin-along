@@ -74,6 +74,15 @@ class ShipmentsController < ApplicationController
 
   def close
     authorize Shipment
+
+    if @shipment.receiver_address != @shipment.latest_delivery_shipment.receiver_address
+      @shipment.update!({
+        company_id: nil,
+        shipment_status_id: nil,
+        truck_id: nil })
+      return redirect_to delivery_path(@shipment.active_delivery), alert: "Shipment successfully returned to shipment marketplace. Please remember to mark this delivery complete once all packages are delivered."
+    end
+
     preference = current_company.shipment_action_preferences.find_by(action: "successfully_delivered")
     unless preference&.shipment_status_id
       return redirect_to delivery_path(@shipment.active_delivery), alert: "No preference set."
