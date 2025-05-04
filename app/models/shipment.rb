@@ -17,6 +17,14 @@ class Shipment < ApplicationRecord
 
   scope :for_company, ->(company) { where(company_id: company.id) }
 
+  scope :without_active_delivery, -> {
+    where.not(
+      id: joins(:deliveries)
+          .merge(Delivery.active)
+          .select(:id)
+    )
+  }
+
   def status
     shipment_status&.name
   end
@@ -35,6 +43,10 @@ class Shipment < ApplicationRecord
 
   def volume
     length * width * height
+  end
+
+  def latest_delivery_shipment
+    delivery_shipments.order(created_at: :desc).first
   end
 
   private

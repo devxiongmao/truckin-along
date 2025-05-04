@@ -725,8 +725,36 @@ RSpec.describe "/shipments", type: :request do
     describe "POST #close" do
       let!(:claimed_shipment) { create(:shipment, company: company) }
       let!(:delivery) { create(:delivery) }
-      let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery) }
+      let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery, receiver_address: claimed_shipment.receiver_address) }
       let!(:shipment_status) { create(:shipment_status, company: company) }
+
+      context "when the receiver address is not the same as within the shipment" do
+        let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery) }
+        it "shows the correct notice" do
+          post close_shipment_url(claimed_shipment)
+          expect(flash[:alert]).to eq("Shipment successfully returned to shipment marketplace. Please remember to mark this delivery complete once all packages are delivered.")
+        end
+
+        it "redirects to the delivery show page" do
+          post close_shipment_url(claimed_shipment)
+          expect(response).to redirect_to(delivery_url(claimed_shipment.active_delivery))
+        end
+
+        it 'updates the shipment status' do
+          post close_shipment_url(claimed_shipment)
+          expect(claimed_shipment.reload.shipment_status_id).to be_nil
+        end
+
+        it 'updates the shipment truck' do
+          post close_shipment_url(claimed_shipment)
+          expect(claimed_shipment.reload.truck_id).to be_nil
+        end
+
+        it 'updates the shipment company' do
+          post close_shipment_url(claimed_shipment)
+          expect(claimed_shipment.reload.company_id).to be_nil
+        end
+      end
 
       context "when there is a preference set" do
         let!(:company_preference) { create(:shipment_action_preference, action: "successfully_delivered", company: company, shipment_status: shipment_status) }

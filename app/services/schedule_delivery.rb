@@ -4,6 +4,7 @@ class ScheduleDelivery < ApplicationService
   def initialize(params, company)
     @truck_id = params[:truck_id]
     @shipment_ids = Array(params[:shipment_ids]).map(&:to_i)
+    @delivery_address = params[:delivery_address]
     @current_company = company
     @errors = []
   end
@@ -45,18 +46,27 @@ class ScheduleDelivery < ApplicationService
   end
 
   def create_delivery_shipments(shipments)
-    # Drastically improves performance with large shipment batches
-    delivery_shipments = shipments.map do |shipment|
-      {
+    shipments.each do |shipment|
+      @delivery.delivery_shipments.create!(
         shipment_id: shipment.id,
-        sender_address: shipment.sender_address,
-        receiver_address: shipment.receiver_address
-      }
+        sender_address: set_sender_address(shipment),
+        receiver_address: set_receiver_address(shipment)
+      )
     end
-    @delivery.delivery_shipments.insert_all!(delivery_shipments)
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to associate shipment: #{e.message}"
     raise e
+  end
+
+  def set_sender_address(shipment)
+    previous_delivery = shipment.latest_delivery_shipment
+    return previous_delivery.receiver_address unless previous_delivery.nil?
+    shipment.sender_address
+  end
+
+  def set_receiver_address(shipment)
+    return @delivery_address if @delivery_address.present?
+    shipment.receiver_address
   end
 
   def load_shipments(shipments)
