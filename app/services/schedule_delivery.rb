@@ -3,40 +3,31 @@ class ScheduleDelivery < ApplicationService
 
   def initialize(params, company)
     @truck_id = params[:truck_id]
-    @shipment_ids = params[:shipment_ids]
+    @shipment_ids = Array(params[:shipment_ids]).map(&:to_i)
     @current_company = company
     @errors = []
   end
 
+
   def run
-    success = false
+    return error("Please select a truck.") unless (truck = Truck.find_by(id: @truck_id))
+    shipments = find_shipments
+    return error("Please select at least one shipment.") if shipments.empty?
 
     ActiveRecord::Base.transaction do
-      truck = Truck.find(@truck_id)
-      unless truck.present?
-        @errors << "Please select a truck."
-        raise ActiveRecord::Rollback
-      end
-
-      find_delivery(truck)
-      shipments = find_shipments
-      if shipments.empty?
-        @errors << "Please select at least one shipment."
-        raise ActiveRecord::Rollback
-      end
-
+      find_or_create_delivery(truck)
       create_delivery_shipments(shipments)
       load_shipments(shipments)
-
-      success = true
     end
 
-    success
+    true
+  rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid => e
+    false
   end
 
   private
 
-  def find_delivery(truck)
+  def find_or_create_delivery(truck)
     @delivery = truck.deliveries.scheduled.first
     return if @delivery.present?
     @delivery = Delivery.create!({
@@ -46,7 +37,7 @@ class ScheduleDelivery < ApplicationService
     })
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to create delivery: #{e.message}"
-    raise ActiveRecord::Rollback
+    raise e
   end
 
   def find_shipments
@@ -54,28 +45,34 @@ class ScheduleDelivery < ApplicationService
   end
 
   def create_delivery_shipments(shipments)
-    shipments.each do |shipment|
-      @delivery.delivery_shipments.create!({
-        shipment: shipment,
+    # Drastically improves performance with large shipment batches
+    delivery_shipments = shipments.map do |shipment|
+      {
+        shipment_id: shipment.id,
         sender_address: shipment.sender_address,
         receiver_address: shipment.receiver_address
-      })
+      }
     end
+    @delivery.delivery_shipments.insert_all!(delivery_shipments)
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to associate shipment: #{e.message}"
-    raise ActiveRecord::Rollback
+    raise e
   end
 
   def load_shipments(shipments)
-    preference = @current_company.shipment_action_preferences.find_by(action: "loaded_onto_truck")
-    if preference&.shipment_status_id
-      shipments.each do |shipment|
-        shipment.update!(shipment_status_id: preference.shipment_status_id)
-      end
-    end
+    status_id = @current_company.shipment_action_preferences
+                  .find_by(action: "loaded_onto_truck")
+                  &.shipment_status_id
+
+    shipments.each { |s| s.update!(shipment_status_id: status_id) if status_id }
     shipments.update_all(truck_id: @truck_id)
-  rescue ActiveRecord::RecordInvalid => e
+  rescue => e
     @errors << "Failed to update shipment: #{e.message}"
-    raise ActiveRecord::Rollback
+    raise e
+  end
+
+  def error(message)
+    @errors << message
+    false
   end
 end

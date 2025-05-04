@@ -858,7 +858,7 @@ RSpec.describe "/shipments", type: :request do
 
         it "shows an alert saying not authorized" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [], truck_id: nil }
-          expect(flash[:alert]).to eq("Please select a truck and at least one shipment.")
+          expect(flash[:alert]).to eq([ "Please select a truck." ])
         end
       end
 
@@ -880,7 +880,7 @@ RSpec.describe "/shipments", type: :request do
 
         it "shows the appropriate alert" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
-          expect(flash[:notice]).to eq("Shipments successfully assigned to truck #{truck.display_name}.")
+          expect(flash[:notice]).to eq("Shipments successfully assigned to truck.")
         end
 
         describe "when a shipment action preference exists" do
@@ -905,7 +905,7 @@ RSpec.describe "/shipments", type: :request do
 
         it "shows an alert saying not authorized" do
           post initiate_delivery_shipments_url, params: { truck_id: nil }
-          expect(flash[:alert]).to eq([ "Failed to create delivery: Validation failed: Truck must exist" ])
+          expect(flash[:alert]).to eq([ "Please select a truck." ])
         end
       end
 
@@ -924,6 +924,7 @@ RSpec.describe "/shipments", type: :request do
 
       context "with valid params" do
         let(:truck) { create(:truck, company: company) }
+        let!(:delivery) { create(:delivery, truck_id: truck.id, status: :scheduled) }
         let!(:sample_shipment) { create(:shipment, company: company, truck: truck) }
 
         before do

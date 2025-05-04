@@ -10,9 +10,10 @@ class InitiateDelivery < ApplicationService
 
   def run
     success = false
+    return error("Please select a truck.") unless (truck = Truck.find_by(id: @truck_id))
 
     ActiveRecord::Base.transaction do
-      update_delivery
+      update_delivery(truck)
       create_delivery_form
       open_shipments = find_open_shipments
 
@@ -47,8 +48,8 @@ class InitiateDelivery < ApplicationService
     raise ActiveRecord::Rollback
   end
 
-  def update_delivery
-    @delivery = Truck.find(@truck_id).deliveries.scheduled.first
+  def update_delivery(truck)
+    @delivery = truck.deliveries.scheduled.first
     @delivery.update!({
       user_id: @current_user.id,
       status: :in_progress
@@ -74,5 +75,10 @@ class InitiateDelivery < ApplicationService
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to update shipment status: #{e.message}"
     raise ActiveRecord::Rollback
+  end
+
+  def error(message)
+    @errors << message
+    false
   end
 end

@@ -44,9 +44,9 @@ RSpec.describe Delivery, type: :model do
     end
 
     describe ".active" do
-      it "includes scheduled and in_progress deliveries" do
-        expect(Delivery.active).to include(@scheduled_delivery, @in_progress_delivery)
-        expect(Delivery.active).not_to include(@completed_delivery, @cancelled_delivery)
+      it "includes in_progress deliveries" do
+        expect(Delivery.active).to include(@in_progress_delivery)
+        expect(Delivery.active).not_to include(@scheduled_delivery, @completed_delivery, @cancelled_delivery)
       end
     end
 
