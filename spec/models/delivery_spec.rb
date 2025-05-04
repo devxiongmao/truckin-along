@@ -113,8 +113,10 @@ RSpec.describe Delivery, type: :model do
 
     context "when all conditions are met" do
       let!(:shipment2) { create(:shipment, shipment_status: status) }
+      let!(:shipment3) { create(:shipment, shipment_status: nil) }
       let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
       let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+      let!(:delivery_shipment3) { create(:delivery_shipment, delivery: delivery, shipment: shipment3) }
 
       it "returns true" do
         expect(delivery.can_be_closed?).to be(true)

@@ -8,8 +8,8 @@ RSpec.describe ScheduleDelivery, type: :service do
 
   let!(:shipment1) { create(:shipment, truck: nil, company: company, shipment_status: shipment_status) }
   let!(:shipment2) { create(:shipment, truck: nil, company: company, shipment_status: shipment_status) }
-
-  let(:params) { { truck_id: truck.id, shipment_ids: [ shipment1.id, shipment2.id ] } }
+  let!(:delivery_shipment) { create(:delivery_shipment, shipment: shipment2) }
+  let(:params) { { truck_id: truck.id, delivery_address: "101 Animal Way, Florida, USA", shipment_ids: [ shipment1.id, shipment2.id ] } }
 
   subject { described_class.new(params, company) }
 
@@ -38,6 +38,18 @@ RSpec.describe ScheduleDelivery, type: :service do
         subject.run
         expect(shipment1.reload.truck).to eq(truck)
         expect(shipment1.shipment_status).to eq(new_status)
+      end
+
+      it "updates delivery_shipments with the provided delivery address" do
+        subject.run
+        delivery = truck.deliveries.scheduled.first
+        expect(delivery.delivery_shipments.first.receiver_address).to eq("101 Animal Way, Florida, USA")
+      end
+
+      it "updates delivery_shipments sender_address with the previous receiver_address" do
+        subject.run
+        delivery = truck.deliveries.scheduled.first
+        expect(delivery.delivery_shipments.last.sender_address).to eq(delivery_shipment.receiver_address)
       end
 
       it "returns true" do

@@ -4,48 +4,78 @@
 </div>
 <h2>Truck Loading</h2>
 <% if @unassigned_shipments.any? %>
-<%= form_with url: assign_shipments_to_truck_shipments_path, method: :post do |f| %>
+<div data-controller="truck-loading-modal">
+  <%= form_with url: assign_shipments_to_truck_shipments_path, method: :post, data: { truck_loading_modal_target: "form" } do |f| %>
 
-<div class="form-group">
-  <%= f.label :truck_id, 'Truck', class: 'form-label' %>
-  <%= f.collection_select :truck_id, @trucks, :id, ->(truck) { truck.display_name.to_s }, 
-  { prompt: "Please select a truck" }, 
-  { class: 'form-select', title: "Choose a truck" } %>
+  <div class="form-group">
+    <%= f.label :truck_id, 'Truck', class: 'form-label' %>
+    <%= f.collection_select :truck_id, @trucks, :id, ->(truck) { truck.display_name.to_s }, 
+    { prompt: "Please select a truck" }, 
+    { class: 'form-select', title: "Choose a truck" } %>
+  </div>
+
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Sender Address</th>
+        <th>Receiver Address</th>
+        <th>Weight</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @unassigned_shipments.each do |shipment| %>
+      <tr>
+        <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
+        <td><%= shipment.status %></td>
+        <td><%= shipment.name %></td>
+        <td><%= shipment.sender_address %></td>
+        <td><%= shipment.receiver_address %></td>
+        <td><%= shipment.weight %></td>
+        <td>
+          <%= link_to 'Show', shipment, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= button_tag "Add to Truck", class: "button primary-button", data: { action: "click->truck-loading-modal#showModal" } %>
+
+  <% end %>
+
+  <!-- Modal Component -->
+  <div class="modal-overlay" data-truck-loading-modal-target="modal">
+    <div class="truck-load-modal-content">
+      <h3>Confirmation</h3>
+      <p>Are these packages each being delivered to the listed address?</p>
+
+      <div class="truck-load-modal-buttons">
+        <button class="button primary-button" data-truck-loading-modal-target="confirmBtn" data-action="click->truck-loading-modal#confirmDelivery">
+          Yes
+        </button>
+        <button class="button secondary-button" data-truck-loading-modal-target="cancelBtn" data-action="click->truck-loading-modal#showAddressInput">
+          No
+        </button>
+      </div>
+
+      <div class="address-container" data-truck-loading-modal-target="addressContainer">
+        <label for="delivery-address">Delivery Address:</label>
+        <input type="text" id="delivery-address" class="form-control" data-truck-loading-modal-target="addressInput">
+        <button class="button primary-button" data-action="click->truck-loading-modal#submitWithAddress">
+          Submit
+        </button>
+        <button class="button secondary-button" data-action="click->truck-loading-modal#hideModal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Status</th>
-      <th>Name</th>
-      <th>Sender Address</th>
-      <th>Receiver Address</th>
-      <th>Weight</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @unassigned_shipments.each do |shipment| %>
-    <tr>
-      <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
-      <td><%= shipment.status %></td>
-      <td><%= shipment.name %></td>
-      <td><%= shipment.sender_address %></td>
-      <td><%= shipment.receiver_address %></td>
-      <td><%= shipment.weight %></td>
-      <td>
-        <%= link_to 'Show', shipment, class: 'action-link' %> |
-        <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= submit_tag "Add to Truck", class: "button primary-button" %>
-
-<% end %>
 <% else %>
 <p>No unassigned shipments available.</p>
 <% end %>
