@@ -48,7 +48,7 @@ class InitiateDelivery < ApplicationService
   end
 
   def update_delivery
-    @delivery = Truck.find(@truck_id).active_delivery
+    @delivery = Truck.find(@truck_id).deliveries.scheduled.first
     @delivery.update!({
       user_id: @current_user.id,
       status: :in_progress

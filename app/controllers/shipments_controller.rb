@@ -107,7 +107,7 @@ class ShipmentsController < ApplicationController
     service = ScheduleDelivery.new(params, current_company)
 
     if service.run
-      redirect_to load_truck_deliveries_path, notice: "Shipments successfully assigned to truck #{truck.display_name}."
+      redirect_to load_truck_deliveries_path, notice: "Shipments successfully assigned to truck."
     else
       flash[:alert] = service.errors
       redirect_to load_truck_deliveries_path

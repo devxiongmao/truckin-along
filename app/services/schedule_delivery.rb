@@ -37,7 +37,7 @@ class ScheduleDelivery < ApplicationService
   private
 
   def find_delivery(truck)
-    @delivery = truck.active_delivery
+    @delivery = truck.deliveries.scheduled.first
     return if @delivery.present?
     @delivery = Delivery.create!({
       user_id: nil,
@@ -67,13 +67,13 @@ class ScheduleDelivery < ApplicationService
   end
 
   def load_shipments(shipments)
-    preference = current_company.shipment_action_preferences.find_by(action: "loaded_onto_truck")
+    preference = @current_company.shipment_action_preferences.find_by(action: "loaded_onto_truck")
     if preference&.shipment_status_id
       shipments.each do |shipment|
         shipment.update!(shipment_status_id: preference.shipment_status_id)
       end
     end
-    shipments.update_all(truck_id: truck.id)
+    shipments.update_all(truck_id: @truck_id)
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to update shipment: #{e.message}"
     raise ActiveRecord::Rollback
