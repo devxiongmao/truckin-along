@@ -1,5 +1,5 @@
 class Delivery < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :truck
 
   has_many :delivery_shipments, dependent: :nullify

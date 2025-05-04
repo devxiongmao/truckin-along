@@ -6,7 +6,7 @@ RSpec.describe Delivery, type: :model do
 
   ## Association Tests
   describe "associations" do
-    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:user).optional }
     it { is_expected.to belong_to(:truck) }
     it { is_expected.to have_many(:delivery_shipments).dependent(:nullify) }
     it { is_expected.to have_many(:shipments).through(:delivery_shipments) }
