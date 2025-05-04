@@ -84,6 +84,16 @@ RSpec.describe Shipment, type: :model do
         expect(Shipment.for_user(user)).not_to include(other_shipment)
       end
     end
+
+    describe "without_active_delivery" do
+      let!(:shipment_with_delivery) { create(:shipment, company: company, user: user) }
+      let!(:delivery) { create(:delivery_shipment, shipment: shipment_with_delivery) }
+
+      it "includes shipments that do not have an active delivery" do
+        expect(Shipment.without_active_delivery).to include(shipment)
+        expect(Shipment.without_active_delivery).not_to include(shipment_with_delivery)
+      end
+    end
   end
 
   ## Edge Case Tests
@@ -174,6 +184,15 @@ RSpec.describe Shipment, type: :model do
       valid_shipment.width  = 25
       valid_shipment.height = 15
       expect(valid_shipment.volume).to eq(3750)
+    end
+  end
+
+  describe "#latest_delivery_shipment" do
+    let!(:delivery_shipment) { create(:delivery_shipment, shipment: valid_shipment) }
+    let!(:delivery_shipment2) { create(:delivery_shipment, shipment: valid_shipment) }
+
+    it "returns the latest delivery shipment" do
+      expect(valid_shipment.latest_delivery_shipment).to eq(delivery_shipment2)
     end
   end
 
