@@ -12,7 +12,7 @@ class InitiateDelivery < ApplicationService
     success = false
 
     ActiveRecord::Base.transaction do
-      create_delivery
+      update_delivery
       create_delivery_form
       open_shipments = find_open_shipments
 
@@ -20,8 +20,6 @@ class InitiateDelivery < ApplicationService
         @errors << "No open shipments found for this truck"
         raise ActiveRecord::Rollback
       end
-
-      create_delivery_shipments(open_shipments)
       update_shipment_statuses(open_shipments)
       success = true
     end
@@ -49,10 +47,10 @@ class InitiateDelivery < ApplicationService
     raise ActiveRecord::Rollback
   end
 
-  def create_delivery
-    @delivery = Delivery.create!({
+  def update_delivery
+    @delivery = Truck.find(@truck_id).active_delivery
+    @delivery.update!({
       user_id: @current_user.id,
-      truck_id: @truck_id,
       status: :in_progress
     })
   rescue ActiveRecord::RecordInvalid => e
@@ -63,15 +61,6 @@ class InitiateDelivery < ApplicationService
   def find_open_shipments
     shipments = Shipment.where(truck_id: @truck_id, company_id: @current_company.id)
     shipments.select(&:open?)
-  end
-
-  def create_delivery_shipments(shipments)
-    shipments.each do |shipment|
-      @delivery.delivery_shipments.create!(shipment: shipment)
-    end
-  rescue ActiveRecord::RecordInvalid => e
-    @errors << "Failed to associate shipment: #{e.message}"
-    raise ActiveRecord::Rollback
   end
 
   def update_shipment_statuses(shipments)
