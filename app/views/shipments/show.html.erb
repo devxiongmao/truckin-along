@@ -33,6 +33,7 @@
 <table class="styled-table">
   <thead>
     <tr>
+      <th>Company</th>
       <th>Departed From</th>
       <th>Arriving At</th>
     </tr>
@@ -40,6 +41,7 @@
   <tbody>
     <% @shipment.delivery_shipments.each do |del_ship| %>
     <tr>
+      <td><%= del_ship.delivery.user.company.name %></td>
       <td><%= del_ship.sender_address %></td>
       <td><%= del_ship.receiver_address %></td>
     </tr>
