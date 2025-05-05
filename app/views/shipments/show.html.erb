@@ -29,3 +29,20 @@
   <%= link_to 'Edit Shipment', edit_shipment_path(@shipment), class: 'button primary-button' %>
   <%= link_to 'Destroy Shipment', @shipment, method: :delete, class: 'button danger-button', data: { confirm: 'Are you sure?' } %>
 </div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Departed From</th>
+      <th>Arriving At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shipment.delivery_shipments.each do |del_ship| %>
+    <tr>
+      <td><%= del_ship.sender_address %></td>
+      <td><%= del_ship.receiver_address %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
