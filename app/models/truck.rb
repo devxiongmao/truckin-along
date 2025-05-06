@@ -35,7 +35,7 @@ class Truck < ApplicationRecord
   end
 
   def current_shipments
-    latest_delivery.shipments
+    latest_delivery&.shipments || []
   end
 
   def current_volume

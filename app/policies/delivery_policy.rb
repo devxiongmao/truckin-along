@@ -21,7 +21,7 @@ class DeliveryPolicy < ApplicationPolicy
   end
 
   def close?
-    user.admin? || user.driver?
+    (delivery.truck.company == user.company) && (user.admin? || user.driver?)
   end
 
   def load_truck?
