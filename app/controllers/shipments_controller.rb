@@ -76,6 +76,7 @@ class ShipmentsController < ApplicationController
     authorize Shipment
 
     if @shipment.receiver_address != @shipment.latest_delivery_shipment.receiver_address
+      @shipment.latest_delivery_shipment.update!(delivered_date: Time.now)
       @shipment.update!({
         company_id: nil,
         shipment_status_id: nil,
@@ -92,6 +93,7 @@ class ShipmentsController < ApplicationController
       return redirect_to delivery_path(@shipment.active_delivery), alert: "Shipment is already closed."
     end
 
+    @shipment.latest_delivery_shipment.update!(delivered_date: Time.now)
     @shipment.update!(shipment_status_id: preference.shipment_status_id)
     redirect_to delivery_path(@shipment.active_delivery), notice: "Shipment successfully closed."
   end
