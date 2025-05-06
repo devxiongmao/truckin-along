@@ -50,7 +50,8 @@ class ScheduleDelivery < ApplicationService
       @delivery.delivery_shipments.create!(
         shipment_id: shipment.id,
         sender_address: set_sender_address(shipment),
-        receiver_address: set_receiver_address(shipment)
+        receiver_address: set_receiver_address(shipment),
+        loaded_date: Time.now
       )
     end
   rescue ActiveRecord::RecordInvalid => e

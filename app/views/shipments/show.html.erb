@@ -36,6 +36,8 @@
       <th>Company</th>
       <th>Departed From</th>
       <th>Arriving At</th>
+      <th>Processing Date</th>
+      <th>Delivered Date</th>
     </tr>
   </thead>
   <tbody>
@@ -44,6 +46,8 @@
       <td><%= @shipment.company&.name || del_ship.delivery&.user.company.name %></td>
       <td><%= del_ship.sender_address %></td>
       <td><%= del_ship.receiver_address %></td>
+      <td><%= del_ship.loaded_date&.strftime("%Y-%m-%d") %></td>
+      <td><%= del_ship.delivered_date&.strftime("%Y-%m-%d") %></td>
     </tr>
     <% end %>
   </tbody>
