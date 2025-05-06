@@ -5,12 +5,19 @@ class DeliveryPolicy < ApplicationPolicy
   # code, beware of possible changes to the ancestors:
   # https://gist.github.com/Burgestrand/4b4bc22f31c8a95c425fc0e30d7ef1f5
 
+  attr_reader :user, :delivery
+
+  def initialize(user, delivery)
+    @user = user
+    @delivery = delivery
+  end
+
   def index?
     user.admin? || user.driver?
   end
 
   def show?
-    user.admin? || user.driver?
+    (delivery.truck.company == user.company) && (user.admin? || user.driver?)
   end
 
   def close?

@@ -35,7 +35,7 @@ class Truck < ApplicationRecord
   end
 
   def current_shipments
-    shipments.select(&:open?)
+    latest_delivery.shipments
   end
 
   def current_volume
@@ -44,5 +44,9 @@ class Truck < ApplicationRecord
 
   def current_weight
     current_shipments.reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
+  end
+
+  def latest_delivery
+    deliveries.order(created_at: :desc).first
   end
 end

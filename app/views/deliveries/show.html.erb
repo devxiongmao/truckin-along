@@ -17,15 +17,19 @@
     <% if @delivery.can_be_closed? %>
     <%= link_to "Mark Complete", close_delivery_path(@delivery), class: 'button primary-button', method: :post, data: { confirm: 'All shipments are successfully closed?' } %>
     <% end %>
+    <% if !@delivery.forms.empty? %>
     <button class="action-link" data-action="click->show-pre-delivery#open">
       Pre-delivery Inspection
     </button>
+    <% end %>
     <%= link_to 'Back', start_deliveries_path, class: 'button secondary-button' %>
   </div>
 
+  <% if !@delivery.forms.empty? %>
   <div id="initiate-modal" class="modal hidden">
     <%= render 'forms/completed_pre_delivery_inspection_form', form: @delivery.forms.first%>
   </div>
+  <% end %>
 
   <table class="styled-table">
     <thead>
@@ -41,7 +45,7 @@
     <tbody>
       <% @delivery.shipments.each do |shipment| %>
       <tr>
-        <td><%= shipment.status || "Delivered" %></td>
+        <td><%= shipment.status %></td>
         <td><%= shipment.name %></td>
         <td><%= shipment.sender_address %></td>
         <td><%= shipment.receiver_address %></td>

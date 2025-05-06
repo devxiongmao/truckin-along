@@ -25,7 +25,7 @@ class Delivery < ApplicationRecord
   end
 
   def can_be_closed?
-    shipments.all? { |shipment| shipment.status.nil? || !shipment.open? } && active?
+    delivery_shipments.all? { |del_ship| !del_ship.delivered_date.nil? } && active?
   end
 
   def volume

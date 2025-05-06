@@ -22,7 +22,7 @@
         <th>Current Volume</th>
         <th>Current Weight</th>
         <th class="center-text">Available?</th>
-        <th>Actions</>
+        <th class="center-text">Actions</>
       </tr>
     </thead>
     <tbody id="my-shipments">
@@ -39,7 +39,8 @@
           ❌
           <% end %>
         </td>
-        <td>
+        <td class="center-text">
+          <%= link_to 'Delivery', truck.latest_delivery, class: 'action-link' %> |
           <button class="action-link" data-action="click->modal#open" data-modal-truck-id-value="<%= truck.id %>">
             Initiate
           </button>
