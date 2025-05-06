@@ -17,7 +17,7 @@ RSpec.describe "/deliveries", type: :request do
 
   let!(:other_truck) { create(:truck, company: other_company) }
 
-  let!(:delivery) { create(:delivery, user: valid_user) }
+  let!(:delivery) { create(:delivery, user: valid_user, truck: truck, status: :scheduled) }
   let!(:form) { create(:form, :pre_delivery, delivery: delivery) }
   let!(:other_delivery) { create(:delivery, user: other_user, truck: other_truck) }
 
@@ -85,20 +85,16 @@ RSpec.describe "/deliveries", type: :request do
 
         it "shows an alert saying not authorized" do
           get delivery_url(other_delivery)
-          expect(flash[:alert]).to eq("Not authorized.")
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
         end
       end
     end
 
     describe 'POST /close' do
       context "when the delivery belongs to the user" do
-        let!(:status) { create(:shipment_status, closed: true) }
-        let!(:shipment1) { create(:shipment, shipment_status: status) }
-
         context "when all shipments are closed" do
-          let!(:shipment2) { create(:shipment, shipment_status: status) }
-          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
-          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
           it "redirects to the delivery start page" do
             post close_delivery_url(delivery)
             expect(response).to redirect_to(start_deliveries_url)
@@ -116,10 +112,8 @@ RSpec.describe "/deliveries", type: :request do
         end
 
         context "when not all shipments are closed" do
-          let!(:open_status) { create(:shipment_status, closed: false) }
-          let!(:shipment2) { create(:shipment, shipment_status: open_status) }
-          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
-          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
+          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
           it "redirects to the delivery show page" do
             post close_delivery_url(delivery)
             expect(response).to redirect_to(delivery_url(delivery))
@@ -145,7 +139,7 @@ RSpec.describe "/deliveries", type: :request do
 
         it "shows an alert saying not authorized" do
           post close_delivery_url(other_delivery)
-          expect(flash[:alert]).to eq("Not authorized.")
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
         end
 
         it "does not close the delivery" do
@@ -285,7 +279,7 @@ RSpec.describe "/deliveries", type: :request do
 
       it "renders the correct flash alert" do
         post close_delivery_url(delivery)
-        expect(flash[:alert]).to eq("Not authorized.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
