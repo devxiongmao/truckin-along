@@ -169,31 +169,56 @@ RSpec.describe Truck, type: :model do
   end
 
   describe "#current_shipments" do
-    let!(:open_status) { create(:shipment_status, closed: false) }
-    let!(:closed_status) { create(:shipment_status, closed: true) }
+    context "when there are delivery shipments" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
 
-    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: open_status) }
-    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: closed_status) }
-    it "returns the open shipments" do
-      expect(valid_truck.current_shipments).to eq([ shipment1 ])
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
+      it "returns the open shipments" do
+        expect(valid_truck.current_shipments).to eq([ delivery_shipment1.shipment, delivery_shipment2.shipment ])
+      end
+    end
+
+    context "when there are no delivery shipments" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+      it "returns an empty array" do
+        expect(valid_truck.current_shipments).to eq([])
+      end
+    end
+
+    context "when there is no delivery" do
+      it "returns an empty array" do
+        expect(valid_truck.current_shipments).to eq([])
+      end
     end
   end
 
   describe "#current_volume" do
-    let!(:shipment_status) { create(:shipment_status, closed: false) }
-    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
-    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
+    let!(:delivery) { create(:delivery, truck: valid_truck) }
+
+    let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
+    let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
     it "calculates the current volume of the truck bed" do
-      expect(valid_truck.current_volume).to eq(shipment1.volume + shipment2.volume)
+      expect(valid_truck.current_volume).to eq(delivery_shipment1.shipment.volume + delivery_shipment2.shipment.volume)
     end
   end
 
   describe "#current_weight" do
-    let!(:shipment_status) { create(:shipment_status, closed: false) }
-    let!(:shipment1) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
-    let!(:shipment2) { create(:shipment, truck: valid_truck, shipment_status: shipment_status) }
+    let!(:delivery) { create(:delivery, truck: valid_truck) }
+
+    let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
+    let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
     it "calculates the current volume of the truck bed" do
-      expect(valid_truck.current_weight).to eq(shipment1.weight + shipment2.weight)
+      expect(valid_truck.current_weight).to eq(delivery_shipment1.shipment.weight + delivery_shipment2.shipment.weight)
+    end
+  end
+
+  describe "#latest_delivery" do
+    let!(:delivery) { create(:delivery, truck: valid_truck) }
+    let!(:delivery2) { create(:delivery, truck: valid_truck) }
+
+    it "returns the latest delivery" do
+      expect(valid_truck.latest_delivery).to eq(delivery2)
     end
   end
 end

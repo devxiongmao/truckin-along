@@ -36,6 +36,6 @@ class DeliveriesController < ApplicationController
 
   private
     def set_delivery
-      @delivery = Delivery.for_user(current_user).find(params[:id])
+      @delivery = Delivery.find(params[:id])
     end
 end

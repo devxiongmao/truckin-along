@@ -90,8 +90,6 @@ RSpec.describe Delivery, type: :model do
 
   describe "#can_be_closed?" do
     let!(:delivery) { create(:delivery) }
-    let!(:status) { create(:shipment_status, closed: true) }
-    let!(:shipment1) { create(:shipment, shipment_status: status) }
 
     context "when the delivery is already closed" do
       it "returns false" do
@@ -101,10 +99,8 @@ RSpec.describe Delivery, type: :model do
     end
 
     context "when shipments are open" do
-      let!(:open_status) { create(:shipment_status, closed: false) }
-      let!(:shipment2) { create(:shipment, shipment_status: open_status) }
-      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
-      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
 
       it "returns false" do
         expect(delivery.can_be_closed?).to be(false)
@@ -112,11 +108,9 @@ RSpec.describe Delivery, type: :model do
     end
 
     context "when all conditions are met" do
-      let!(:shipment2) { create(:shipment, shipment_status: status) }
-      let!(:shipment3) { create(:shipment, shipment_status: nil) }
-      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
-      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
-      let!(:delivery_shipment3) { create(:delivery_shipment, delivery: delivery, shipment: shipment3) }
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+      let!(:delivery_shipment3) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
 
       it "returns true" do
         expect(delivery.can_be_closed?).to be(true)
