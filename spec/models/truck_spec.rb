@@ -169,12 +169,27 @@ RSpec.describe Truck, type: :model do
   end
 
   describe "#current_shipments" do
-    let!(:delivery) { create(:delivery, truck: valid_truck) }
+    context "when there are delivery shipments" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
 
-    let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
-    let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
-    it "returns the open shipments" do
-      expect(valid_truck.current_shipments).to eq([ delivery_shipment1.shipment, delivery_shipment2.shipment ])
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
+      it "returns the open shipments" do
+        expect(valid_truck.current_shipments).to eq([ delivery_shipment1.shipment, delivery_shipment2.shipment ])
+      end
+    end
+
+    context "when there are no delivery shipments" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+      it "returns an empty array" do
+        expect(valid_truck.current_shipments).to eq([])
+      end
+    end
+
+    context "when there is no delivery" do
+      it "returns an empty array" do
+        expect(valid_truck.current_shipments).to eq([])
+      end
     end
   end
 
