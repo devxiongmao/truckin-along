@@ -30,7 +30,6 @@
   <table class="styled-table">
     <thead>
       <tr>
-        <th>Company</th>
         <th>Status</th>
         <th>Name</th>
         <th>Sender Address</th>
@@ -42,17 +41,18 @@
     <tbody>
       <% @delivery.shipments.each do |shipment| %>
       <tr>
-        <td><%= shipment&.company&.name %></td>
-        <td><%= shipment.status %></td>
+        <td><%= shipment.status || "Delivered" %></td>
         <td><%= shipment.name %></td>
         <td><%= shipment.sender_address %></td>
         <td><%= shipment.receiver_address %></td>
         <td><%= shipment.weight %></td>
         <td>
+          <% if shipment.latest_delivery_shipment.delivered_date.nil? %>
           <%= link_to 'Quick Close', close_shipment_path(shipment), 
             class: 'action-link', 
             method: :post, 
             data: { confirm: 'Was this shipment successfully delivered?' } %> |
+          <% end %>
           <%= link_to 'Show', shipment, class: 'action-link' %>
         </td>
       </tr>
