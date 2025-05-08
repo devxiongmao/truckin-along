@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "/shipments", type: :request do
+  include ActiveJob::TestHelper
   let!(:valid_user) { create(:user, :customer) }
   let!(:other_user) { create(:user, :customer) }
 
@@ -757,6 +758,9 @@ RSpec.describe "/shipments", type: :request do
       end
 
       context "when there is a preference set" do
+        before { clear_enqueued_jobs }
+        after  { clear_enqueued_jobs }
+
         let!(:company_preference) { create(:shipment_action_preference, action: "successfully_delivered", company: company, shipment_status: shipment_status) }
         it "shows the correct notice" do
           post close_shipment_url(claimed_shipment)
@@ -771,6 +775,12 @@ RSpec.describe "/shipments", type: :request do
         it 'updates the a shipment status' do
           post close_shipment_url(claimed_shipment)
           expect(claimed_shipment.reload.shipment_status_id).to eq(shipment_status.id)
+        end
+
+        it "enqueues the delivery email job" do
+          expect {
+            post close_shipment_url(claimed_shipment)
+          }.to have_enqueued_job(SendDeliveryEmailJob).with(claimed_shipment.id)
         end
       end
 
