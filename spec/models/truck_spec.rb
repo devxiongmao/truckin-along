@@ -215,10 +215,10 @@ RSpec.describe Truck, type: :model do
 
   describe "#latest_delivery" do
     let!(:delivery) { create(:delivery, truck: valid_truck) }
-    let!(:delivery2) { create(:delivery, truck: valid_truck) }
+    let!(:delivery2) { create(:delivery, truck: valid_truck, status: :completed) }
 
-    it "returns the latest delivery" do
-      expect(valid_truck.latest_delivery).to eq(delivery2)
+    it "returns the latest active delivery" do
+      expect(valid_truck.latest_delivery).to eq(delivery)
     end
   end
 end

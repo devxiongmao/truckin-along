@@ -39,12 +39,18 @@
           ❌
           <% end %>
         </td>
+        <% if !truck.latest_delivery.nil? %>
         <td class="center-text">
           <%= link_to 'Delivery', truck.latest_delivery, class: 'action-link' %> |
           <button class="action-link" data-action="click->modal#open" data-modal-truck-id-value="<%= truck.id %>">
             Initiate
           </button>
         </td>
+        <% else %>
+        <td class="center-text">
+          <%= link_to "Add Shipments", load_truck_deliveries_path, class: "button secondary-button" %>
+        </td>
+        <% end %>
       </tr>
       <% end %>
     </tbody>
