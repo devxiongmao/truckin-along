@@ -47,6 +47,6 @@ class Truck < ApplicationRecord
   end
 
   def latest_delivery
-    deliveries.order(created_at: :desc).first
+    deliveries.active.order(created_at: :desc).first
   end
 end
