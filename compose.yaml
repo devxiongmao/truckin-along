@@ -12,6 +12,7 @@ services:
       dockerfile: ./Dockerfile.dev
     depends_on:
       - truckin_along_db
+      - redis
     ports:
       - 3000:3000
     volumes:
@@ -21,6 +22,7 @@ services:
       POSTGRES_DB_HOST: truckin_along_db
       POSTGRES_DB_NAME: truckin_along_development
       RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/0
 
   truckin_along_db:
     container_name: truckin_along_db
@@ -33,7 +35,29 @@ services:
     environment:
       POSTGRES_DB: truckin_along_development
       POSTGRES_HOST_AUTH_METHOD: "trust"
+
+  redis:
+    image: redis:7
+    container_name: truckin_along_redis
+    restart: always
+    ports:
+      - 6379:6379
+
+  sidekiq:
+    container_name: truckin_along_sidekiq
+    image: truckin_along
+    depends_on:
+      - truckin_along_db
+      - redis
+    volumes:
+      - .:/usr/src/app
+    command: bundle exec sidekiq
+    environment:
+      POSTGRES_DB_USER: postgres
+      POSTGRES_DB_HOST: truckin_along_db
+      POSTGRES_DB_NAME: truckin_along_development
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/0
 volumes:
   truckin_along_db_volume:
     external: true
-
