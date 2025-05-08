@@ -55,7 +55,7 @@ gem "sidekiq-cron"
 gem "geocoder"
 
 # CSS Styling for emails
-gem 'premailer-rails'
+gem "premailer-rails"
 
 group :development, :test do
   gem "pry"
