@@ -1,0 +1,38 @@
+<h1>Hello, <%= @user.display_name %>!</h1>
+<p>Your shipment: <%= @shipment.name%> has been successfully delivered to <%= @shipment.receiver_address %>. Thank you for using Truckin' Along!</p>
+
+<h2>Shipment Details</h2>
+<div class="details-container">
+  <p><strong>Name:</strong> <span class="detail-value"><%= @shipment.name %></span></p>
+  <p><strong>Sender Name:</strong> <span class="detail-value"><%= @shipment.sender_name %></span></p>
+  <p><strong>Sender Address:</strong> <span class="detail-value"><%= @shipment.sender_address %></span></p>
+  <p><strong>Receiver Name:</strong> <span class="detail-value"><%= @shipment.receiver_name %></span></p>
+  <p><strong>Receiver Address:</strong> <span class="detail-value"><%= @shipment.receiver_address %></span></p>
+  <p><strong>Weight:</strong> <span class="detail-value"><%= @shipment.weight %> kg</span></p>
+  <p><strong>Length:</strong> <span class="detail-value"><%= @shipment.length %> cm</span></p>
+  <p><strong>Width:</strong> <span class="detail-value"><%= @shipment.width %> cm</span></p>
+  <p><strong>Height:</strong> <span class="detail-value"><%= @shipment.height %> cm</span></p>
+</div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Departed From</th>
+      <th>Arriving At</th>
+      <th>Processing Date</th>
+      <th>Delivered Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @shipment.delivery_shipments.each do |del_ship| %>
+    <tr>
+      <td><%= @shipment.company&.name || del_ship.delivery&.user.company.name %></td>
+      <td><%= del_ship.sender_address %></td>
+      <td><%= del_ship.receiver_address %></td>
+      <td><%= del_ship.loaded_date&.strftime("%Y-%m-%d") %></td>
+      <td><%= del_ship.delivered_date&.strftime("%Y-%m-%d") %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
