@@ -54,6 +54,9 @@ gem "sidekiq-cron"
 # Adds gem for geolocation
 gem "geocoder"
 
+# CSS Styling for emails
+gem "premailer-rails"
+
 group :development, :test do
   gem "pry"
   gem "byebug"
