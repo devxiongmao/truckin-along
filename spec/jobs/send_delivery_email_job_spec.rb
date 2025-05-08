@@ -4,13 +4,12 @@ require 'rails_helper'
 RSpec.describe SendDeliveryEmailJob, type: :job do
   include ActiveJob::TestHelper
 
-  let(:user) { create(:user) }
   let(:shipment) { create(:shipment) }
 
   it 'enqueues the job with correct arguments' do
     expect {
-      described_class.perform_later(user.id, shipment.id)
-    }.to have_enqueued_job.with(user.id, shipment.id)
+      described_class.perform_later(shipment.id)
+    }.to have_enqueued_job.with(shipment.id)
   end
 
   it 'calls the mailer with correct arguments and delivers the email' do
@@ -18,11 +17,11 @@ RSpec.describe SendDeliveryEmailJob, type: :job do
 
     expect(ShipmentDeliveryMailer)
       .to receive(:successfully_delivered_email)
-      .with(user.id, shipment.id)
+      .with(shipment.id)
       .and_return(mail_double)
 
     perform_enqueued_jobs do
-      described_class.perform_later(user.id, shipment.id)
+      described_class.perform_later(shipment.id)
     end
   end
 end

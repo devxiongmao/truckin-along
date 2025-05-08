@@ -6,7 +6,7 @@ RSpec.describe ShipmentDeliveryMailer, type: :mailer do
     let(:user) { create(:user, role: "customer") }
     let(:shipment) { create(:shipment, user: user) }
 
-    let(:mail) { described_class.successfully_delivered_email(user.id, shipment.id) }
+    let(:mail) { described_class.successfully_delivered_email(shipment.id) }
 
     it 'renders the headers' do
       expect(mail.subject).to eq('Your package has been delivered!')

@@ -95,7 +95,7 @@ class ShipmentsController < ApplicationController
 
     @shipment.latest_delivery_shipment.update!(delivered_date: Time.now)
     @shipment.update!(shipment_status_id: preference.shipment_status_id)
-    SendDeliveryEmailJob.perform_later(@shipment.user.email)
+    SendDeliveryEmailJob.perform_later(@shipment.id)
     redirect_to delivery_path(@shipment.active_delivery), notice: "Shipment successfully closed."
   end
 
