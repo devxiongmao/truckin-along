@@ -10,6 +10,8 @@ class DeliveriesController < ApplicationController
 
   def show
     authorize @delivery
+    @open_shipments = @delivery.open_shipments
+    @delivered_shipments = @delivery.delivered_shipments
   end
 
   def close

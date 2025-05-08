@@ -35,4 +35,17 @@ class Delivery < ApplicationRecord
   def weight
     shipments.reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
   end
+
+  def open_shipments
+    shipments
+      .joins(:delivery_shipments)
+      .where(delivery_shipments: { delivery_id: id, delivered_date: nil })
+  end
+
+  def delivered_shipments
+    shipments
+      .joins(:delivery_shipments)
+      .where.not(delivery_shipments: { delivered_date: nil })
+      .where(delivery_shipments: { delivery_id: id })
+  end
 end
