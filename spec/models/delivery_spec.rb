@@ -160,4 +160,32 @@ RSpec.describe Delivery, type: :model do
       end
     end
   end
+
+  describe "#open_shipments" do
+    let!(:shipment1) { create(:shipment) }
+    let!(:shipment2) { create(:shipment) }
+    let!(:shipment3) { create(:shipment) }
+
+    let!(:del_ship1) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment1, delivered_date: nil) }
+    let!(:del_ship2) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment2, delivered_date: 1.day.ago) }
+    let!(:del_ship3) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment3, delivered_date: nil) }
+
+    it "returns shipments with nil delivered_date for #open_shipments" do
+      expect(valid_delivery.open_shipments).to contain_exactly(shipment1, shipment3)
+    end
+  end
+
+  describe "#delivered_shipments" do
+    let!(:shipment1) { create(:shipment) }
+    let!(:shipment2) { create(:shipment) }
+    let!(:shipment3) { create(:shipment) }
+
+    let!(:del_ship1) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment1, delivered_date: nil) }
+    let!(:del_ship2) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment2, delivered_date: 1.day.ago) }
+    let!(:del_ship3) { create(:delivery_shipment, delivery: valid_delivery, shipment: shipment3, delivered_date: nil) }
+
+    it "returns shipments with non-nil delivered_date for #delivered_shipments" do
+      expect(valid_delivery.delivered_shipments).to contain_exactly(shipment2)
+    end
+  end
 end

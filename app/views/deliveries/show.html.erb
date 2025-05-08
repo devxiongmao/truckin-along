@@ -31,6 +31,7 @@
   </div>
   <% end %>
 
+  <% if !@open_shipments.empty? %>
   <table class="styled-table">
     <thead>
       <tr>
@@ -43,7 +44,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @delivery.shipments.each do |shipment| %>
+      <% @open_shipments.each do |shipment| %>
       <tr>
         <td><%= shipment.status %></td>
         <td><%= shipment.name %></td>
@@ -51,16 +52,46 @@
         <td><%= shipment.receiver_address %></td>
         <td><%= shipment.weight %></td>
         <td>
-          <% if shipment.latest_delivery_shipment.delivered_date.nil? %>
           <%= link_to 'Quick Close', close_shipment_path(shipment), 
             class: 'action-link', 
             method: :post, 
             data: { confirm: 'Was this shipment successfully delivered?' } %> |
-          <% end %>
           <%= link_to 'Show', shipment, class: 'action-link' %>
         </td>
       </tr>
       <% end %>
     </tbody>
   </table>
+  <br />
+  <% end %>
+
+  <% if !@delivered_shipments.empty? %>
+  <h3>Closed Shipments</h3>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Sender Address</th>
+        <th>Receiver Address</th>
+        <th>Weight</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @delivered_shipments.each do |shipment| %>
+      <tr>
+        <td><%= shipment.status %></td>
+        <td><%= shipment.name %></td>
+        <td><%= shipment.sender_address %></td>
+        <td><%= shipment.receiver_address %></td>
+        <td><%= shipment.weight %></td>
+        <td>
+          <%= link_to 'Show', shipment, class: 'action-link' %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% end %>
 </div>
