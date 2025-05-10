@@ -23,7 +23,7 @@ class Truck < ApplicationRecord
 
   # Check if truck is available
   def available?
-    deliveries.active.none?
+    deliveries.in_progress.none?
   end
 
   # Get the truck's active delivery if any
