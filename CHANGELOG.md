@@ -1,10 +1,8 @@
-### From v1.5.0 to HEAD
+### From v1.5.1 to HEAD
 
-- XMDEV-306: Adds styling to emails (#275) (9167f02) by Jon
-- XMDEV-300: Adds successfully delivered email functionality (#274) (ba075ad) by Jon
-- XMDEV-299: Updates docker-compose with current services (#273) (97adb84) by Jon
-- XMDEV-294: Bug fix on start deliveries page showing numbers for closed shipments (#272) (c68e2ca) by Jon
-- XMDEV-293: Updates delivery show page to separate delivered vs open shipments (#271) (ec7e5f0) by Jon
+- XMDEV-313: Bug fix for deliveries show page where scheduled deliveries were not showing (#279) (64c16a3) by Jon
+- XMDEV-225: Refactors forms to support polymorphic associations. (#278) (e141a4c) by Jon
+- Bump parallel_tests from 5.1.0 to 5.2.0 (#277) (730da28) by dependabot[bot]
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
