@@ -21,8 +21,25 @@ RSpec.describe Form, type: :model do
   describe "associations" do
     it { should belong_to(:user) }
     it { should belong_to(:company) }
-    it { should belong_to(:truck).optional }
-    it { should belong_to(:delivery).optional }
+    it { should belong_to(:formable).optional }
+  end
+
+  describe "polymorphic behavior" do
+    it "can belong to a Truck" do
+      truck = create(:truck)
+      form = create(:form, :maintenance, formable: truck)
+
+      expect(form.formable).to eq(truck)
+      expect(form.formable_type).to eq("Truck")
+    end
+
+    it "can belong to a Delivery" do
+      delivery = create(:delivery)
+      form = create(:form, :pre_delivery, formable: delivery)
+
+      expect(form.formable).to eq(delivery)
+      expect(form.formable_type).to eq("Delivery")
+    end
   end
 
   describe "validations" do
