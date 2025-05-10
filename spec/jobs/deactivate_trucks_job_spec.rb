@@ -5,21 +5,21 @@ RSpec.describe DeactivateTrucksJob, type: :job do
   let!(:truck_recent_inspection) do
     create(:truck, active: true, mileage: 110_000).tap do |truck|
       create(:form, :maintenance,
-             truck: truck,
+             formable: truck,
              custom_content: { "last_inspection_date" => 2.months.ago, "mileage" => 100_000 })
     end
   end
   let!(:truck_old_inspection) do
     create(:truck, active: true, mileage: 150_000).tap do |truck|
       create(:form, :maintenance,
-             truck: truck,
+             formable: truck,
              custom_content: { "last_inspection_date" => 7.months.ago, "mileage" => 125_000 })
     end
   end
   let!(:truck_high_mileage) do
     create(:truck, active: true, mileage: 130_000).tap do |truck|
       create(:form, :maintenance,
-             truck: truck,
+             formable: truck,
              custom_content: { "last_inspection_date" => 3.months.ago, "mileage" => 100_000 })
     end
   end
@@ -32,7 +32,7 @@ RSpec.describe DeactivateTrucksJob, type: :job do
   let!(:truck_edge_case) do
     create(:truck, active: true, mileage: 125_000).tap do |truck|
       create(:form, :maintenance,
-             truck: truck,
+             formable: truck,
              custom_content: { "last_inspection_date" => 6.months.ago.to_date, "mileage" => 100_000 })
     end
   end
@@ -90,7 +90,7 @@ RSpec.describe DeactivateTrucksJob, type: :job do
     it "logs errors when update fails" do
       # Create a scenario where this specific truck should be deactivated
       create(:form, :maintenance,
-             truck: truck_update_error,
+             formable: truck_update_error,
              custom_content: { "last_inspection_date" => 7.months.ago, "mileage" => 150_000 })
 
       allow_any_instance_of(Truck).to receive(:update!).and_call_original

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_06_000047) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_10_205956) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,8 +60,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_06_000047) do
     t.datetime "updated_at", null: false
     t.bigint "truck_id"
     t.bigint "delivery_id"
+    t.string "formable_type"
+    t.bigint "formable_id"
     t.index ["company_id"], name: "index_forms_on_company_id"
     t.index ["delivery_id"], name: "index_forms_on_delivery_id"
+    t.index ["formable_type", "formable_id"], name: "index_forms_on_formable"
     t.index ["truck_id"], name: "index_forms_on_truck_id"
     t.index ["user_id"], name: "index_forms_on_user_id"
   end

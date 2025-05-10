@@ -34,11 +34,11 @@ class InitiateDelivery < ApplicationService
     @form = Form.create!({
       user_id: @current_user.id,
       company_id: @current_company.id,
-      truck_id: @truck_id,
-      delivery_id: @delivery.id,
       title: "Pre Delivery Inspection",
       form_type: "Pre-delivery Inspection",
       submitted_at: Time.now,
+      formable_type: "Delivery",
+      formable_id: @delivery.id,
       content: {
         start_time: Time.now
       }
