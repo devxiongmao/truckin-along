@@ -54,9 +54,10 @@ class TrucksController < ApplicationController
     form = Form.new(form_params.merge(
       user_id: current_user.id,
       company_id: current_company.id,
-      truck_id: @truck.id,
       form_type: "Maintenance",
-      submitted_at: Time.current
+      submitted_at: Time.current,
+      formable_type: "Truck",
+      formable_id: @truck.id
     ))
 
     if form.save

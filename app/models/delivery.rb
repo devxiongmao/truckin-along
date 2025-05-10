@@ -4,7 +4,8 @@ class Delivery < ApplicationRecord
 
   has_many :delivery_shipments, dependent: :nullify
   has_many :shipments, through: :delivery_shipments
-  has_many :forms, dependent: :nullify
+
+  has_many :forms, as: :formable
 
   enum :status, {
     scheduled: 0,

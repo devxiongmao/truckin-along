@@ -10,7 +10,7 @@ RSpec.describe Delivery, type: :model do
     it { is_expected.to belong_to(:truck) }
     it { is_expected.to have_many(:delivery_shipments).dependent(:nullify) }
     it { is_expected.to have_many(:shipments).through(:delivery_shipments) }
-    it { is_expected.to have_many(:forms).dependent(:nullify) }
+    it { is_expected.to have_many(:forms) }
   end
 
   ## Enum Tests

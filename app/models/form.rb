@@ -1,8 +1,7 @@
 class Form < ApplicationRecord
   belongs_to :user
   belongs_to :company
-  belongs_to :truck, optional: true
-  belongs_to :delivery, optional: true
+  belongs_to :formable, polymorphic: true, optional: true
 
   # Common Validations
   validates :user_id, presence: true

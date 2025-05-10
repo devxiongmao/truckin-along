@@ -18,7 +18,7 @@ RSpec.describe "/deliveries", type: :request do
   let!(:other_truck) { create(:truck, company: other_company) }
 
   let!(:delivery) { create(:delivery, user: valid_user, truck: truck, status: :scheduled) }
-  let!(:form) { create(:form, :pre_delivery, delivery: delivery) }
+  let!(:form) { create(:form, :pre_delivery, formable: delivery) }
   let!(:other_delivery) { create(:delivery, user: other_user, truck: other_truck) }
 
   describe "when user is not a customer" do
