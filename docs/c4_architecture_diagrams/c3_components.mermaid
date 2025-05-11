@@ -1,0 +1,76 @@
+C4Component
+    title Component diagram for Truckin' Along Rails App
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+
+    Person(customer, "Customer", "A customer of Truckin' Along who sends shipments", $tags="user")
+    Person(driver, "Truck Driver", "A driver of trucks for a trucking company", $tags="user")
+    Person(admin, "Truck Company Admin", "An admin for a trucking company", $tags="user")
+
+    System_Ext(geolocatorService, "Geolocation System", "The system used to transform addresses into latitudes and longitudes")
+    ContainerDb_Ext(database, "PostgreSQL Database", "Stores application data including users, shipments, trucks, and deliveries")
+    ContainerDb_Ext(redis, "Redis", "In-memory data store used for job queuing, caching, and pub/sub messaging")
+
+    Container_Boundary(webApp, "Web Application - Rails App") {
+        Component(controllers, "Controllers", "Ruby on Rails", "Handle HTTP requests, session management, and orchestrate application flow", $tags="primary")
+        Component(views, "View Templates", "ERB/HAML", "Render HTML responses for the user interface")
+        Component(models, "ActiveRecord Models", "Ruby", "Domain models representing Shipments, Users, Trucks, and Deliveries")
+        Component(services, "Service Objects", "Ruby", "Encapsulate complex business logic like delivery scheduling and payment processing")
+        Component(jobs, "Background Jobs", "Sidekiq/Redis", "Handle asynchronous processing like notifications and geocoding")
+        Component(mailers, "Action Mailers", "Ruby", "Send email notifications to users about shipment updates")
+        Component(helpers, "View Helpers", "Ruby", "Provide reusable UI components and formatting functions")
+        Component(assets, "Asset Pipeline", "JavaScript/CSS", "Handle front-end code and styling")
+    }
+
+    Rel(customer, controllers, "Interacts with", "HTTPS")
+    Rel(driver, controllers, "Interacts with", "HTTPS")
+    Rel(admin, controllers, "Interacts with", "HTTPS")
+
+    Rel(controllers, views, "Renders", "MVC")
+    Rel(views, helpers, "Uses", "Ruby")
+    Rel(views, assets, "Includes", "JavaScript/CSS")
+    
+    Rel(controllers, models, "Uses", "ActiveRecord")
+    Rel(controllers, services, "Invokes", "Ruby")
+    Rel(controllers, jobs, "Enqueues", "Sidekiq/Redis")
+    Rel(controllers, mailers, "Triggers", "ActionMailer")
+    Rel(jobs, redis, "Uses for queuing and processing", "Sidekiq")
+    
+    Rel(models, database, "Reads from and writes to", "ActiveRecord")
+    Rel(services, models, "Uses", "Ruby")
+    Rel(services, geolocatorService, "Makes API calls to", "HTTP/JSON")
+    Rel(jobs, models, "Reads/updates", "ActiveRecord")
+    Rel(jobs, mailers, "Triggers", "ActionMailer")
+    
+    UpdateRelStyle(customer, controllers, $offsetY="-40")
+    UpdateRelStyle(driver, controllers, $offsetY="0")
+    UpdateRelStyle(admin, controllers, $offsetY="40")
+    
+    UpdateRelStyle(controllers, views, $offsetX="-100")
+    UpdateRelStyle(controllers, models, $offsetY="30")
+    UpdateRelStyle(controllers, services, $offsetX="100")
+    UpdateRelStyle(controllers, jobs, $offsetY="-30")
+    UpdateRelStyle(controllers, mailers, $offsetX="50", $offsetY="-40")
+    
+    UpdateRelStyle(models, database, $offsetY="20")
+    UpdateRelStyle(services, geolocatorService, $offsetY="-20")
+    UpdateRelStyle(services, models, $offsetX="-70", $offsetY="20")
+    UpdateRelStyle(jobs, models, $offsetX="40", $offsetY="30")
+    
+    UpdateElementStyle(controllers, $bgColor="#1168BD", $fontColor="#ffffff")
+    UpdateElementStyle(views, $bgColor="#438DD5", $fontColor="#ffffff")
+    UpdateElementStyle(models, $bgColor="#438DD5", $fontColor="#ffffff")
+    UpdateElementStyle(services, $bgColor="#438DD5", $fontColor="#ffffff")
+    UpdateElementStyle(jobs, $bgColor="#438DD5", $fontColor="#ffffff")
+    UpdateElementStyle(mailers, $bgColor="#438DD5", $fontColor="#ffffff")
+    UpdateElementStyle(helpers, $bgColor="#438DD5", $fontColor="#ffffff")
+    UpdateElementStyle(assets, $bgColor="#438DD5", $fontColor="#ffffff")
+    
+    UpdateElementStyle(database, $bgColor="#408E3A", $fontColor="#ffffff")
+    UpdateElementStyle(redis, $bgColor="#D93A2C", $fontColor="#ffffff")
+    UpdateElementStyle(geolocatorService, $bgColor="#999999")
+    
+    UpdateElementStyle(customer, $bgColor="#08427B")
+    UpdateElementStyle(driver, $bgColor="#08427B")
+    UpdateElementStyle(admin, $bgColor="#08427B")
+    
