@@ -1,0 +1,42 @@
+C4Container
+    title Container diagram for Truckin' Along
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+
+    Person(customer, "Customer", "A customer of Truckin' Along who sends shipments", $tags="user")
+    Person(driver, "Truck Driver", "A driver of trucks for a trucking company", $tags="user")
+    Person(admin, "Truck Company Admin", "An admin for a trucking company", $tags="user")
+
+    System_Ext(geolocatorService, "Geolocation System", "The system used to transform addresses into latitudes and longitudes")
+
+    Container_Boundary(c1, "Truckin' Along System") {
+        Container(webApp, "Web Application", "Ruby on Rails", "Delivers static content and the Truckin' Along web interface", $tags="primary")
+        ContainerDb(database, "Database", "PostgreSQL", "Stores user data, shipment details, delivery records, and truck information")
+        Container(backgroundJobs, "Background Jobs", "Sidekiq, Redis", "Handles scheduled and async tasks like notifications and automated maintenance")
+    }
+    
+    Rel(customer, webApp, "Uses to create and track shipments", "HTTPS")
+    Rel(driver, webApp, "Uses for managing deliveries", "HTTPS")
+    Rel(admin, webApp, "Uses for operations oversight", "HTTPS")
+    
+    Rel_Back(database, webApp, "Reads from and writes to", "ActiveRecord")
+    
+    Rel(webApp, geolocatorService, "Requests location data from", "HTTP/JSON")
+    Rel(backgroundJobs, database, "Reads from and writes to", "ActiveRecord")
+    Rel(webApp, backgroundJobs, "Schedules jobs", "Redis")
+    
+    UpdateRelStyle(customer, webApp, $offsetY="-30")
+    UpdateRelStyle(driver, webApp, $offsetY="0")
+    UpdateRelStyle(admin, webApp, $offsetY="30")
+    UpdateRelStyle(webApp, geolocatorService, $offsetX="30")
+    UpdateRelStyle(webApp, backgroundJobs, $offsetY="15")
+    
+    UpdateElementStyle(webApp, $bgColor="#3B7EA1", $fontColor="#ffffff")
+    UpdateElementStyle(backgroundJobs, $bgColor="#3B7EA1", $fontColor="#ffffff")
+    UpdateElementStyle(database, $bgColor="#408E3A", $fontColor="#ffffff")
+    UpdateElementStyle(geolocatorService, $bgColor="#999999")
+    
+    UpdateElementStyle(customer, $bgColor="#08427B")
+    UpdateElementStyle(driver, $bgColor="#08427B")
+    UpdateElementStyle(admin, $bgColor="#08427B")
+    
