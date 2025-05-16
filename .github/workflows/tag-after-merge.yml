@@ -19,7 +19,6 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-          tags: true
 
       - name: Determine Version Number
         run: |

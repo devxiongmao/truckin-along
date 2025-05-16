@@ -1,0 +1,45 @@
+name: "setup-ruby"
+description: "Setup Ruby and checkout code"
+
+inputs:
+  ruby-version:
+    description: "Ruby version to use"
+    required: false
+    default: ".ruby-version"
+  bundler-cache:
+    description: "Use bundler cache"
+    required: false
+    default: "true"
+  fetch-depth:
+    description: "Fetch depth for checkout"
+    required: false
+    default: "1"
+  fetch-tags:
+    description: "Fetch tags"
+    required: false
+    default: "false"
+  ref:
+    description: "Reference to checkout"
+    required: false
+    default: ""
+  token:
+    description: "GitHub token"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        fetch-tags: ${{ inputs.fetch-tags == 'true' }}
+        ref: ${{ inputs.ref }}
+        token: ${{ inputs.token != '' && inputs.token || github.token }}
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+        bundler-cache: ${{ inputs.bundler-cache == 'true' }}
