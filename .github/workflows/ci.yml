@@ -150,15 +150,7 @@ jobs:
     if: needs.analyze_changes.outputs.backend_changes == 'true' || startsWith(github.head_ref, 'release-')
     timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager --skip-files script/determine_app_version.rb
 
@@ -168,15 +160,7 @@ jobs:
     if: needs.analyze_changes.outputs.frontend_changes == 'true' || startsWith(github.head_ref, 'release-')
     timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
@@ -186,9 +170,7 @@ jobs:
     if: needs.analyze_changes.outputs.frontend_changes == 'true' || startsWith(github.head_ref, 'release-')
     timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      - uses: ./.github/actions/setup-ruby
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -207,15 +189,7 @@ jobs:
     if: needs.analyze_changes.outputs.backend_changes == 'true' || startsWith(github.head_ref, 'release-')
     timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+      - uses: ./.github/actions/setup-ruby
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
@@ -245,17 +219,9 @@ jobs:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-ruby
         with:
-          fetch-depth: 0
-          tags: true
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+          fetch-tags: true
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@latest
@@ -319,19 +285,11 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-ruby
         with:
-          fetch-depth: 0
+          fetch-tags: true
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          tags: true
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
 
       - name: Generate Changelog
         run: |
