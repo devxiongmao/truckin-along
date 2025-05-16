@@ -11,7 +11,7 @@ class ScheduleDelivery < ApplicationService
 
 
   def run
-    return error("Please select a truck.") unless (truck = Truck.find_by(id: @truck_id))
+    return error("Please select a trucks.") unless (truck = Truck.find_by(id: @truck_id))
     shipments = find_shipments
     return error("Please select at least one shipment.") if shipments.empty?
 
