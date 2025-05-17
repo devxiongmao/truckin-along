@@ -2,15 +2,27 @@
 install:
 	gem install bundler
 	bundle install
-	npm install
+	pnpm install
 
 .PHONY: dev
 dev:
 	redis-server & sidekiq & rails s
 
-.PHONY: migrate
-migrate:
+.PHONY: db-create
+db-create:
+	rails db:create
+
+.PHONY: db-migrate
+db-migrate:
 	rails db:migrate
+
+.PHONY: db-drop
+db-drop:
+	rails db:drop
+
+.PHONY: db-seed
+db-seed:
+	rails db:seed
 
 .PHONY: network_dev
 network_dev:
