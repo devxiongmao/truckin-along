@@ -1,7 +1,8 @@
-### From v1.5.3 to HEAD
+### From v1.5.4 to HEAD
 
-- Bump kamal from 2.5.3 to 2.6.1 (#292) (34d6633) by dependabot[bot]
-- Bump bootsnap from 1.18.4 to 1.18.6 (#291) (4683ac2) by dependabot[bot]
+- XMDEV-303: Updates README, app config, makefile and switches to pnpm (#296) (41a1db6) by Jon
+- XMDEV-315: Removes Home Address from Admin driver edit view (#289) (89b84cd) by Jon
+- XMDEV-320: Adds decision doc around e2e testing framework (#288) (e3da591) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
