@@ -1,6 +1,6 @@
 # 🚛 Truckin' Along
 
-Truckin' Along is a comprehensive Rails application designed to revolutionize truck management, deliveries, and logistics operations. It provides an intuitive interface for managing trucks, drivers, and routes while ensuring robust functionality, real-time tracking, and enterprise-grade scalability.
+Truckin' Along is a comprehensive Rails application designed to revolutionize shipping and package delivery, truck management, and logistics operations. It provides an intuitive interface for managing shipments, trucks, drivers, and routes while ensuring robust functionality, real-time tracking, and enterprise-grade scalability.
 
 [![Ruby Version](https://img.shields.io/badge/ruby-3.x-red.svg)](https://www.ruby-lang.org/)
 [![Rails Version](https://img.shields.io/badge/rails-8.x-brightgreen.svg)](https://rubyonrails.org/)
@@ -13,7 +13,6 @@ Truckin' Along is a comprehensive Rails application designed to revolutionize tr
 ### For Shippers & Customers
 
 - **Shipment Creation & Management**: Create, edit, and manage shipments through an intuitive dashboard
-- **Real-Time Tracking**: Monitor delivery status with live updates and estimated arrival times
 - **Delivery Notifications**: Receive automated alerts at key delivery milestones
 - **Historical Analytics**: Access comprehensive shipment history and performance metrics
 - **Document Management**: Upload and store shipping documents securely in one place
@@ -21,7 +20,6 @@ Truckin' Along is a comprehensive Rails application designed to revolutionize tr
 ### For Trucking Companies & Carriers
 
 - **Shipment Marketplace**: Browse and claim available shipments based on routes and capacity
-- **Intelligent Route Optimization**: Maximize efficiency with AI-powered route suggestions
 - **Fleet Management**: Comprehensive tools for truck maintenance scheduling and tracking
 - **Driver Management**: Streamline driver assignments, documentation, and performance monitoring
 - **Automated Status Updates**: Configure preferences for automatic shipment status reporting
@@ -29,10 +27,9 @@ Truckin' Along is a comprehensive Rails application designed to revolutionize tr
 
 ### System Capabilities
 
-- **API Integration**: Connect with external systems, GPS trackers, and industry platforms
+- **API Integration**: Connect with external systems for geolocation positioning
 - **Role-Based Access Control**: Granular permission settings for diverse user types
 - **Multi-tenant Architecture**: Support for multiple companies with data isolation
-- **Advanced Reporting**: Generate custom reports for operational insights
 - **Mobile Responsiveness**: Full functionality across desktop and mobile devices
 
 ---
@@ -43,8 +40,8 @@ To get started, ensure you have the following installed on your system:
 
 - **Ruby**: `3.x` or newer
 - **Rails**: `8.x` or newer
-- **Node.js**: `14.x` or newer
-- **Yarn** or **npm**
+- **Node.js**: `23.x` or newer
+- **Yarn** or **pnpm**
 - **PostgreSQL** (or another supported database)
 - **Docker & Docker Compose** (for containerized development)
 
@@ -63,40 +60,27 @@ cd truckin-along
 
 ### 2. Install Ruby Gems
 
-Install all the required Ruby dependencies using Bundler:
+Install all the required JavaScript and Ruby dependencies using Make:
 
 ```bash
-bundle install
+make install
 ```
 
-### 3. Install JavaScript Dependencies
-
-If you are using Yarn, run:
-
-```bash
-yarn install
-```
-
-If you are using npm, run:
-
-```bash
-npm install
-```
-
-### 4. Setup the Database
+### 3. Setup the Database
 
 Create and migrate the database:
 
 ```bash
-bin/rails db:create db:migrate
+make db-setup
+make db-migrate
 ```
 
-### 5. Start the Rails Server
+### 4. Start the Rails Server
 
 Run the Rails development server:
 
 ```bash
-bin/rails server
+make dev
 ```
 
 Visit the app in your browser at http://localhost:3000.
@@ -165,15 +149,18 @@ make d_stop
 Truckin' Along uses RSpec for testing. Run the test suite with:
 
 ```bash
-bundle exec rspec
+make b-test
+make f-test
 ```
 
-### Run Linters
+### Run Quality Checks
 
-Ensure your code adheres to style guidelines with Rubocop:
+Ensure your code adheres to style/security guidelines with Rubocop:
 
 ```bash
-bundle exec rubocop
+make rubocop
+make scan-ruby
+make scan-js
 ```
 
 ---
@@ -186,19 +173,20 @@ bundle exec rubocop
 - **PostgreSQL**: Robust relational database
 - **Sidekiq**: Background job processing
 - **Redis**: In-memory data structure store
-- **REST & GraphQL APIs**: Flexible data access options
 
 ### Frontend
 
 - **Hotwire (Turbo & Stimulus)**: Modern, minimal-JavaScript approach
-- **TailwindCSS**: Utility-first CSS framework
 - **Import Maps**: Streamlined JavaScript dependency management
 
 ### Testing & Quality
 
-- **RSpec**: Comprehensive testing framework
+- **RSpec**: Comprehensive testing framework for Ruby
+- **Vitest**: Comprehensive testing framework for JavaScript
+- **WDIO Tests**: End-to-end (E2E) and browser automation testing using WebdriverIO (Cucumber)
 - **Factory Bot**: Test data generation
 - **Rubocop**: Code style enforcement
+- **Brakeman**: Static analysis security scanner for Ruby on Rails applications
 - **GitHub Actions**: CI/CD pipeline integration
 
 ### Deployment

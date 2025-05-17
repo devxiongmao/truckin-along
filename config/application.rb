@@ -26,16 +26,20 @@ module TruckinAlong
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
     config.after_initialize do
       # Remove production check when ready
-      unless Rails.env.test? || Rails.env.production?
+      unless Rails.env.test? || Rails.env.production? || defined?(Rails::Console) || (File.basename($PROGRAM_NAME) == "rake" && ARGV.any? { |arg| arg.start_with?("db:") })
         schedule_file = Rails.root.join("config/sidekiq.yml")
+
         if File.exist?(schedule_file)
           config = YAML.load_file(schedule_file)
           jobs = config["schedule"] || {}
-          Sidekiq::Cron::Job.load_from_hash(jobs)
-          puts "Cron jobs loaded: #{Sidekiq::Cron::Job.all.size}"
+          begin
+            Sidekiq::Cron::Job.load_from_hash(jobs)
+            puts "Cron jobs loaded: #{Sidekiq::Cron::Job.all.size}"
+          rescue RedisClient::CannotConnectError => e
+            puts "Redis not available, skipping cron job load. #{e.message}"
+          end
         end
       end
     end
