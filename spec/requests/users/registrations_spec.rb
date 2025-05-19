@@ -27,9 +27,9 @@ RSpec.describe "Users::RegistrationsController", type: :request do
         expect(user.role).to eq("admin")
       end
 
-      it "redirects to the root path (default Devise behavior after signup)" do
+      it "redirects to the dashboard path" do
         post user_registration_path, params: { user: valid_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
     end
 
