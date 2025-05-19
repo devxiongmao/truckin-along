@@ -41,7 +41,7 @@ To get started, ensure you have the following installed on your system:
 - **Ruby**: `3.x` or newer
 - **Rails**: `8.x` or newer
 - **Node.js**: `23.x` or newer
-- **Yarn** or **pnpm**
+- **pnpm**: `10.x` or newer
 - **PostgreSQL** (or another supported database)
 - **Docker & Docker Compose** (for containerized development)
 
