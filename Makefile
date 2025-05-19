@@ -38,7 +38,7 @@ b-test:
 
 .PHONY: f-test
 f-test:
-	yarn test
+	pnpm test
 
 .PHONY: scan-ruby
 scan-ruby:
