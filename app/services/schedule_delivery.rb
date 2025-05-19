@@ -46,14 +46,19 @@ class ScheduleDelivery < ApplicationService
   end
 
   def create_delivery_shipments(shipments)
-    shipments.each do |shipment|
-      @delivery.delivery_shipments.create!(
+    shipment_attributes = shipments.map do |shipment|
+      {
+        delivery_id: @delivery.id,
         shipment_id: shipment.id,
         sender_address: set_sender_address(shipment),
         receiver_address: set_receiver_address(shipment),
-        loaded_date: Time.now
-      )
+        loaded_date: Time.now,
+        created_at: Time.current,
+        updated_at: Time.current
+      }
     end
+
+    @delivery.delivery_shipments.insert_all!(shipment_attributes)
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to associate shipment: #{e.message}"
     raise e
