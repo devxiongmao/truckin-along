@@ -15,7 +15,7 @@ RSpec.describe "User Authentication", type: :system do
     click_button "Log in"
 
     expect(page).to have_content("Signed in successfully")
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(dashboard_path)
   end
 
   it "rejects invalid credentials" do
