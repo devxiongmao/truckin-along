@@ -1,10 +1,10 @@
-# User Journey: [Title of the Journey]
+# User Journey: Driver Setting A Delivery to be Closed
 
 ## Persona
 
-**Name:** [Example: Taylor]  
-**Role:** [e.g., Returning user, first-time visitor, admin, etc.]  
-**Goal:** [What does this user want to accomplish?]
+**Name:** Peter Parker, a person matching our standard trucking professional profile
+**Role:** A registered driver on Truckin' Along that's currently out on a delivery
+**Goal:** Mark a shipment delivery complete.
 
 ---
 

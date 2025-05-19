@@ -1,10 +1,10 @@
-# User Journey: [Title of the Journey]
+# User Journey: Trucking Company Loading a Shipment to a Truck
 
 ## Persona
 
-**Name:** [Example: Taylor]  
-**Role:** [e.g., Returning user, first-time visitor, admin, etc.]  
-**Goal:** [What does this user want to accomplish?]
+**Name:** Peter Parker, a person matching our standard trucking professional profile
+**Role:** A driver or admin tied to a trucking company that uses the app.
+**Goal:** To load a given shipment onto a truck
 
 ---
 

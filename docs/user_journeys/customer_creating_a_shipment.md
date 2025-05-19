@@ -1,10 +1,10 @@
-# User Journey: [Title of the Journey]
+# User Journey: Customer Creating a Shipment
 
 ## Persona
 
-**Name:** [Example: Taylor]  
-**Role:** [e.g., Returning user, first-time visitor, admin, etc.]  
-**Goal:** [What does this user want to accomplish?]
+**Name:** John Doe, a person matching our standard customer profile
+**Role:** Customer
+**Goal:** Create and ship a shipment through Truckin' Along
 
 ---
 
