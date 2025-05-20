@@ -1,5 +1,5 @@
 <h3>Completed Trips</h3>
-
+<% if @deliveries.present? %>
 <table class="styled-table">
   <thead>
     <tr>
@@ -24,3 +24,12 @@
     <% end %>
   </tbody>
 </table>
+<% else %>
+<div class="empty-state-container">
+  <div class="empty-state-content">
+    <h4>Seems a little quiet here...</h4>
+    <p>Head over to the deliveries page to start.... Truckin' Along!</p>
+    <%= link_to "Start First Delivery", start_deliveries_path, class: "primary-button" %>
+  </div>
+</div>
+<% end %>
