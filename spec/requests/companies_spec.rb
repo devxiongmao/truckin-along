@@ -62,9 +62,9 @@ RSpec.describe "/companies", type: :request do
           expect(valid_user.reload.company).to eq(Company.last)
         end
 
-        it "redirects to the root page" do
+        it "redirects to the dashboard page" do
           post companies_url, params: { company: valid_attributes }
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(dashboard_url)
         end
 
         it 'renders the correct flash response' do
@@ -144,9 +144,9 @@ RSpec.describe "/companies", type: :request do
       end
 
       context "when the company is not found" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get edit_company_url(99999)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders the correct flash alert' do
@@ -169,9 +169,9 @@ RSpec.describe "/companies", type: :request do
           expect(company.address).to eq("456 Updated Street")
         end
 
-        it "redirects to the edit page for the company" do
+        it "redirects to the dashboard page" do
           patch company_url(company), params: { company: new_attributes }
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(dashboard_url)
         end
       end
 
