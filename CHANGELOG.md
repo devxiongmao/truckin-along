@@ -1,8 +1,10 @@
-### From v1.5.4 to HEAD
+### From v1.5.5 to HEAD
 
-- XMDEV-303: Updates README, app config, makefile and switches to pnpm (#296) (41a1db6) by Jon
-- XMDEV-315: Removes Home Address from Admin driver edit view (#289) (89b84cd) by Jon
-- XMDEV-320: Adds decision doc around e2e testing framework (#288) (e3da591) by Jon
+- XMDEV-319: Redirect to dashboard after creating and updating a company (#302) (0eac818) by Jon
+- XMDEV-325: Adds buttons to dashboard page when there are no shipments (#301) (0b444e6) by Jon
+- XMDEV-316: Adds redirect on sign up and login to my dashboard page (#300) (7285ce1) by Jon
+- XMDEV-324: Removes yarn.lock and switches to solely pnpm (#299) (16eef4d) by Jon
+- XMDEV-322: Updates the schedule delivery service to create the delivery_shipments faster (#298) (0ecf46f) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
