@@ -15,7 +15,7 @@ class CompaniesController < ApplicationController
       current_user.save
       setup_company_defaults(@company)
       flash[:notice] = "Company created successfully."
-      redirect_to root_path
+      redirect_to dashboard_path
     else
       flash.now[:alert] = "Failed to create company."
       render :new, status: :unprocessable_entity
@@ -30,7 +30,7 @@ class CompaniesController < ApplicationController
     authorize @company
     if @company.update(company_params)
       flash[:notice] = "Company updated successfully."
-      redirect_to root_path
+      redirect_to dashboard_path
     else
       flash.now[:alert] = "Failed to update company."
       render :edit, status: :unprocessable_entity
@@ -43,7 +43,7 @@ class CompaniesController < ApplicationController
     @company = Company.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Company not found."
-    redirect_to root_path
+    redirect_to dashboard_path
   end
 
   def company_params
