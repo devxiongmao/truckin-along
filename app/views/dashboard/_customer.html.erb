@@ -1,5 +1,6 @@
 <h3>My Customer Shipments</h3>
 
+<% if @shipments.present? %>
 <table class="styled-table">
   <thead>
     <tr>
@@ -31,3 +32,12 @@
     <% end %>
   </tbody>
 </table>
+<% else %>
+<div class="empty-state-container">
+  <div class="empty-state-content">
+    <h4>Seems a little quiet here...</h4>
+    <p>Head over to the shipments page to get some shipments.... Truckin' Along!</p>
+    <%= link_to "Create First Shipment", new_shipment_path, class: "primary-button" %>
+  </div>
+</div>
+<% end %>
