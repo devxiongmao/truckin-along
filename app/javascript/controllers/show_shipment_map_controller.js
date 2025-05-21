@@ -7,7 +7,8 @@ export default class extends Controller {
     receiverLat: Number,
     receiverLng: Number,
     senderAddress: String,
-    receiverAddress: String
+    receiverAddress: String,
+    additionalCoordinates: Array
   }
 
   hasValidCoordinates() {
@@ -26,7 +27,7 @@ export default class extends Controller {
   }
 
   initMap() {
-    // Calculate center point
+    // Calculate center point for the main route
     const centerLat = (this.senderLatValue + this.receiverLatValue) / 2;
     const centerLng = (this.senderLngValue + this.receiverLngValue) / 2;
     
@@ -38,19 +39,65 @@ export default class extends Controller {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     
-    // Add markers for sender and receiver
+    // Create bounds to encompass all points
+    const allPoints = [
+      [this.senderLatValue, this.senderLngValue],
+      [this.receiverLatValue, this.receiverLngValue]
+    ];
+    
+    // Add markers for main sender and receiver
     const senderMarker = L.marker([this.senderLatValue, this.senderLngValue]).addTo(map);
     senderMarker.bindPopup("<b>Pickup Location</b><br>" + this.senderAddressValue);
     
     const receiverMarker = L.marker([this.receiverLatValue, this.receiverLngValue]).addTo(map);
     receiverMarker.bindPopup("<b>Delivery Location</b><br>" + this.receiverAddressValue);
     
-    // Fit the map to show both markers
-    const bounds = L.latLngBounds([
+    // Draw the main route in blue
+    const mainRoute = L.polyline([
       [this.senderLatValue, this.senderLngValue],
       [this.receiverLatValue, this.receiverLngValue]
-    ]);
+    ], { color: 'blue', weight: 3 }).addTo(map);
+    
+    // Process additional coordinates if available
+    
+    if (this.hasAdditionalCoordinatesValue && this.additionalCoordinatesValue.length > 0) {
+      this.additionalCoordinatesValue.forEach((coord, index) => {
+        // Check if this additional coordinate has valid data
+          console.log(this.isValidAdditionalCoordinate(coord))
+
+        if (this.isValidAdditionalCoordinate(coord)) {
+          // Add to the bounds calculation
+          allPoints.push([coord.senderLat, coord.senderLng]);
+          allPoints.push([coord.receiverLat, coord.receiverLng]);
+          
+          // Add markers for this segment
+          const segmentSenderMarker = L.marker([coord.senderLat, coord.senderLng]).addTo(map);
+          segmentSenderMarker.bindPopup(`<b>Waypoint ${index + 1}</b><br>${coord.senderAddress}`);
+          
+          const segmentReceiverMarker = L.marker([coord.receiverLat, coord.receiverLng]).addTo(map);
+          segmentReceiverMarker.bindPopup(`<b>Waypoint ${index + 2}</b><br>${coord.receiverAddress}`);
+          
+          // Draw this segment route in red
+          const segmentRoute = L.polyline([
+            [coord.senderLat, coord.senderLng],
+            [coord.receiverLat, coord.receiverLng]
+          ], { color: 'red', weight: 2 }).addTo(map);
+        }
+      });
+    }
+    
+    // Fit the map to show all markers
+    const bounds = L.latLngBounds(allPoints);
     map.fitBounds(bounds, { padding: [50, 50] });
+  }
+  
+  isValidAdditionalCoordinate(coord) {
+    console.log(coord)
+    return coord &&
+           typeof coord.senderLat === 'number' && typeof coord.senderLng === 'number' &&
+           typeof coord.receiverLat === 'number' && typeof coord.receiverLng === 'number' &&
+           coord.senderLat !== 0 && coord.senderLng !== 0 &&
+           coord.receiverLat !== 0 && coord.receiverLng !== 0;
   }
 
   showError() {
