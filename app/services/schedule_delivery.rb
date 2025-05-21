@@ -58,7 +58,8 @@ class ScheduleDelivery < ApplicationService
       }
     end
 
-    @delivery.delivery_shipments.insert_all!(shipment_attributes)
+    inserted = @delivery.delivery_shipments.insert_all!(shipment_attributes, returning: %w[id])
+    GeocodeDeliveryShipmentsJob.perform_later(inserted.pluck("id"))
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to associate shipment: #{e.message}"
     raise e

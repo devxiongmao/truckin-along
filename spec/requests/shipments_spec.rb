@@ -921,6 +921,12 @@ RSpec.describe "/shipments", type: :request do
           expect(flash[:notice]).to eq("Shipments successfully assigned to truck.")
         end
 
+        it "enqueues a geocode job" do
+          expect {
+            post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
+          }.to have_enqueued_job(GeocodeDeliveryShipmentsJob)
+        end
+
         describe "when a shipment action preference exists" do
           let(:shipment_status) { create(:shipment_status, company: company) }
           let!(:company_preference) { create(:shipment_action_preference, action: "loaded_onto_truck", company: company, shipment_status: shipment_status) }
