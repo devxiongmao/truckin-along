@@ -43,7 +43,7 @@ module ShipmentsHelper
   def prep_delivery_shipments_json(shipment)
     shipment.delivery_shipments.map do |delivery_shipment|
       {
-        senderLat: delivery_shipment.sender_latitude, 
+        senderLat: delivery_shipment.sender_latitude,
         senderLng: delivery_shipment.sender_longitude,
         receiverLat: delivery_shipment.receiver_latitude,
         receiverLng: delivery_shipment.receiver_longitude,
