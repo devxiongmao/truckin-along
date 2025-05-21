@@ -59,12 +59,9 @@ export default class extends Controller {
     ], { color: 'blue', weight: 3 }).addTo(map);
     
     // Process additional coordinates if available
-    
     if (this.hasAdditionalCoordinatesValue && this.additionalCoordinatesValue.length > 0) {
       this.additionalCoordinatesValue.forEach((coord, index) => {
         // Check if this additional coordinate has valid data
-          console.log(this.isValidAdditionalCoordinate(coord))
-
         if (this.isValidAdditionalCoordinate(coord)) {
           // Add to the bounds calculation
           allPoints.push([coord.senderLat, coord.senderLng]);
@@ -92,7 +89,6 @@ export default class extends Controller {
   }
   
   isValidAdditionalCoordinate(coord) {
-    console.log(coord)
     return coord &&
            typeof coord.senderLat === 'number' && typeof coord.senderLng === 'number' &&
            typeof coord.receiverLat === 'number' && typeof coord.receiverLng === 'number' &&

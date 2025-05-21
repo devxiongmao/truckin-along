@@ -41,15 +41,15 @@ module ShipmentsHelper
   end
 
   def prep_delivery_shipments_json(shipment)
-  shipment.delivery_shipments.map do |delivery_shipment|
-    {
-      senderLat: delivery_shipment.sender_latitude, 
-      senderLng: delivery_shipment.sender_longitude,
-      receiverLat: delivery_shipment.receiver_latitude,
-      receiverLng: delivery_shipment.receiver_longitude,
-      senderAddress: delivery_shipment.sender_address,
-      receiverAddress: delivery_shipment.receiver_address
-    }
-  end.to_json
-end
+    shipment.delivery_shipments.map do |delivery_shipment|
+      {
+        senderLat: delivery_shipment.sender_latitude, 
+        senderLng: delivery_shipment.sender_longitude,
+        receiverLat: delivery_shipment.receiver_latitude,
+        receiverLng: delivery_shipment.receiver_longitude,
+        senderAddress: delivery_shipment.sender_address,
+        receiverAddress: delivery_shipment.receiver_address
+      }
+    end.to_json
+  end
 end
