@@ -52,6 +52,12 @@ RSpec.describe ScheduleDelivery, type: :service do
         expect(delivery.delivery_shipments.last.sender_address).to eq(delivery_shipment.receiver_address)
       end
 
+      it "enqueus a job to geocode delivery shipments" do
+        expect {
+          subject.run
+        }.to have_enqueued_job(GeocodeDeliveryShipmentsJob)
+      end
+
       it "returns true" do
         expect(subject.run).to eq(true)
       end
