@@ -25,6 +25,9 @@ describe("ShipmentShowMapController", () => {
   }
 
   beforeEach(() => {
+    // Clear all mocks before each test
+    vi.clearAllMocks();
+    
     mockLeaflet = {
       map: vi.fn().mockReturnValue({
         setView: vi.fn().mockReturnThis(),
@@ -37,6 +40,9 @@ describe("ShipmentShowMapController", () => {
       marker: vi.fn().mockReturnValue({
         addTo: vi.fn().mockReturnThis(),
         bindPopup: vi.fn().mockReturnThis()
+      }),
+      polyline: vi.fn().mockReturnValue({
+        addTo: vi.fn().mockReturnThis()
       }),
       latLngBounds: vi.fn().mockReturnValue("mockBounds")
     };
@@ -177,6 +183,18 @@ describe("ShipmentShowMapController", () => {
       expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Los Angeles, CA"));
     });
 
+    it("draws the main route polyline in blue", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "show-shipment-map");
+
+      controller.initMap();
+
+      expect(mockLeaflet.polyline).toHaveBeenCalledWith([
+        [40.7128, -74.0060],
+        [34.0522, -118.2437]
+      ], { color: 'blue', weight: 3 });
+      expect(mockLeaflet.polyline().addTo).toHaveBeenCalled();
+    });
+
     it("fits the map bounds to show both markers", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "show-shipment-map");
 
@@ -187,6 +205,223 @@ describe("ShipmentShowMapController", () => {
         [34.0522, -118.2437]
       ]);
       expect(mockLeaflet.map().fitBounds).toHaveBeenCalledWith("mockBounds", { padding: [50, 50] });
+    });
+
+    describe("with additional coordinates", () => {
+      it("adds markers and polylines for additional coordinate segments", async () => {
+        const additionalCoordinates = [
+          {
+            senderLat: 41.8781,
+            senderLng: -87.6298,
+            receiverLat: 39.7392,
+            receiverLng: -104.9903,
+            senderAddress: "Chicago, IL",
+            receiverAddress: "Denver, CO"
+          }
+        ];
+
+        const { controller } = await setupNewController(`
+          <div 
+            data-controller="show-shipment-map"
+            data-show-shipment-map-sender-lat-value="40.7128"
+            data-show-shipment-map-sender-lng-value="-74.0060"
+            data-show-shipment-map-receiver-lat-value="34.0522"
+            data-show-shipment-map-receiver-lng-value="-118.2437"
+            data-show-shipment-map-sender-address-value="New York, NY"
+            data-show-shipment-map-receiver-address-value="Los Angeles, CA"
+            data-show-shipment-map-additional-coordinates-value='${JSON.stringify(additionalCoordinates)}'>
+          </div>
+        `);
+
+        // Check that additional markers were added
+        expect(mockLeaflet.marker).toHaveBeenCalledWith([41.8781, -87.6298]);
+        expect(mockLeaflet.marker).toHaveBeenCalledWith([39.7392, -104.9903]);
+
+        // Check that waypoint popups were bound
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 1"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Chicago, IL"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 2"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Denver, CO"));
+
+        // Check that additional polyline was drawn in red
+        expect(mockLeaflet.polyline).toHaveBeenCalledWith([
+          [41.8781, -87.6298],
+          [39.7392, -104.9903]
+        ], { color: 'red', weight: 2 });
+
+        // Check that bounds include additional coordinates
+        expect(mockLeaflet.latLngBounds).toHaveBeenCalledWith([
+          [40.7128, -74.0060],  // main sender
+          [34.0522, -118.2437], // main receiver
+          [41.8781, -87.6298],  // additional sender
+          [39.7392, -104.9903]  // additional receiver
+        ]);
+      });
+
+      it("handles multiple additional coordinate segments", async () => {
+        vi.clearAllMocks();
+
+        const additionalCoordinates = [
+          {
+            senderLat: 41.8781,
+            senderLng: -87.6298,
+            receiverLat: 39.7392,
+            receiverLng: -104.9903,
+            senderAddress: "Chicago, IL",
+            receiverAddress: "Denver, CO"
+          },
+          {
+            senderLat: 47.6062,
+            senderLng: -122.3321,
+            receiverLat: 45.5152,
+            receiverLng: -122.6784,
+            senderAddress: "Seattle, WA",
+            receiverAddress: "Portland, OR"
+          }
+        ];
+
+        const { controller } = await setupNewController(`
+          <div 
+            data-controller="show-shipment-map"
+            data-show-shipment-map-sender-lat-value="40.7128"
+            data-show-shipment-map-sender-lng-value="-74.0060"
+            data-show-shipment-map-receiver-lat-value="34.0522"
+            data-show-shipment-map-receiver-lng-value="-118.2437"
+            data-show-shipment-map-sender-address-value="New York, NY"
+            data-show-shipment-map-receiver-address-value="Los Angeles, CA"
+            data-show-shipment-map-additional-coordinates-value='${JSON.stringify(additionalCoordinates)}'>
+          </div>
+        `);
+
+        // Should have 6 markers total (2 main + 4 additional)
+        expect(mockLeaflet.marker).toHaveBeenCalledTimes(6);
+
+        // Should have 3 polylines total (1 main + 2 additional)
+        expect(mockLeaflet.polyline).toHaveBeenCalledTimes(3);
+
+        // Check waypoint numbering - note that "Waypoint 2" appears twice due to the controller's numbering logic
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 1"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 2"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 3"));
+        
+        // Check that addresses are included in popups
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Chicago, IL"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Denver, CO"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Seattle, WA"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Portland, OR"));
+      });
+
+      it("skips invalid additional coordinates", async () => {
+        vi.clearAllMocks();
+
+        const additionalCoordinates = [
+          {
+            senderLat: 0,  // Invalid - zero coordinate
+            senderLng: -87.6298,
+            receiverLat: 39.7392,
+            receiverLng: -104.9903,
+            senderAddress: "Chicago, IL",
+            receiverAddress: "Denver, CO"
+          },
+          {
+            senderLat: 47.6062,
+            senderLng: -122.3321,
+            receiverLat: 45.5152,
+            receiverLng: -122.6784,
+            senderAddress: "Seattle, WA",
+            receiverAddress: "Portland, OR"
+          }
+        ];
+
+        const { controller } = await setupNewController(`
+          <div 
+            data-controller="show-shipment-map"
+            data-show-shipment-map-sender-lat-value="40.7128"
+            data-show-shipment-map-sender-lng-value="-74.0060"
+            data-show-shipment-map-receiver-lat-value="34.0522"
+            data-show-shipment-map-receiver-lng-value="-118.2437"
+            data-show-shipment-map-sender-address-value="New York, NY"
+            data-show-shipment-map-receiver-address-value="Los Angeles, CA"
+            data-show-shipment-map-additional-coordinates-value='${JSON.stringify(additionalCoordinates)}'>
+          </div>
+        `);
+
+        // Should only process the valid segment (4 markers total: 2 main + 2 from valid segment)
+        expect(mockLeaflet.marker).toHaveBeenCalledTimes(4);
+        expect(mockLeaflet.polyline).toHaveBeenCalledTimes(2); // 1 main + 1 valid additional
+
+        // Should not include invalid coordinates in bounds
+        expect(mockLeaflet.latLngBounds).toHaveBeenCalledWith([
+          [40.7128, -74.0060],  // main sender
+          [34.0522, -118.2437], // main receiver
+          [47.6062, -122.3321], // valid additional sender
+          [45.5152, -122.6784]  // valid additional receiver
+        ]);
+      });
+    });
+  });
+
+  describe("isValidAdditionalCoordinate", () => {
+    let controller;
+
+    beforeEach(() => {
+      controller = application.getControllerForElementAndIdentifier(container, "show-shipment-map");
+    });
+
+    it("returns true for valid coordinates", () => {
+      const validCoord = {
+        senderLat: 41.8781,
+        senderLng: -87.6298,
+        receiverLat: 39.7392,
+        receiverLng: -104.9903,
+        senderAddress: "Chicago, IL",
+        receiverAddress: "Denver, CO"
+      };
+
+      expect(controller.isValidAdditionalCoordinate(validCoord)).toBe(true);
+    });
+
+    it("returns false for null or undefined coordinates", () => {
+      expect(controller.isValidAdditionalCoordinate(null)).toBe(null);
+      expect(controller.isValidAdditionalCoordinate(undefined)).toBe(undefined);
+    });
+
+    it("returns false when any coordinate is zero", () => {
+      const coordWithZero = {
+        senderLat: 0,
+        senderLng: -87.6298,
+        receiverLat: 39.7392,
+        receiverLng: -104.9903,
+        senderAddress: "Chicago, IL",
+        receiverAddress: "Denver, CO"
+      };
+
+      expect(controller.isValidAdditionalCoordinate(coordWithZero)).toBe(false);
+    });
+
+    it("returns false when any coordinate is not a number", () => {
+      const coordWithString = {
+        senderLat: "invalid",
+        senderLng: -87.6298,
+        receiverLat: 39.7392,
+        receiverLng: -104.9903,
+        senderAddress: "Chicago, IL",
+        receiverAddress: "Denver, CO"
+      };
+
+      expect(controller.isValidAdditionalCoordinate(coordWithString)).toBe(false);
+    });
+
+    it("returns false when coordinates are missing", () => {
+      const incompleteCoord = {
+        senderLat: 41.8781,
+        senderLng: -87.6298,
+        // missing receiverLat and receiverLng
+        senderAddress: "Chicago, IL",
+        receiverAddress: "Denver, CO"
+      };
+
+      expect(controller.isValidAdditionalCoordinate(incompleteCoord)).toBe(false);
     });
   });
 

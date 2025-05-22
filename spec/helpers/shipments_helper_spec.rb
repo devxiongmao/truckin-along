@@ -189,4 +189,56 @@ RSpec.describe ShipmentsHelper, type: :helper do
       end
     end
   end
+
+  describe "#prep_delivery_shipments_json" do
+    let(:shipment) { create(:shipment) }
+
+    let!(:delivery_shipment1) do
+      create(:delivery_shipment,
+        shipment: shipment,
+        sender_latitude: 40.7128,
+        sender_longitude: -74.0060,
+        receiver_latitude: 34.0522,
+        receiver_longitude: -118.2437,
+        sender_address: "New York, NY",
+        receiver_address: "Los Angeles, CA"
+      )
+    end
+
+    let!(:delivery_shipment2) do
+      create(:delivery_shipment,
+        shipment: shipment,
+        sender_latitude: 37.7749,
+        sender_longitude: -122.4194,
+        receiver_latitude: 47.6062,
+        receiver_longitude: -122.3321,
+        sender_address: "San Francisco, CA",
+        receiver_address: "Seattle, WA"
+      )
+    end
+
+    it "returns correct JSON structure for all delivery_shipments" do
+      result = JSON.parse(helper.prep_delivery_shipments_json(shipment))
+
+      expect(result.size).to eq(2)
+
+      expect(result[0]).to include(
+        "senderLat" => a_kind_of(Float),
+        "senderLng" => a_kind_of(Float),
+        "receiverLat" => a_kind_of(Float),
+        "receiverLng" => a_kind_of(Float),
+        "senderAddress" => "New York, NY",
+        "receiverAddress" => "Los Angeles, CA"
+      )
+
+      expect(result[1]).to include(
+        "senderLat" => a_kind_of(Float),
+        "senderLng" => a_kind_of(Float),
+        "receiverLat" => a_kind_of(Float),
+        "receiverLng" => a_kind_of(Float),
+        "senderAddress" => "San Francisco, CA",
+        "receiverAddress" => "Seattle, WA"
+      )
+    end
+  end
 end
