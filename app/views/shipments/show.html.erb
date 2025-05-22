@@ -3,8 +3,19 @@
   <%= render 'back_button', shipment: @shipment%>
 </div>
 
-<div id="shipment-map" data-controller="show-shipment-map" data-show-shipment-map-sender-lat-value="<%= @shipment.sender_latitude %>" data-show-shipment-map-sender-lng-value="<%= @shipment.sender_longitude %>" data-show-shipment-map-receiver-lat-value="<%= @shipment.receiver_latitude %>" data-show-shipment-map-receiver-lng-value="<%= @shipment.receiver_longitude %>" data-show-shipment-map-sender-address-value="<%= @shipment.sender_address %>" data-show-shipment-map-receiver-address-value="<%= @shipment.receiver_address %>" style="height: 500px; width: 100%;">
-</div>
+<%= tag.div id: "shipment-map",
+            data: {
+              controller: "show-shipment-map",
+              show_shipment_map_sender_lat_value: @shipment.sender_latitude,
+              show_shipment_map_sender_lng_value: @shipment.sender_longitude,
+              show_shipment_map_receiver_lat_value: @shipment.receiver_latitude,
+              show_shipment_map_receiver_lng_value: @shipment.receiver_longitude,
+              show_shipment_map_sender_address_value: @shipment.sender_address,
+              show_shipment_map_receiver_address_value: @shipment.receiver_address,
+              show_shipment_map_additional_coordinates_value: prep_delivery_shipments_json(@shipment)
+            },
+            style: "height: 500px; width: 100%;" %>
+
 <br />
 
 <div class="details-container">
