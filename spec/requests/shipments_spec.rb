@@ -729,6 +729,21 @@ RSpec.describe "/shipments", type: :request do
       let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery, receiver_address: claimed_shipment.receiver_address) }
       let!(:shipment_status) { create(:shipment_status, company: company) }
 
+      context "when the delivery is not in_progress" do
+        let!(:delivery) { create(:delivery, status: :scheduled) }
+        let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery) }
+
+        it "shows the correct alert" do
+          post close_shipment_url(claimed_shipment)
+          expect(flash[:alert]).to eq("Delivery is not in progress.")
+        end
+
+        it "redirects to the delivery show page" do
+          post close_shipment_url(claimed_shipment)
+          expect(response).to redirect_to(delivery_url(claimed_shipment.active_delivery))
+        end
+      end
+
       context "when the receiver address is not the same as within the shipment" do
         let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment, delivery: delivery) }
         it "shows the correct notice" do
