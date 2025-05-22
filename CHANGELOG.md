@@ -1,10 +1,11 @@
-### From v1.5.5 to HEAD
+### From v1.5.6 to HEAD
 
-- XMDEV-319: Redirect to dashboard after creating and updating a company (#302) (0eac818) by Jon
-- XMDEV-325: Adds buttons to dashboard page when there are no shipments (#301) (0b444e6) by Jon
-- XMDEV-316: Adds redirect on sign up and login to my dashboard page (#300) (7285ce1) by Jon
-- XMDEV-324: Removes yarn.lock and switches to solely pnpm (#299) (16eef4d) by Jon
-- XMDEV-322: Updates the schedule delivery service to create the delivery_shipments faster (#298) (0ecf46f) by Jon
+- Bump pnpm/action-setup from 2 to 4 (#304) (be7fd53) by dependabot[bot]
+- Bump vitest from 3.1.3 to 3.1.4 (#305) (26bcd96) by dependabot[bot]
+- XMDEV-302: Updates maps within shipments show to show incremental deliveries (#309) (5c9ff13) by Jon
+- XMDEV-331: Adds async geocode delivery shipments job (#308) (1885335) by Jon
+- XMDEV-327: Updates check on empty shipments array to do conditional map render on load truck page (#307) (40a85d4) by Jon
+- XMDEV-329: Clean up github workflows and make them run on dependacy changes (#306) (b6793e9) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
