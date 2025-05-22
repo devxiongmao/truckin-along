@@ -74,6 +74,9 @@ class ShipmentsController < ApplicationController
 
   def close
     authorize Shipment
+    unless @shipment.latest_delivery_shipment.delivery.in_progress?
+      return redirect_to delivery_path(@shipment.active_delivery), alert: "Delivery is not in progress."
+    end
 
     if @shipment.receiver_address != @shipment.latest_delivery_shipment.receiver_address
       @shipment.latest_delivery_shipment.update!(delivered_date: Time.now)
