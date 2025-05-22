@@ -1,0 +1,27 @@
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #09e80d;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.navbar-links .nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-left: 2rem;
+}
+
+.navbar-links .nav-link:hover {
+  text-decoration: underline;
+}

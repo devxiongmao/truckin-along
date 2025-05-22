@@ -1,0 +1,38 @@
+/* Message Styles */
+.error-messages, .info-message {
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.error-messages {
+  border: 1px solid #f5c6cb;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.info-message {
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  color: #555;
+}
+
+/* Flash Messages */
+.notice {
+  background-color: #28a745; /* Rich green */
+  color: #ffffff; /* White text */
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.alert {
+  background-color: #dc3545; /* Red */
+  color: #000000; /* Black text */
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}

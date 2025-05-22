@@ -6,7 +6,7 @@ install:
 
 .PHONY: dev
 dev:
-	redis-server & sidekiq & rails s
+	redis-server & sidekiq & bin/dev
 
 .PHONY: db-create
 db-create:
