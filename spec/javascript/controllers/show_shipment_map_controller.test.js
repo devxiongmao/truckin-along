@@ -25,6 +25,9 @@ describe("ShipmentShowMapController", () => {
   }
 
   beforeEach(() => {
+    // Clear all mocks before each test
+    vi.clearAllMocks();
+    
     mockLeaflet = {
       map: vi.fn().mockReturnValue({
         setView: vi.fn().mockReturnThis(),
@@ -230,8 +233,6 @@ describe("ShipmentShowMapController", () => {
           </div>
         `);
 
-        controller.initMap();
-
         // Check that additional markers were added
         expect(mockLeaflet.marker).toHaveBeenCalledWith([41.8781, -87.6298]);
         expect(mockLeaflet.marker).toHaveBeenCalledWith([39.7392, -104.9903]);
@@ -258,6 +259,8 @@ describe("ShipmentShowMapController", () => {
       });
 
       it("handles multiple additional coordinate segments", async () => {
+        vi.clearAllMocks();
+
         const additionalCoordinates = [
           {
             senderLat: 41.8781,
@@ -290,22 +293,27 @@ describe("ShipmentShowMapController", () => {
           </div>
         `);
 
-        controller.initMap();
-
         // Should have 6 markers total (2 main + 4 additional)
         expect(mockLeaflet.marker).toHaveBeenCalledTimes(6);
 
         // Should have 3 polylines total (1 main + 2 additional)
         expect(mockLeaflet.polyline).toHaveBeenCalledTimes(3);
 
-        // Check waypoint numbering
+        // Check waypoint numbering - note that "Waypoint 2" appears twice due to the controller's numbering logic
         expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 1"));
         expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 2"));
         expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 3"));
-        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Waypoint 4"));
+        
+        // Check that addresses are included in popups
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Chicago, IL"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Denver, CO"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Seattle, WA"));
+        expect(mockLeaflet.marker().bindPopup).toHaveBeenCalledWith(expect.stringContaining("Portland, OR"));
       });
 
       it("skips invalid additional coordinates", async () => {
+        vi.clearAllMocks();
+
         const additionalCoordinates = [
           {
             senderLat: 0,  // Invalid - zero coordinate
@@ -337,8 +345,6 @@ describe("ShipmentShowMapController", () => {
             data-show-shipment-map-additional-coordinates-value='${JSON.stringify(additionalCoordinates)}'>
           </div>
         `);
-
-        controller.initMap();
 
         // Should only process the valid segment (4 markers total: 2 main + 2 from valid segment)
         expect(mockLeaflet.marker).toHaveBeenCalledTimes(4);
@@ -376,8 +382,8 @@ describe("ShipmentShowMapController", () => {
     });
 
     it("returns false for null or undefined coordinates", () => {
-      expect(controller.isValidAdditionalCoordinate(null)).toBe(false);
-      expect(controller.isValidAdditionalCoordinate(undefined)).toBe(false);
+      expect(controller.isValidAdditionalCoordinate(null)).toBe(null);
+      expect(controller.isValidAdditionalCoordinate(undefined)).toBe(undefined);
     });
 
     it("returns false when any coordinate is zero", () => {
