@@ -1,0 +1,38 @@
+/* Base Reset and Global Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333; /* Neutral text color */
+}
+
+/* Common Link Styles */
+a, .action-link {
+  color: #09e80d; /* Light green */
+  text-decoration: none;
+}
+
+.warning-link {
+  background-color: rgb(255, 140, 0);
+  text-decoration: none;
+}
+
+a:hover, .action-link:hover {
+  text-decoration: underline;
+}
+
+.action-link.danger-link {
+  color: #dc3545; /* Red for destructive actions */
+}
+
+.action-link.danger-link:hover {
+  color: #c82333; /* Darker red on hover */
+  text-decoration: underline;
+}
+
+.nav-no-style-link {
+  text-decoration: none;
+  color: inherit;
+  font: inherit; 
+}

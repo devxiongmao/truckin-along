@@ -1,0 +1,66 @@
+/* Form Styles */
+.styled-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 95%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-select {
+  width: auto; /* Adjust width as needed */
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-input:focus {
+  border-color: #09e80d;
+  outline: none;
+  box-shadow: 0 0 5px rgba(9, 232, 13, 0.5);
+}
+
+.form-select option {
+  white-space: normal; 
+  overflow: visible;
+}
+
+.form-actions {
+  margin-top: 30px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+/* Address Form Styles */
+.address-container {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.address-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.address-container input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.address-container button {
+  margin-right: 1rem;
+}
