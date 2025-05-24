@@ -57,6 +57,9 @@ gem "geocoder"
 # CSS Styling for emails
 gem "premailer-rails"
 
+# SASS and SCSS for CSS
+gem "cssbundling-rails"
+
 group :development, :test do
   gem "pry"
   gem "byebug"

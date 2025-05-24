@@ -1,0 +1,40 @@
+/* Utility Classes */
+.intro, .features, .call-to-action, .auth-links {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.features ul, .auth-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+
+.auth-links a {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.auth-links .danger-link {
+  color: #dc3545;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.checkmark {
+  color: green;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 8px;
+}

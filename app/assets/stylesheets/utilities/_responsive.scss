@@ -1,0 +1,16 @@
+/* Responsive Design Styles */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .two-columns {
+    flex-direction: column;
+  }
+}

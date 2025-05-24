@@ -1,0 +1,27 @@
+/* Table Styles */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: left;
+  background-color: #fff;
+}
+
+.styled-table th, .styled-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.styled-table th {
+  background-color: #09e80d;
+  color: #fff;
+}
+
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
