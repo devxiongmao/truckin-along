@@ -16,12 +16,14 @@ class DeliveriesController < ApplicationController
 
   def close
     authorize @delivery
-    if @delivery.can_be_closed?
-      @delivery.update!(status: :completed)
-      return redirect_to start_deliveries_path, notice: "Delivery complete!"
-    end
 
-    redirect_to delivery_path(@delivery), alert: "Delivery still has open shipments. It cannot be closed at this time."
+    result = DeliveryClosureService.new(@delivery, odometer_params).call
+
+    if result.success?
+      redirect_to start_deliveries_path, notice: result.message
+    else
+      redirect_to delivery_path(@delivery), alert: result.error
+    end
   end
 
   def load_truck
@@ -39,5 +41,9 @@ class DeliveriesController < ApplicationController
   private
     def set_delivery
       @delivery = Delivery.find(params[:id])
+    end
+
+    def odometer_params
+      { odometer_reading: params[:odometer_reading].to_i }
     end
 end

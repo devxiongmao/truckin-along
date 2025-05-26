@@ -50,4 +50,20 @@ class Truck < ApplicationRecord
   def latest_delivery
     deliveries.active.order(created_at: :desc).first
   end
+
+  def should_deactivate?
+    return false unless available?
+
+    last_form = forms.maintenance_forms.order(Arel.sql("(forms.content->>'last_inspection_date')::date DESC")).first
+
+    return true if last_form.nil?
+    return true if last_form.content["last_inspection_date"] < 6.months.ago # Trucks must be inspected every 6 months
+    return true if mileage - last_form.content["mileage"].to_i >= 25_000
+
+    false
+  end
+
+  def deactivate!
+    update!(active: false)
+  end
 end
