@@ -17,7 +17,7 @@ class DeliveriesController < ApplicationController
   def close
     authorize @delivery
 
-    result = DeliveryClosureService.new(@delivery, odometer_params).call
+    result = CloseDelivery.new(@delivery, odometer_params).call
 
     if result.success?
       redirect_to start_deliveries_path, notice: result.message
