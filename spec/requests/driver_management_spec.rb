@@ -74,6 +74,18 @@ RSpec.describe "/driver_managements", type: :request do
           expect(User.last.company).to eq(company)
         end
 
+        it "assigns a temporary password to the driver" do
+          post driver_managements_url, params: { user: valid_attributes }
+          created_driver = User.last
+          expect(created_driver.encrypted_password).to be_present
+        end
+
+        it "sends a temporary password email" do
+          expect {
+            post driver_managements_url, params: { user: valid_attributes }
+          }.to have_enqueued_mail(DriverMailer, :send_temp_password)
+        end
+
         it "redirects to the admin index" do
           post driver_managements_url, params: { user: valid_attributes }
           expect(response).to redirect_to(admin_index_url)
@@ -90,6 +102,12 @@ RSpec.describe "/driver_managements", type: :request do
           expect {
             post driver_managements_url, params: { user: invalid_attributes }
           }.to change(User, :count).by(0)
+        end
+
+        it "does not send an email when driver creation fails" do
+          expect {
+            post driver_managements_url, params: { user: invalid_attributes }
+          }.not_to have_enqueued_mail(DriverMailer, :send_temp_password)
         end
 
         it "renders an unprocessable_entity response" do
