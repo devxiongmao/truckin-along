@@ -9,10 +9,17 @@ class DriverManagementsController < ApplicationController
 
     def create
       authorize :driver_management, :create?
+      temp_password = Devise.friendly_token.first(12)
+
       @driver = User.new(driver_params)
+      @driver.password = temp_password
+      @driver.password_confirmation = temp_password
+
       @driver.role = "driver"
       @driver.company = current_user.company
+
       if @driver.save
+        DriverMailer.send_temp_password(@driver, temp_password).deliver_later
         redirect_to admin_index_path, notice: "Driver account created successfully."
       else
         render :new, status: :unprocessable_entity, alert: "Unable to create driver account."
@@ -39,6 +46,6 @@ class DriverManagementsController < ApplicationController
     end
 
     def driver_params
-      params.require(:user).permit(:first_name, :last_name, :home_address, :drivers_license, :email, :password, :password_confirmation)
+      params.require(:user).permit(:first_name, :last_name, :home_address, :drivers_license, :email)
     end
 end
