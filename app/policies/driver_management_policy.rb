@@ -20,4 +20,8 @@ class DriverManagementPolicy < ApplicationPolicy
   def update?
     user.admin?
   end
+
+  def reset_password?
+    user.admin?
+  end
 end

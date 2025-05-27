@@ -1,6 +1,6 @@
 class DriverManagementsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_driver, only: %i[edit update]
+    before_action :set_driver, only: %i[edit update reset_password]
 
     def new
       authorize :driver_management, :new?
@@ -34,6 +34,21 @@ class DriverManagementsController < ApplicationController
       authorize :driver_management, :update?
       if @driver.update(driver_params)
         redirect_to admin_index_path, notice: "Driver was successfully updated."
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+    def reset_password
+      authorize :driver_management, :reset_password?
+
+      temp_password = Devise.friendly_token.first(12)
+
+      @driver.password = temp_password
+      @driver.password_confirmation = temp_password
+      if @driver.save
+        DriverMailer.send_reset_password(@driver, temp_password).deliver_later
+        redirect_to admin_index_path, notice: "Driver password was successfully reset."
       else
         render :edit, status: :unprocessable_entity
       end

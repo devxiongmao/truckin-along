@@ -21,5 +21,9 @@ RSpec.describe DriverManagementsController, type: :routing do
     it "routes to #update via PATCH" do
       expect(patch: "/driver_managements/1").to route_to("driver_managements#update", id: "1")
     end
+
+    it "routes to #reset_password" do
+      expect(post: "/driver_managements/1/reset_password").to route_to("driver_managements#reset_password", id: "1")
+    end
   end
 end
