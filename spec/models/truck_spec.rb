@@ -223,7 +223,6 @@ RSpec.describe Truck, type: :model do
   end
 
   describe "#should_deactivate?" do
-
     context "when the truck has an active delivery" do
       let!(:delivery) { create(:delivery, truck: valid_truck) }
 
@@ -234,7 +233,7 @@ RSpec.describe Truck, type: :model do
 
     context "when the truck has no maintenance forms" do
       let!(:truck_no_inspection) { create(:truck, active: true, mileage: 140_000) }
-      
+
       it "returns true" do
         expect(truck_no_inspection.should_deactivate?).to eq(true)
       end
@@ -253,7 +252,7 @@ RSpec.describe Truck, type: :model do
         expect(truck_old_inspection.should_deactivate?).to eq(true)
       end
     end
-    
+
     context "when the truck exceeds the mileage threshold" do
       let!(:truck_high_mileage) do
         create(:truck, active: true, mileage: 130_000).tap do |truck|

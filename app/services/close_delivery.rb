@@ -1,4 +1,4 @@
-require 'ostruct'
+require "ostruct"
 class CloseDelivery < ApplicationService
   def initialize(delivery, params)
     @delivery = delivery

@@ -5,7 +5,7 @@ RSpec.describe CloseDelivery, type: :service do
   let(:delivery) { create(:delivery, truck: truck) }
   let(:odometer_reading) { 10500 }
   let(:params) { { odometer_reading: odometer_reading } }
-  
+
   subject(:service) { described_class.new(delivery, params) }
   subject(:result) { service.call }
 
@@ -100,7 +100,7 @@ RSpec.describe CloseDelivery, type: :service do
     context 'when an exception occurs during transaction' do
       before do
         allow(delivery).to receive(:can_be_closed?).and_return(true)
-        allow(truck).to receive(:update!).and_raise(StandardError.new("Database error"))
+        allow(delivery.truck).to receive(:update!).and_raise(StandardError.new("Database error"))
       end
 
       it 'returns a failure result with error message' do
@@ -109,14 +109,15 @@ RSpec.describe CloseDelivery, type: :service do
       end
 
       it 'does not complete the delivery due to transaction rollback' do
-        expect { result }.not_to change { delivery.reload.status }
+        expect(delivery).not_to receive(:update!) # ensure not called at all
+        result
       end
     end
 
     context 'when truck update fails' do
       before do
         allow(delivery).to receive(:can_be_closed?).and_return(true)
-        allow(truck).to receive(:update!).and_raise(ActiveRecord::RecordInvalid.new(truck))
+        allow(delivery.truck).to receive(:update!).and_raise(ActiveRecord::RecordInvalid.new(truck))
       end
 
       it 'handles the exception and returns failure' do
@@ -146,8 +147,8 @@ RSpec.describe CloseDelivery, type: :service do
     context 'when truck deactivation fails' do
       before do
         allow(delivery).to receive(:can_be_closed?).and_return(true)
-        allow(truck).to receive(:should_deactivate?).and_return(true)
-        allow(truck).to receive(:deactivate!).and_raise(StandardError.new("Deactivation failed"))
+        allow(delivery.truck).to receive(:should_deactivate?).and_return(true)
+        allow(delivery.truck).to receive(:deactivate!).and_raise(StandardError.new("Deactivation failed"))
       end
 
       it 'handles the exception and returns failure' do
@@ -159,7 +160,7 @@ RSpec.describe CloseDelivery, type: :service do
         original_mileage = truck.mileage
         original_status = delivery.status
         result
-        expect(truck.reload.mileage).to eq(original_mileage)
+        expect(delivery.truck.reload.mileage).to eq(original_mileage)
         expect(delivery.reload.status).to eq(original_status)
       end
     end
@@ -219,7 +220,7 @@ RSpec.describe CloseDelivery, type: :service do
         expect(truck).to receive(:update!).with(mileage: odometer_reading).ordered
         expect(truck).to receive(:deactivate!).ordered
         expect(delivery).to receive(:update!).with(status: :completed).ordered
-        
+
         result
       end
     end
