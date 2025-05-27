@@ -1,7 +1,8 @@
+require 'ostruct'
 class CloseDelivery < ApplicationService
   def initialize(delivery, params)
     @delivery = delivery
-    @odometer_reading = params[:odometer_reading]
+    @odometer_reading = params[:odometer_reading].to_i
   end
 
   def call
