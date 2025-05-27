@@ -221,4 +221,80 @@ RSpec.describe Truck, type: :model do
       expect(valid_truck.latest_delivery).to eq(delivery)
     end
   end
+
+  describe "#should_deactivate?" do
+    context "when the truck has an active delivery" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+
+      it "returns false" do
+        expect(valid_truck.should_deactivate?).to eq(false)
+      end
+    end
+
+    context "when the truck has no maintenance forms" do
+      let!(:truck_no_inspection) { create(:truck, active: true, mileage: 140_000) }
+
+      it "returns true" do
+        expect(truck_no_inspection.should_deactivate?).to eq(true)
+      end
+    end
+
+    context "when a truck has an old inspection" do
+      let!(:truck_old_inspection) do
+        create(:truck, active: true, mileage: 150_000).tap do |truck|
+          create(:form, :maintenance,
+                formable: truck,
+                custom_content: { "last_inspection_date" => 7.months.ago, "mileage" => 125_000 })
+        end
+      end
+
+      it "returns true" do
+        expect(truck_old_inspection.should_deactivate?).to eq(true)
+      end
+    end
+
+    context "when the truck exceeds the mileage threshold" do
+      let!(:truck_high_mileage) do
+        create(:truck, active: true, mileage: 130_000).tap do |truck|
+          create(:form, :maintenance,
+                formable: truck,
+                custom_content: { "last_inspection_date" => 3.months.ago, "mileage" => 100_000 })
+        end
+      end
+
+      it "returns true" do
+        expect(truck_high_mileage.should_deactivate?).to eq(true)
+      end
+    end
+
+    context "when no conditions are met" do
+      let!(:passing_truck) do
+        create(:truck, active: true, mileage: 130_000).tap do |truck|
+          create(:form, :maintenance,
+                formable: truck,
+                custom_content: { "last_inspection_date" => 3.months.ago, "mileage" => 120_000 })
+        end
+      end
+      it "returns false" do
+        expect(passing_truck.should_deactivate?).to eq(false)
+      end
+    end
+  end
+
+  describe "#deactivate!" do
+    context "when the truck is active" do
+      it "deactivates the truck" do
+        valid_truck.deactivate!
+        expect(valid_truck.active).to eq(false)
+      end
+    end
+    context "when the truck is not active" do
+      let(:invalid_truck) { create(:truck, active: false) }
+
+      it "does not update the truck" do
+        expect { invalid_truck.deactivate! }
+          .not_to change { invalid_truck.reload.active }.from(false)
+      end
+    end
+  end
 end

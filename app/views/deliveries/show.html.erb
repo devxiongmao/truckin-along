@@ -15,7 +15,42 @@
   <div class="page-header">
     <h1 class="page-title">Delivery Details - <%= @delivery.status.humanize %></h1>
     <% if @delivery.can_be_closed? %>
-    <%= link_to "Mark Complete", close_delivery_path(@delivery), class: 'button primary-button', method: :post, data: { confirm: 'All shipments are successfully closed?' } %>
+    <div data-controller="complete-delivery">
+      <%= form_with url: close_delivery_path(@delivery), method: :post, data: { complete_delivery_target: "form" } do |f| %>
+      <!-- Modal Component -->
+      <div class="modal-overlay" data-complete-delivery-target="modal">
+        <div class="truck-load-modal-content">
+          <h3>Delivery Complete Confirmation</h3>
+          <p>All shipments are successfully closed?</p>
+
+          <div class="truck-load-modal-buttons">
+            <button type="button" class="button primary-button" data-complete-delivery-target="confirmBtn" data-action="click->complete-delivery#showOdometerInput">
+              Yes
+            </button>
+
+            <button type="button" class="button secondary-button" data-complete-delivery-target="cancelBtn" data-action="click->complete-delivery#hideModal">
+              No
+            </button>
+          </div>
+
+          <div class="address-container" data-complete-delivery-target="odometerContainer">
+            <label for="odometer-reading">Odometer Reading for <%= @delivery.truck.display_name %>:</label>
+            <input type="text" id="odometer-reading" class="form-control" data-complete-delivery-target="odometerInput">
+            <button type="button" class="button primary-button" data-action="click->complete-delivery#submitWithOdometer">
+              Submit
+            </button>
+
+            <button type="button" class="button secondary-button" data-action="click->complete-delivery#hideModal">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <%= button_tag "Mark Complete", class: "button primary-button", data: { action: "click->complete-delivery#showModal" } %>
+      <% end %>
+    </div>
+
     <% end %>
     <% if !@delivery.forms.empty? %>
     <button class="action-link" data-action="click->show-pre-delivery#open">
