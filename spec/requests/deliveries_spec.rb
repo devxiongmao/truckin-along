@@ -91,60 +91,123 @@ RSpec.describe "/deliveries", type: :request do
     end
 
     describe 'POST /close' do
+      let(:valid_odometer_reading) { delivery.truck.mileage + 100 }
+      let(:invalid_odometer_reading) { delivery.truck.mileage - 100 }
+
       context "when the delivery belongs to the user" do
-        context "when all shipments are closed" do
+        context "when all shipments are closed and odometer reading is valid" do
           let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
           let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+
           it "redirects to the delivery start page" do
-            post close_delivery_url(delivery)
+            post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
             expect(response).to redirect_to(start_deliveries_url)
           end
 
-          it "shows an notice saying delivery is closed" do
-            post close_delivery_url(delivery)
+          it "shows a notice saying delivery is closed" do
+            post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
             expect(flash[:notice]).to eq("Delivery complete!")
           end
 
-          it "Updates the delivery status" do
-            post close_delivery_url(delivery)
-            expect(delivery.reload.active?).to be(false)
+          it "updates the delivery status to completed" do
+            post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
+            expect(delivery.reload.status).to eq("completed")
+          end
+
+          it "updates the truck mileage" do
+            expect {
+              post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
+            }.to change { delivery.truck.reload.mileage }.to(valid_odometer_reading)
           end
         end
 
         context "when not all shipments are closed" do
           let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
           let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
+
+          it "redirects to the delivery show page" do
+            post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
+            expect(response).to redirect_to(delivery_url(delivery))
+          end
+
+          it "shows an alert saying shipments are still open" do
+            post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
+            expect(flash[:alert]).to eq("Delivery still has open shipments. It cannot be closed at this time.")
+          end
+
+          it "does not close the delivery" do
+            post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
+            expect(delivery.reload.status).not_to eq("completed")
+          end
+
+          it "does not update the truck mileage" do
+            expect {
+              post close_delivery_url(delivery), params: { odometer_reading: valid_odometer_reading }
+            }.not_to change { delivery.truck.reload.mileage }
+          end
+        end
+
+        context "when odometer reading is invalid" do
+          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+
+          it "redirects to the delivery show page" do
+            post close_delivery_url(delivery), params: { odometer_reading: invalid_odometer_reading }
+            expect(response).to redirect_to(delivery_url(delivery))
+          end
+
+          it "shows an alert saying odometer reading is incorrect" do
+            post close_delivery_url(delivery), params: { odometer_reading: invalid_odometer_reading }
+            expect(flash[:alert]).to eq("Odometer reading is incorrect. Please revise.")
+          end
+
+          it "does not close the delivery" do
+            post close_delivery_url(delivery), params: { odometer_reading: invalid_odometer_reading }
+            expect(delivery.reload.status).not_to eq("completed")
+          end
+
+          it "does not update the truck mileage" do
+            expect {
+              post close_delivery_url(delivery), params: { odometer_reading: invalid_odometer_reading }
+            }.not_to change { delivery.truck.reload.mileage }
+          end
+        end
+
+        context "when odometer reading is missing" do
+          let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+          let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, delivered_date: Time.now) }
+
           it "redirects to the delivery show page" do
             post close_delivery_url(delivery)
             expect(response).to redirect_to(delivery_url(delivery))
           end
 
-          it "shows an alert saying shipments are still open" do
+          it "shows an alert saying odometer reading is incorrect" do
             post close_delivery_url(delivery)
-            expect(flash[:alert]).to eq("Delivery still has open shipments. It cannot be closed at this time.")
+            expect(flash[:alert]).to eq("Odometer reading is incorrect. Please revise.")
           end
 
           it "does not close the delivery" do
             post close_delivery_url(delivery)
-            expect(delivery.active?).to be(true)
+            expect(delivery.reload.status).not_to eq("completed")
           end
         end
       end
 
       context "when the delivery does not belong to the users company" do
         it "redirects to the root" do
-          post close_delivery_url(other_delivery)
+          post close_delivery_url(other_delivery), params: { odometer_reading: valid_odometer_reading }
           expect(response).to redirect_to(root_path)
         end
 
         it "shows an alert saying not authorized" do
-          post close_delivery_url(other_delivery)
+          post close_delivery_url(other_delivery), params: { odometer_reading: valid_odometer_reading }
           expect(flash[:alert]).to eq("You are not authorized to perform this action.")
         end
 
         it "does not close the delivery" do
-          post close_delivery_url(other_delivery)
-          expect(other_delivery.active?).to be(true)
+          post close_delivery_url(other_delivery), params: { odometer_reading: valid_odometer_reading }
+          expect(other_delivery.reload.status).not_to eq("completed")
         end
       end
     end
