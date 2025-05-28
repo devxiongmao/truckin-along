@@ -24,4 +24,28 @@ RSpec.describe DriverMailer, type: :mailer do
       expect(mail.body.encoded).to include("Please change your password after logging in")
     end
   end
+
+  describe ".send_reset_password" do
+    let(:user) { create(:user, email: "test@example.com", first_name: "Robert", last_name: "Baratheon") }
+    let(:temp_password) { "ResetAbcd1234!@#" }
+    let(:mail) { described_class.send_reset_password(user, temp_password) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("Your Password Has Been Reset")
+      expect(mail.to).to eq([ "test@example.com" ])
+      expect(mail.from).to eq([ Rails.application.credentials.dig(:mailer, :default_from) || "from@example.com" ])
+    end
+
+    it "renders the body with the user's name" do
+      expect(mail.body.encoded).to include("Hello Robert Baratheon")
+    end
+
+    it "includes the temporary password in the email body" do
+      expect(mail.body.encoded).to include(temp_password)
+    end
+
+    it "encourages the user to change their password" do
+      expect(mail.body.encoded).to include("Please change your password after logging in")
+    end
+  end
 end

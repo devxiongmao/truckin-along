@@ -9,4 +9,14 @@ class DriverMailerPreview < ActionMailer::Preview
     temp_password = "Temp1234@Preview"
     DriverMailer.send_temp_password(user, temp_password)
   end
+
+  def send_reset_password
+    user = User.new(
+      email: "demo.driver@example.com",
+      first_name: "Demo",
+      last_name: "Driver"
+    )
+    temp_password = "Reset1234@Preview"
+    DriverMailer.send_reset_password(user, temp_password)
+  end
 end

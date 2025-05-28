@@ -41,7 +41,11 @@ Rails.application.routes.draw do
       post :create_form
     end
   end
-  resources :driver_managements, only: [ :new, :create, :edit, :update ]
+  resources :driver_managements, only: [ :new, :create, :edit, :update ] do
+    member do
+      post :reset_password
+    end
+  end
 
   resources :forms do
     get "show_modal", on: :member

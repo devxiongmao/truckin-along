@@ -14,6 +14,7 @@ RSpec.describe DriverManagementPolicy, type: :policy do
       it { expect(subject.create?).to be true }
       it { expect(subject.edit?).to be true }
       it { expect(subject.update?).to be true }
+      it { expect(subject.reset_password?).to be true }
     end
 
     context 'when the user is a driver' do
@@ -24,6 +25,7 @@ RSpec.describe DriverManagementPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.edit?).to be false }
       it { expect(subject.update?).to be false }
+      it { expect(subject.reset_password?).to be false }
     end
 
     context 'when the user is a customer' do
@@ -34,6 +36,7 @@ RSpec.describe DriverManagementPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.edit?).to be false }
       it { expect(subject.update?).to be false }
+      it { expect(subject.reset_password?).to be false }
     end
   end
 end

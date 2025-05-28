@@ -185,6 +185,63 @@ RSpec.describe "/driver_managements", type: :request do
         end
       end
     end
+
+    describe "POST /reset_password" do
+      context "with successful password reset" do
+        it "updates the driver's password" do
+          original_encrypted_password = driver.encrypted_password
+          post reset_password_driver_management_url(driver)
+          driver.reload
+          expect(driver.encrypted_password).not_to eq(original_encrypted_password)
+        end
+
+        it "sends a reset password email" do
+          expect {
+            post reset_password_driver_management_url(driver)
+          }.to have_enqueued_mail(DriverMailer, :send_reset_password)
+        end
+
+        it "redirects to the admin index" do
+          post reset_password_driver_management_url(driver)
+          expect(response).to redirect_to(admin_index_url)
+        end
+
+        it "has the appropriate success flash message" do
+          post reset_password_driver_management_url(driver)
+          expect(flash[:notice]).to eq("Driver password was successfully reset.")
+        end
+      end
+
+      context "when password reset fails" do
+        before do
+          allow_any_instance_of(User).to receive(:save).and_return(false)
+        end
+
+        it "does not send an email when password reset fails" do
+          expect {
+            post reset_password_driver_management_url(driver)
+          }.not_to have_enqueued_mail(DriverMailer, :send_reset_password)
+        end
+
+        it "redirects to the admin index with error message" do
+          post reset_password_driver_management_url(driver)
+          expect(response).to redirect_to(admin_index_url)
+          expect(flash[:alert]).to eq("Unable to reset password.")
+        end
+      end
+
+      context "when the driver is from another company" do
+        it 'redirects to the root path' do
+          post reset_password_driver_management_url(other_driver)
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders with an alert' do
+          post reset_password_driver_management_url(other_driver)
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
+      end
+    end
   end
 
   describe "when the current_user is not an admin" do
@@ -248,6 +305,31 @@ RSpec.describe "/driver_managements", type: :request do
 
       it "renders the correct flash alert" do
         patch driver_management_url(driver), params: { user: new_attributes }
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+
+    describe "POST /reset_password" do
+      it "does not reset the driver's password" do
+        original_encrypted_password = driver.encrypted_password
+        post reset_password_driver_management_url(driver)
+        driver.reload
+        expect(driver.encrypted_password).to eq(original_encrypted_password)
+      end
+
+      it "does not send a reset password email" do
+        expect {
+          post reset_password_driver_management_url(driver)
+        }.not_to have_enqueued_mail(DriverMailer, :send_reset_password)
+      end
+
+      it "redirects to the root path" do
+        post reset_password_driver_management_url(driver)
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "renders the correct flash alert" do
+        post reset_password_driver_management_url(driver)
         expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
