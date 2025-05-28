@@ -50,7 +50,7 @@ class DriverManagementsController < ApplicationController
         DriverMailer.send_reset_password(@driver, temp_password).deliver_later
         redirect_to admin_index_path, notice: "Driver password was successfully reset."
       else
-        render :edit, status: :unprocessable_entity
+        redirect_to admin_index_path, alert: "Unable to reset password."
       end
     end
 
