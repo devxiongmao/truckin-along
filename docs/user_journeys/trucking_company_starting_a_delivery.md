@@ -1,69 +1,77 @@
-# TO DO
-
 # User Journey: Trucking Company Starting a Delivery
 
 ## Persona
 
-**Name:** Peter Parker, a person matching our standard trucking professional profile
-**Role:** A driver or admin tied to a trucking company that uses the app.
-**Goal:** To kick off a delivery
+**Name:** Peter Parker  
+**Role:** Driver or admin associated with a trucking company using the Truckin' Along platform  
+**Goal:** To kick off a delivery route for a fully loaded truck
 
 ---
 
 ## Journey Overview
 
-[Describe the context and purpose of this user journey. Why are they here? What triggered this experience?]
+Once trucks have been successfully loaded with shipments, the next step in the delivery workflow is to **initiate the delivery process**. This includes reviewing available trucks, completing a regulatory pre-inspection checklist, and formally starting the delivery. This journey ensures both **compliance** and **logistical readiness** for getting shipments on the road.
 
 ---
 
 ## Steps
 
-1. **Entry Point**
+1. **Entry Point: Accessing the Start Delivery Page**
 
-   - [How does the user arrive at the product or feature?]
-   - [Relevant screens, links, or situations]
+   - The user navigates to the **Start Deliveries** page from the top navigation bar
+   - Route: `/deliveries/start` (e.g., http://localhost:3000/deliveries/start)
 
-2. **[Step Name]**
+2. **Review Available Trucks**
 
-   - [Describe the action or experience]
-   - [Any UI elements, forms, or buttons involved]
+   - This page displays **trucks not currently on active deliveries**
+   - Each truck card includes:
+     - Earliest scheduled shipment delivery time
+     - Volume and weight metrics
+   - Users can optionally click the `Delivery` button to view the **Delivery Show** page, which includes a map and more route details
+   - After reviewing, users can return to the Start Deliveries page via the back button
 
-3. **[Step Name]**
+3. **Initiate the Delivery**
 
-   - [Continue each step in sequential order]
-   - [Include decisions, alternate paths, retries, etc.]
+   - Once a truck is selected, the user clicks the **`Initiate`** button beside the desired truck
+   - This opens a modal titled **Pre-Delivery Inspection Checklist**
 
-4. **[Optional Step: Verification/Onboarding/etc.]**
+4. **Complete the Pre-Delivery Inspection**
 
-   - [Describe any extra workflows the user goes through]
+   - The user performs a **physical truck inspection** and logs findings via a checklist in the modal
+   - Every required checkbox must be checked to enable submission
+   - The user completes the form and clicks **`Confirm and Start Delivery`**
+   - If the form is incomplete, missing sections are highlighted and submission is blocked
 
-5. **[Final Step]**
-   - [What is the final screen, interaction, or outcome?]
+5. **Confirmation: Delivery In Progress**
+
+   - If submission is successful:
+     - The user is redirected to the **Delivery Show** page
+     - A banner confirms: `Delivery was successfully created with X shipments.`
+   - The delivery is now marked as active and in progress
 
 ---
 
 ## Emotions
 
-- 🟢 [Positive emotion: e.g., “Happy with easy sign-up”]
-- 🟡 [Neutral or mixed: e.g., “Annoyed by pop-ups”]
-- 🔴 [Negative emotion: e.g., “Confused by unclear CTA”]
+- 🟢 Satisfied with the overall simplicity of the start procedure
+- 🟡 Slight frustration due to the need to manually check every box in the inspection form
 
 ---
 
 ## Pain Points
 
-- [List issues that interrupt or slow down the user]
-- [Think of usability, performance, copywriting, etc.]
+- No option to “select all” or bulk check groups in the Pre-Delivery Inspection form, making the process feel tedious
 
 ---
 
 ## Opportunities
 
-- [What could be improved in the journey?]
-- [Design, UX, feature enhancements, etc.]
+- **XMDEV-356**: Update deliveries start page to show earliest scheduled shipment delivery time
+- **XMDEV-354**: Add map to the Delivery Show page for better spatial awareness
+- **XMDEV-355**: Implement “Check All” functionality for certain checklist sections in the pre-delivery form
 
 ---
 
 ## Outcome
 
-[Summarize what happened by the end of the journey. Did the user succeed? Abandon the process? Return later?]
+The user successfully initiated a delivery while ensuring all **regulatory pre-inspection requirements** were fulfilled. They were able to review trucks, inspect them, and launch the route without errors or confusion. The journey was efficient, though slightly improved UX around form inputs would further enhance it.

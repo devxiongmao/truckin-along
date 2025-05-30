@@ -1,18 +1,16 @@
-# TO DO
-
 # User Journey: Trucking Company Loading a Shipment to a Truck
 
 ## Persona
 
-**Name:** Peter Parker, a person matching our standard trucking professional profile
-**Role:** A driver or admin tied to a trucking company that uses the app.
-**Goal:** To load a given shipment onto a truck
+**Name:** Peter Parker  
+**Role:** Driver or admin associated with a trucking company using the Truckin' Along platform  
+**Goal:** Assign a shipment to an appropriate truck, optimizing for route efficiency and delivery grouping
 
 ---
 
 ## Journey Overview
 
-[Describe the context and purpose of this user journey. Why are they here? What triggered this experience?]
+Once a shipment has been claimed by a trucking company, the next step is deciding **which truck** should carry it. This workflow allows the user to group multiple shipments by delivery location and route, increasing operational efficiency and reducing costs. This journey focuses on assigning a shipment to the most appropriate truck based on planned stops and geography.
 
 ---
 
@@ -20,50 +18,57 @@
 
 1. **Entry Point**
 
-   - [How does the user arrive at the product or feature?]
-   - [Relevant screens, links, or situations]
+   - The user navigates to the **Truck Loading** page via the top navigation bar
+   - Route: `/deliveries/load_truck` (e.g., http://localhost:3000/deliveries/load_truck)
 
-2. **[Step Name]**
+2. **Review Available Trucks**
 
-   - [Describe the action or experience]
-   - [Any UI elements, forms, or buttons involved]
+   - The top of the page features a **visual map** displaying:
+     - Active trucks
+     - Their current routes and planned stops
+   - This view helps users understand truck paths at a glance
 
-3. **[Step Name]**
+3. **Analyze Shipment Alignment**
 
-   - [Continue each step in sequential order]
-   - [Include decisions, alternate paths, retries, etc.]
+   - When the user **hovers over a shipment**, the system temporarily renders the **dropoff location** on the map
+   - Users can compare this dropoff location to current truck routes to identify the most optimal pairing
 
-4. **[Optional Step: Verification/Onboarding/etc.]**
+4. **Assign Shipment to Truck**
 
-   - [Describe any extra workflows the user goes through]
+   - The user selects:
+     - A shipment (via checkbox)
+     - A truck (via dropdown selector)
+   - Then clicks the **`Add to Truck`** button
 
-5. **[Final Step]**
-   - [What is the final screen, interaction, or outcome?]
+5. **Confirmation and Feedback**
+
+   - On success:
+     - A **green banner** appears: `Shipments successfully assigned to truck`
+     - The user is redirected back to Step 1 for continued workflow
+   - On failure:
+     - A **red banner** appears with relevant error messaging
 
 ---
 
 ## Emotions
 
-- 🟢 [Positive emotion: e.g., “Happy with easy sign-up”]
-- 🟡 [Neutral or mixed: e.g., “Annoyed by pop-ups”]
-- 🔴 [Negative emotion: e.g., “Confused by unclear CTA”]
+- 🟢 Feels empowered by the visual truck routing interface
+- 🟢 Appreciates the simplicity and intuitiveness of shipment-to-truck assignment
 
 ---
 
 ## Pain Points
 
-- [List issues that interrupt or slow down the user]
-- [Think of usability, performance, copywriting, etc.]
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- [What could be improved in the journey?]
-- [Design, UX, feature enhancements, etc.]
+- **XMDEV-353**: Remove delivery address confirmation modal and refactor triggering of geocoding worker for location data
 
 ---
 
 ## Outcome
 
-[Summarize what happened by the end of the journey. Did the user succeed? Abandon the process? Return later?]
+The user successfully assigned shipments to trucks. The system’s **visual map** and **lightweight controls** allowed them to quickly evaluate geographic alignment and ensure efficient loading. This journey enabled streamlined planning without any errors or confusion.
