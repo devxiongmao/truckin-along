@@ -87,11 +87,11 @@
         <td><%= shipment.receiver_address %></td>
         <td><%= shipment.weight %></td>
         <td>
-          <% if @delivery.in_progress? %>
+          <% if @delivery.in_progress? && @shipment_status%>
           <%= link_to 'Quick Close', close_shipment_path(shipment), 
             class: 'action-link', 
             method: :post, 
-            data: { confirm: "Mark this shipment as Delivered?" } %> |
+            data: { confirm: "Mark this shipment as #{@shipment_status.name}?" } %> |
           <% end %>
           <%= link_to 'Show', shipment, class: 'action-link' %> |
           <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>

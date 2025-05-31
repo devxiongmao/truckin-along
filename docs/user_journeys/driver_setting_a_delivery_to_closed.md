@@ -72,7 +72,6 @@ As Peter completes the physical delivery of packages to their destination, he mu
 
 ## Opportunities
 
-- **XMDEV-357**: Hide Quick Close button if not configured by the company
 - **XMDEV-359**: Hide receiver address on the Delivery Show page if delivery is in progress
 - **XMDEV-361**: Fix bug preventing delivery from closing after manual shipment closure
 
