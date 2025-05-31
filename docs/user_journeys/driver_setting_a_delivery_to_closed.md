@@ -1,69 +1,87 @@
-# TO DO
-
-# User Journey: Driver Setting A Delivery to be Closed
+# User Journey: Driver Setting a Delivery to Be Closed
 
 ## Persona
 
-**Name:** Peter Parker, a person matching our standard trucking professional profile
-**Role:** A registered driver on Truckin' Along that's currently out on a delivery
-**Goal:** Mark a shipment delivery complete.
+**Name:** Peter Parker  
+**Role:** A registered driver currently on a delivery using the Truckin' Along platform  
+**Goal:** To mark a shipment as delivered (i.e., close the shipment)
 
 ---
 
 ## Journey Overview
 
-[Describe the context and purpose of this user journey. Why are they here? What triggered this experience?]
+As Peter completes the physical delivery of packages to their destination, he must mark those shipments as "delivered" in the system. The platform supports two methods of closing shipments: a quick close workflow (if configured by the company) and a manual update workflow. This journey outlines both options.
 
 ---
 
 ## Steps
 
-1. **Entry Point**
+1. **Entry Point: Accessing the Start Deliveries Page**
 
-   - [How does the user arrive at the product or feature?]
-   - [Relevant screens, links, or situations]
+   - The user navigates to the **Start Deliveries** page from the top navigation bar
+   - Route: `/deliveries/start`
+   - Example: `http://localhost:3000/deliveries/start`
 
-2. **[Step Name]**
+2. **View the Active Delivery**
 
-   - [Describe the action or experience]
-   - [Any UI elements, forms, or buttons involved]
+   - From the list of active deliveries, the user clicks the **`View Delivery`** button for the delivery in progress
+   - Route: `/deliveries/:id`
+   - Example: `http://localhost:3000/deliveries/1`
 
-3. **[Step Name]**
+3. **Option A: Quick Close a Shipment**
 
-   - [Continue each step in sequential order]
-   - [Include decisions, alternate paths, retries, etc.]
+   - On the Delivery Show page, each shipment has `Show` and `Quick Close` buttons
+   - If **Quick Close** is enabled by the company, clicking it will:
+     - Open a browser alert asking to confirm the delivery
+     - Options: `Cancel` or `OK`
+     - If `OK` is clicked, the shipment is marked as closed
 
-4. **[Optional Step: Verification/Onboarding/etc.]**
+4. **Option B: Manually Close via Shipment Edit**
 
-   - [Describe any extra workflows the user goes through]
+   - If Quick Close is **not configured**, the user must:
+     - Click `Show` next to the desired shipment (navigates to `/shipments/:id`)
+     - Click **`Edit Shipment`**
+     - In the edit view, update the **Shipment Status** field to `Delivered` or the appropriate final status
+     - Submit the form to apply changes
 
-5. **[Final Step]**
-   - [What is the final screen, interaction, or outcome?]
+5. **Confirmation and Feedback**
+
+   - If closed via **Quick Close**:
+
+     - Redirect to the Delivery Show page
+     - Banner appears: `Shipment successfully closed.`
+
+   - If closed via **Manual Edit**:
+     - Redirect to the Shipment Show page
+     - Banner appears: `Shipment was successfully updated.`
 
 ---
 
 ## Emotions
 
-- 🟢 [Positive emotion: e.g., “Happy with easy sign-up”]
-- 🟡 [Neutral or mixed: e.g., “Annoyed by pop-ups”]
-- 🔴 [Negative emotion: e.g., “Confused by unclear CTA”]
+- 🟢 Pleased when Quick Close is available — fast and efficient
+- 🟡 Mild annoyance when forced to use manual process
+- 🔴 Frustration from UI bugs or over-clicking
 
 ---
 
 ## Pain Points
 
-- [List issues that interrupt or slow down the user]
-- [Think of usability, performance, copywriting, etc.]
+- Tedious manual closing process with multiple clicks when Quick Close isn't available
+- A known bug prevents delivery from being properly closed if done manually
 
 ---
 
 ## Opportunities
 
-- [What could be improved in the journey?]
-- [Design, UX, feature enhancements, etc.]
+- **XMDEV-357**: Hide Quick Close button if not configured by the company
+- **XMDEV-358**: Change alert button label from `OK` to `Yes` for better clarity
+- **XMDEV-359**: Hide receiver address on the Delivery Show page if delivery is in progress
+- **XMDEV-360**: Add `Edit` button for each shipment directly on the Delivery Show page
+- **XMDEV-361**: Fix bug preventing delivery from closing after manual shipment closure
 
 ---
 
 ## Outcome
 
-[Summarize what happened by the end of the journey. Did the user succeed? Abandon the process? Return later?]
+At the end of this journey, the user successfully marked shipments as delivered, either via the streamlined **Quick Close** method or through the more detailed **manual update** process. While functional, the journey reveals opportunities to reduce friction and resolve bugs for a more seamless closing experience.

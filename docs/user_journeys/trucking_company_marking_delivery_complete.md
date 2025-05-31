@@ -1,69 +1,81 @@
-# TO DO
-
 # User Journey: Trucking Company Marking a Delivery Complete
 
 ## Persona
 
-**Name:** Peter Parker, a person matching our standard trucking professional profile
-**Role:** A driver or admin tied to a trucking company that uses the app.
-**Goal:** Mark a delivery complete
+**Name:** Peter Parker  
+**Role:** A driver or admin at a trucking company using the Truckin' Along platform  
+**Goal:** Mark a delivery as complete after all shipments have been delivered
 
 ---
 
 ## Journey Overview
 
-[Describe the context and purpose of this user journey. Why are they here? What triggered this experience?]
+After completing all associated deliveries, the driver (or admin) needs to formally close the delivery in the system. This not only notifies relevant users but also makes the truck available for future assignments and ensures backend processes (like maintenance tracking) are triggered.
 
 ---
 
 ## Steps
 
-1. **Entry Point**
+1. **Entry Point: Accessing the Start Deliveries Page**
 
-   - [How does the user arrive at the product or feature?]
-   - [Relevant screens, links, or situations]
+   - The user navigates to the **Start Deliveries** page from the top navigation bar
+   - Route: `/deliveries/start`
+   - Example: `http://localhost:3000/deliveries/start`
 
-2. **[Step Name]**
+2. **Viewing the Active Delivery**
 
-   - [Describe the action or experience]
-   - [Any UI elements, forms, or buttons involved]
+   - The user identifies the active delivery and clicks the **`View Delivery`** button
+   - Route: `/deliveries/:id`
+   - Example: `http://localhost:3000/deliveries/1`
 
-3. **[Step Name]**
+3. **Initiating Delivery Completion**
 
-   - [Continue each step in sequential order]
-   - [Include decisions, alternate paths, retries, etc.]
+   - If **all shipments** under the delivery have been marked as delivered or closed, a green **`Mark Complete`** button appears at the top of the Delivery Show page
+   - Clicking this button opens a **confirmation modal**
+     - User options:
+       - `No`: Cancel the action
+       - `Yes`: Proceed to confirm closure
 
-4. **[Optional Step: Verification/Onboarding/etc.]**
+4. **Entering Odometer Reading**
 
-   - [Describe any extra workflows the user goes through]
+   - If the user clicks `Yes`, an additional field appears in the modal requesting the **final odometer reading**
+   - The user must enter the correct numeric value
+   - If entered incorrectly:
+     - The user is redirected back to the Delivery Show page
+     - A red error banner appears:
+       > `Odometer reading is incorrect. Please revise.`
 
-5. **[Final Step]**
-   - [What is the final screen, interaction, or outcome?]
+5. **Confirmation and Completion**
+
+   - If the odometer value is correct and the form is submitted:
+     - The user is redirected to the **Start Deliveries** page
+     - A green banner appears:
+       > `Delivery Complete!`
+   - Additionally, system-level backend processes are triggered:
+     - The truck may be marked as **inactive** if due for **maintenance**
 
 ---
 
 ## Emotions
 
-- 🟢 [Positive emotion: e.g., “Happy with easy sign-up”]
-- 🟡 [Neutral or mixed: e.g., “Annoyed by pop-ups”]
-- 🔴 [Negative emotion: e.g., “Confused by unclear CTA”]
+- 🟢 Pleased with how simple and straightforward it is to mark a delivery complete
 
 ---
 
 ## Pain Points
 
-- [List issues that interrupt or slow down the user]
-- [Think of usability, performance, copywriting, etc.]
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- [What could be improved in the journey?]
-- [Design, UX, feature enhancements, etc.]
+- **XMDEV-364**: Add input formatting and hint text to odometer field to reduce validation issues (e.g., `e.g., 148723`)
+- **XMDEV-363**: Improve error messaging to explain what was incorrect (e.g., “Odometer reading must be higher than starting value”)
+- **XMDEV-362**: If the delivery is not eligible for completion (e.g., shipments still open), disable or hide the `Mark Complete` button until criteria are met
 
 ---
 
 ## Outcome
 
-[Summarize what happened by the end of the journey. Did the user succeed? Abandon the process? Return later?]
+At the end of the journey, the user successfully marked the delivery as complete, making the truck available for reassignment and triggering backend actions like maintenance checks. While generally efficient, the experience could be improved by refining the odometer input flow and enhancing error clarity.

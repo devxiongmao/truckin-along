@@ -1,18 +1,18 @@
-To Do
+Under Construction
 
-# User Journey: [Title of the Journey]
+# User Journey: Customer Accepting a Bid
 
 ## Persona
 
-**Name:** [Example: Taylor]  
-**Role:** [e.g., Returning user, first-time visitor, admin, etc.]  
-**Goal:** [What does this user want to accomplish?]
+**Name:** John Doe, a person matching our standard customer profile  
+**Role:** Customer  
+**Goal:** Review and accept bids on their shipments through Truckin' Along
 
 ---
 
 ## Journey Overview
 
-[Describe the context and purpose of this user journey. Why are they here? What triggered this experience?]
+Now that the user has submitted a shipment, they can receive bids from shipping companies to deliver their shipments. This user journey details them reviewing the bids, and selecting one.
 
 ---
 
@@ -20,12 +20,12 @@ To Do
 
 1. **Entry Point**
 
-   - [How does the user arrive at the product or feature?]
-   - [Relevant screens, links, or situations]
+   - After logging in, the user navigates to the Bids menu.
+   - Route: `/bids` (http://localhost:3000/bids)
 
-2. **[Step Name]**
+2. **Reviewing the Bids**
 
-   - [Describe the action or experience]
+   - On this page, for each shipment, there are a list of bids that companies have submitted
    - [Any UI elements, forms, or buttons involved]
 
 3. **[Step Name]**
