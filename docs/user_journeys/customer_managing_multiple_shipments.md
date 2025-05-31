@@ -50,17 +50,13 @@ This user is here because they want to use Truckin' Along’s services to get mu
    - This provides a visual cue to confirm the entered data is accurate.
    - The user may click the `Edit Shipment` button if changes are needed.
 
-6. **Optional: Create Additional Shipments → Click the Back to Index Button**
+6. **Optional: Duplicate the Shipment → Click the Copy Button**
 
-   - If the user has more packages to send (e.g., similar in size or weight), they click the `Back to Index` button to return to the shipment list.
-
-7. **Optional: Duplicate the Shipment → Click the Copy Button**
-
-   - In the shipment list, the user finds their newly created shipment and clicks the `Copy` button beside it.
+   - The user may click the `Copy Shipment` button if they need to copy a majority of the fields for a subsequent shipment.
    - This leads to the shipment copy page: `/shipments/:id/copy`
    - The user returns to Step 3 and can repeat Steps 3–5 as many times as needed.
 
-8. **Outcome**
+7. **Outcome**
 
    - Back on the `/shipments` page, the user can now view all of their created shipments.
 
@@ -69,14 +65,14 @@ This user is here because they want to use Truckin' Along’s services to get mu
 ## Emotions
 
 - 🟢 Pleased with the short, simple form
+- 🟢 Pleased with the straightforward process for duplicating shipments
 - 🟡 Slight friction: two clicks required to begin creating a shipment after login
-- 🔴 Confusion around how to duplicate shipments
 
 ---
 
 ## Pain Points
 
-- The process for duplicating shipments isn’t intuitive or clearly explained.
+- None currently reported in this workflow
 
 ---
 
@@ -84,7 +80,6 @@ This user is here because they want to use Truckin' Along’s services to get mu
 
 - Add a direct "Create New Shipment" button to the top of the dashboard page to reduce clicks. (XMDEV-338)
 - The `Delete Shipment` button should not always be visible. (XMDEV-336)
-- Add a `Copy` button to the shipment show page. (XMDEV-337)
 
 ---
 
