@@ -38,6 +38,16 @@ button, .primary-button, .secondary-button, .danger-button {
   background-color: #c82333; /* Darker red */
 }
 
+.warning-button {
+  background-color: rgb(255, 140, 0);
+  color: #fff;
+  border: none;
+}
+
+.warning-button:hover {
+  background-color: #c86a23; /* Darker orange */
+}
+
 .alternative-button {
   background-color: #4CAF50;
   color: white;
