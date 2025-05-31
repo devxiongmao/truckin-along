@@ -1,11 +1,11 @@
-### From v1.5.8 to HEAD
+### From v1.5.9 to HEAD
 
-- Bump sidekiq from 8.0.3 to 8.0.4 (#318) (e00012b) by dependabot[bot]
-- Bump parallel_tests from 5.2.0 to 5.3.0 (#319) (6834eff) by dependabot[bot]
-- XMDEV-307: Adds documentation on core user journeys (#282) (4b1b912) by Jon
-- XMDEV-333: Adds password reset option for admins (#317) (fccdc3c) by Jon
-- XMDEV-317: Updates driver creation to generate temp password and send email (#316) (4800633) by Jon
-- XMDEV-323: Adds CloseDelivery service to update delivery and truck (#315) (b394869) by Jon
+- XMDEV-337: Adds copy shipment button to shipment show page (#326) (1f586f6) by Jon
+- XMDEV-340: Updates company form button to say Create or Update (#325) (755a019) by Jon
+- XMDEV-349: Updates styles for the warning button (#324) (a641d41) by Jon
+- XMDEV-357: Hides quick close button if company does not have the status configured (#323) (2ded875) by Jon
+- XMDEV-358: Change alert button verbiage on quick close to work with Ok and Cancel options (#322) (89d707e) by Jon
+- XMDEV-360: Adds edit button to deliveries show page for each shipment (#321) (a80ee0b) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
