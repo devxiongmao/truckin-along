@@ -39,7 +39,7 @@ This user likely discovered Truckin' Along via word of mouth or marketing effort
 
 4. **Initial Redirect**
 
-   - Upon successful sign-up, the user is redirected back to _Create Company_ page.
+   - Upon successful sign-up, the user is redirected to _Create Company_ page.
    - A banner appears at the top:  
      `Welcome! You have signed up successfully.`
 
