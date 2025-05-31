@@ -53,7 +53,6 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 
 - 🟢 Relieved and satisfied that the app proactively notified them of due maintenance
 - 🟢 Grateful for the quick, low-effort maintenance form process
-- 🟡 Finds the orange Maintenance button visually out of sync with the rest of the UI
 - 🔴 Frustrated that **only admins** can complete maintenance tasks—drivers are often more aware of the truck’s actual condition
 
 ---
@@ -61,7 +60,6 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 ## Pain Points
 
 - **Role restrictions:** Only admin users can submit maintenance forms, limiting flexibility and slowing down operational workflows
-- **UI inconsistency:** The orange Maintenance button doesn’t visually match the overall platform design
 
 ---
 
@@ -69,10 +67,9 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 
 - **XMDEV-347**: Allow drivers to fill out and submit maintenance forms, increasing accuracy and reducing admin overhead
 - **XMDEV-348**: Implement email notifications for upcoming or overdue truck maintenance
-- **XMDEV-349**: Update styling of the Maintenance button to align with platform design standards
 
 ---
 
 ## Outcome
 
-The user successfully logged maintenance data into the system with no technical issues or errors. While the flow is generally efficient, enhancements to role permissions and visual design would improve the experience further.
+The user successfully logged maintenance data into the system with no technical issues or errors. While the flow is generally efficient, enhancements to role permissions would improve the experience further.
