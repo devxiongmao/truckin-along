@@ -39,8 +39,7 @@ As Peter completes the physical delivery of packages to their destination, he mu
 4. **Option B: Manually Close via Shipment Edit**
 
    - If Quick Close is **not configured**, the user must:
-     - Click `Show` next to the desired shipment (navigates to `/shipments/:id`)
-     - Click **`Edit Shipment`**
+     - Click `Edit` next to the desired shipment (navigates to `/shipments/:id/edit`)
      - In the edit view, update the **Shipment Status** field to `Delivered` or the appropriate final status
      - Submit the form to apply changes
 
@@ -60,14 +59,13 @@ As Peter completes the physical delivery of packages to their destination, he mu
 ## Emotions
 
 - 🟢 Pleased when Quick Close is available — fast and efficient
-- 🟡 Mild annoyance when forced to use manual process
+- 🟢 Please with power behind manual process - able to manipulate all fields quickly
 - 🔴 Frustration from UI bugs or over-clicking
 
 ---
 
 ## Pain Points
 
-- Tedious manual closing process with multiple clicks when Quick Close isn't available
 - A known bug prevents delivery from being properly closed if done manually
 
 ---
@@ -77,7 +75,6 @@ As Peter completes the physical delivery of packages to their destination, he mu
 - **XMDEV-357**: Hide Quick Close button if not configured by the company
 - **XMDEV-358**: Change alert button label from `OK` to `Yes` for better clarity
 - **XMDEV-359**: Hide receiver address on the Delivery Show page if delivery is in progress
-- **XMDEV-360**: Add `Edit` button for each shipment directly on the Delivery Show page
 - **XMDEV-361**: Fix bug preventing delivery from closing after manual shipment closure
 
 ---
