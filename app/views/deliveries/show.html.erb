@@ -93,7 +93,8 @@
             method: :post, 
             data: { confirm: 'Was this shipment successfully delivered?' } %> |
           <% end %>
-          <%= link_to 'Show', shipment, class: 'action-link' %>
+          <%= link_to 'Show', shipment, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
         </td>
       </tr>
       <% end %>
@@ -124,7 +125,8 @@
         <td><%= shipment.receiver_address %></td>
         <td><%= shipment.weight %></td>
         <td>
-          <%= link_to 'Show', shipment, class: 'action-link' %>
+          <%= link_to 'Show', shipment, class: 'action-link' %> |
+          <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
         </td>
       </tr>
       <% end %>
