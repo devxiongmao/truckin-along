@@ -12,6 +12,11 @@ class DeliveriesController < ApplicationController
     authorize @delivery
     @open_shipments = @delivery.open_shipments.distinct
     @delivered_shipments = @delivery.delivered_shipments.distinct
+
+    @shipment_status = ShipmentActionPreference
+                       .includes(:shipment_status)
+                       .find_by(action: "successfully_delivered", company_id: current_company.id)
+                       &.shipment_status
   end
 
   def close
