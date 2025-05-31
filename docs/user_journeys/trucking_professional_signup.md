@@ -39,22 +39,20 @@ This user likely discovered Truckin' Along via word of mouth or marketing effort
 
 4. **Initial Redirect**
 
-   - Upon successful sign-up, the user is redirected back to the homepage.
+   - Upon successful sign-up, the user is redirected back to _Create Company_ page.
    - A banner appears at the top:  
      `Welcome! You have signed up successfully.`
-   - At this point, the homepage still displays the original sign-up buttons.
 
 5. **Company Creation Trigger**
 
-   - When the user clicks on any navigation link after signing up, they're prompted to create their company.
    - A new form appears requiring:
      - Company Name
      - Company Address
-   - The user completes the form and clicks `Save Company`.
+   - The user completes the form and clicks `Create Company`.
 
 6. **Final Step**
 
-   - After creating the company, the user is directed to the page they originally clicked on.
+   - After creating the company, the user is directed to the _My Dashboard_ page.
    - They now have full access to the platform’s features as a trucking professional.
 
 ---
@@ -63,24 +61,19 @@ This user likely discovered Truckin' Along via word of mouth or marketing effort
 
 - 🟢 Pleased with the lightweight sign-up process
 - 🟢 Appreciates the minimal cognitive load
-- 🟡 Confused by being redirected to the same homepage post-signup
-- 🟡 Unclear that they must create a company before using the platform
-- 🟡 Confused by the label `Save Company`, which implies support for multiple companies when that is not currently the case
+- 🟢 Pleased with the sequenced flow of creating a user account, then a company
 
 ---
 
 ## Pain Points
 
-- Lack of clear indication that the user is signed in after account creation
-- Disjointed flow between user sign-up and company creation
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- Update homepage content post-login to reflect the user’s authenticated state and role more clearly _(XMDEV-316)_
-- Prompt trucking professionals to create their company **immediately** after completing personal sign-up _(XMDEV-319)_
-- Consider renaming the `Save Company` button to something more accurate, like `Create Company` _(XMDEV-340)_
+- None currently reported in this workflow
 
 ---
 
