@@ -14,31 +14,31 @@
 /*
  * Base styles (reset, typography)
  */
-@import "base/reset";
+@use "base/reset";
 
 /*
  * Layout components
  */
-@import "layout/page-structure";
-@import "layout/welcome-page";
+@use "layout/page-structure";
+@use "layout/welcome-page";
 
 /*
  * UI Components
  */
-@import "components/buttons";
-@import "components/forms";
-@import "components/tables";
-@import "components/navbar";
-@import "components/messages";
-@import "components/modals";
+@use "components/buttons";
+@use "components/forms";
+@use "components/tables";
+@use "components/navbar";
+@use "components/messages";
+@use "components/modals";
 
 /*
  * Page-specific styles
  */
-@import "pages/tabs";
+@use "pages/tabs";
 
 /*
  * Utilities (load last to override)
  */
-@import "utilities/helpers";
-@import "utilities/responsive";
+@use "utilities/helpers";
+@use "utilities/responsive";
