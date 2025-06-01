@@ -15,7 +15,6 @@ RSpec.describe Company, type: :model do
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
   it { should validate_presence_of(:address) }
-  it { should validate_presence_of(:phone_number) }
 
   describe 'phone_number format' do
     it 'is valid with correct format' do
@@ -34,11 +33,16 @@ RSpec.describe Company, type: :model do
       end
     end
 
+    it 'is valid when blank' do
+      subject.phone_number = nil
+      expect(subject).to be_valid
+    end
+
     it 'is invalid with incorrect format' do
       invalid_numbers = [
         'abc1234567',
         '123-abc-7890',
-        '123456', # too short
+        '123456',
         '+1(123)456-7890ext',
         '++1234567890',
         '123_456_7890'
