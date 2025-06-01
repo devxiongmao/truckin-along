@@ -70,7 +70,6 @@ After completing all associated deliveries, the driver (or admin) needs to forma
 
 ## Opportunities
 
-- **XMDEV-364**: Add input formatting and hint text to odometer field to reduce validation issues (e.g., `e.g., 148723`)
 - **XMDEV-363**: Improve error messaging to explain what was incorrect (e.g., “Odometer reading must be higher than starting value”)
 - **XMDEV-362**: If the delivery is not eligible for completion (e.g., shipments still open), disable or hide the `Mark Complete` button until criteria are met
 
