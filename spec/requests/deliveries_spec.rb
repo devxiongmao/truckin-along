@@ -158,7 +158,7 @@ RSpec.describe "/deliveries", type: :request do
 
           it "shows an alert saying odometer reading is incorrect" do
             post close_delivery_url(delivery), params: { odometer_reading: invalid_odometer_reading }
-            expect(flash[:alert]).to eq("Odometer reading is incorrect. Please revise.")
+            expect(flash[:alert]).to eq("Odometer reading must be higher than previous value. Please revise.")
           end
 
           it "does not close the delivery" do
@@ -184,7 +184,7 @@ RSpec.describe "/deliveries", type: :request do
 
           it "shows an alert saying odometer reading is incorrect" do
             post close_delivery_url(delivery)
-            expect(flash[:alert]).to eq("Odometer reading is incorrect. Please revise.")
+            expect(flash[:alert]).to eq("Odometer reading must be higher than previous value. Please revise.")
           end
 
           it "does not close the delivery" do
