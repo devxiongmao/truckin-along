@@ -34,8 +34,8 @@
           </div>
 
           <div class="address-container" data-complete-delivery-target="odometerContainer">
-            <label for="odometer-reading">Odometer Reading for <%= @delivery.truck.display_name %>:</label>
-            <input type="text" id="odometer-reading" class="form-control" data-complete-delivery-target="odometerInput">
+            <label for="odometer-reading">Odometer Reading (e.g., 148723):</label>
+            <input type="number" min="0" step="1" id="odometer-reading" class="form-control" data-complete-delivery-target="odometerInput">
             <button type="button" class="button primary-button" data-action="click->complete-delivery#submitWithOdometer">
               Submit
             </button>
