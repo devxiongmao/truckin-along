@@ -9,21 +9,24 @@ RSpec.describe "/companies", type: :request do
   let(:valid_attributes) {
     {
       name: "Test Company",
-      address: "123 Test Street"
+      address: "123 Test Street",
+      phone_number: "6479808236"
     }
   }
 
   let(:invalid_attributes) {
     {
       name: nil,
-      address: nil
+      address: nil,
+      phone_number: nil
     }
   }
 
   let(:new_attributes) {
     {
       name: "Updated Company",
-      address: "456 Updated Street"
+      address: "456 Updated Street",
+      phone_number: "+16479808236"
     }
   }
 
@@ -167,6 +170,7 @@ RSpec.describe "/companies", type: :request do
           company.reload
           expect(company.name).to eq("Updated Company")
           expect(company.address).to eq("456 Updated Street")
+          expect(company.phone_number).to eq("+16479808236")
         end
 
         it "redirects to the dashboard page" do
