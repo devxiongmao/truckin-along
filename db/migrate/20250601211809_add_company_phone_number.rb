@@ -2,7 +2,7 @@ class AddCompanyPhoneNumber < ActiveRecord::Migration[8.0]
   include MigrationHelpers::IdempotentMigration
 
   def up
-    add_column_unless_exists :companies, :phone_number, :string
+    add_column_unless_exists :companies, :phone_number, :string, null: true
   end
 
   def down
