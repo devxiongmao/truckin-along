@@ -14,8 +14,8 @@
         <label for="form-title">Date of completion:</label>
         <input type="text" id="form-title" name="last_inspection_date" class="form-input" required value=<%= Date.today %>>
 
-        <label for="form-title">Mileage:</label>
-        <input type="text" id="form-title" name="mileage" class="form-input" required>
+        <label for="form-title">Odometer Reading (e.g., 148723):</label>
+        <input type="number" min="0" step="1" id="form-title" name="mileage" class="form-input" required>
       </div>
 
       <div class="checklist-group">
