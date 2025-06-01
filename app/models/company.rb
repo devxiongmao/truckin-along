@@ -9,4 +9,11 @@ class Company < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :address, presence: true
+
+  validates :phone_number,
+          allow_blank: true,
+          format: {
+            with: /\A\+?[\d\s\-()]{10,20}\z/,
+            message: "must be a valid phone number (can include +, -, space, parentheses)"
+          }
 end

@@ -50,7 +50,7 @@ The customer wants to track the progress of their shipment to understand how far
 ## Emotions
 
 - 🟢 Feels well-informed by email notifications about shipment activity
-- 🟢 Appreciates being able to track the shipment and identify the carrier
+- 🟢 Appreciates being able to track the shipment and identify and contact the carrier
 - 🟡 Frustrated by difficulty identifying the correct shipment on the index page
 - 🟡 Confused by delivery events being displayed out of order
 
@@ -66,7 +66,6 @@ The customer wants to track the progress of their shipment to understand how far
 ## Opportunities
 
 - Maintain and improve shipment-claimed email notifications _(XMDEV-343)_
-- Enable customers to easily call the assigned trucking company from the interface for support _(XMDEV-344)_
 
 ---
 
