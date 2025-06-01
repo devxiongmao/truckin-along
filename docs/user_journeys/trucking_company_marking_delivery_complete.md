@@ -59,6 +59,7 @@ After completing all associated deliveries, the driver (or admin) needs to forma
 ## Emotions
 
 - 🟢 Pleased with how simple and straightforward it is to mark a delivery complete
+- 🟢 Pleased with information provided when there is an error with the odometer value
 
 ---
 
@@ -70,11 +71,10 @@ After completing all associated deliveries, the driver (or admin) needs to forma
 
 ## Opportunities
 
-- **XMDEV-363**: Improve error messaging to explain what was incorrect (e.g., “Odometer reading must be higher than starting value”)
 - **XMDEV-362**: If the delivery is not eligible for completion (e.g., shipments still open), disable or hide the `Mark Complete` button until criteria are met
 
 ---
 
 ## Outcome
 
-At the end of the journey, the user successfully marked the delivery as complete, making the truck available for reassignment and triggering backend actions like maintenance checks. While generally efficient, the experience could be improved by refining the odometer input flow and enhancing error clarity.
+At the end of the journey, the user successfully marked the delivery as complete, making the truck available for reassignment and triggering backend actions like maintenance checks.

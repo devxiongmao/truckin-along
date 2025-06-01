@@ -7,7 +7,7 @@ class CloseDelivery < ApplicationService
 
   def call
     return failure("Delivery still has open shipments. It cannot be closed at this time.") unless @delivery.can_be_closed?
-    return failure("Odometer reading is incorrect. Please revise.") unless valid_odometer_reading?
+    return failure("Odometer reading must be higher than previous value. Please revise.") unless valid_odometer_reading?
 
     ActiveRecord::Base.transaction do
       update_truck_mileage

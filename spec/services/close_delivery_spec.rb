@@ -75,7 +75,7 @@ RSpec.describe CloseDelivery, type: :service do
 
         it 'returns a failure result' do
           expect(result.success?).to be false
-          expect(result.error).to eq("Odometer reading is incorrect. Please revise.")
+          expect(result.error).to eq("Odometer reading must be higher than previous value. Please revise.")
         end
 
         it 'does not update truck mileage' do
@@ -92,7 +92,7 @@ RSpec.describe CloseDelivery, type: :service do
 
         it 'returns a failure result' do
           expect(result.success?).to be false
-          expect(result.error).to eq("Odometer reading is incorrect. Please revise.")
+          expect(result.error).to eq("Odometer reading must be higher than previous value. Please revise.")
         end
       end
     end
