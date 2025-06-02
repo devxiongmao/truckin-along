@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "/companies", type: :request do
-  let(:valid_user) { create(:user, role: "admin") }
+  let(:valid_user) { create(:user, role: "admin", company: nil) }
   let(:non_admin_user) { create(:user) }
 
   let(:company) { create(:company) }
@@ -49,6 +49,22 @@ RSpec.describe "/companies", type: :request do
       it "renders a successful response" do
         get new_company_url
         expect(response).to be_successful
+      end
+
+      context 'when the user already has a company' do
+        before do
+          valid_user.update!(company: company)
+        end
+
+        it 'redirects to the root path' do
+          get new_company_url
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'renders the correct flash alert' do
+          get new_company_url
+          expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+        end
       end
     end
 
