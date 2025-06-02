@@ -13,11 +13,11 @@ class CompanyPolicy < ApplicationPolicy
   end
 
   def new?
-    user.admin?
+    user.admin? && user.company.nil?
   end
 
   def create?
-    user.admin?
+    user.admin? && user.company.nil?
   end
 
   def edit?
