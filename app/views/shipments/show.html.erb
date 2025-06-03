@@ -56,7 +56,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @shipment.delivery_shipments.each do |del_ship| %>
+    <% @shipment.delivery_shipments.order(created_at: :desc).each do |del_ship| %>
     <tr>
       <td>
         <% company = @shipment.company || del_ship.delivery&.user&.company %>
