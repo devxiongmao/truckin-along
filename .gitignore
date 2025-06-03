@@ -41,3 +41,6 @@
 dump.rdb
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+
+.vscode/settings.json
