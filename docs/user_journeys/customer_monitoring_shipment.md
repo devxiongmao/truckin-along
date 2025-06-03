@@ -50,16 +50,15 @@ The customer wants to track the progress of their shipment to understand how far
 ## Emotions
 
 - 🟢 Feels well-informed by email notifications about shipment activity
+- 🟢 Appreciates the straighforward and clear layout of the shipment details page, showing incremental deliveries
 - 🟢 Appreciates being able to track the shipment and identify and contact the carrier
 - 🟡 Frustrated by difficulty identifying the correct shipment on the index page
-- 🟡 Confused by delivery events being displayed out of order
 
 ---
 
 ## Pain Points
 
 - The shipment index page includes columns that aren't helpful for most users; customers typically search by recipient and send date _(XMDEV-341)_
-- The shipment show page does not always sort delivery events chronologically, causing confusion _(XMDEV-342)_
 
 ---
 
