@@ -86,9 +86,9 @@ RSpec.describe "/trucks", type: :request do
       end
 
       context "when the truck belongs to another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get truck_url(other_truck)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -133,9 +133,9 @@ RSpec.describe "/trucks", type: :request do
       end
 
       context "when the truck belongs to another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get edit_truck_url(other_truck)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -228,9 +228,9 @@ RSpec.describe "/trucks", type: :request do
       end
 
       context "when the truck belongs to another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           delete truck_url(other_truck)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -292,9 +292,9 @@ RSpec.describe "/trucks", type: :request do
       end
 
       context "when the truck belongs to another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           post create_form_truck_url(other_truck), params: valid_form_attributes
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -311,9 +311,9 @@ RSpec.describe "/trucks", type: :request do
     end
 
     describe "GET /show" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get truck_url(truck)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -323,9 +323,9 @@ RSpec.describe "/trucks", type: :request do
     end
 
     describe "GET /new" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get new_truck_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -335,9 +335,9 @@ RSpec.describe "/trucks", type: :request do
     end
 
     describe "GET /edit" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get truck_url(truck)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -353,9 +353,9 @@ RSpec.describe "/trucks", type: :request do
         }.not_to change(Truck, :count)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         post trucks_url, params: { truck: valid_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -371,9 +371,9 @@ RSpec.describe "/trucks", type: :request do
         expect(truck.make).not_to eq("Ford")
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         patch truck_url(truck), params: { truck: new_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -389,9 +389,9 @@ RSpec.describe "/trucks", type: :request do
         }.not_to change(Truck, :count)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         delete truck_url(truck)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -409,9 +409,9 @@ RSpec.describe "/trucks", type: :request do
         expect(truck.active).not_to eq(true)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         post create_form_truck_url(truck), params: valid_form_attributes
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do

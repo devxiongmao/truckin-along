@@ -56,9 +56,9 @@ RSpec.describe "/companies", type: :request do
           valid_user.update!(company: company)
         end
 
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get new_company_url
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders the correct flash alert' do
@@ -221,9 +221,9 @@ RSpec.describe "/companies", type: :request do
     end
 
     describe 'GET /new' do
-      it 'redirects to the root path' do
+      it 'redirects to the dashboard path' do
         get new_company_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it 'renders with an error message' do
@@ -239,9 +239,9 @@ RSpec.describe "/companies", type: :request do
         }.not_to change(Company, :count)
       end
 
-      it 'redirects to the root path' do
+      it 'redirects to the dashboard path' do
         post companies_url, params: { company: valid_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it 'renders with an error message' do
@@ -253,9 +253,9 @@ RSpec.describe "/companies", type: :request do
     describe 'GET /edit' do
       before { non_admin_user.update!(company: company) }
 
-      it 'redirects to the root path' do
+      it 'redirects to the dashboard path' do
         get edit_company_url(company)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it 'renders with an error message' do
@@ -277,9 +277,9 @@ RSpec.describe "/companies", type: :request do
         expect(company.name).not_to eq("Updated Company")
       end
 
-      it 'redirects to the root path' do
+      it 'redirects to the dashboard path' do
         patch company_url(company), params: { company: new_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it 'renders with an error message' do

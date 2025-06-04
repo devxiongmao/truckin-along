@@ -46,9 +46,9 @@ RSpec.describe "Forms", type: :request do
       context "when form exists" do
         let(:form) { create(:form, :maintenance, company: company) }
 
-        it "redirects to the root path" do
+        it "redirects to the dashboard path" do
           get show_modal_form_path(form)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it "renders an error message" do
