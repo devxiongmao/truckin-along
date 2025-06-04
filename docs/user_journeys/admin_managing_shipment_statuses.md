@@ -64,19 +64,19 @@ Each trucking company does things differently. They may have different steps or 
 
 - 🟢 Easy creation of status
 - 🟢 Shipment status automation—no additional manual work required
-- 🟡 Some confusion around when a particular workflow might apply
+- 🟢 Users are pleased by the clear explainations of when the status change actions will be triggered within the app.
 
 ---
 
 ## Pain Points
 
-- User may not know when the associated action is triggered within the app.
+- None currently reported in this workflow.
 
 ---
 
 ## Opportunities
 
-- Update the copy on the workflow action page to explain when a given action is triggered within the app (XMDEV-335).
+- None currently reported in this workflow.
 
 ---
 
