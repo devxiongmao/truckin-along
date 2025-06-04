@@ -18,6 +18,7 @@
         value: "When #{preference.action.gsub('_', ' ')}", 
         class: 'form-input', 
         disabled: true %>
+  <p class="form-help-text"><%= action_explanation(preference.action) %></p>
 </div>
 
 <% unless statuses.empty? %>
