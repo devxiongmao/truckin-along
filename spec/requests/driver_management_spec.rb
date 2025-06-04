@@ -139,9 +139,9 @@ RSpec.describe "/driver_managements", type: :request do
       end
 
       context "when the driver is from another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get edit_driver_management_url(other_driver)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -231,9 +231,9 @@ RSpec.describe "/driver_managements", type: :request do
       end
 
       context "when the driver is from another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           post reset_password_driver_management_url(other_driver)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -250,9 +250,9 @@ RSpec.describe "/driver_managements", type: :request do
     end
 
     describe "GET /new" do
-      it "redirects non-admin users to the root path" do
+      it "redirects non-admin users to the dashboard path" do
         get new_driver_management_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -268,9 +268,9 @@ RSpec.describe "/driver_managements", type: :request do
         }.not_to change(User, :count)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         post driver_managements_url, params: { user: valid_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -280,9 +280,9 @@ RSpec.describe "/driver_managements", type: :request do
     end
 
     describe "GET /edit" do
-      it "redirects non-admin users to the root path" do
+      it "redirects non-admin users to the dashboard path" do
         get edit_driver_management_url(driver)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -298,9 +298,9 @@ RSpec.describe "/driver_managements", type: :request do
         expect(driver.first_name).not_to eq("Jane")
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         patch driver_management_url(driver), params: { user: new_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -323,9 +323,9 @@ RSpec.describe "/driver_managements", type: :request do
         }.not_to have_enqueued_mail(DriverMailer, :send_reset_password)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         post reset_password_driver_management_url(driver)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do

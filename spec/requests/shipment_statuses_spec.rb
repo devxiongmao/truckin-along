@@ -72,9 +72,9 @@ RSpec.describe "/shipment_statuses", type: :request do
       end
 
       context "when the shipment status belongs to another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get edit_shipment_status_url(other_shipment_status)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -176,9 +176,9 @@ RSpec.describe "/shipment_statuses", type: :request do
     end
 
     describe "GET /new" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get new_shipment_status_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -188,9 +188,9 @@ RSpec.describe "/shipment_statuses", type: :request do
     end
 
     describe "GET /edit" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get edit_shipment_status_url(shipment_status)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -206,9 +206,9 @@ RSpec.describe "/shipment_statuses", type: :request do
         }.not_to change(ShipmentStatus, :count)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         post shipment_statuses_url, params: { shipment_status: valid_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -224,9 +224,9 @@ RSpec.describe "/shipment_statuses", type: :request do
         expect(shipment_status.name).not_to eq("Delivered")
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         patch shipment_status_url(shipment_status), params: { shipment_status: new_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -242,9 +242,9 @@ RSpec.describe "/shipment_statuses", type: :request do
         }.not_to change(ShipmentStatus, :count)
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         delete shipment_status_url(shipment_status)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do

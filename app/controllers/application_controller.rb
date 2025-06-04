@@ -27,12 +27,12 @@ class ApplicationController < ActionController::Base
     end
 
     def handle_record_not_found
-      redirect_to(root_path, alert: "Not authorized.")
+      redirect_to(dashboard_path, alert: "Not authorized.")
     end
 
     def user_not_authorized
       flash[:alert] = "You are not authorized to perform this action."
-      redirect_to(request.referrer || root_path)
+      redirect_to(request.referrer || dashboard_path)
     end
 
   protected
