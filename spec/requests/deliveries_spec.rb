@@ -78,9 +78,9 @@ RSpec.describe "/deliveries", type: :request do
       end
 
       context "when the delivery does not belong to the users company" do
-        it "redirects to the root" do
+        it "redirects to the dashboard" do
           get delivery_url(other_delivery)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it "shows an alert saying not authorized" do
@@ -195,9 +195,9 @@ RSpec.describe "/deliveries", type: :request do
       end
 
       context "when the delivery does not belong to the users company" do
-        it "redirects to the root" do
+        it "redirects to the dashboard" do
           post close_delivery_url(other_delivery), params: { odometer_reading: valid_odometer_reading }
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it "shows an alert saying not authorized" do
@@ -311,9 +311,9 @@ RSpec.describe "/deliveries", type: :request do
     end
 
     describe "GET /index" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get deliveries_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -323,9 +323,9 @@ RSpec.describe "/deliveries", type: :request do
     end
 
     describe "GET /show" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get deliveries_url(delivery)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -335,9 +335,9 @@ RSpec.describe "/deliveries", type: :request do
     end
 
     describe "POST /close" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         post close_delivery_url(delivery)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -347,9 +347,9 @@ RSpec.describe "/deliveries", type: :request do
     end
 
     describe "GET /load_truck" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get load_truck_deliveries_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -359,9 +359,9 @@ RSpec.describe "/deliveries", type: :request do
     end
 
     describe "GET /start" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get start_deliveries_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do

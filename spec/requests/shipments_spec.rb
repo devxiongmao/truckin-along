@@ -341,7 +341,7 @@ RSpec.describe "/shipments", type: :request do
       context "when the shipment belongs to the user" do
         it "redirects to the shipments index" do
           post close_shipment_url(shipment)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it "shows an alert saying not authorized" do
@@ -364,9 +364,9 @@ RSpec.describe "/shipments", type: :request do
     end
 
     describe "POST #assign" do
-      it 'redirects to the root page' do
+      it 'redirects to the dashboard page' do
         post assign_shipments_url, params: { shipment_ids: [] }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -376,9 +376,9 @@ RSpec.describe "/shipments", type: :request do
     end
 
     describe "POST #assign_shipments_to_truck" do
-      it 'redirects to the root' do
+      it 'redirects to the dashboard' do
         post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [], truck_id: nil }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -388,9 +388,9 @@ RSpec.describe "/shipments", type: :request do
     end
 
     describe "POST #initiate_delivery" do
-      it 'redirects to the root' do
+      it 'redirects to the dashboard' do
         post initiate_delivery_shipments_url, params: { truck_id: 1 }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -406,9 +406,9 @@ RSpec.describe "/shipments", type: :request do
     end
 
     describe 'GET #index' do
-      it 'redirects to the root page' do
+      it 'redirects to the dashboard page' do
         get shipments_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -475,9 +475,9 @@ RSpec.describe "/shipments", type: :request do
     end
 
     describe "GET #new" do
-      it 'redirects to the root page' do
+      it 'redirects to the dashboard page' do
         get new_shipment_url
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -490,9 +490,9 @@ RSpec.describe "/shipments", type: :request do
       context "when the shipment is unclaimed" do
         let!(:shipment) { create(:shipment, user: valid_user, company: nil) }
 
-        it 'redirects to the root page' do
+        it 'redirects to the dashboard page' do
           get edit_shipment_url(shipment)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it "shows an alert saying not authorized" do
@@ -541,9 +541,9 @@ RSpec.describe "/shipments", type: :request do
     describe "GET #copy" do
       let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company, name: "Test Shipment") }
 
-      it 'redirects to the root page' do
+      it 'redirects to the dashboard page' do
         get copy_shipment_url(claimed_shipment)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -559,9 +559,9 @@ RSpec.describe "/shipments", type: :request do
       }.not_to change(Shipment, :count)
       end
 
-      it 'redirects to the root page' do
+      it 'redirects to the dashboard page' do
         post shipments_url, params: { shipment: valid_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
@@ -585,9 +585,9 @@ RSpec.describe "/shipments", type: :request do
             expect(shipment.name).not_to eq("Toys")
           end
 
-          it "redirects to the root path" do
+          it "redirects to the dashboard path" do
             patch shipment_url(shipment), params: { shipment: new_attributes }
-            expect(response).to redirect_to(root_path)
+            expect(response).to redirect_to(dashboard_path)
           end
         end
 
@@ -666,9 +666,9 @@ RSpec.describe "/shipments", type: :request do
             expect(shipment.name).not_to eq(nil)
           end
 
-          it 'redirects to the root page' do
+          it 'redirects to the dashboard page' do
             patch shipment_url(shipment), params: { shipment: invalid_attributes }
-            expect(response).to redirect_to(root_path)
+            expect(response).to redirect_to(dashboard_path)
           end
 
           it "shows an alert saying not authorized" do
@@ -846,7 +846,7 @@ RSpec.describe "/shipments", type: :request do
     end
 
     describe "DELETE #destroy" do
-      it 'redirects to the root page' do
+      it 'redirects to the dashboard page' do
         delete shipment_url(shipment)
         expect(response).to redirect_to(deliveries_path)
       end

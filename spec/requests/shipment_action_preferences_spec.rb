@@ -48,9 +48,9 @@ RSpec.describe "/shipment_action_preferences", type: :request do
       end
 
       context "when the shipment action preference belongs to another company" do
-        it 'redirects to the root path' do
+        it 'redirects to the dashboard path' do
           get edit_shipment_action_preference_url(other_company_preference)
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(dashboard_path)
         end
 
         it 'renders with an alert' do
@@ -100,9 +100,9 @@ RSpec.describe "/shipment_action_preferences", type: :request do
     end
 
     describe "GET /edit" do
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         get edit_shipment_action_preference_url(company_preference)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
@@ -118,9 +118,9 @@ RSpec.describe "/shipment_action_preferences", type: :request do
         expect(company_preference.shipment_status_id).not_to be_nil
       end
 
-      it "redirects to the root path" do
+      it "redirects to the dashboard path" do
         patch shipment_action_preference_url(company_preference), params: { shipment_action_preference: new_attributes }
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "renders the correct flash alert" do
