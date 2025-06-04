@@ -71,7 +71,7 @@ After completing all associated deliveries, the driver (or admin) needs to forma
 
 ## Opportunities
 
-- **XMDEV-362**: If the delivery is not eligible for completion (e.g., shipments still open), disable or hide the `Mark Complete` button until criteria are met
+- None currently reported in this workflow
 
 ---
 
