@@ -77,6 +77,11 @@
   <%= form.text_field :height, class: 'form-input', disabled: disabled || lock_fields_by_role(:height) %>
 </div>
 
+<div class="form-group">
+  <%= form.label :deliver_by, "Deliver By", class: 'form-label' %>
+  <%= form.date_field :deliver_by, class: 'form-input', disabled: disabled || lock_fields_by_role(:deliver_by) %>
+</div>
+
 <div class="form-actions">
   <%= form.submit 'Save Shipment', class: 'button primary-button', disabled: disabled %>
 </div>

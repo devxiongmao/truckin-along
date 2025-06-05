@@ -9,6 +9,7 @@ FactoryBot.define do
     length { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
     width { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
     height { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
+    deliver_by { Faker::Date.forward(days: 30) }
 
     association :truck
     association :shipment_status
