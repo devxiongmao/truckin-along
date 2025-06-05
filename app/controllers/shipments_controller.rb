@@ -175,7 +175,8 @@ class ShipmentsController < ApplicationController
           :weight,
           :length,
           :width,
-          :height)
+          :height,
+          :deliver_by)
       elsif current_user.admin?
         params.require(:shipment).permit(
           :shipment_status_id,
