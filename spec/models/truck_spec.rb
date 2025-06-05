@@ -175,7 +175,7 @@ RSpec.describe Truck, type: :model do
       let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery) }
       let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery) }
       it "returns the open shipments" do
-        expect(valid_truck.current_shipments).to match_array([delivery_shipment1.shipment, delivery_shipment2.shipment])
+        expect(valid_truck.current_shipments).to match_array([ delivery_shipment1.shipment, delivery_shipment2.shipment ])
       end
     end
 
