@@ -112,7 +112,7 @@ RSpec.describe ShipmentsHelper, type: :helper do
       before { allow(helper).to receive(:current_user).and_return(customer) }
 
       it "does not lock whitelisted fields for customers" do
-        %i[name sender_name sender_address receiver_name receiver_address weight length width height].each do |field|
+        %i[name sender_name sender_address receiver_name receiver_address weight length width height deliver_by].each do |field|
           expect(helper.lock_fields_by_role(field)).to eq(false)
         end
       end

@@ -23,7 +23,7 @@ module ShipmentsHelper
 
   def lock_fields_by_role(field)
     whitelisted_fields = {
-      customer: %i[name sender_name sender_address receiver_name receiver_address weight length width height],
+      customer: %i[name sender_name sender_address receiver_name receiver_address weight length width height deliver_by],
       admin: %i[shipment_status_id sender_address receiver_address weight length width height],
       driver: %i[shipment_status_id weight length width height]
     }
