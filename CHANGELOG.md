@@ -1,9 +1,8 @@
-### From v1.5.11 to HEAD
+### From v1.5.12 to HEAD
 
-- Bump sass from 1.89.0 to 1.89.1 (#335) (d5d707d) by dependabot[bot]
-- Bump turbo-rails from 2.0.13 to 2.0.16 (#333) (359db78) by dependabot[bot]
-- XMDEV-335: Update copy on shipment action preference edit page to detail when action is triggered (#341) (2aa5e50) by Jon
-- XMDEV-367: Update redirection to dashboard path instead of root path (#340) (77d7346) by Jon
+- Bump vitest from 3.1.4 to 3.2.1 (#337) (8d30e91) by dependabot[bot]
+- XMDEV-339: Adds deliver_by date to shipments (#344) (4cb8ba8) by Jon
+- XMDEV-371: Fix flaky test to ensure robustness with array matching (#343) (3f613f8) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
