@@ -1,8 +1,8 @@
-### From v1.5.12 to HEAD
+### From v1.5.13 to HEAD
 
-- Bump vitest from 3.1.4 to 3.2.1 (#337) (8d30e91) by dependabot[bot]
-- XMDEV-339: Adds deliver_by date to shipments (#344) (4cb8ba8) by Jon
-- XMDEV-371: Fix flaky test to ensure robustness with array matching (#343) (3f613f8) by Jon
+- Bump vitest from 3.2.1 to 3.2.3 (#347) (99f6c72) by dependabot[bot]
+- Bump factory_bot_rails from 6.4.4 to 6.5.0 (#348) (bd412c5) by dependabot[bot]
+- XMDEV-359: Updates columns in delivery show page (#349) (5bf4fd1) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
