@@ -72,9 +72,12 @@
       <tr>
         <th>Status</th>
         <th>Name</th>
+        <% unless @delivery.in_progress? %>
         <th>Sender Address</th>
+        <% end %>
         <th>Receiver Address</th>
         <th>Weight</th>
+        <th>Deliver By</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -83,9 +86,12 @@
       <tr>
         <td><%= shipment.status %></td>
         <td><%= shipment.name %></td>
+        <% unless @delivery.in_progress? %>
         <td><%= shipment.sender_address %></td>
+        <% end %>
         <td><%= shipment.receiver_address %></td>
         <td><%= shipment.weight %></td>
+        <td><%= shipment.deliver_by %></td>
         <td>
           <% if @delivery.in_progress? && @shipment_status%>
           <%= link_to 'Quick Close', close_shipment_path(shipment), 
@@ -113,6 +119,7 @@
         <th>Sender Address</th>
         <th>Receiver Address</th>
         <th>Weight</th>
+        <th>Deliver By</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -124,6 +131,7 @@
         <td><%= shipment.sender_address %></td>
         <td><%= shipment.receiver_address %></td>
         <td><%= shipment.weight %></td>
+        <td><%= shipment.deliver_by %></td>
         <td>
           <%= link_to 'Show', shipment, class: 'action-link' %> |
           <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
