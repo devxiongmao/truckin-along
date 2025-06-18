@@ -51,6 +51,7 @@ export default class extends Controller {
         const receiverMarker = L.marker([shipment.receiver_latitude, shipment.receiver_longitude]).addTo(map);
         receiverMarker.bindPopup(`<b>Delivery Location ${index + 1}</b><br>${shipment.receiver_address}`);
 
+        // eslint-disable-next-line no-unused-vars
         const polyline = L.polyline([
           [shipment.sender_latitude, shipment.sender_longitude],
           [shipment.receiver_latitude, shipment.receiver_longitude]
