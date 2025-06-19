@@ -4,8 +4,8 @@ class DeliveriesController < ApplicationController
 
   def index
     authorize Delivery
-    @unassigned_shipments = Shipment.where(company_id: nil).without_active_delivery
-    @my_shipments = Shipment.where(company_id: current_company)
+    @unassigned_shipments = Shipment.where(company_id: nil).without_active_delivery.order(deliver_by: :asc)
+    @my_shipments = Shipment.where(company_id: current_company).order(deliver_by: :asc)
   end
 
   def show
@@ -33,7 +33,7 @@ class DeliveriesController < ApplicationController
 
   def load_truck
     authorize Delivery
-    @unassigned_shipments = Shipment.for_company(current_company).where(truck_id: nil)
+    @unassigned_shipments = Shipment.for_company(current_company).where(truck_id: nil).order(deliver_by: :asc)
     @trucks = Truck.for_company(current_company).active?.select(&:available?)
   end
 
