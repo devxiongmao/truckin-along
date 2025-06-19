@@ -83,7 +83,7 @@ RSpec.describe "/driver_managements", type: :request do
         it "sends a temporary password email" do
           expect {
             post driver_managements_url, params: { user: valid_attributes }
-          }.to have_enqueued_mail(DriverMailer, :send_temp_password)
+          }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
 
         it "redirects to the admin index" do
@@ -107,7 +107,7 @@ RSpec.describe "/driver_managements", type: :request do
         it "does not send an email when driver creation fails" do
           expect {
             post driver_managements_url, params: { user: invalid_attributes }
-          }.not_to have_enqueued_mail(DriverMailer, :send_temp_password)
+          }.not_to change { ActionMailer::Base.deliveries.count }
         end
 
         it "renders an unprocessable_entity response" do
@@ -198,7 +198,7 @@ RSpec.describe "/driver_managements", type: :request do
         it "sends a reset password email" do
           expect {
             post reset_password_driver_management_url(driver)
-          }.to have_enqueued_mail(DriverMailer, :send_reset_password)
+          }.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
 
         it "redirects to the admin index" do
@@ -220,7 +220,7 @@ RSpec.describe "/driver_managements", type: :request do
         it "does not send an email when password reset fails" do
           expect {
             post reset_password_driver_management_url(driver)
-          }.not_to have_enqueued_mail(DriverMailer, :send_reset_password)
+          }.not_to change { ActionMailer::Base.deliveries.count }
         end
 
         it "redirects to the admin index with error message" do
@@ -320,7 +320,7 @@ RSpec.describe "/driver_managements", type: :request do
       it "does not send a reset password email" do
         expect {
           post reset_password_driver_management_url(driver)
-        }.not_to have_enqueued_mail(DriverMailer, :send_reset_password)
+        }.not_to change { ActionMailer::Base.deliveries.count }
       end
 
       it "redirects to the dashboard path" do

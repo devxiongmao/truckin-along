@@ -33,7 +33,7 @@ class CloseDelivery < ApplicationService
   def deactivate_truck_if_needed
     if @delivery.truck.should_deactivate?
       @delivery.truck.deactivate!
-      TruckMailer.send_truck_maintenance_due_email(@delivery.truck).deliver_later
+      TruckMailer.send_truck_maintenance_due_email(@delivery.truck.id).deliver_later
     end
   end
 
