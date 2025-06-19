@@ -9,9 +9,9 @@
       <th>Company</th>
       <th>Status</th>
       <th>Name</th>
-      <th>Sender Address</th>
+      <th>Reciever Name</th>
       <th>Receiver Address</th>
-      <th>Weight</th>
+      <th>Deliver By</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -21,9 +21,9 @@
       <td><%= shipment&.company&.name %></td>
       <td><%= shipment.status %></td>
       <td><%= shipment.name %></td>
-      <td><%= shipment.sender_address %></td>
+      <td><%= shipment.receiver_name %></td>
       <td><%= shipment.receiver_address %></td>
-      <td><%= shipment.weight %></td>
+      <td><%= shipment.deliver_by %></td>
       <td>
         <%= link_to 'Show', shipment, class: 'action-link' %> |
         <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |

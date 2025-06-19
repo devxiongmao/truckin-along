@@ -5,7 +5,7 @@ class ShipmentsController < ApplicationController
   # GET /shipments
   def index
     authorize Shipment
-    @shipments = Shipment.where(user_id: current_user.id)
+    @shipments = Shipment.where(user_id: current_user.id).order(deliver_by: :asc)
   end
 
   # GET /shipments/1
