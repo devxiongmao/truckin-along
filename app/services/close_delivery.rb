@@ -31,7 +31,10 @@ class CloseDelivery < ApplicationService
   end
 
   def deactivate_truck_if_needed
-    @delivery.truck.deactivate! if @delivery.truck.should_deactivate?
+    if @delivery.truck.should_deactivate?
+      @delivery.truck.deactivate!
+      TruckMailer.send_truck_maintenance_due_email(@delivery.truck).deliver_later
+    end
   end
 
   def complete_delivery
