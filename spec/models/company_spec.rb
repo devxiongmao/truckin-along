@@ -54,4 +54,20 @@ RSpec.describe Company, type: :model do
       end
     end
   end
+
+  describe '#admin_emails' do
+    let(:company) { create(:company) }
+
+    let!(:admin1) { create(:user, company: company, role: 'admin', email: 'admin1@example.com') }
+    let!(:admin2) { create(:user, company: company, role: 'admin', email: 'admin2@example.com') }
+    let!(:user)    { create(:user, company: company, role: 'driver', email: 'user@example.com') }
+
+    it 'returns only the emails of admin users' do
+      expect(company.admin_emails).to match_array([ 'admin1@example.com', 'admin2@example.com' ])
+    end
+
+    it 'does not include non-admin emails' do
+      expect(company.admin_emails).not_to include('user@example.com')
+    end
+  end
 end

@@ -72,6 +72,12 @@ RSpec.describe DeactivateTrucksJob, type: :job do
       expect(Rails.logger).to have_received(:info).with("✅ Truck ##{truck_high_mileage.id} deactivated successfully")
     end
 
+    it "sends an email for trucks that have been deactivated" do
+      expect { described_class.perform_now }
+        .to have_enqueued_mail(TruckMailer, :send_truck_maintenance_due_email)
+        .with(truck_old_inspection)
+    end
+
     it "ignores already inactive trucks" do
       expect { described_class.perform_now }
         .not_to change { truck_inactive.reload.active }

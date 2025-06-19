@@ -53,6 +53,7 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 
 - 🟢 Relieved and satisfied that the app proactively notified them of due maintenance
 - 🟢 Grateful for the quick, low-effort maintenance form process
+- 🟢 Grateful for the email notifications alerting for due truck maintenance
 - 🔴 Frustrated that **only admins** can complete maintenance tasks—drivers are often more aware of the truck’s actual condition
 
 ---
@@ -66,7 +67,6 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 ## Opportunities
 
 - **XMDEV-347**: Allow drivers to fill out and submit maintenance forms, increasing accuracy and reducing admin overhead
-- **XMDEV-348**: Implement email notifications for upcoming or overdue truck maintenance
 
 ---
 
