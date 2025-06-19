@@ -795,7 +795,7 @@ RSpec.describe "/shipments", type: :request do
         it "enqueues the delivery email job" do
           expect {
             post close_shipment_url(claimed_shipment)
-          }.to have_enqueued_job(SendDeliveryEmailJob).with(claimed_shipment.id)
+          }.to have_enqueued_mail(ShipmentDeliveryMailer, :successfully_delivered_email).with(claimed_shipment.id)
         end
       end
 

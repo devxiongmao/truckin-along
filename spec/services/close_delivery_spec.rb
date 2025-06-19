@@ -53,7 +53,7 @@ RSpec.describe CloseDelivery, type: :service do
         it 'sends a maintenance due email' do
           expect {
             result
-          }.to have_enqueued_mail(TruckMailer, :send_truck_maintenance_due_email).with(truck)
+          }.to have_enqueued_mail(TruckMailer, :send_truck_maintenance_due_email).with(truck.id)
         end
       end
     end
