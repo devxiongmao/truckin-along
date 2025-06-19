@@ -16,4 +16,8 @@ class Company < ApplicationRecord
             with: /\A\+?[\d\s\-()]{10,20}\z/,
             message: "must be a valid phone number (can include +, -, space, parentheses)"
           }
+
+  def admin_emails
+    users.admins.pluck(:email)
+  end
 end

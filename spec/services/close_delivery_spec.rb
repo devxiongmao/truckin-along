@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ActiveJob::TestHelper
 
 RSpec.describe CloseDelivery, type: :service do
   let(:truck) { create(:truck, mileage: 10000) }
@@ -10,6 +11,11 @@ RSpec.describe CloseDelivery, type: :service do
   subject(:result) { service.call }
 
   describe '#call' do
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
+
     context 'when delivery can be successfully closed' do
       before do
         allow(delivery).to receive(:can_be_closed?).and_return(true)
@@ -43,6 +49,12 @@ RSpec.describe CloseDelivery, type: :service do
           expect(truck).to receive(:deactivate!)
           result
         end
+
+        it 'sends a maintenance due email' do
+          expect {
+            result
+          }.to have_enqueued_mail(TruckMailer, :send_truck_maintenance_due_email).with(truck)
+        end
       end
     end
 
@@ -62,6 +74,10 @@ RSpec.describe CloseDelivery, type: :service do
 
       it 'does not complete the delivery' do
         expect { result }.not_to change { delivery.reload.status }
+      end
+
+      it 'does not send any emails' do
+        expect { result }.not_to have_enqueued_mail
       end
     end
 
@@ -84,6 +100,10 @@ RSpec.describe CloseDelivery, type: :service do
 
         it 'does not complete the delivery' do
           expect { result }.not_to change { delivery.reload.status }
+        end
+
+        it 'does not send any emails' do
+          expect { result }.not_to have_enqueued_mail
         end
       end
 
