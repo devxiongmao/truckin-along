@@ -7,7 +7,7 @@ class DeactivateTrucksJob < ApplicationJob
 
       begin
         truck.update!(active: false) # Use update! to raise an error if it fails
-        TruckMailer.send_truck_maintenance_due_email(truck).deliver_later
+        TruckMailer.send_truck_maintenance_due_email(truck.id).deliver_later
         Rails.logger.info("✅ Truck ##{truck.id} deactivated successfully")
       rescue StandardError => e
         Rails.logger.error("❌ Failed to deactivate Truck ##{truck.id}: #{e.message}")

@@ -4,7 +4,7 @@ RSpec.describe TruckMailer, type: :mailer do
   describe ".send_truck_maintenance_due_email" do
     let(:user) { create(:user, role: "admin") }
     let!(:truck) { create(:truck, company: user.company) }
-    let(:mail) { described_class.send_truck_maintenance_due_email(truck) }
+    let(:mail) { described_class.send_truck_maintenance_due_email(truck.id) }
 
 
     it "renders the headers" do

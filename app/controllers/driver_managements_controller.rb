@@ -19,7 +19,7 @@ class DriverManagementsController < ApplicationController
       @driver.company = current_user.company
 
       if @driver.save
-        DriverMailer.send_temp_password(@driver, temp_password).deliver_later
+        DriverMailer.send_temp_password(@driver, temp_password).deliver_now
         redirect_to admin_index_path, notice: "Driver account created successfully."
       else
         render :new, status: :unprocessable_entity, alert: "Unable to create driver account."
@@ -47,7 +47,7 @@ class DriverManagementsController < ApplicationController
       @driver.password = temp_password
       @driver.password_confirmation = temp_password
       if @driver.save
-        DriverMailer.send_reset_password(@driver, temp_password).deliver_later
+        DriverMailer.send_reset_password(@driver, temp_password).deliver_now
         redirect_to admin_index_path, notice: "Driver password was successfully reset."
       else
         redirect_to admin_index_path, alert: "Unable to reset password."

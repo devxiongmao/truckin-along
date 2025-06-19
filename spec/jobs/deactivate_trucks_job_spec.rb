@@ -75,7 +75,7 @@ RSpec.describe DeactivateTrucksJob, type: :job do
     it "sends an email for trucks that have been deactivated" do
       expect { described_class.perform_now }
         .to have_enqueued_mail(TruckMailer, :send_truck_maintenance_due_email)
-        .with(truck_old_inspection)
+        .with(truck_old_inspection.id)
     end
 
     it "ignores already inactive trucks" do
