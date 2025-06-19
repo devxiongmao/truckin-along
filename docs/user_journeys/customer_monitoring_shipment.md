@@ -52,13 +52,13 @@ The customer wants to track the progress of their shipment to understand how far
 - 🟢 Feels well-informed by email notifications about shipment activity
 - 🟢 Appreciates the straighforward and clear layout of the shipment details page, showing incremental deliveries
 - 🟢 Appreciates being able to track the shipment and identify and contact the carrier
-- 🟡 Frustrated by difficulty identifying the correct shipment on the index page
+- 🟢 Apperciates the ease of identifying the correct shipment on the index page
 
 ---
 
 ## Pain Points
 
-- The shipment index page includes columns that aren't helpful for most users; customers typically search by recipient and send date _(XMDEV-341)_
+- None currently reported in this workflow
 
 ---
 

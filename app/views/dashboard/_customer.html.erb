@@ -10,6 +10,7 @@
       <th>Sender</th>
       <th>Receiver</th>
       <th>Weight</th>
+      <th>Deliver By</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -22,6 +23,7 @@
       <td><%= shipment.sender_name %></td>
       <td><%= shipment.receiver_name %></td>
       <td><%= shipment.weight %></td>
+      <td><%= shipment.deliver_by %></td>
       <td>
         <%= link_to 'Show', shipment, class: 'action-link' %> |
         <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |
