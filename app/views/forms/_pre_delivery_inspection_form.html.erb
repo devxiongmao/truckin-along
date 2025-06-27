@@ -1,14 +1,28 @@
-<div id="initiate-modal" class="modal hidden">
+<div id="initiate-modal" class="modal hidden" data-controller="pre-delivery-inspection">
   <div class="modal-content">
-    <h3>Pre-Delivery Inspection Checklist</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3>Pre-Delivery Inspection Checklist</h3>
+      <% if Rails.env.development? %>
+      <button type="button" class="btn btn-warning btn-sm" id="check-all-dev" style="background-color: #ffc107; border-color: #ffc107; color: #000;">
+        ✓ Check All (DEV)
+      </button>
+      <% end %>
+    </div>
 
     <form id="initiate-form" method="post" data-action="modal#submitForm">
       <p>Before initiating delivery, please confirm all safety checks:</p>
 
       <div class="inspection-section">
-        <h4>Exterior Inspection</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h4>Exterior Inspection</h4>
+          <% unless Rails.env.development? %>
+          <button type="button" class="btn btn-outline-secondary btn-sm section-check-all" data-section="exterior">
+            ✓ Check Section
+          </button>
+          <% end %>
+        </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group exterior-checks">
           <h5>1. General Condition</h5>
           <label>
             <input type="checkbox" name="truck_body" required>
@@ -24,7 +38,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group exterior-checks">
           <h5>2. Lights and Reflectors</h5>
           <label>
             <input type="checkbox" name="headlights" required>
@@ -52,7 +66,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group exterior-checks">
           <h5>3. Tires and Wheels</h5>
           <label>
             <input type="checkbox" name="tread_depth" required>
@@ -76,7 +90,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group exterior-checks">
           <h5>4. Windshield and Mirrors</h5>
           <label>
             <input type="checkbox" name="windshield" required>
@@ -92,7 +106,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group exterior-checks">
           <h5>5. Fluid Leaks</h5>
           <label>
             <input type="checkbox" name="fluid_leaks" required>
@@ -100,7 +114,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group exterior-checks">
           <h5>6. Coupling Devices</h5>
           <label>
             <input type="checkbox" name="trailer_hitch" required>
@@ -122,9 +136,16 @@
       </div>
 
       <div class="inspection-section">
-        <h4>Interior Inspection</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h4>Interior Inspection</h4>
+          <% unless Rails.env.development? %>
+          <button type="button" class="btn btn-outline-secondary btn-sm section-check-all" data-section="interior">
+            ✓ Check Section
+          </button>
+          <% end %>
+        </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group interior-checks">
           <h5>1. Brakes</h5>
           <label>
             <input type="checkbox" name="service_brake" required>
@@ -140,7 +161,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group interior-checks">
           <h5>2. Steering</h5>
           <label>
             <input type="checkbox" name="steering" required>
@@ -148,7 +169,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group interior-checks">
           <h5>3. Gauges and Indicators</h5>
           <label>
             <input type="checkbox" name="fuel_gauge" required>
@@ -168,7 +189,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group interior-checks">
           <h5>4. Horn and Warning Devices</h5>
           <label>
             <input type="checkbox" name="horn" required>
@@ -180,7 +201,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group interior-checks">
           <h5>5. Emergency Equipment</h5>
           <label>
             <input type="checkbox" name="fire_extinguisher" required>
@@ -198,9 +219,16 @@
       </div>
 
       <div class="inspection-section">
-        <h4>Trailer-Specific Checks</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h4>Trailer-Specific Checks</h4>
+          <% unless Rails.env.development? %>
+          <button type="button" class="btn btn-outline-secondary btn-sm section-check-all" data-section="trailer">
+            ✓ Check Section
+          </button>
+          <% end %>
+        </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group trailer-checks">
           <h5>1. Trailer Doors</h5>
           <label>
             <input type="checkbox" name="trailer_doors" required>
@@ -212,7 +240,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group trailer-checks">
           <h5>2. Cargo Securement</h5>
           <label>
             <input type="checkbox" name="cargo_loaded" required>
@@ -226,9 +254,16 @@
       </div>
 
       <div class="inspection-section">
-        <h4>Additional Checks</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h4>Additional Checks</h4>
+          <% unless Rails.env.development? %>
+          <button type="button" class="btn btn-outline-secondary btn-sm section-check-all" data-section="additional">
+            ✓ Check Section
+          </button>
+          <% end %>
+        </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group additional-checks">
           <h5>1. Exhaust System</h5>
           <label>
             <input type="checkbox" name="exhaust" required>
@@ -236,7 +271,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group additional-checks">
           <h5>2. Suspension System</h5>
           <label>
             <input type="checkbox" name="suspension" required>
@@ -244,7 +279,7 @@
           </label>
         </div>
 
-        <div class="checklist-group">
+        <div class="checklist-group additional-checks">
           <h5>3. Documentation</h5>
           <label>
             <input type="checkbox" name="registration" required>
