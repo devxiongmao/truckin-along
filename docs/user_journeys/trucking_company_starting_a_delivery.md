@@ -54,24 +54,23 @@ Once trucks have been successfully loaded with shipments, the next step in the d
 ## Emotions
 
 - 🟢 Satisfied with the overall simplicity of the start procedure
-- 🟡 Slight frustration due to the need to manually check every box in the inspection form
+- 🟢 Satisfied with the check sections buttons to complete the inspection form faster
 
 ---
 
 ## Pain Points
 
-- No option to “select all” or bulk check groups in the Pre-Delivery Inspection form, making the process feel tedious
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
 - **XMDEV-356**: Update deliveries start page to show earliest scheduled shipment delivery time
-- **XMDEV-354**: Add map to the Delivery Show page for better spatial awareness
-- **XMDEV-355**: Implement “Check All” functionality for certain checklist sections in the pre-delivery form
+- **XMDEV-354**: Add map to the Delivery Show page for better spatial awarenessform
 
 ---
 
 ## Outcome
 
-The user successfully initiated a delivery while ensuring all **regulatory pre-inspection requirements** were fulfilled. They were able to review trucks, inspect them, and launch the route without errors or confusion. The journey was efficient, though slightly improved UX around form inputs would further enhance it.
+The user successfully initiated a delivery while ensuring all **regulatory pre-inspection requirements** were fulfilled. They were able to review trucks, inspect them, and launch the route without errors or confusion. The journey was efficient, and users appreciate the ability to quickly fill out the pre-delivery from.
