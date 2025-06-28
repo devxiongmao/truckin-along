@@ -51,11 +51,11 @@ To get started, ensure you have the following installed on your system:
 
 ### Azure Maps API Key
 
-Truckin' Along uses Azure Maps for geocoding services. You'll need to set up an API key:
+Truckin' Along uses Azure Maps for geocoding services. It's recommended to use this service for optimal performance. If you skip this setup, Truckin' Along will still work, you will just be using the `Nominatim` api instead. You can get your free Azure API key by performing the following steps.
 
 1. **Get an Azure Maps API Key**:
 
-   - Visit the [Azure Portal](https://portal.azure.com/#blade/Microsoft_Azure_Maps/Common/MenuBlade/Keys)
+   - Visit the [Azure Portal](https://azure.microsoft.com/en-us/products/azure-maps)
    - Create a new Azure Maps account or use an existing one
    - Copy your primary or secondary key
 
