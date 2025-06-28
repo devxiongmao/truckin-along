@@ -279,14 +279,14 @@ RSpec.describe "/shipments", type: :request do
             expect(shipment.name).not_to eq(nil)
           end
 
-          it "responds with unprocessable_entity status" do
+          it "redirects to the shipment edit page" do
             patch shipment_url(shipment), params: { shipment: invalid_attributes }
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to redirect_to(shipment_url(shipment))
           end
 
-          it 're-renders the edit template' do
+          it "shows an alert saying the shipment was ot updated" do
             patch shipment_url(shipment), params: { shipment: invalid_attributes }
-            expect(response).to render_template(:edit)
+            expect(flash[:alert]).to eq("Name can't be blank, Sender name can't be blank, Sender address can't be blank, Receiver name can't be blank, Receiver address can't be blank, Weight can't be blank, Weight is not a number")
           end
         end
       end
@@ -687,14 +687,14 @@ RSpec.describe "/shipments", type: :request do
               expect(shipment.name).not_to eq(nil)
             end
 
-            it "responds with unprocessable_entity status" do
+            it "redirects to the shipment edit page" do
               patch shipment_url(shipment), params: { shipment: invalid_attributes }
-              expect(response).to have_http_status(:unprocessable_entity)
+              expect(response).to redirect_to(shipment_url(shipment))
             end
 
-            it 're-renders the edit template' do
+            it "shows an alert saying the shipment was ot updated" do
               patch shipment_url(shipment), params: { shipment: invalid_attributes }
-              expect(response).to render_template(:edit)
+              expect(flash[:alert]).to eq("Sender address can't be blank, Receiver address can't be blank, Weight can't be blank, Weight is not a number")
             end
           end
 

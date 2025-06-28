@@ -40,18 +40,14 @@ class ShipmentsController < ApplicationController
   # PATCH/PUT /shipments/1
   def update
     authorize @shipment
-    if @shipment.shipment_status&.closed
-      return redirect_to @shipment, alert: "Shipment is closed, and currently locked for edits."
-    end
 
-    if current_user.customer? && @shipment.shipment_status&.locked_for_customers
-      return redirect_to @shipment, alert: "Shipment is currently locked for edits."
-    end
+    service = UpdateShipment.new(@shipment, shipment_params, current_user)
+    result = service.run
 
-    if @shipment.update(shipment_params)
-      redirect_to @shipment, notice: "Shipment was successfully updated."
+    if result.success?
+      redirect_to @shipment, notice: result.message
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to @shipment, alert: result.error
     end
   end
 
