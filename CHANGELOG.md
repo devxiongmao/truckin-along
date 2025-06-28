@@ -1,13 +1,12 @@
-### From v1.5.14 to HEAD
+### From v1.5.15 to HEAD
 
-- Bump debug from 1.10.0 to 1.11.0 (#352) (686783c) by dependabot[bot]
-- Bump kamal from 2.6.1 to 2.7.0 (#356) (c1015a9) by dependabot[bot]
-- Bump thruster from 0.1.13 to 0.1.14 (#357) (b6e2038) by dependabot[bot]
-- XMDEV-394: Remove SendDeliveryEmailJob and update jobs to use serialization (#360) (df3b372) by Jon
-- XMDEV-348: Adds truck maintenance deliver email (#359) (ebc1f60) by Jon
-- XMDEV-341: Refactors columns for various table views for shipments (#358) (9f24e6f) by Jon
-- XMDEV-389: Removes max width constraint from main-content window (#351) (44b1174) by Jon
-- XMDEV-393: Removes unused files (#354) (b0632c4) by Jon
+- Bump rspec-rails from 8.0.0 to 8.0.1 (#362) (ca50720) by dependabot[bot]
+- Bump solid_cable from 3.0.8 to 3.0.11 (#365) (1f210e3) by dependabot[bot]
+- XMDEV-361: Fix issue when manually updating a shipment status to closed (#367) (1b8f9fa) by Jon
+- XMDEV-380: Adds eslint to CI (#355) (d78231d) by Jon
+- XMDEV-355: Adds select all buttons for the pre inspection form (#366) (ab59c5b) by Jon
+- XMDEV-399: Updates redirect to dashboard page on user update (#364) (3a3b50d) by Jon
+- NO-JIRA: Removes test folder (#363) (b09f689) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
