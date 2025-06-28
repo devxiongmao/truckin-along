@@ -53,11 +53,11 @@ describe("ShowTruckLoadingMapController", () => {
       <div 
         data-controller="show-truck-loading-map"
         data-show-truck-loading-map-shipments-json-value='[{
-          "sender_latitude": 40.7128,
-          "sender_longitude": -74.0060,
+          "current_sender_latitude": 40.7128,
+          "current_sender_longitude": -74.0060,
           "receiver_latitude": 34.0522,
           "receiver_longitude": -118.2437,
-          "sender_address": "New York, NY",
+          "current_sender_address": "New York, NY",
           "receiver_address": "Los Angeles, CA"
         }]'>
       </div>
@@ -104,8 +104,8 @@ describe("ShowTruckLoadingMapController", () => {
         <div 
           data-controller="show-truck-loading-map"
           data-show-truck-loading-map-shipments-json-value='[{
-            "sender_latitude": 0,
-            "sender_longitude": 0,
+            "current_sender_latitude": 0,
+            "current_sender_longitude": 0,
             "receiver_latitude": 0,
             "receiver_longitude": 0
           }]'>
@@ -122,8 +122,8 @@ describe("ShowTruckLoadingMapController", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "show-truck-loading-map");
       
       const validShipment = {
-        sender_latitude: 40.7128,
-        sender_longitude: -74.0060,
+        current_sender_latitude: 40.7128,
+        current_sender_longitude: -74.0060,
         receiver_latitude: 34.0522,
         receiver_longitude: -118.2437
       };
@@ -135,8 +135,8 @@ describe("ShowTruckLoadingMapController", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "show-truck-loading-map");
 
       const invalidShipment = {
-        sender_latitude: 0,
-        sender_longitude: -74.0060,
+        current_sender_latitude: 0,
+        current_sender_longitude: -74.0060,
         receiver_latitude: 34.0522,
         receiver_longitude: -118.2437
       };
