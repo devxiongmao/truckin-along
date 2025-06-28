@@ -47,6 +47,44 @@ To get started, ensure you have the following installed on your system:
 
 ---
 
+## 🔧 Environment Setup
+
+### Azure Maps API Key
+
+Truckin' Along uses Azure Maps for geocoding services. You'll need to set up an API key:
+
+1. **Get an Azure Maps API Key**:
+
+   - Visit the [Azure Portal](https://portal.azure.com/#blade/Microsoft_Azure_Maps/Common/MenuBlade/Keys)
+   - Create a new Azure Maps account or use an existing one
+   - Copy your primary or secondary key
+
+2. **Configure Environment Variables**:
+
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Edit `.env` and add your Azure Maps API key:
+     ```bash
+     AZURE_MAPS_API_KEY=your_actual_api_key_here
+     ```
+
+3. **Security Notes**:
+   - Never commit your `.env` file to version control (it's already in `.gitignore`)
+   - For production, set environment variables through your hosting platform
+   - The `.env.example` file serves as documentation for required variables
+
+### Other Environment Variables
+
+Additional environment variables can be added to your `.env` file as needed:
+
+- `DATABASE_URL`: Database connection string
+- `REDIS_URL`: Redis connection string
+- `RAILS_LOG_LEVEL`: Logging level (default: info)
+
+---
+
 ## 🛠️ Standard Installation (Local Development)
 
 ### 1. Clone the Repository

@@ -1,37 +1,71 @@
-Geocoder.configure do |config|
-  # Geocoding options
-  config.timeout = 5                  # geocoding service timeout (secs)
+# Geocoder configuration for Azure Maps
+# Ensure environment variables are loaded
+require "dotenv/rails" if defined?(Dotenv)
 
-  # Environment-specific configuration
-  if Rails.env.test? || ENV["CI"] == "true" || ENV["GITHUB_ACTIONS"] == "true" || ENV["GEOCODER_DISABLED"] == "true"
-    # Test mode - use much faster test adapter
-    puts "Using Geocoder test mode configuration"
-    config.lookup = :test
-    config.ip_lookup = :test
-    config.timeout = 0.1  # Very short timeout for faster failures if something goes wrong
-  else
-    # Normal mode
-    config.lookup = :nominatim          # name of geocoding service (symbol)
-    # config.ip_lookup = :ipinfo_io     # name of IP address geocoding service (symbol)
-    config.language = :en               # ISO-639 language code
-    config.use_https = true             # use HTTPS for lookup requests? (if supported)
-    # config.http_proxy = nil           # HTTP proxy server (user:pass@host:port)
-    # config.https_proxy = nil          # HTTPS proxy server (user:pass@host:port)
-    config.api_key = nil                # API key for geocoding service
+if Rails.env.test? || ENV["CI"] == "true" || ENV["GITHUB_ACTIONS"] == "true" || ENV["GEOCODER_DISABLED"] == "true"
+  # Test mode - use much faster test adapter
+  puts "🌍 Using Geocoder test mode configuration" if Rails.env.development?
+  Geocoder.configure(
+    lookup: :test,
+    ip_lookup: :test,
+    timeout: 0.1
+  )
+
+  # Create a default stub for all geocoding requests
+  Geocoder::Lookup::Test.add_stub(
+    "any", [
+      {
+        "coordinates"  => [ 40.7128, -74.0060 ],
+        "address"      => "New York, NY, USA",
+        "state"        => "New York",
+        "country"      => "United States",
+        "country_code" => "US"
+      }
+    ]
+  )
+
+  # Add common address stubs for seed data
+  common_addresses = [
+    "101 Tech Blvd, Silicon Valley, USA",
+    "123 Main St, Anytown, USA",
+    "456 Park Ave, Metropolis, USA",
+    "789 Broadway, New City, USA",
+    "10 Innovation Way, Tech Park, USA"
+  ]
+
+  # Add individual stubs for each common address
+  common_addresses.each do |address|
+    Geocoder::Lookup::Test.add_stub(
+      address, [
+        {
+          "coordinates"  => [ 37.7749 + rand(-0.1..0.1), -122.4194 + rand(-0.1..0.1) ],
+          "address"      => address,
+          "state"        => address.split(", ")[1],
+          "country"      => "United States",
+          "country_code" => "US"
+        }
+      ]
+    )
   end
+elsif ENV["AZURE_MAPS_API_KEY"].present?
+  # Production/Development mode - Azure Maps
+  puts "🌍 Using Azure Maps geocoding service" if Rails.env.development?
 
-  # Exceptions that should not be rescued by default
-  # (if you want to implement custom error handling);
-  # supports SocketError and Timeout::Error
-  # config.always_raise = []
+  Geocoder.configure(
+    lookup: :azure,
+    api_key: ENV["AZURE_MAPS_API_KEY"],
+    language: :en,
+    use_https: true,
+    timeout: 5
+  )
+else
+  puts "🌍 Falling back to Nominatim geocoding service" if Rails.env.development?
 
-  # Calculation options
-  # config.units = :mi                # :km for kilometers or :mi for miles
-  # config.distances = :linear        # :spherical or :linear
-
-  # Cache configuration
-  # config.cache_options = {
-  #   expiration: 2.days,
-  #   prefix: 'geocoder:'
-  # }
+  Geocoder.configure(
+    lookup: :nominatim,
+    api_key: nil,
+    language: :en,
+    use_https: true,
+    timeout: 5
+  )
 end
