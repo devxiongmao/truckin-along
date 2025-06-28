@@ -60,22 +60,21 @@ As Peter completes the physical delivery of packages to their destination, he mu
 
 - 🟢 Pleased when Quick Close is available — fast and efficient
 - 🟢 Please with power behind manual process - able to manipulate all fields quickly
-- 🔴 Frustration from UI bugs or over-clicking
 
 ---
 
 ## Pain Points
 
-- A known bug prevents delivery from being properly closed if done manually
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- **XMDEV-361**: Fix bug preventing delivery from closing after manual shipment closure
+- None currently reported in this workflow
 
 ---
 
 ## Outcome
 
-At the end of this journey, the user successfully marked shipments as delivered, either via the streamlined **Quick Close** method or through the more detailed **manual update** process. While functional, the journey reveals opportunities to reduce friction and resolve bugs for a more seamless closing experience.
+At the end of this journey, the user successfully marked shipments as delivered, either via the streamlined **Quick Close** method or through the more detailed **manual update** process.
