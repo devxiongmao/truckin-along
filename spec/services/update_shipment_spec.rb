@@ -5,17 +5,14 @@ RSpec.describe UpdateShipment do
 
   let(:user) { create(:user) }
   let(:company) { create(:company) }
-  let(:truck) { create(:truck, company: company) }
-  let(:shipment_status) { create(:shipment_status, company: company) }
   let(:closed_status) { create(:shipment_status, company: company, closed: true) }
   let(:locked_status) { create(:shipment_status, company: company, locked_for_customers: true) }
-  let(:delivery) { create(:delivery, truck: truck, user: user) }
+  let(:delivery) { create(:delivery, user: user) }
 
   let(:shipment) do
     create(:shipment,
            user: user,
-           company: company,
-           shipment_status: shipment_status)
+           company: company)
   end
 
   describe '#run' do
