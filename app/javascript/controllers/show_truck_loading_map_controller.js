@@ -23,12 +23,12 @@ export default class extends Controller {
 
   hasValidCoordinates(shipment) {
     return (
-      shipment.sender_latitude != null &&
-      shipment.sender_longitude != null &&
+      shipment.current_sender_latitude != null &&
+      shipment.current_sender_longitude != null &&
       shipment.receiver_latitude != null &&
       shipment.receiver_longitude != null &&
-      shipment.sender_latitude !== 0 &&
-      shipment.sender_longitude !== 0 &&
+      shipment.current_sender_latitude !== 0 &&
+      shipment.current_sender_longitude !== 0 &&
       shipment.receiver_latitude !== 0 &&
       shipment.receiver_longitude !== 0
     );
@@ -45,15 +45,15 @@ export default class extends Controller {
 
     this.shipments.forEach((shipment, index) => {
       if (this.hasValidCoordinates(shipment)) {
-        const senderMarker = L.marker([shipment.sender_latitude, shipment.sender_longitude]).addTo(map);
-        senderMarker.bindPopup(`<b>Pickup Location ${index + 1}</b><br>${shipment.sender_address}`);
+        const senderMarker = L.marker([shipment.current_sender_latitude, shipment.current_sender_longitude]).addTo(map);
+        senderMarker.bindPopup(`<b>Pickup Location ${index + 1}</b><br>${shipment.current_sender_address}`);
 
         const receiverMarker = L.marker([shipment.receiver_latitude, shipment.receiver_longitude]).addTo(map);
         receiverMarker.bindPopup(`<b>Delivery Location ${index + 1}</b><br>${shipment.receiver_address}`);
 
         // eslint-disable-next-line no-unused-vars
         const polyline = L.polyline([
-          [shipment.sender_latitude, shipment.sender_longitude],
+          [shipment.current_sender_latitude, shipment.current_sender_longitude],
           [shipment.receiver_latitude, shipment.receiver_longitude]
         ], {
           color: this.getRouteColor(index),
@@ -61,7 +61,7 @@ export default class extends Controller {
           opacity: 0.7
         }).addTo(map);
 
-        bounds.extend([shipment.sender_latitude, shipment.sender_longitude]);
+        bounds.extend([shipment.current_sender_latitude, shipment.current_sender_longitude]);
         bounds.extend([shipment.receiver_latitude, shipment.receiver_longitude]);
       }
     });

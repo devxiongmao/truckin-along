@@ -49,6 +49,21 @@ class Shipment < ApplicationRecord
     delivery_shipments.order(created_at: :desc).first
   end
 
+  def current_sender_address
+    return sender_address if latest_delivery_shipment.nil?
+    latest_delivery_shipment.receiver_address
+  end
+
+  def current_sender_latitude
+    return sender_latitude if latest_delivery_shipment.nil?
+    latest_delivery_shipment.receiver_latitude
+  end
+
+  def current_sender_longitude
+    return sender_longitude if latest_delivery_shipment.nil?
+    latest_delivery_shipment.receiver_longitude
+  end
+
   private
 
   def geocode_sender
