@@ -193,6 +193,50 @@ RSpec.describe Truck, type: :model do
     end
   end
 
+  describe "#earliest_due_date" do
+    context "when there are shipments with different deliver_by dates" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+      let!(:shipment1) { create(:shipment, deliver_by: 1.week.from_now.to_date) }
+      let!(:shipment2) { create(:shipment, deliver_by: 2.weeks.from_now.to_date) }
+      let!(:shipment3) { create(:shipment, deliver_by: 3.days.from_now.to_date) }
+
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+      let!(:delivery_shipment3) { create(:delivery_shipment, delivery: delivery, shipment: shipment3) }
+
+      it "returns the earliest deliver_by date" do
+        expect(valid_truck.earliest_due_date).to eq(3.days.from_now.to_date)
+      end
+    end
+
+    context "when there are shipments with the same deliver_by date" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+      let!(:shipment1) { create(:shipment, deliver_by: 1.week.from_now.to_date) }
+      let!(:shipment2) { create(:shipment, deliver_by: 1.week.from_now.to_date) }
+
+      let!(:delivery_shipment1) { create(:delivery_shipment, delivery: delivery, shipment: shipment1) }
+      let!(:delivery_shipment2) { create(:delivery_shipment, delivery: delivery, shipment: shipment2) }
+
+      it "returns the deliver_by date" do
+        expect(valid_truck.earliest_due_date).to eq(1.week.from_now.to_date)
+      end
+    end
+
+    context "when there are no delivery shipments" do
+      let!(:delivery) { create(:delivery, truck: valid_truck) }
+
+      it "returns 'No shipments'" do
+        expect(valid_truck.earliest_due_date).to eq("No shipments")
+      end
+    end
+
+    context "when there is no delivery" do
+      it "returns 'No shipments'" do
+        expect(valid_truck.earliest_due_date).to eq("No shipments")
+      end
+    end
+  end
+
   describe "#current_volume" do
     let!(:delivery) { create(:delivery, truck: valid_truck) }
 
