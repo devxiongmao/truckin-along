@@ -19,8 +19,13 @@ if Rails.env.test? || ENV['CI'] == 'true' || ENV['GITHUB_ACTIONS'] == 'true' || 
 
   puts "Found #{seed_addresses.count} potential addresses in seed data"
 
-  # Configure test mode
-  Geocoder.configure(lookup: :test, ip_lookup: :test)
+  # Configure test mode only if not already configured for production
+  unless Rails.env.production? || ENV["AZURE_MAPS_API_KEY"].present?
+    puts "Configuring Geocoder for seed data in test mode"
+    Geocoder.configure(lookup: :test, ip_lookup: :test)
+  else
+    puts "Using existing Geocoder configuration for seed data"
+  end
 
   # Add a fallback stub using a regex to match any unknown address
   Geocoder::Lookup::Test.add_stub(
