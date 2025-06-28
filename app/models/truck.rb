@@ -47,6 +47,10 @@ class Truck < ApplicationRecord
     current_shipments.reduce(0.0) { |curr_weight, shipment| curr_weight + shipment.weight }
   end
 
+  def earliest_due_date
+    current_shipments.minimum(:deliver_by) || "No shipments"
+  end
+
   def latest_delivery
     deliveries.active.order(created_at: :desc).first
   end

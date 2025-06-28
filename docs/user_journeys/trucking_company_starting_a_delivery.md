@@ -66,7 +66,6 @@ Once trucks have been successfully loaded with shipments, the next step in the d
 
 ## Opportunities
 
-- **XMDEV-356**: Update deliveries start page to show earliest scheduled shipment delivery time
 - **XMDEV-354**: Add map to the Delivery Show page for better spatial awarenessform
 
 ---
