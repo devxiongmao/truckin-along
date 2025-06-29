@@ -249,7 +249,7 @@ RSpec.describe Shipment, type: :model do
           delivery_shipment.update!(delivered_date: Time.current)
         end
 
-        ### Fix this 
+        ### Fix this
         it "returns the receiver latitude from the latest delivery shipment" do
           expect(valid_shipment.current_sender_latitude).to eq(40.7128)
         end
@@ -283,7 +283,7 @@ RSpec.describe Shipment, type: :model do
           delivery_shipment.update!(delivered_date: Time.current)
         end
 
-        ### Fix this 
+        ### Fix this
         it "returns the receiver longitude from the latest delivery shipment" do
           expect(valid_shipment.current_sender_longitude).to eq(-74.006)
         end
