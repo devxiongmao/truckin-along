@@ -51,17 +51,20 @@ class Shipment < ApplicationRecord
 
   def current_sender_address
     return sender_address if latest_delivery_shipment.nil?
-    latest_delivery_shipment.receiver_address
+    return latest_delivery_shipment.receiver_address if !latest_delivery_shipment.delivered_date.nil?
+    latest_delivery_shipment.sender_address
   end
 
   def current_sender_latitude
     return sender_latitude if latest_delivery_shipment.nil?
-    latest_delivery_shipment.receiver_latitude
+    return latest_delivery_shipment.receiver_latitude if !latest_delivery_shipment.delivered_date.nil?
+    latest_delivery_shipment.sender_latitude
   end
 
   def current_sender_longitude
     return sender_longitude if latest_delivery_shipment.nil?
-    latest_delivery_shipment.receiver_longitude
+    return latest_delivery_shipment.receiver_longitude if !latest_delivery_shipment.delivered_date.nil?
+    latest_delivery_shipment.sender_longitude
   end
 
   private
