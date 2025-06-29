@@ -55,7 +55,7 @@ This user is here because they want to use Truckin' Along’s services to get th
 ## Emotions
 
 - 🟢 Pleased with the short, simple form
-- 🟡 Slight friction: two clicks required to begin creating a shipment after login
+- 🟢 Pleased with the ease of getting started. Their able to begin creating shipments quickly.
 
 ---
 
@@ -67,7 +67,6 @@ This user is here because they want to use Truckin' Along’s services to get th
 
 ## Opportunities
 
-- Add a direct "Create New Shipment" button to the top of the dashboard page to reduce clicks. (XMDEV-338)
 - The `Delete Shipment` button should not always be visible. (XMDEV-336)
 
 ---
