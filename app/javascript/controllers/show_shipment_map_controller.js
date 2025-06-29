@@ -53,8 +53,7 @@ export default class extends Controller {
     receiverMarker.bindPopup("<b>Delivery Location</b><br>" + this.receiverAddressValue);
     
     // Draw the main route in blue
-    // eslint-disable-next-line no-unused-vars
-    const mainRoute = L.polyline([
+    L.polyline([
       [this.senderLatValue, this.senderLngValue],
       [this.receiverLatValue, this.receiverLngValue]
     ], { color: 'blue', weight: 3 }).addTo(map);
@@ -76,8 +75,7 @@ export default class extends Controller {
           segmentReceiverMarker.bindPopup(`<b>Waypoint ${index + 2}</b><br>${coord.receiverAddress}`);
           
           // Draw this segment route in red
-          // eslint-disable-next-line no-unused-vars
-          const segmentRoute = L.polyline([
+          L.polyline([
             [coord.senderLat, coord.senderLng],
             [coord.receiverLat, coord.receiverLng]
           ], { color: 'red', weight: 2 }).addTo(map);

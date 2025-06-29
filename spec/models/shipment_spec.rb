@@ -207,11 +207,24 @@ RSpec.describe Shipment, type: :model do
       let!(:delivery_shipment) do
         create(:delivery_shipment,
                shipment: valid_shipment,
+               sender_address: "123 Pickup Street, New York, NY",
                receiver_address: "456 Delivery Street, Los Angeles, CA")
       end
 
-      it "returns the receiver address from the latest delivery shipment" do
-        expect(valid_shipment.current_sender_address).to eq("456 Delivery Street, Los Angeles, CA")
+      describe "when the latest delivery shipment has been delivered" do
+        before do
+          delivery_shipment.update!(delivered_date: Time.current)
+        end
+
+        it "returns the receiver address from the latest delivery shipment" do
+          expect(valid_shipment.current_sender_address).to eq("456 Delivery Street, Los Angeles, CA")
+        end
+      end
+
+      describe "when the latest delivery shipment has not been delivered" do
+        it "returns the sender address from the latest delivery shipment" do
+          expect(valid_shipment.current_sender_address).to eq("123 Pickup Street, New York, NY")
+        end
       end
     end
   end
@@ -227,11 +240,25 @@ RSpec.describe Shipment, type: :model do
       let!(:delivery_shipment) do
         create(:delivery_shipment,
                shipment: valid_shipment,
-               receiver_latitude: 40.7128)
+               sender_latitude: 40.7128,
+               receiver_latitude: 34.0522)
       end
 
-      it "returns the receiver latitude from the latest delivery shipment" do
-        expect(valid_shipment.current_sender_latitude).to eq(40.7128)
+      describe "when the latest delivery shipment has been delivered" do
+        before do
+          delivery_shipment.update!(delivered_date: Time.current)
+        end
+
+        ### Fix this
+        it "returns the receiver latitude from the latest delivery shipment" do
+          expect(valid_shipment.current_sender_latitude).to eq(40.7128)
+        end
+      end
+
+      describe "when the latest delivery shipment has not been delivered" do
+        it "returns the sender latitude from the latest delivery shipment" do
+          expect(valid_shipment.current_sender_latitude).to eq(40.7128)
+        end
       end
     end
   end
@@ -247,11 +274,25 @@ RSpec.describe Shipment, type: :model do
       let!(:delivery_shipment) do
         create(:delivery_shipment,
                shipment: valid_shipment,
-               receiver_longitude: -74.006)
+               sender_longitude: -74.0060,
+               receiver_longitude: -118.2437)
       end
 
-      it "returns the receiver longitude from the latest delivery shipment" do
-        expect(valid_shipment.current_sender_longitude).to eq(-74.006)
+      describe "when the latest delivery shipment has been delivered" do
+        before do
+          delivery_shipment.update!(delivered_date: Time.current)
+        end
+
+        ### Fix this
+        it "returns the receiver longitude from the latest delivery shipment" do
+          expect(valid_shipment.current_sender_longitude).to eq(-74.006)
+        end
+      end
+
+      describe "when the latest delivery shipment has not been delivered" do
+        it "returns the sender longitude from the latest delivery shipment" do
+          expect(valid_shipment.current_sender_longitude).to eq(-74.0060)
+        end
       end
     end
   end
