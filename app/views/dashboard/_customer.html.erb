@@ -1,5 +1,7 @@
-<h3>My Customer Shipments</h3>
-
+<div class="page-header">
+  <h3>My Customer Shipments</h3>
+  <%= link_to 'Create New Shipment', new_shipment_path, class: 'button primary-button' %>
+</div>
 <% if @shipments.present? %>
 <table class="styled-table">
   <thead>
