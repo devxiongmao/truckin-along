@@ -80,7 +80,6 @@ As trucking companies grow, they acquire new vehicles to expand or replace their
 - 🟢 Feels accomplished after a smooth and intuitive truck creation flow
 - 🟢 Appreciates low cognitive effort required for basic operations
 - 🟡 Slightly frustrated if required truck data is not immediately available
-- 🔴 Frustrated that only admins can complete maintenance records, adding overhead
 
 ---
 
@@ -88,13 +87,12 @@ As trucking companies grow, they acquire new vehicles to expand or replace their
 
 - Truck creation requires all data up front:
   - Missing data means either placeholder input (which must be corrected) or a delayed form submission
-- Only admin users can complete truck maintenance, limiting operational flexibility
 
 ---
 
 ## Opportunities
 
-- **XMDEV-347**: Enable drivers to fill out and submit maintenance forms, reducing admin burden and increasing real-time accuracy
+- None currently reported in this workflow
 
 ---
 
