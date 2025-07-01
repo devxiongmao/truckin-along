@@ -38,3 +38,22 @@
   font-size: 1.2em;
   margin-right: 8px;
 }
+
+/* Status Indicators */
+.status-active {
+  color: #28a745;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.status-inactive {
+  color: #dc3545;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}

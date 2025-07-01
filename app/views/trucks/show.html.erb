@@ -1,6 +1,10 @@
 <div class="page-header">
   <h1 class="page-title">Truck Details</h1>
+  <% if current_user.admin? %>
   <%= link_to 'Back', admin_index_path, class: 'button secondary-button' %>
+  <% else %>
+  <%= link_to 'Back', dashboard_path, class: 'button secondary-button' %>
+  <% end %>
 </div>
 
 <div class="details-container">
@@ -17,7 +21,9 @@
 </div>
 
 <div class="details-actions">
+  <% if current_user.admin? %>
   <%= link_to 'Edit', edit_truck_path(@truck), class: 'button primary-button' %>
+  <% end %>
 </div>
 
 <div data-controller="tabs">

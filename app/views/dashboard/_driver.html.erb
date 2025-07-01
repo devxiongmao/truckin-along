@@ -7,7 +7,7 @@
       <th># of Shipments</th>
       <th>Current Volume</th>
       <th>Current Weight</th>
-      <th>Actions</>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody id="my-shipments">
@@ -30,6 +30,68 @@
     <h4>Seems a little quiet here...</h4>
     <p>Head over to the deliveries page to start.... Truckin' Along!</p>
     <%= link_to "Start First Delivery", start_deliveries_path, class: "primary-button" %>
+  </div>
+</div>
+<% end %>
+
+<br />
+
+<h3>Truck Maintenance</h3>
+<% if @trucks.present? %>
+<div data-controller="create-maintenance">
+  <div id="maintenance-modal" class="modal hidden">
+    <%= render 'forms/maintenance_form'%>
+  </div>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Mileage</th>
+        <th>License Plate</th>
+        <th>Status</th>
+        <th>Actions</th>
+        <th>Maintenance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @trucks.each do |truck| %>
+      <tr>
+        <td><%= truck.make %></td>
+        <td><%= truck.model %></td>
+        <td><%= truck.year %></td>
+        <td><%= truck.mileage %></td>
+        <td><%= truck.license_plate %></td>
+        <td>
+          <% if truck.active %>
+          <span class="status-active">Active</span>
+          <% else %>
+          <span class="status-inactive">Maintenance Required</span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to 'View Details', truck, class: 'action-link' %>
+        </td>
+        <td>
+          <% if !truck.active %>
+          <button class="button warning-button" data-action="click->create-maintenance#open" data-modal-truck-id-value="<%= truck.id %>">
+            Complete Maintenance
+          </button>
+          <% else %>
+          <span class="status-active">Up to Date</span>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% else %>
+<div class="empty-state-container">
+  <div class="empty-state-content">
+    <h4>No trucks available</h4>
+    <p>Contact your administrator to add trucks to your fleet.</p>
   </div>
 </div>
 <% end %>
