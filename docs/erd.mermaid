@@ -10,7 +10,7 @@ erDiagram
     Users ||--o{ Deliveries : performs
     Users ||--o{ Shipments : handles
     Users ||--o{ Forms : submits
-    Users ||--o{ Offers : receives
+    Shipments ||--o{ Offers : receives
     
     Trucks ||--o{ Deliveries : assigned_to
     Trucks ||--o{ Shipments : carries
@@ -153,7 +153,7 @@ erDiagram
     
     Offers {
         bigint id PK
-        bigint user_id FK
+        bigint shipment_id FK
         bigint company_id FK
         integer status
         text reception_address

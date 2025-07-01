@@ -26,6 +26,15 @@ a:hover, .action-link:hover {
   text-decoration: underline;
 }
 
+.action-link.success-link {
+  color: #28a745; /* Green for positive actions */
+}
+
+.action-link.success-link:hover {
+  color: #1e7e34; /* Darker green on hover */
+  text-decoration: underline;
+}
+
 .nav-no-style-link {
   text-decoration: none;
   color: inherit;

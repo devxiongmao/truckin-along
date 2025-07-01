@@ -67,7 +67,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_212117) do
   end
 
   create_table "offers", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "shipment_id", null: false
     t.bigint "company_id", null: false
     t.integer "status", default: 0, null: false
     t.text "reception_address"
@@ -80,7 +80,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_212117) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_offers_on_company_id"
-    t.index ["user_id"], name: "index_offers_on_user_id"
+    t.index ["shipment_id"], name: "index_offers_on_shipment_id"
   end
 
   create_table "shipment_action_preferences", force: :cascade do |t|
@@ -174,7 +174,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_01_212117) do
   add_foreign_key "forms", "companies"
   add_foreign_key "forms", "users"
   add_foreign_key "offers", "companies"
-  add_foreign_key "offers", "users"
+  add_foreign_key "offers", "shipments"
   add_foreign_key "shipment_action_preferences", "companies"
   add_foreign_key "shipment_action_preferences", "shipment_statuses"
   add_foreign_key "shipment_statuses", "companies"

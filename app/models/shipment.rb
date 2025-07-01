@@ -6,6 +6,7 @@ class Shipment < ApplicationRecord
 
   has_many :delivery_shipments, dependent: :nullify
   has_many :deliveries, through: :delivery_shipments
+  has_many :offers, dependent: :nullify
 
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }

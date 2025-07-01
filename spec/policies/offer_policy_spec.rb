@@ -13,6 +13,7 @@ RSpec.describe OfferPolicy, type: :policy do
 
       it { expect(subject.index?).to be true }
       it { expect(subject.create?).to be true }
+      it { expect(subject.bulk_create?).to be true }
     end
 
     context 'when the user is a driver' do
@@ -21,6 +22,7 @@ RSpec.describe OfferPolicy, type: :policy do
 
       it { expect(subject.index?).to be true }
       it { expect(subject.create?).to be true }
+      it { expect(subject.bulk_create?).to be true }
     end
 
     context 'when the user is a customer' do
@@ -29,6 +31,7 @@ RSpec.describe OfferPolicy, type: :policy do
 
       it { expect(subject.index?).to be true }
       it { expect(subject.create?).to be false }
+      it { expect(subject.bulk_create?).to be false }
     end
   end
 end

@@ -12,4 +12,8 @@ class OfferPolicy < ApplicationPolicy
   def create?
     user.admin? || user.driver?
   end
+
+  def bulk_create?
+    user.admin? || user.driver?
+  end
 end

@@ -1,7 +1,7 @@
 class CreateOffers < ActiveRecord::Migration[8.0]
   def change
     create_table :offers, if_not_exists: true do |t|
-      t.references :user, null: false, foreign_key: true
+      t.references :shipment, null: false, foreign_key: true
       t.references :company, null: false, foreign_key: true
       t.integer :status, default: 0, null: false
       t.text :reception_address
