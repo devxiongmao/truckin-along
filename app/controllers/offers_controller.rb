@@ -2,7 +2,7 @@ class OffersController < ApplicationController
   before_action :authenticate_user!
 
 
-  def index 
+  def index
     if current_user.customer?
       @offers = current_user.offers
     else
@@ -10,14 +10,14 @@ class OffersController < ApplicationController
     end
   end
 
-  def create 
+  def create
     @offer = Offer.new(offer_params)
     authorize @offer
 
     if @offer.save
-      redirect_to offers_path, notice: 'Offer was successfully sent.'
+      redirect_to offers_path, notice: "Offer was successfully sent."
     else
-      redirect_to offers_path, alert: 'There was an error creating the offer.'
+      redirect_to offers_path, alert: "There was an error creating the offer."
     end
   end
 end

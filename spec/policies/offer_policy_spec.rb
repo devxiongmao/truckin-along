@@ -31,4 +31,4 @@ RSpec.describe OfferPolicy, type: :policy do
       it { expect(subject.create?).to be false }
     end
   end
-end 
+end

@@ -8,5 +8,4 @@ class Offer < ApplicationRecord
   validates :company, presence: true
   validates :status, presence: true
   validates :price, presence: true, numericality: true
-
-end 
+end
