@@ -13,7 +13,7 @@ class TruckPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin?
+    user.admin? || user.driver?
   end
 
   def new?
@@ -37,6 +37,6 @@ class TruckPolicy < ApplicationPolicy
   end
 
   def create_form?
-    user.admin?
+    user.admin? || user.driver?
   end
 end

@@ -127,6 +127,7 @@
         <th>Year</th>
         <th>Mileage</th>
         <th>License Plate</th>
+        <th>Status</th>
         <th>Actions</th>
         <th>Maintenance</th>
       </tr>
@@ -140,6 +141,13 @@
         <td><%= truck.mileage %></td>
         <td><%= truck.license_plate %></td>
         <td>
+          <% if truck.active %>
+          <span class="status-active">Active</span>
+          <% else %>
+          <span class="status-inactive">Maintenance Required</span>
+          <% end %>
+        </td>
+        <td>
           <%= link_to 'Show', truck, class: 'action-link' %> |
           <%= link_to 'Edit', edit_truck_path(truck), class: 'action-link' %> |
           <%= link_to 'Destroy', truck, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
@@ -149,6 +157,8 @@
           <button class="button warning-button" data-action="click->create-maintenance#open" data-modal-truck-id-value="<%= truck.id %>">
             Complete
           </button>
+          <% else %>
+          <span class="status-active">Up to Date</span>
           <% end %>
         </td>
       </tr>

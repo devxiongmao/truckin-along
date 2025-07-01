@@ -19,13 +19,14 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 1. **Entry Point**
 
    - The user receives an **email notification** alerting them that a truck in their fleet is due for maintenance.
-   - They navigate to the **Admin dashboard** via the top navigation bar.
-   - Route: `/admin` (e.g., http://localhost:3000/admin)
+   - They navigate to the **Admin dashboard** via the top navigation bar or the main dashboard page
+   - Route: `/admin` (e.g., http://localhost:3000/admin) or `/dashboard` (e.g., http://localhost:3000/dashboard)
 
 2. **Initiate Maintenance**
 
    - On the Admin dashboard, each truck entry that has due maintenance includes a visible **orange `Maintenance` button**.
    - Clicking this button opens a **modal labeled `Maintenance Form`**.
+   - Alternatively, on the Dashboard page, Drivers will see this same view and can complete the maintenance for the trucks.
 
 3. **Fill Out the Maintenance Form**
 
@@ -54,19 +55,18 @@ As trucks rack up mileage and time on the road, regular maintenance becomes crit
 - 🟢 Relieved and satisfied that the app proactively notified them of due maintenance
 - 🟢 Grateful for the quick, low-effort maintenance form process
 - 🟢 Grateful for the email notifications alerting for due truck maintenance
-- 🔴 Frustrated that **only admins** can complete maintenance tasks—drivers are often more aware of the truck’s actual condition
 
 ---
 
 ## Pain Points
 
-- **Role restrictions:** Only admin users can submit maintenance forms, limiting flexibility and slowing down operational workflows
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- **XMDEV-347**: Allow drivers to fill out and submit maintenance forms, increasing accuracy and reducing admin overhead
+- None currently reported in this workflow
 
 ---
 
