@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "dashboard" => "dashboard#index"
 
   resources :admin, only: [ :index ]
+  resources :offers, only: [ :index, :create ]
 
   resources :deliveries, only: [ :index, :show ] do
     member do

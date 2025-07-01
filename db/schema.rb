@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_010106) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_01_212117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_010106) do
     t.index ["company_id"], name: "index_forms_on_company_id"
     t.index ["formable_type", "formable_id"], name: "index_forms_on_formable"
     t.index ["user_id"], name: "index_forms_on_user_id"
+  end
+
+  create_table "offers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "company_id", null: false
+    t.integer "status", default: 0, null: false
+    t.text "reception_address"
+    t.boolean "pickup_from_sender", default: false, null: false
+    t.boolean "deliver_to_door", default: true, null: false
+    t.text "dropoff_location"
+    t.boolean "pickup_at_dropoff", default: false, null: false
+    t.float "price", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_offers_on_company_id"
+    t.index ["user_id"], name: "index_offers_on_user_id"
   end
 
   create_table "shipment_action_preferences", force: :cascade do |t|
@@ -156,6 +173,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_010106) do
   add_foreign_key "delivery_shipments", "shipments"
   add_foreign_key "forms", "companies"
   add_foreign_key "forms", "users"
+  add_foreign_key "offers", "companies"
+  add_foreign_key "offers", "users"
   add_foreign_key "shipment_action_preferences", "companies"
   add_foreign_key "shipment_action_preferences", "shipment_statuses"
   add_foreign_key "shipment_statuses", "companies"
