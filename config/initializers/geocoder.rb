@@ -66,6 +66,9 @@ else
     api_key: nil,
     language: :en,
     use_https: true,
-    timeout: 5
+    timeout: 5,
+    http_headers: {
+      "User-Agent" => ENV["NOMINATIM_USER_AGENT"]
+    }
   )
 end
