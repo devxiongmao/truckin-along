@@ -12,7 +12,6 @@ RSpec.describe OfferPolicy, type: :policy do
       subject { described_class.new(user, offer) }
 
       it { expect(subject.index?).to be true }
-      it { expect(subject.create?).to be true }
       it { expect(subject.bulk_create?).to be true }
     end
 
@@ -21,7 +20,6 @@ RSpec.describe OfferPolicy, type: :policy do
       subject { described_class.new(user, offer) }
 
       it { expect(subject.index?).to be true }
-      it { expect(subject.create?).to be true }
       it { expect(subject.bulk_create?).to be true }
     end
 
@@ -30,7 +28,6 @@ RSpec.describe OfferPolicy, type: :policy do
       subject { described_class.new(user, offer) }
 
       it { expect(subject.index?).to be true }
-      it { expect(subject.create?).to be false }
       it { expect(subject.bulk_create?).to be false }
     end
   end

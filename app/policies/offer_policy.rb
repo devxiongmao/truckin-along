@@ -9,10 +9,6 @@ class OfferPolicy < ApplicationPolicy
     true # Anyone can view the offers index page
   end
 
-  def create?
-    user.admin? || user.driver?
-  end
-
   def bulk_create?
     user.admin? || user.driver?
   end
