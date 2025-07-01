@@ -65,9 +65,10 @@ Truckin' Along uses Azure Maps for geocoding services. It's recommended to use t
      ```bash
      cp .env.example .env
      ```
-   - Edit `.env` and add your Azure Maps API key:
+   - Edit `.env` and add your Azure Maps API key or your Nominatim user agent:
      ```bash
      AZURE_MAPS_API_KEY=your_actual_api_key_here
+     NOMINATIM_USER_AGENT=your_user_agent
      ```
 
 3. **Security Notes**:
