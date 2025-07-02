@@ -5,10 +5,12 @@ erDiagram
     Companies ||--o{ ShipmentStatuses : defines
     Companies ||--o{ ShipmentActionPreferences : configures
     Companies ||--o{ Forms : owns
+    Companies ||--o{ Offers : issues
     
     Users ||--o{ Deliveries : performs
     Users ||--o{ Shipments : handles
     Users ||--o{ Forms : submits
+    Shipments ||--o{ Offers : receives
     
     Trucks ||--o{ Deliveries : assigned_to
     Trucks ||--o{ Shipments : carries
@@ -145,6 +147,22 @@ erDiagram
         string form_type
         jsonb content
         datetime submitted_at
+        datetime created_at
+        datetime updated_at
+    }
+    
+    Offers {
+        bigint id PK
+        bigint shipment_id FK
+        bigint company_id FK
+        integer status
+        text reception_address
+        boolean pickup_from_sender
+        boolean deliver_to_door
+        text dropoff_location
+        boolean pickup_at_dropoff
+        float price
+        text notes
         datetime created_at
         datetime updated_at
     }

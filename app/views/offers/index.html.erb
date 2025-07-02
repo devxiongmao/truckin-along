@@ -1,0 +1,9 @@
+<div class="page-header">
+  <h1 class="page-title">Offers</h1>
+</div>
+
+<% if current_user.customer? %>
+<%= render 'customer_offers' %>
+<% else %>
+<%= render 'company_offers' %>
+<% end %>

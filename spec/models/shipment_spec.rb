@@ -14,6 +14,7 @@ RSpec.describe Shipment, type: :model do
     it { is_expected.to belong_to(:shipment_status).optional }
     it { is_expected.to belong_to(:company).optional }
     it { is_expected.to have_many(:delivery_shipments).dependent(:nullify) }
+    it { is_expected.to have_many(:offers).dependent(:nullify) }
     it { is_expected.to have_many(:deliveries).through(:delivery_shipments) }
   end
 
