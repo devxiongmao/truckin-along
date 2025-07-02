@@ -46,9 +46,10 @@ class OffersController < ApplicationController
 
   def bulk_offer_params
     offers_param = params[:offers]
-    return [] if offers_param.blank? || offers_param.first.is_a?(String)
+    return [] if offers_param.blank?
 
-    offers_param.map do |offer|
+    # Convert hash with numeric keys to array of permitted parameters
+    offers_param.values.map do |offer|
       offer.permit(
         :shipment_id,
         :company_id,

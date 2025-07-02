@@ -153,3 +153,98 @@
 .truck-load-modal-buttons button {
   min-width: 100px;
 }
+
+/* Bulk Offer Modal Styles */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #09e80d;
+  font-size: 1.5rem;
+}
+
+.modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 0 10px;
+}
+
+.shipments-container {
+  margin-top: 20px;
+}
+
+.shipment-entry {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+}
+
+.shipment-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.shipment-header h4 {
+  color: #09e80d;
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.shipment-header p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.offer-fields {
+  display: grid;
+  gap: 15px;
+}
+
+.offer-fields .form-group {
+  margin-bottom: 0;
+}
+
+.offer-fields label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.offer-fields input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+.offer-fields input[type="checkbox"] + span {
+  font-weight: normal;
+}
+
+.reception-address-group,
+.dropoff-location-group {
+  margin-top: 10px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  border-left: 3px solid #09e80d;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}

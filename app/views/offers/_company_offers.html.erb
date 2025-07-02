@@ -1,7 +1,3 @@
-<div class="page-actions">
-  <%= link_to 'Create Bulk Offers', '#', class: 'button primary-button' %>
-</div>
-
 <% if @offers.present? %>
 <table class="styled-table">
   <thead>
@@ -53,9 +49,8 @@
       </td>
       <td><%= offer.created_at.strftime("%B %d, %Y") %></td>
       <td>
-        <%= link_to 'View Details', '#', class: 'action-link' %> |
+        <%= link_to 'View Shipment', shipment_path(offer.shipment), class: 'action-link' %> |
         <% if offer.issued? %>
-        <%= link_to 'Edit', '#', class: 'action-link' %> |
         <%= link_to 'Withdraw', '#', class: 'action-link danger-link' %>
         <% end %>
       </td>
