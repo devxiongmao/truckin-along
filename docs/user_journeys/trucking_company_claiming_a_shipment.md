@@ -74,7 +74,6 @@ When a customer posts a shipment to the Truckin' Along platform, trucking compan
 ## Opportunities
 
 - **XMDEV-350**: Rename **`Assign to Me`** button to **`Submit Bids`** for clarity
-- **XMDEV-309**: Fully implement a structured bidding system, enhancing scalability and transparency
 - Improve shipment preview cards to **display key details** (location, timing) without requiring a deep dive
 
 ---

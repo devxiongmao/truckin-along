@@ -1,0 +1,74 @@
+<div class="page-actions">
+  <%= link_to 'Create Bulk Offers', '#', class: 'button primary-button' %>
+</div>
+
+<% if @offers.present? %>
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Shipment</th>
+      <th>Customer</th>
+      <th>Status</th>
+      <th>Price</th>
+      <th>Pickup Service</th>
+      <th>Delivery Service</th>
+      <th>Created</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @offers.each do |offer| %>
+    <tr>
+      <td>
+        <div class="shipment-info">
+          <strong><%= offer.shipment.name %></strong><br>
+          <small><%= offer.shipment.sender_name %> → <%= offer.shipment.receiver_name %></small>
+        </div>
+      </td>
+      <td><%= offer.shipment.user&.display_name || 'N/A' %></td>
+      <td>
+        <% case offer.status %>
+        <% when 'issued' %>
+        <span class="status-issued">Issued</span>
+        <% when 'accepted' %>
+        <span class="status-accepted">Accepted</span>
+        <% when 'rejected' %>
+        <span class="status-rejected">Rejected</span>
+        <% end %>
+      </td>
+      <td class="price">$<%= number_with_precision(offer.price, precision: 2) %></td>
+      <td>
+        <% if offer.pickup_from_sender %>
+        <span class="service-included">✓ Included</span>
+        <% else %>
+        <span class="service-not-included">✗ Not included</span>
+        <% end %>
+      </td>
+      <td>
+        <% if offer.deliver_to_door %>
+        <span class="service-included">✓ Door delivery</span>
+        <% else %>
+        <span class="service-not-included">✗ Drop-off only</span>
+        <% end %>
+      </td>
+      <td><%= offer.created_at.strftime("%B %d, %Y") %></td>
+      <td>
+        <%= link_to 'View Details', '#', class: 'action-link' %> |
+        <% if offer.issued? %>
+        <%= link_to 'Edit', '#', class: 'action-link' %> |
+        <%= link_to 'Withdraw', '#', class: 'action-link danger-link' %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<div class="empty-state-container">
+  <div class="empty-state-content">
+    <h4>No offers found</h4>
+    <p>Your company hasn't made any offers yet. Start by creating offers for available shipments.</p>
+    <%= link_to "View Available Shipments", deliveries_path, class: "primary-button" %>
+  </div>
+</div>
+<% end %>
