@@ -208,7 +208,7 @@ RSpec.describe "/offers", type: :request do
         sign_in customer, scope: :user
       end
 
-      it "redirects to offers path with authorization error" do
+      it "redirects to offers path" do
         post bulk_create_offers_url, params: valid_bulk_attributes
         expect(response).to redirect_to(offers_path)
       end
