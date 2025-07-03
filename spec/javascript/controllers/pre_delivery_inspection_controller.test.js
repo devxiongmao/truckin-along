@@ -97,7 +97,7 @@ describe("CheckboxController", () => {
 
       // This should not throw an error
       expect(() => {
-        const controller = application.getControllerForElementAndIdentifier(
+        application.getControllerForElementAndIdentifier(
           document.querySelector('[data-controller="checkbox"]'),
           "checkbox"
         );
@@ -339,7 +339,7 @@ describe("CheckboxController", () => {
       const sectionButtons = document.querySelectorAll('.section-check-all');
       
       // Test each section button to verify they work independently
-      sectionButtons.forEach((button, index) => {
+      sectionButtons.forEach((button) => {
         // Reset all checkboxes
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
           checkbox.checked = false;

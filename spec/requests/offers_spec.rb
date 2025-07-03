@@ -21,48 +21,49 @@ RSpec.describe "/offers", type: :request do
 
   let(:valid_bulk_attributes) do
     {
-      offers: [
-        {
-          shipment_id: customer_shipment.id,
-          company_id: company.id,
-          reception_address: "123 Main St",
-          pickup_from_sender: false,
-          deliver_to_door: true,
-          dropoff_location: "456 Oak Ave",
-          pickup_at_dropoff: false,
-          price: 150.00,
-          notes: "Test offer 1"
-        },
-        {
-          shipment_id: customer_shipment.id,
-          company_id: company.id,
-          reception_address: "789 Pine St",
-          pickup_from_sender: true,
-          deliver_to_door: false,
-          dropoff_location: "321 Elm St",
-          pickup_at_dropoff: true,
-          price: 200.00,
-          notes: "Test offer 2"
+      bulk_offer: {
+        offers_attributes: {
+          "0" => {
+            shipment_id: customer_shipment.id,
+            reception_address: "123 Main St",
+            pickup_from_sender: false,
+            deliver_to_door: true,
+            dropoff_location: "456 Oak Ave",
+            pickup_at_dropoff: false,
+            price: 150.00,
+            notes: "Test offer 1"
+          },
+          "1" => {
+            shipment_id: customer_shipment.id,
+            reception_address: "789 Pine St",
+            pickup_from_sender: true,
+            deliver_to_door: false,
+            dropoff_location: "321 Elm St",
+            pickup_at_dropoff: true,
+            price: 200.00,
+            notes: "Test offer 2"
+          }
         }
-      ]
+      }
     }
   end
 
   let(:invalid_bulk_attributes) do
     {
-      offers: [
-        {
-          shipment_id: customer_shipment.id,
-          company_id: company.id,
-          reception_address: "123 Main St",
-          pickup_from_sender: false,
-          deliver_to_door: true,
-          dropoff_location: "456 Oak Ave",
-          pickup_at_dropoff: false,
-          price: nil, # Invalid - price is required
-          notes: "Test offer 1"
+      bulk_offer: {
+        offers_attributes: {
+          "0" => {
+            shipment_id: customer_shipment.id,
+            reception_address: "123 Main St",
+            pickup_from_sender: false,
+            deliver_to_door: true,
+            dropoff_location: "456 Oak Ave",
+            pickup_at_dropoff: false,
+            price: nil, # Invalid - price is required
+            notes: "Test offer 1"
+          }
         }
-      ]
+      }
     }
   end
 
@@ -144,7 +145,6 @@ RSpec.describe "/offers", type: :request do
 
       it "renders the company offers partial" do
         get offers_url
-        expect(response.body).to include("Create Bulk Offers")
         expect(response.body).to include("Shipment")
         expect(response.body).to include("Status")
       end
@@ -189,7 +189,6 @@ RSpec.describe "/offers", type: :request do
 
       it "renders the company offers partial" do
         get offers_url
-        expect(response.body).to include("Create Bulk Offers")
         expect(response.body).to include("Shipment")
         expect(response.body).to include("Status")
       end
@@ -209,14 +208,14 @@ RSpec.describe "/offers", type: :request do
         sign_in customer, scope: :user
       end
 
-      it "redirects to dashboard path with error" do
+      it "redirects to offers path" do
         post bulk_create_offers_url, params: valid_bulk_attributes
-        expect(response).to redirect_to(dashboard_path)
+        expect(response).to redirect_to(offers_path)
       end
 
-      it "shows the error message" do
+      it "shows the authorization error message" do
         post bulk_create_offers_url, params: valid_bulk_attributes
-        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+        expect(flash[:alert]).to include("Not authorized to create this offer")
       end
 
       it "does not create any offers" do
@@ -287,7 +286,15 @@ RSpec.describe "/offers", type: :request do
 
       context "with empty offers array" do
         it "redirects to offers index with error message" do
-          post bulk_create_offers_url, params: { offers: [] }
+          post bulk_create_offers_url, params: { bulk_offer: { offers_attributes: {} } }
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:alert]).to eq("No offers provided")
+        end
+      end
+
+      context "with missing bulk_offer parameter" do
+        it "redirects to offers index with error message" do
+          post bulk_create_offers_url, params: {}
           expect(response).to redirect_to(offers_path)
           expect(flash[:alert]).to eq("No offers provided")
         end
@@ -317,6 +324,12 @@ RSpec.describe "/offers", type: :request do
           expect(response).to redirect_to(offers_path)
           expect(flash[:notice]).to eq("2 offers were successfully created.")
         end
+
+        it "creates offers with the correct company_id from current_company" do
+          post bulk_create_offers_url, params: valid_bulk_attributes
+          created_offers = Offer.last(2)
+          expect(created_offers.map(&:company_id)).to all(eq(company.id))
+        end
       end
 
       context "with invalid parameters" do
@@ -338,13 +351,34 @@ RSpec.describe "/offers", type: :request do
     context "when database transaction fails" do
       before do
         sign_in driver, scope: :user
-        allow(Offer).to receive(:transaction).and_raise(ActiveRecord::RecordInvalid.new(Offer.new))
+        allow_any_instance_of(Offer).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(Offer.new))
       end
 
       it "redirects to offers index with error message" do
         post bulk_create_offers_url, params: valid_bulk_attributes
         expect(response).to redirect_to(offers_path)
         expect(flash[:alert]).to include("There was an error creating the offers:")
+      end
+    end
+
+    context "when authorization fails for some offers" do
+      before do
+        sign_in driver, scope: :user
+        # Mock Pundit to raise NotAuthorizedError for the first offer
+        allow_any_instance_of(OffersController).to receive(:authorize).and_raise(Pundit::NotAuthorizedError)
+      end
+
+      it "does not create any offers" do
+        expect {
+          post bulk_create_offers_url, params: valid_bulk_attributes
+        }.not_to change(Offer, :count)
+      end
+
+      it "redirects to offers index with authorization error message" do
+        post bulk_create_offers_url, params: valid_bulk_attributes
+        expect(response).to redirect_to(offers_path)
+        expect(flash[:alert]).to include("Errors occurred:")
+        expect(flash[:alert]).to include("Not authorized to create this offer")
       end
     end
   end

@@ -220,7 +220,7 @@ describe("ShipmentShowMapController", () => {
           }
         ];
 
-        const { controller } = await setupNewController(`
+        await setupNewController(`
           <div 
             data-controller="show-shipment-map"
             data-show-shipment-map-sender-lat-value="40.7128"
@@ -280,7 +280,7 @@ describe("ShipmentShowMapController", () => {
           }
         ];
 
-        const { controller } = await setupNewController(`
+        await setupNewController(`
           <div 
             data-controller="show-shipment-map"
             data-show-shipment-map-sender-lat-value="40.7128"
@@ -333,7 +333,7 @@ describe("ShipmentShowMapController", () => {
           }
         ];
 
-        const { controller } = await setupNewController(`
+        await setupNewController(`
           <div 
             data-controller="show-shipment-map"
             data-show-shipment-map-sender-lat-value="40.7128"

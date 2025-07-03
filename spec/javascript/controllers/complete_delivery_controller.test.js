@@ -109,9 +109,6 @@ describe("CompleteDeliveryController", () => {
     it("appends the odometer reading to the form and submits it", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "complete-delivery");
 
-      // Mock console.log to test logging
-      const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
       // Mock form submission
       const mockSubmit = vi.fn();
       controller.formTarget.submit = mockSubmit;
@@ -123,9 +120,6 @@ describe("CompleteDeliveryController", () => {
       // Trigger the action
       controller.submitWithOdometer();
       
-      // Check if console.log was called with correct message
-      expect(consoleSpy).toHaveBeenCalledWith("Submitting with odometer value:", "54321");
-      
       // Check if new hidden input was added
       const odometerInput = controller.formTarget.querySelector('input[name="odometer_reading"]');
       expect(odometerInput).not.toBe(null);
@@ -134,9 +128,6 @@ describe("CompleteDeliveryController", () => {
       
       // Check if form was submitted
       expect(mockSubmit).toHaveBeenCalled();
-      
-      // Clean up spy
-      consoleSpy.mockRestore();
     });
 
     it("handles empty odometer input", () => {

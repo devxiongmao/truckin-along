@@ -5,7 +5,6 @@ import TruckLoadingModalController from "controllers/truck_loading_modal_control
 describe("TruckLoadingModalController", () => {
   let application;
   let container;
-  let controller;
 
   beforeEach(() => {
     // Set up the DOM structure
@@ -55,8 +54,6 @@ describe("TruckLoadingModalController", () => {
   describe("showModal", () => {
     it("displays the modal when button is clicked", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "truck-loading-modal");
-
-      const button = document.querySelector('[data-action="truck-loading-modal#showModal"]');
       
       // Mock preventDefault
       const mockEvent = { preventDefault: vi.fn() };

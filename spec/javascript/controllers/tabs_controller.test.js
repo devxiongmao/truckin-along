@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { Application } from "@hotwired/stimulus";
 import TabsController from "controllers/tabs_controller";
 
@@ -64,7 +64,7 @@ describe("TabsController", () => {
 
       // This should not throw an error
       expect(() => {
-        const controller = application.getControllerForElementAndIdentifier(
+        application.getControllerForElementAndIdentifier(
           document.querySelector('[data-controller="tabs"]'),
           "tabs"
         );
