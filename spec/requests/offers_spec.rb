@@ -382,4 +382,393 @@ RSpec.describe "/offers", type: :request do
       end
     end
   end
+
+  describe "PATCH /accept" do
+    let!(:accepted_offer) { create(:offer, shipment: customer_shipment, company: company, status: :accepted) }
+    let!(:rejected_offer) { create(:offer, shipment: customer_shipment, company: company, status: :rejected) }
+    let!(:withdrawn_offer) { create(:offer, shipment: customer_shipment, company: company, status: :withdrawn) }
+    let!(:other_issued_offer) { create(:offer, shipment: customer_shipment, company: other_company, status: :issued) }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        patch accept_offer_url(customer_offer)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is a customer" do
+      before do
+        sign_in customer, scope: :user
+      end
+
+      context "with an issued offer" do
+        it "accepts the offer" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change { customer_offer.reload.status }.from("issued").to("accepted")
+        end
+
+        it "rejects all other issued offers for the same shipment" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change { other_issued_offer.reload.status }.from("issued").to("rejected")
+        end
+
+        it "redirects to offers path with success message" do
+          patch accept_offer_url(customer_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:notice]).to eq("Offer was successfully accepted. All other offers for this shipment have been rejected.")
+        end
+
+        it "does not affect offers with other statuses" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.not_to change { accepted_offer.reload.status }
+          expect(accepted_offer.status).to eq("accepted")
+        end
+
+        it "does not affect offers for other shipments" do
+          other_shipment_offer = create(:offer, shipment: other_customer_shipment, company: company, status: :issued)
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.not_to change { other_shipment_offer.reload.status }
+          expect(other_shipment_offer.status).to eq("issued")
+        end
+      end
+
+      context "with a non-issued offer" do
+        it "does not accept the offer" do
+          expect {
+            patch accept_offer_url(accepted_offer)
+          }.not_to change { accepted_offer.reload.status }
+        end
+
+        it "redirects to offers path with error message" do
+          patch accept_offer_url(accepted_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:alert]).to eq("Only issued offers can be accepted.")
+        end
+
+        it "does not reject other offers" do
+          expect {
+            patch accept_offer_url(accepted_offer)
+          }.not_to change { other_issued_offer.reload.status }
+        end
+      end
+
+      context "when offer belongs to another company" do
+        it "accepts the offer if it's for the customer's shipment" do
+          expect {
+            patch accept_offer_url(other_company_offer)
+          }.to change { other_company_offer.reload.status }.from("issued").to("accepted")
+        end
+      end
+    end
+
+    context "when user is a driver" do
+      before do
+        sign_in driver, scope: :user
+      end
+
+      it "does not accept the offer" do
+        expect {
+          patch accept_offer_url(customer_offer)
+        }.not_to change { customer_offer.reload.status }
+      end
+
+      it "redirects to dashboard path" do
+        patch accept_offer_url(customer_offer)
+        expect(response).to redirect_to(dashboard_path)
+      end
+
+      it "shows authorization error" do
+        patch accept_offer_url(customer_offer)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+
+    context "when user is an admin" do
+      before do
+        sign_in admin, scope: :user
+      end
+
+      it "does not accept the offer" do
+        expect {
+          patch accept_offer_url(customer_offer)
+        }.not_to change { customer_offer.reload.status }
+      end
+
+      it "redirects to dashboard path" do
+        patch accept_offer_url(customer_offer)
+        expect(response).to redirect_to(dashboard_path)
+      end
+
+      it "shows authorization error" do
+        patch accept_offer_url(customer_offer)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+  end
+
+  describe "PATCH /reject" do
+    let!(:accepted_offer) { create(:offer, shipment: customer_shipment, company: company, status: :accepted) }
+    let!(:rejected_offer) { create(:offer, shipment: customer_shipment, company: company, status: :rejected) }
+    let!(:withdrawn_offer) { create(:offer, shipment: customer_shipment, company: company, status: :withdrawn) }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        patch reject_offer_url(customer_offer)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is a customer" do
+      before do
+        sign_in customer, scope: :user
+      end
+
+      context "with an issued offer" do
+        it "rejects the offer" do
+          expect {
+            patch reject_offer_url(customer_offer)
+          }.to change { customer_offer.reload.status }.from("issued").to("rejected")
+        end
+
+        it "redirects to offers path with success message" do
+          patch reject_offer_url(customer_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:notice]).to eq("Offer was successfully rejected.")
+        end
+
+        it "does not affect other offers" do
+          other_issued_offer = create(:offer, shipment: customer_shipment, company: other_company, status: :issued)
+          expect {
+            patch reject_offer_url(customer_offer)
+          }.not_to change { other_issued_offer.reload.status }
+          expect(other_issued_offer.status).to eq("issued")
+        end
+      end
+
+      context "with a non-issued offer" do
+        it "does not reject the offer" do
+          expect {
+            patch reject_offer_url(accepted_offer)
+          }.not_to change { accepted_offer.reload.status }
+        end
+
+        it "redirects to offers path with error message" do
+          patch reject_offer_url(accepted_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:alert]).to eq("Only issued offers can be rejected.")
+        end
+      end
+
+      context "when offer belongs to another company" do
+        it "rejects the offer if it's for the customer's shipment" do
+          expect {
+            patch reject_offer_url(other_company_offer)
+          }.to change { other_company_offer.reload.status }.from("issued").to("rejected")
+        end
+      end
+    end
+
+    context "when user is a driver" do
+      before do
+        sign_in driver, scope: :user
+      end
+
+      it "does not reject the offer" do
+        expect {
+          patch reject_offer_url(customer_offer)
+        }.not_to change { customer_offer.reload.status }
+      end
+
+      it "redirects to dashboard path" do
+        patch reject_offer_url(customer_offer)
+        expect(response).to redirect_to(dashboard_path)
+      end
+
+      it "shows authorization error" do
+        patch reject_offer_url(customer_offer)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+
+    context "when user is an admin" do
+      before do
+        sign_in admin, scope: :user
+      end
+
+      it "does not reject the offer" do
+        expect {
+          patch reject_offer_url(customer_offer)
+        }.not_to change { customer_offer.reload.status }
+      end
+
+      it "redirects to dashboard path" do
+        patch reject_offer_url(customer_offer)
+        expect(response).to redirect_to(dashboard_path)
+      end
+
+      it "shows authorization error" do
+        patch reject_offer_url(customer_offer)
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+      end
+    end
+  end
+
+  describe "PATCH /withdraw" do
+    let!(:accepted_offer) { create(:offer, shipment: customer_shipment, company: company, status: :accepted) }
+    let!(:rejected_offer) { create(:offer, shipment: customer_shipment, company: company, status: :rejected) }
+    let!(:withdrawn_offer) { create(:offer, shipment: customer_shipment, company: company, status: :withdrawn) }
+
+    context "when user is not signed in" do
+      it "redirects to the sign in page" do
+        patch withdraw_offer_url(customer_offer)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context "when user is a customer" do
+      before do
+        sign_in customer, scope: :user
+      end
+
+      it "does not withdraw the offer" do
+        expect {
+          patch withdraw_offer_url(customer_offer)
+        }.not_to change { customer_offer.reload.status }
+      end
+
+      it "redirects to dashboard path" do
+        patch withdraw_offer_url(customer_offer)
+        expect(response).to redirect_to(dashboard_path)
+      end
+
+      it "shows authorization error" do
+        patch withdraw_offer_url(customer_offer)
+        expect(flash[:alert]).to eq("Not authorized.")
+      end
+    end
+
+    context "when user is a driver" do
+      before do
+        sign_in driver, scope: :user
+      end
+
+      context "with an issued offer from the driver's company" do
+        it "withdraws the offer" do
+          expect {
+            patch withdraw_offer_url(customer_offer)
+          }.to change { customer_offer.reload.status }.from("issued").to("withdrawn")
+        end
+
+        it "redirects to offers path with success message" do
+          patch withdraw_offer_url(customer_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:notice]).to eq("Offer was successfully withdrawn.")
+        end
+
+        it "does not affect other offers" do
+          other_issued_offer = create(:offer, shipment: customer_shipment, company: other_company, status: :issued)
+          expect {
+            patch withdraw_offer_url(customer_offer)
+          }.not_to change { other_issued_offer.reload.status }
+          expect(other_issued_offer.status).to eq("issued")
+        end
+      end
+
+      context "with a non-issued offer" do
+        it "does not withdraw the offer" do
+          expect {
+            patch withdraw_offer_url(accepted_offer)
+          }.not_to change { accepted_offer.reload.status }
+        end
+
+        it "redirects to offers path with error message" do
+          patch withdraw_offer_url(accepted_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:alert]).to eq("Only issued offers can be withdrawn.")
+        end
+      end
+
+      context "when offer belongs to another company" do
+        it "does not withdraw the offer" do
+          expect {
+            patch withdraw_offer_url(other_company_offer)
+          }.not_to change { other_company_offer.reload.status }
+        end
+
+        it "redirects to dashboard path" do
+          patch withdraw_offer_url(other_company_offer)
+          expect(response).to redirect_to(dashboard_path)
+        end
+
+        it "shows authorization error" do
+          patch withdraw_offer_url(other_company_offer)
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
+      end
+    end
+
+    context "when user is an admin" do
+      before do
+        sign_in admin, scope: :user
+      end
+
+      context "with an issued offer from the admin's company" do
+        it "withdraws the offer" do
+          expect {
+            patch withdraw_offer_url(customer_offer)
+          }.to change { customer_offer.reload.status }.from("issued").to("withdrawn")
+        end
+
+        it "redirects to offers path with success message" do
+          patch withdraw_offer_url(customer_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:notice]).to eq("Offer was successfully withdrawn.")
+        end
+
+        it "does not affect other offers" do
+          other_issued_offer = create(:offer, shipment: customer_shipment, company: other_company, status: :issued)
+          expect {
+            patch withdraw_offer_url(customer_offer)
+          }.not_to change { other_issued_offer.reload.status }
+          expect(other_issued_offer.status).to eq("issued")
+        end
+      end
+
+      context "with a non-issued offer" do
+        it "does not withdraw the offer" do
+          expect {
+            patch withdraw_offer_url(accepted_offer)
+          }.not_to change { accepted_offer.reload.status }
+        end
+
+        it "redirects to offers path with error message" do
+          patch withdraw_offer_url(accepted_offer)
+          expect(response).to redirect_to(offers_path)
+          expect(flash[:alert]).to eq("Only issued offers can be withdrawn.")
+        end
+      end
+
+      context "when offer belongs to another company" do
+        it "does not withdraw the offer" do
+          expect {
+            patch withdraw_offer_url(other_company_offer)
+          }.not_to change { other_company_offer.reload.status }
+        end
+
+        it "redirects to dashboard path" do
+          patch withdraw_offer_url(other_company_offer)
+          expect(response).to redirect_to(dashboard_path)
+        end
+
+        it "shows authorization error" do
+          patch withdraw_offer_url(other_company_offer)
+          expect(flash[:alert]).to eq("Not authorized.")
+        end
+      end
+    end
+  end
 end
