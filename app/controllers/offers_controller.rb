@@ -10,30 +10,32 @@ class OffersController < ApplicationController
   end
 
   def bulk_create
+    offers_data = bulk_offer_params.dig(:offers_attributes)&.values
+
+    if offers_data.blank?
+      redirect_to offers_path, alert: "No offers provided" and return
+    end
+
     @offers = []
     errors = []
 
-    offer_params = bulk_offer_params
-    if offer_params.empty?
-      redirect_to offers_path, alert: "No offers provided"
-      return
-    end
+    offers_data.each_with_index do |offer_attrs, index|
+      offer = Offer.new(offer_attrs.merge(company_id: current_company.id, status: "issued"))
 
-    offer_params.each_with_index do |offer_attrs, index|
-      offer = Offer.new(offer_attrs)
-      offer.status = "issued"
-      authorize offer
-      @offers << offer
+      begin
+        authorize offer
+        @offers << offer
 
-      unless offer.valid?
-        errors << "Offer #{index + 1}: #{offer.errors.full_messages.join(', ')}"
+        unless offer.valid?
+          errors << "Offer #{index + 1}: #{offer.errors.full_messages.join(', ')}"
+        end
+      rescue Pundit::NotAuthorizedError
+        errors << "Offer #{index + 1}: Not authorized to create this offer"
       end
     end
 
     if errors.empty?
-      Offer.transaction do
-        @offers.each(&:save!)
-      end
+      Offer.transaction { @offers.each(&:save!) }
       redirect_to offers_path, notice: "#{@offers.count} offers were successfully created."
     else
       redirect_to offers_path, alert: "Errors occurred: #{errors.join('; ')}"
@@ -45,22 +47,17 @@ class OffersController < ApplicationController
   private
 
   def bulk_offer_params
-    offers_param = params[:offers]
-    return [] if offers_param.blank?
-
-    # Convert hash with numeric keys to array of permitted parameters
-    offers_param.values.map do |offer|
-      offer.permit(
+    params.fetch(:bulk_offer, {}).permit(
+      offers_attributes: [
         :shipment_id,
-        :company_id,
         :reception_address,
         :pickup_from_sender,
         :deliver_to_door,
         :dropoff_location,
         :pickup_at_dropoff,
         :price,
-        :notes,
-      )
-    end
+        :notes
+      ]
+    )
   end
 end

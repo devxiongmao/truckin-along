@@ -32,12 +32,9 @@ export default class extends Controller {
     selectedShipments.forEach((checkbox, index) => {
       const shipmentId = checkbox.value
       const shipmentRow = checkbox.closest('tr')
-      const shipmentName = shipmentRow.querySelector('td:nth-child(3)').textContent.trim()
-      const senderAddress = shipmentRow.querySelector('td:nth-child(4)').textContent.trim()
-      const receiverAddress = shipmentRow.querySelector('td:nth-child(5)').textContent.trim()
-      const weight = shipmentRow.querySelector('td:nth-child(6)').textContent.trim()
+      const shipmentData = this.extractShipmentData(shipmentRow)
       
-      const shipmentEntry = this.createShipmentEntry(shipmentId, shipmentName, senderAddress, receiverAddress, weight, index)
+      const shipmentEntry = this.createShipmentEntry(shipmentId, shipmentData, index)
       this.shipmentContainerTarget.appendChild(shipmentEntry)
     })
     
@@ -49,23 +46,35 @@ export default class extends Controller {
     this.modalTarget.style.display = "none"
   }
   
-  createShipmentEntry(shipmentId, shipmentName, senderAddress, receiverAddress, weight, index) {
+  extractShipmentData(shipmentRow) {
+    return {
+      name: shipmentRow.querySelector('td:nth-child(3)')?.textContent.trim() || '',
+      senderAddress: shipmentRow.querySelector('td:nth-child(4)')?.textContent.trim() || '',
+      receiverAddress: shipmentRow.querySelector('td:nth-child(5)')?.textContent.trim() || '',
+      weight: shipmentRow.querySelector('td:nth-child(6)')?.textContent.trim() || ''
+    }
+  }
+  
+  createShipmentEntry(shipmentId, shipmentData, index) {
     const entry = document.createElement('div')
     entry.className = 'shipment-entry'
     entry.innerHTML = `
       <div class="shipment-header">
-        <h4>Shipment: ${shipmentName}</h4>
-        <p><strong>From:</strong> ${senderAddress}</p>
-        <p><strong>To:</strong> ${receiverAddress}</p>
-        <p><strong>Weight:</strong> ${weight}</p>
+        <h4>Shipment: ${shipmentData.name}</h4>
+        <p><strong>From:</strong> ${shipmentData.senderAddress}</p>
+        <p><strong>To:</strong> ${shipmentData.receiverAddress}</p>
+        <p><strong>Weight:</strong> ${shipmentData.weight}</p>
       </div>
       
       <div class="offer-fields">
+        <!-- Rails-style nested attributes with proper indexing -->
+        <input type="hidden" name="bulk_offer[offers_attributes][${index}][shipment_id]" value="${shipmentId}">
+        
         <div class="form-group">
-          <label for="price_${index}">Offer Price ($):</label>
+          <label for="offer_price_${index}">Offer Price ($):</label>
           <input type="number" 
-                 id="price_${index}" 
-                 name="offers[${index}][price]" 
+                 id="offer_price_${index}" 
+                 name="bulk_offer[offers_attributes][${index}][price]" 
                  step="0.01" 
                  min="0" 
                  required 
@@ -73,74 +82,81 @@ export default class extends Controller {
         </div>
         
         <div class="form-group">
+          <!-- Hidden input MUST come before checkbox -->
+          <input type="hidden" 
+                 name="bulk_offer[offers_attributes][${index}][pickup_from_sender]" 
+                 value="0">
           <label>
             <input type="checkbox" 
                    id="pickup_from_sender_${index}"
+                   name="bulk_offer[offers_attributes][${index}][pickup_from_sender]"
+                   value="1"
                    data-action="change->bulk-offer-modal#toggleReceptionAddress"
                    data-index="${index}"
                    checked>
             Pickup from sender
           </label>
-          <input type="hidden" 
-                 name="offers[${index}][pickup_from_sender]" 
-                 value="1">
         </div>
         
-        <div class="form-group reception-address-group" id="reception_address_${index}" style="display: none;">
-          <label for="reception_address_input_${index}">Reception Address:</label>
+        <div class="form-group reception-address-group" 
+             id="reception_address_group_${index}" 
+             style="display: none;">
+          <label for="reception_address_${index}">Reception Address:</label>
           <input type="text" 
-                 id="reception_address_input_${index}" 
-                 name="offers[${index}][reception_address]" 
+                 id="reception_address_${index}" 
+                 name="bulk_offer[offers_attributes][${index}][reception_address]" 
                  class="form-input">
         </div>
         
         <div class="form-group">
+          <!-- Hidden input MUST come before checkbox -->
+          <input type="hidden" 
+                 name="bulk_offer[offers_attributes][${index}][deliver_to_door]" 
+                 value="0">
           <label>
             <input type="checkbox" 
                    id="deliver_to_door_${index}"
+                   name="bulk_offer[offers_attributes][${index}][deliver_to_door]"
+                   value="1"
                    data-action="change->bulk-offer-modal#toggleDropoffLocation"
                    data-index="${index}"
                    checked>
             Deliver to door
           </label>
-          <input type="hidden" 
-                 name="offers[${index}][deliver_to_door]" 
-                 value="1">
         </div>
         
-        <div class="form-group dropoff-location-group" id="dropoff_location_${index}" style="display: none;">
-          <label for="dropoff_location_input_${index}">Dropoff Location:</label>
+        <div class="form-group dropoff-location-group" 
+             id="dropoff_location_group_${index}" 
+             style="display: none;">
+          <label for="dropoff_location_${index}">Dropoff Location:</label>
           <input type="text" 
-                 id="dropoff_location_input_${index}" 
-                 name="offers[${index}][dropoff_location]" 
+                 id="dropoff_location_${index}" 
+                 name="bulk_offer[offers_attributes][${index}][dropoff_location]" 
                  class="form-input">
           
           <div class="form-group" style="margin-top: 10px;">
+            <!-- Hidden input MUST come before checkbox -->
+            <input type="hidden" 
+                   name="bulk_offer[offers_attributes][${index}][pickup_at_dropoff]" 
+                   value="0">
             <label>
               <input type="checkbox" 
                      id="pickup_at_dropoff_${index}"
-                     data-action="change->bulk-offer-modal#updatePickupAtDropoff"
-                     data-index="${index}">
+                     name="bulk_offer[offers_attributes][${index}][pickup_at_dropoff]"
+                     value="1">
               Pickup at dropoff location
             </label>
-            <input type="hidden" 
-                   name="offers[${index}][pickup_at_dropoff]" 
-                   value="0">
           </div>
         </div>
         
         <div class="form-group">
-          <label for="notes_${index}">Notes:</label>
-          <textarea id="notes_${index}" 
-                    name="offers[${index}][notes]" 
+          <label for="offer_notes_${index}">Notes:</label>
+          <textarea id="offer_notes_${index}" 
+                    name="bulk_offer[offers_attributes][${index}][notes]" 
                     class="form-input" 
                     rows="3" 
                     placeholder="Any additional notes for this shipment..."></textarea>
         </div>
-        
-        <!-- Hidden fields -->
-        <input type="hidden" name="offers[${index}][shipment_id]" value="${shipmentId}">
-        <input type="hidden" name="offers[${index}][company_id]" value="${this.getCurrentCompanyId()}">
       </div>
     `
     
@@ -149,60 +165,55 @@ export default class extends Controller {
   
   toggleReceptionAddress(event) {
     const index = event.target.dataset.index
-    const receptionAddressGroup = document.getElementById(`reception_address_${index}`)
-    const receptionAddressInput = document.getElementById(`reception_address_input_${index}`)
-    const hiddenField = document.querySelector(`input[name="offers[${index}][pickup_from_sender]"]`)
+    const receptionAddressGroup = document.getElementById(`reception_address_group_${index}`)
+    const receptionAddressInput = document.getElementById(`reception_address_${index}`)
     
     if (event.target.checked) {
       receptionAddressGroup.style.display = 'none'
       receptionAddressInput.removeAttribute('required')
       receptionAddressInput.value = ''
-      hiddenField.value = '1'
     } else {
       receptionAddressGroup.style.display = 'block'
       receptionAddressInput.setAttribute('required', 'required')
-      hiddenField.value = '0'
     }
   }
   
   toggleDropoffLocation(event) {
     const index = event.target.dataset.index
-    const dropoffLocationGroup = document.getElementById(`dropoff_location_${index}`)
-    const dropoffLocationInput = document.getElementById(`dropoff_location_input_${index}`)
-    const hiddenField = document.querySelector(`input[name="offers[${index}][deliver_to_door]"]`)
+    const dropoffLocationGroup = document.getElementById(`dropoff_location_group_${index}`)
+    const dropoffLocationInput = document.getElementById(`dropoff_location_${index}`)
     
     if (event.target.checked) {
       dropoffLocationGroup.style.display = 'none'
       dropoffLocationInput.removeAttribute('required')
       dropoffLocationInput.value = ''
-      hiddenField.value = '1'
     } else {
       dropoffLocationGroup.style.display = 'block'
       dropoffLocationInput.setAttribute('required', 'required')
-      hiddenField.value = '0'
     }
   }
   
-  updatePickupAtDropoff(event) {
-    const index = event.target.dataset.index
-    const hiddenField = document.querySelector(`input[name="offers[${index}][pickup_at_dropoff]"]`)
-    hiddenField.value = event.target.checked ? '1' : '0'
-  }
-  
-  getCurrentCompanyId() {
-    // This should be set in the view or retrieved from a data attribute
-    return this.element.dataset.companyId || ''
-  }
-  
-  submitForm() {
-    // Validate that at least one shipment is selected
-    const selectedShipments = document.querySelectorAll('input[name="shipment_ids[]"]:checked')
-    if (selectedShipments.length === 0) {
-      alert('Please select at least one shipment to create offers for.')
+  submitForm(event) {
+    event?.preventDefault()
+    
+    // Basic validation
+    const priceInputs = this.shipmentContainerTarget.querySelectorAll('input[type="number"]')
+    let isValid = true
+    
+    priceInputs.forEach(input => {
+      if (!input.value || parseFloat(input.value) <= 0) {
+        isValid = false
+        input.classList.add('error')
+      } else {
+        input.classList.remove('error')
+      }
+    })
+    
+    if (!isValid) {
+      alert('Please enter valid prices for all offers.')
       return
     }
-    
-    // Submit the form
+  
     this.formTarget.submit()
   }
-} 
+}

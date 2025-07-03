@@ -42,8 +42,6 @@ export default class extends Controller {
     odometerInput.type = "hidden"
     odometerInput.name = "odometer_reading"
     odometerInput.value = this.odometerInputTarget.value
-
-    console.log("Submitting with odometer value:", odometerInput.value)
     
     // Append to form and submit
     this.formTarget.appendChild(odometerInput)
