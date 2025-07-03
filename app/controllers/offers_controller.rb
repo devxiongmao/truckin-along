@@ -44,6 +44,52 @@ class OffersController < ApplicationController
     redirect_to offers_path, alert: "There was an error creating the offers: #{e.message}"
   end
 
+  def accept
+    @offer = Offer.find(params[:id])
+
+    if @offer.issued?
+      authorize @offer, :accept?
+
+      Offer.transaction do
+        @offer.update!(status: :accepted)
+
+        # Reject all other issued offers for the same shipment
+        Offer.joins(:shipment)
+             .where(shipment_id: @offer.shipment_id, status: :issued)
+             .where.not(id: @offer.id)
+             .update_all(status: :rejected)
+      end
+
+      redirect_to offers_path, notice: "Offer was successfully accepted. All other offers for this shipment have been rejected."
+    else
+      redirect_to offers_path, alert: "Only issued offers can be accepted."
+    end
+  end
+
+  def reject
+    @offer = Offer.find(params[:id])
+
+    if @offer.issued?
+      authorize @offer, :reject?
+      @offer.update!(status: :rejected)
+      redirect_to offers_path, notice: "Offer was successfully rejected."
+    else
+      redirect_to offers_path, alert: "Only issued offers can be rejected."
+    end
+  end
+
+  def withdraw
+    @offer = Offer.for_company(current_company).find(params[:id])
+
+    if @offer.issued?
+      authorize @offer, :withdraw?
+      @offer.update!(status: :withdrawn)
+      redirect_to offers_path, notice: "Offer was successfully withdrawn."
+    else
+      redirect_to offers_path, alert: "Only issued offers can be withdrawn."
+    end
+  end
+
   private
 
   def bulk_offer_params

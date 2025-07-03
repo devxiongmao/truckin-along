@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     collection do
       post :bulk_create
     end
+    member do
+      patch :withdraw
+      patch :accept
+      patch :reject
+    end
   end
 
   resources :deliveries, only: [ :index, :show ] do

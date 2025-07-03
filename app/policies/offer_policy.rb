@@ -12,4 +12,16 @@ class OfferPolicy < ApplicationPolicy
   def bulk_create?
     user.admin? || user.driver?
   end
+
+  def withdraw?
+    user.admin? || user.driver?
+  end
+
+  def accept?
+    user.customer?
+  end
+
+  def reject?
+    user.customer?
+  end
 end

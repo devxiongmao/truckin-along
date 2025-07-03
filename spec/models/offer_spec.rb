@@ -7,7 +7,7 @@ RSpec.describe Offer, type: :model do
   end
 
   describe 'enums' do
-    it { should define_enum_for(:status).with_values(issued: 0, accepted: 1, rejected: 2) }
+    it { should define_enum_for(:status).with_values(issued: 0, accepted: 1, rejected: 2, withdrawn: 3) }
   end
 
   describe 'validations' do
