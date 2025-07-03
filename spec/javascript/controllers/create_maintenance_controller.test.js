@@ -5,7 +5,6 @@ import ModalController from "controllers/create_maintenance_controller";
 describe("CreateMaintenanceController", () => {
   let application;
   let container;
-  let controller;
 
   beforeEach(() => {
     // Set up the DOM structure

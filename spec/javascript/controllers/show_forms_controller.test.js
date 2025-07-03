@@ -5,7 +5,6 @@ import ShowFormsController from "controllers/show_forms_controller";
 describe("ShowFormsController", () => {
   let application;
   let container;
-  let controller;
 
   beforeEach(() => {
     // Set up the DOM structure

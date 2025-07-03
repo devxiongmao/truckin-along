@@ -1,40 +1,74 @@
 <h1>Shipment Marketplace</h1>
 
-<h2>Unassigned Shipments</h2>
-<% if @unassigned_shipments.any? %>
-<%= form_with url: assign_shipments_path, method: :post do |f| %>
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Status</th>
-      <th>Name</th>
-      <th>Sender Address</th>
-      <th>Receiver Address</th>
-      <th>Weight</th>
-      <th>Deliver By</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="unassigned-shipments">
-    <% @unassigned_shipments.each do |shipment| %>
-    <tr>
-      <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
-      <td><%= shipment.status %></td>
-      <td><%= shipment.name %></td>
-      <td><%= shipment.current_sender_address %></td>
-      <td><%= shipment.receiver_address %></td>
-      <td><%= shipment.weight %></td>
-      <td><%= shipment.deliver_by %></td>
-      <td>
-        <%= link_to 'Show Details', shipment, class: 'action-link' %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= submit_tag "Assign to Me", class: "button primary-button" %>
-<% end %>
+<div data-controller="bulk-offer-modal" data-company-id="<%= current_user.company_id %>">
+  <h2>Unassigned Shipments</h2>
+  <% if @unassigned_shipments.any? %>
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Status</th>
+        <th>Name</th>
+        <th>Sender Address</th>
+        <th>Receiver Address</th>
+        <th>Weight</th>
+        <th>Deliver By</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="unassigned-shipments">
+      <% @unassigned_shipments.each do |shipment| %>
+      <tr>
+        <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
+        <td><%= shipment.status %></td>
+        <td><%= shipment.name %></td>
+        <td><%= shipment.current_sender_address %></td>
+        <td><%= shipment.receiver_address %></td>
+        <td><%= shipment.weight %></td>
+        <td><%= shipment.deliver_by %></td>
+        <td>
+          <%= link_to 'Show Details', shipment, class: 'action-link' %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="page-actions">
+    <button type="button" class="button primary-button" data-action="click->bulk-offer-modal#showModal">
+      Submit Bids
+    </button>
+  </div>
+
+  <!-- Bulk Offer Modal -->
+  <div class="modal" data-bulk-offer-modal-target="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create Offers</h3>
+        <span class="close" data-action="click->bulk-offer-modal#hideModal">&times;</span>
+      </div>
+
+      <%= form_with url: bulk_create_offers_path, method: :post, data: { bulk_offer_modal_target: "form" } do |f| %>
+      <div class="modal-body">
+        <p>Please fill out the offer details for each selected shipment:</p>
+
+        <div class="shipments-container" data-bulk-offer-modal-target="shipmentContainer">
+          <!-- Shipment entries will be dynamically inserted here -->
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn btn-secondary" data-action="click->bulk-offer-modal#hideModal">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" data-bulk-offer-modal-target="submitBtn">
+          Create Offers
+        </button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
 <% else %>
 <p>No unassigned shipments available.</p>
 <% end %>

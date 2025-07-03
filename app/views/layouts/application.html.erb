@@ -48,9 +48,11 @@
       </div>
       <% end %>
 
+      <% if show_nav_link?(:offers) %>
       <div class="navbar-links">
         <%= link_to 'Offers', offers_path, class: 'nav-link' %>
       </div>
+      <% end %>
 
       <% if show_nav_link?(:load_truck) %>
       <div class="navbar-links">
