@@ -30,6 +30,8 @@
         <span class="status-accepted">Accepted</span>
         <% when 'rejected' %>
         <span class="status-rejected">Rejected</span>
+        <% when 'withdrawn' %>
+        <span class="status-withdrawn">Withdrawn</span>
         <% end %>
       </td>
       <td class="price">$<%= number_with_precision(offer.price, precision: 2) %></td>
@@ -38,6 +40,8 @@
         <span class="service-included">✓ Included</span>
         <% else %>
         <span class="service-not-included">✗ Not included</span>
+        <br />
+        <small>Dropoff: <%= offer.reception_address %></small>
         <% end %>
       </td>
       <td>
@@ -45,13 +49,15 @@
         <span class="service-included">✓ Door delivery</span>
         <% else %>
         <span class="service-not-included">✗ Drop-off only</span>
+        <br />
+        <small>Delivery: <%= offer.dropoff_location %></small>
         <% end %>
       </td>
       <td><%= offer.created_at.strftime("%B %d, %Y") %></td>
       <td>
-        <%= link_to 'View Shipment', shipment_path(offer.shipment), class: 'action-link' %> |
+        <%= link_to 'View Shipment', shipment_path(offer.shipment), class: 'action-link' %>
         <% if offer.issued? %>
-        <%= link_to 'Withdraw', '#', class: 'action-link danger-link' %>
+        | <%= link_to 'Withdraw', withdraw_offer_path(offer), method: :patch, class: 'action-link danger-link', data: { confirm: 'Are you sure you want to withdraw this offer?' } %>
         <% end %>
       </td>
     </tr>

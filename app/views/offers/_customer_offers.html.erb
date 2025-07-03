@@ -17,6 +17,7 @@
     <thead>
       <tr>
         <th>Company</th>
+        <th>Status</th>
         <th>Price</th>
         <th>Pickup Service</th>
         <th>Delivery Service</th>
@@ -28,12 +29,26 @@
       <% offers.each do |offer| %>
       <tr>
         <td><%= offer.company.name %></td>
+        <td>
+          <% case offer.status %>
+          <% when 'issued' %>
+          <span class="status-issued">Issued</span>
+          <% when 'accepted' %>
+          <span class="status-accepted">Accepted</span>
+          <% when 'rejected' %>
+          <span class="status-rejected">Rejected</span>
+          <% when 'withdrawn' %>
+          <span class="status-withdrawn">Withdrawn</span>
+          <% end %>
+        </td>
         <td class="price">$<%= number_with_precision(offer.price, precision: 2) %></td>
         <td>
           <% if offer.pickup_from_sender %>
           <span class="service-included">✓ Pickup from sender</span>
           <% else %>
           <span class="service-not-included">✗ No pickup service</span>
+          <br />
+          <small>Dropoff: <%= offer.reception_address %></small>
           <% end %>
         </td>
         <td>
@@ -41,13 +56,16 @@
           <span class="service-included">✓ Door delivery</span>
           <% else %>
           <span class="service-not-included">✗ Drop-off only</span>
+          <br />
+          <small>Delivery: <%= offer.dropoff_location %></small>
           <% end %>
         </td>
         <td><%= offer.notes %></td>
         <td>
-          <%= link_to 'Accept', '#', class: 'action-link success-link' %> |
-          <%= link_to 'Reject', '#', class: 'action-link danger-link' %> |
-          <%= link_to 'View Details', '#', class: 'action-link' %>
+          <% if offer.issued? %>
+          <%= link_to 'Accept', accept_offer_path(offer), method: :patch, class: 'action-link success-link', data: { confirm: 'Are you sure you want to accept this offer? This will reject all other offers for this shipment.' } %> |
+          <%= link_to 'Reject', reject_offer_path(offer), method: :patch, class: 'action-link danger-link', data: { confirm: 'Are you sure you want to reject this offer?' } %>
+          <% end %>
         </td>
       </tr>
       <% end %>
