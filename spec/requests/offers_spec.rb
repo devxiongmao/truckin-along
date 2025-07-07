@@ -280,9 +280,13 @@ RSpec.describe "/offers", type: :request do
           }.not_to change(Offer, :count)
         end
 
-        it "redirects to offers index with error message" do
+        it "redirects to offers index" do
           post bulk_create_offers_url, params: invalid_bulk_attributes
           expect(response).to redirect_to(offers_path)
+        end
+
+        it "renders with error message" do
+          post bulk_create_offers_url, params: invalid_bulk_attributes
           expect(flash[:alert]).to include("Errors occurred:")
           expect(flash[:alert]).to include("Price can't be blank")
         end
@@ -332,6 +336,7 @@ RSpec.describe "/offers", type: :request do
               bulk_offer: {
                 offers_attributes: {
                   "0" => {
+                    status: "accepted",
                     shipment_id: bulk_test_shipment_1.id,
                     reception_address: "123 Main St",
                     pickup_from_sender: false,
@@ -354,8 +359,12 @@ RSpec.describe "/offers", type: :request do
 
           it "shows validation error because controller sets status to issued" do
             post bulk_create_offers_url, params: accepted_offer_attributes
-            expect(response).to redirect_to(offers_path)
             expect(flash[:alert]).to include("You already have an active offer for this shipment")
+          end
+
+          it "redirects to the offers path" do
+            post bulk_create_offers_url, params: accepted_offer_attributes
+            expect(response).to redirect_to(offers_path)
           end
         end
       end

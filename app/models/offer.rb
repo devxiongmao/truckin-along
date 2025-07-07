@@ -15,7 +15,9 @@ class Offer < ApplicationRecord
   private
 
   def only_one_active_offer_per_company_per_shipment
-    # Guard clause needed for tests. Controller auto-sets issued status. Always.
+    # Guard clause needed for tests.
+    # Reminder: Statuses for offers are ALWAYS controller via requests
+    # bulk_create action sets to issued, accept action sets to accept, withdraw action sets to withdraw, etc
     return unless status == "issued"
 
     existing_offer = Offer.where(
