@@ -8,6 +8,26 @@ class Offer < ApplicationRecord
   validates :company, presence: true
   validates :status, presence: true
   validates :price, presence: true, numericality: true
+  validate :only_one_active_offer_per_company_per_shipment, on: :create
 
   scope :for_company, ->(company) { where(company_id: company.id) }
+
+  private
+
+  def only_one_active_offer_per_company_per_shipment
+    # Guard clause needed for tests.
+    # Reminder: Status changes for offers are ALWAYS controlled via requests
+    # bulk_create action sets to issued, accept action sets to accept, withdraw action sets to withdraw, etc
+    return unless status == "issued"
+
+    existing_offer = Offer.where(
+      shipment: shipment,
+      company: company,
+      status: :issued
+    ).first
+
+    if existing_offer
+      errors.add(:base, "You already have an active offer for this shipment")
+    end
+  end
 end

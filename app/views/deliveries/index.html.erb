@@ -19,8 +19,13 @@
     <tbody id="unassigned-shipments">
       <% @unassigned_shipments.each do |shipment| %>
       <tr>
+        <% if shipment.has_active_offer_from?(current_user.company) %>
+        <td></td>
+        <td><span class="status-already-bid">Already Bid</span></td>
+        <% else %>
         <td><%= check_box_tag 'shipment_ids[]', shipment.id %></td>
-        <td><%= shipment.status %></td>
+        <td></td>
+        <% end %>
         <td><%= shipment.name %></td>
         <td><%= shipment.current_sender_address %></td>
         <td><%= shipment.receiver_address %></td>
