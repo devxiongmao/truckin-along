@@ -97,6 +97,42 @@ RSpec.describe Shipment, type: :model do
     end
   end
 
+  describe '#has_active_offer_from?' do
+    let(:company) { create(:company) }
+    let(:other_company) { create(:company) }
+    let(:shipment) { create(:shipment) }
+
+    context 'when company has an issued offer for the shipment' do
+      let!(:offer) { create(:offer, shipment: shipment, company: company, status: :issued) }
+
+      it 'returns true' do
+        expect(shipment.has_active_offer_from?(company)).to be true
+      end
+    end
+
+    context 'when company has a non-issued offer for the shipment' do
+      let!(:offer) { create(:offer, shipment: shipment, company: company, status: :accepted) }
+
+      it 'returns false' do
+        expect(shipment.has_active_offer_from?(company)).to be false
+      end
+    end
+
+    context 'when company has no offers for the shipment' do
+      it 'returns false' do
+        expect(shipment.has_active_offer_from?(company)).to be false
+      end
+    end
+
+    context 'when other company has an issued offer for the shipment' do
+      let!(:offer) { create(:offer, shipment: shipment, company: other_company, status: :issued) }
+
+      it 'returns false for the first company' do
+        expect(shipment.has_active_offer_from?(company)).to be false
+      end
+    end
+  end
+
   ## Edge Case Tests
   describe "edge cases" do
     it "handles extremely large weights" do

@@ -13,6 +13,10 @@ RSpec.describe "/offers", type: :request do
   let(:driver_shipment) { create(:shipment, user: driver) }
   let(:other_customer_shipment) { create(:shipment, user: customer) }
 
+  # New shipments specifically for bulk_create tests to avoid conflicts
+  let(:bulk_test_shipment_1) { create(:shipment, user: customer) }
+  let(:bulk_test_shipment_2) { create(:shipment, user: customer) }
+
   let!(:customer_offer) { create(:offer, shipment: customer_shipment, company: company, status: :issued) }
   let!(:driver_offer) { create(:offer, shipment: driver_shipment, company: company, status: :issued) }
   let!(:other_company_offer) { create(:offer, shipment: other_customer_shipment, company: other_company, status: :issued) }
@@ -24,7 +28,7 @@ RSpec.describe "/offers", type: :request do
       bulk_offer: {
         offers_attributes: {
           "0" => {
-            shipment_id: customer_shipment.id,
+            shipment_id: bulk_test_shipment_1.id,
             reception_address: "123 Main St",
             pickup_from_sender: false,
             deliver_to_door: true,
@@ -34,7 +38,7 @@ RSpec.describe "/offers", type: :request do
             notes: "Test offer 1"
           },
           "1" => {
-            shipment_id: customer_shipment.id,
+            shipment_id: bulk_test_shipment_2.id,
             reception_address: "789 Pine St",
             pickup_from_sender: true,
             deliver_to_door: false,
@@ -254,14 +258,14 @@ RSpec.describe "/offers", type: :request do
           created_offers = Offer.last(2)
 
           first_offer = created_offers.first
-          expect(first_offer.shipment_id).to eq(customer_shipment.id)
+          expect(first_offer.shipment_id).to eq(bulk_test_shipment_1.id)
           expect(first_offer.company_id).to eq(company.id)
           expect(first_offer.reception_address).to eq("123 Main St")
           expect(first_offer.price).to eq(150.00)
           expect(first_offer.status).to eq("issued")
 
           second_offer = created_offers.last
-          expect(second_offer.shipment_id).to eq(customer_shipment.id)
+          expect(second_offer.shipment_id).to eq(bulk_test_shipment_2.id)
           expect(second_offer.company_id).to eq(company.id)
           expect(second_offer.reception_address).to eq("789 Pine St")
           expect(second_offer.price).to eq(200.00)
@@ -281,6 +285,78 @@ RSpec.describe "/offers", type: :request do
           expect(response).to redirect_to(offers_path)
           expect(flash[:alert]).to include("Errors occurred:")
           expect(flash[:alert]).to include("Price can't be blank")
+        end
+      end
+
+      context "when trying to create duplicate active offers" do
+        let!(:existing_offer) { create(:offer, shipment: bulk_test_shipment_1, company: company, status: :issued) }
+
+        let(:duplicate_offer_attributes) do
+          {
+            bulk_offer: {
+              offers_attributes: {
+                "0" => {
+                  shipment_id: bulk_test_shipment_1.id,
+                  reception_address: "123 Main St",
+                  pickup_from_sender: false,
+                  deliver_to_door: true,
+                  dropoff_location: "456 Oak Ave",
+                  pickup_at_dropoff: false,
+                  price: 150.00,
+                  notes: "Test offer 1"
+                }
+              }
+            }
+          }
+        end
+
+        it "does not create any offers" do
+          expect {
+            post bulk_create_offers_url, params: duplicate_offer_attributes
+          }.not_to change(Offer, :count)
+        end
+
+        it "redirects to offers index" do
+          post bulk_create_offers_url, params: duplicate_offer_attributes
+          expect(response).to redirect_to(offers_path)
+        end
+
+        it "shows the validation error message" do
+          post bulk_create_offers_url, params: duplicate_offer_attributes
+          expect(flash[:alert]).to include("You already have an active offer for this shipment")
+        end
+
+        context "when trying to create offers with different statuses" do
+          let(:accepted_offer_attributes) do
+            {
+              bulk_offer: {
+                offers_attributes: {
+                  "0" => {
+                    shipment_id: bulk_test_shipment_1.id,
+                    reception_address: "123 Main St",
+                    pickup_from_sender: false,
+                    deliver_to_door: true,
+                    dropoff_location: "456 Oak Ave",
+                    pickup_at_dropoff: false,
+                    price: 150.00,
+                    notes: "Test offer 1"
+                  }
+                }
+              }
+            }
+          end
+
+          it "still prevents creation because controller sets status to issued" do
+            expect {
+              post bulk_create_offers_url, params: accepted_offer_attributes
+            }.not_to change(Offer, :count)
+          end
+
+          it "shows validation error because controller sets status to issued" do
+            post bulk_create_offers_url, params: accepted_offer_attributes
+            expect(response).to redirect_to(offers_path)
+            expect(flash[:alert]).to include("You already have an active offer for this shipment")
+          end
         end
       end
 
