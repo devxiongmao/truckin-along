@@ -68,6 +68,10 @@ class Shipment < ApplicationRecord
     latest_delivery_shipment.sender_longitude
   end
 
+  def has_active_offer_from?(company)
+    offers.where(company: company, status: :issued).exists?
+  end
+
   private
 
   def geocode_sender
