@@ -4,7 +4,6 @@ class ScheduleDelivery < ApplicationService
   def initialize(params, company)
     @truck_id = params[:truck_id]
     @shipment_ids = Array(params[:shipment_ids]).map(&:to_i)
-    @delivery_address = params[:delivery_address]
     @current_company = company
     @errors = []
   end
@@ -17,7 +16,7 @@ class ScheduleDelivery < ApplicationService
 
     ActiveRecord::Base.transaction do
       find_or_create_delivery(truck)
-      create_delivery_shipments(shipments)
+      update_delivery_shipments(shipments)
       load_shipments(shipments)
     end
 
@@ -45,35 +44,16 @@ class ScheduleDelivery < ApplicationService
     Shipment.for_company(@current_company).where(id: @shipment_ids)
   end
 
-  def create_delivery_shipments(shipments)
-    shipment_attributes = shipments.map do |shipment|
-      {
-        delivery_id: @delivery.id,
-        shipment_id: shipment.id,
-        sender_address: set_sender_address(shipment),
-        receiver_address: set_receiver_address(shipment),
-        loaded_date: Time.now,
-        created_at: Time.current,
-        updated_at: Time.current
-      }
+  def update_delivery_shipments(shipments)
+    shipments.each do |shipment|
+      last_delivery_shipment = shipment.latest_delivery_shipment
+      last_delivery_shipment.loaded_date = Time.now
+      last_delivery_shipment.delivery_id = @delivery.id
+      last_delivery_shipment.save!
     end
-
-    inserted = @delivery.delivery_shipments.insert_all!(shipment_attributes, returning: %w[id])
-    GeocodeDeliveryShipmentsJob.perform_later(inserted.pluck("id"))
   rescue ActiveRecord::RecordInvalid => e
     @errors << "Failed to associate shipment: #{e.message}"
     raise e
-  end
-
-  def set_sender_address(shipment)
-    previous_delivery = shipment.latest_delivery_shipment
-    return previous_delivery.receiver_address unless previous_delivery.nil?
-    shipment.sender_address
-  end
-
-  def set_receiver_address(shipment)
-    return @delivery_address if @delivery_address.present?
-    shipment.receiver_address
   end
 
   def load_shipments(shipments)

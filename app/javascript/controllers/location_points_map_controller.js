@@ -25,12 +25,12 @@ export default class extends Controller {
     return (
       point.current_sender_latitude != null &&
       point.current_sender_longitude != null &&
-      point.receiver_latitude != null &&
-      point.receiver_longitude != null &&
+      point.current_receiver_latitude != null &&
+      point.current_receiver_longitude != null &&
       point.current_sender_latitude !== 0 &&
       point.current_sender_longitude !== 0 &&
-      point.receiver_latitude !== 0 &&
-      point.receiver_longitude !== 0
+      point.current_receiver_latitude !== 0 &&
+      point.current_receiver_longitude !== 0
     );
   }
 
@@ -72,16 +72,16 @@ export default class extends Controller {
         startMarker.bindPopup(startPopupContent);
 
         // Add end location marker (blue)
-        const endMarker = L.marker([point.receiver_latitude, point.receiver_longitude], { icon: endIcon }).addTo(map);
-        const endPopupContent = point.receiver_address ? 
-          `<b>End Location ${index + 1}</b><br>${point.receiver_address}` : 
-          `<b>End Location ${index + 1}</b><br>Lat: ${point.receiver_latitude}, Lng: ${point.receiver_longitude}`;
+        const endMarker = L.marker([point.current_receiver_latitude, point.current_receiver_longitude], { icon: endIcon }).addTo(map);
+        const endPopupContent = point.current_receiver_address ? 
+          `<b>End Location ${index + 1}</b><br>${point.current_receiver_address}` : 
+          `<b>End Location ${index + 1}</b><br>Lat: ${point.current_receiver_latitude}, Lng: ${point.current_receiver_longitude}`;
         endMarker.bindPopup(endPopupContent);
 
         // Add connecting line between start and end points
         L.polyline([
           [point.current_sender_latitude, point.current_sender_longitude],
-          [point.receiver_latitude, point.receiver_longitude]
+          [point.current_receiver_latitude, point.current_receiver_longitude]
         ], {
           color: this.getRouteColor(index),
           weight: 3,
@@ -91,7 +91,7 @@ export default class extends Controller {
 
         // Extend bounds to include both points
         bounds.extend([point.current_sender_latitude, point.current_sender_longitude]);
-        bounds.extend([point.receiver_latitude, point.receiver_longitude]);
+        bounds.extend([point.current_receiver_latitude, point.current_receiver_longitude]);
       }
     });
 

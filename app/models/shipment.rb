@@ -68,6 +68,18 @@ class Shipment < ApplicationRecord
     latest_delivery_shipment.sender_longitude
   end
 
+  def current_receiver_address
+    latest_delivery_shipment.nil? ? receiver_address : latest_delivery_shipment.receiver_address
+  end
+
+  def current_receiver_latitude
+    latest_delivery_shipment.nil? ? receiver_latitude : latest_delivery_shipment.receiver_latitude
+  end
+
+  def current_receiver_longitude
+    latest_delivery_shipment.nil? ? receiver_longitude : latest_delivery_shipment.receiver_longitude
+  end
+
   def has_active_offer_from?(company)
     offers.where(company: company, status: :issued).exists?
   end

@@ -11,7 +11,7 @@
 <% end %>
 </div>
 
-<div style="height: 500px; width: 100%;" data-controller="location-points-map" data-location-points-map-points-json-value='<%= raw @open_shipments.to_json(only: [:id], methods: [:current_sender_latitude, :current_sender_longitude, :receiver_latitude, :receiver_longitude, :current_sender_address, :receiver_address]) %>'>
+<div style="height: 500px; width: 100%;" data-controller="location-points-map" data-location-points-map-points-json-value='<%= raw @open_shipments.to_json(only: [:id], methods: [:current_sender_latitude, :current_sender_longitude, :current_receiver_latitude, :current_receiver_longitude, :current_sender_address, :current_receiver_address]) %>'>
 </div>
 <br />
 <div data-controller="show-pre-delivery">
@@ -90,9 +90,9 @@
         <td><%= shipment.status %></td>
         <td><%= shipment.name %></td>
         <% unless @delivery.in_progress? %>
-        <td><%= shipment.sender_address %></td>
+        <td><%= shipment.current_sender_address %></td>
         <% end %>
-        <td><%= shipment.receiver_address %></td>
+        <td><%= shipment.current_receiver_address %></td>
         <td><%= shipment.weight %></td>
         <td><%= shipment.deliver_by %></td>
         <td>
