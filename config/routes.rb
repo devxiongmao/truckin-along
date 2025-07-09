@@ -41,7 +41,6 @@ Rails.application.routes.draw do
       post :close
     end
     collection do
-      post :assign
       post :assign_shipments_to_truck
       post :initiate_delivery
     end

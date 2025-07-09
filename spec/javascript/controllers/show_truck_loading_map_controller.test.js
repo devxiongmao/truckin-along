@@ -55,10 +55,10 @@ describe("ShowTruckLoadingMapController", () => {
         data-show-truck-loading-map-shipments-json-value='[{
           "current_sender_latitude": 40.7128,
           "current_sender_longitude": -74.0060,
-          "receiver_latitude": 34.0522,
-          "receiver_longitude": -118.2437,
+          "current_receiver_latitude": 34.0522,
+          "current_receiver_longitude": -118.2437,
           "current_sender_address": "New York, NY",
-          "receiver_address": "Los Angeles, CA"
+          "current_receiver_address": "Los Angeles, CA"
         }]'>
       </div>
     `;
@@ -106,8 +106,8 @@ describe("ShowTruckLoadingMapController", () => {
           data-show-truck-loading-map-shipments-json-value='[{
             "current_sender_latitude": 0,
             "current_sender_longitude": 0,
-            "receiver_latitude": 0,
-            "receiver_longitude": 0
+            "current_receiver_latitude": 0,
+            "current_receiver_longitude": 0
           }]'>
         </div>
       `);
@@ -124,8 +124,8 @@ describe("ShowTruckLoadingMapController", () => {
       const validShipment = {
         current_sender_latitude: 40.7128,
         current_sender_longitude: -74.0060,
-        receiver_latitude: 34.0522,
-        receiver_longitude: -118.2437
+        current_receiver_latitude: 34.0522,
+        current_receiver_longitude: -118.2437
       };
       
       expect(controller.hasValidCoordinates(validShipment)).toBe(true);
@@ -137,8 +137,8 @@ describe("ShowTruckLoadingMapController", () => {
       const invalidShipment = {
         current_sender_latitude: 0,
         current_sender_longitude: -74.0060,
-        receiver_latitude: 34.0522,
-        receiver_longitude: -118.2437
+        current_receiver_latitude: 34.0522,
+        current_receiver_longitude: -118.2437
       };
 
       expect(controller.hasValidCoordinates(invalidShipment)).toBe(false);

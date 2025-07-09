@@ -53,6 +53,21 @@ class OffersController < ApplicationController
       Offer.transaction do
         @offer.update!(status: :accepted)
 
+        preference = @offer.company.shipment_action_preferences.find_by(action: "claimed_by_company")
+        if preference
+          @offer.shipment.update!(
+            company_id: @offer.company_id,
+            shipment_status_id: preference.shipment_status_id)
+        else
+          @offer.shipment.update!(company_id: @offer.company_id)
+        end
+
+        DeliveryShipment.create!(
+          shipment: @offer.shipment,
+          sender_address: @offer.reception_address,
+          receiver_address: @offer.dropoff_location
+        )
+
         # Reject all other issued offers for the same shipment
         Offer.joins(:shipment)
              .where(shipment_id: @offer.shipment_id, status: :issued)

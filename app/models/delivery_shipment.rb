@@ -1,5 +1,5 @@
 class DeliveryShipment < ApplicationRecord
-  belongs_to :delivery
+  belongs_to :delivery, optional: true
   belongs_to :shipment
 
   after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? }

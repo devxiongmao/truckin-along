@@ -59,10 +59,10 @@ describe("LocationPointsMapController", () => {
         data-location-points-map-points-json-value='[{
           "current_sender_latitude": 40.7128,
           "current_sender_longitude": -74.0060,
-          "receiver_latitude": 34.0522,
-          "receiver_longitude": -118.2437,
+          "current_receiver_latitude": 34.0522,
+          "current_receiver_longitude": -118.2437,
           "current_sender_address": "New York, NY",
-          "receiver_address": "Los Angeles, CA"
+          "current_receiver_address": "Los Angeles, CA"
         }]'>
       </div>
     `;
@@ -116,8 +116,8 @@ describe("LocationPointsMapController", () => {
           data-location-points-map-points-json-value='[{
             "current_sender_latitude": 0,
             "current_sender_longitude": 0,
-            "receiver_latitude": 0,
-            "receiver_longitude": 0
+            "current_receiver_latitude": 0,
+            "current_receiver_longitude": 0
           }]'>
         </div>
       `);
@@ -133,8 +133,8 @@ describe("LocationPointsMapController", () => {
           data-location-points-map-points-json-value='[{
             "current_sender_latitude": null,
             "current_sender_longitude": -74.0060,
-            "receiver_latitude": 34.0522,
-            "receiver_longitude": -118.2437
+            "current_receiver_latitude": 34.0522,
+            "current_receiver_longitude": -118.2437
           }]'>
         </div>
       `);
@@ -150,14 +150,14 @@ describe("LocationPointsMapController", () => {
             {
               "current_sender_latitude": 0,
               "current_sender_longitude": 0,
-              "receiver_latitude": 0,
-              "receiver_longitude": 0
+              "current_receiver_latitude": 0,
+              "current_receiver_longitude": 0
             },
             {
               "current_sender_latitude": 40.7128,
               "current_sender_longitude": -74.0060,
-              "receiver_latitude": 34.0522,
-              "receiver_longitude": -118.2437
+              "current_receiver_latitude": 34.0522,
+              "current_receiver_longitude": -118.2437
             }
           ]'>
         </div>
@@ -192,8 +192,8 @@ describe("LocationPointsMapController", () => {
           data-location-points-map-points-json-value='[{
             "current_sender_latitude": 0,
             "current_sender_longitude": 0,
-            "receiver_latitude": 0,
-            "receiver_longitude": 0
+            "current_receiver_latitude": 0,
+            "current_receiver_longitude": 0
           }]'>
         </div>
       `);
@@ -209,8 +209,8 @@ describe("LocationPointsMapController", () => {
       const validPoint = {
         current_sender_latitude: 40.7128,
         current_sender_longitude: -74.0060,
-        receiver_latitude: 34.0522,
-        receiver_longitude: -118.2437
+        current_receiver_latitude: 34.0522,
+        current_receiver_longitude: -118.2437
       };
       
       expect(controller.hasValidCoordinates(validPoint)).toBe(true);
@@ -222,8 +222,8 @@ describe("LocationPointsMapController", () => {
       const invalidPoint = {
         current_sender_latitude: null,
         current_sender_longitude: -74.0060,
-        receiver_latitude: 34.0522,
-        receiver_longitude: -118.2437
+        current_receiver_latitude: 34.0522,
+        current_receiver_longitude: -118.2437
       };
 
       expect(controller.hasValidCoordinates(invalidPoint)).toBe(false);
@@ -235,8 +235,8 @@ describe("LocationPointsMapController", () => {
       const invalidPoint = {
         current_sender_latitude: 0,
         current_sender_longitude: -74.0060,
-        receiver_latitude: 34.0522,
-        receiver_longitude: -118.2437
+        current_receiver_latitude: 34.0522,
+        current_receiver_longitude: -118.2437
       };
 
       expect(controller.hasValidCoordinates(invalidPoint)).toBe(false);
@@ -246,8 +246,8 @@ describe("LocationPointsMapController", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "location-points-map");
 
       const invalidPoint = {
-        receiver_latitude: 34.0522,
-        receiver_longitude: -118.2437
+        current_receiver_latitude: 34.0522,
+        current_receiver_longitude: -118.2437
       };
 
       expect(controller.hasValidCoordinates(invalidPoint)).toBe(false);
@@ -336,8 +336,8 @@ describe("LocationPointsMapController", () => {
           data-location-points-map-points-json-value='[{
             "current_sender_latitude": 40.7128,
             "current_sender_longitude": -74.0060,
-            "receiver_latitude": 34.0522,
-            "receiver_longitude": -118.2437
+            "current_receiver_latitude": 34.0522,
+            "current_receiver_longitude": -118.2437
           }]'>
         </div>
       `);
@@ -382,14 +382,14 @@ describe("LocationPointsMapController", () => {
             {
               "current_sender_latitude": 40.7128,
               "current_sender_longitude": -74.0060,
-              "receiver_latitude": 34.0522,
-              "receiver_longitude": -118.2437
+              "current_receiver_latitude": 34.0522,
+              "current_receiver_longitude": -118.2437
             },
             {
               "current_sender_latitude": 41.8781,
               "current_sender_longitude": -87.6298,
-              "receiver_latitude": 29.7604,
-              "receiver_longitude": -95.3698
+              "current_receiver_latitude": 29.7604,
+              "current_receiver_longitude": -95.3698
             }
           ]'>
         </div>
@@ -434,14 +434,14 @@ describe("LocationPointsMapController", () => {
             {
               "current_sender_latitude": 0,
               "current_sender_longitude": 0,
-              "receiver_latitude": 0,
-              "receiver_longitude": 0
+              "current_receiver_latitude": 0,
+              "current_receiver_longitude": 0
             },
             {
               "current_sender_latitude": 40.7128,
               "current_sender_longitude": -74.0060,
-              "receiver_latitude": 34.0522,
-              "receiver_longitude": -118.2437
+              "current_receiver_latitude": 34.0522,
+              "current_receiver_longitude": -118.2437
             }
           ]'>
         </div>
