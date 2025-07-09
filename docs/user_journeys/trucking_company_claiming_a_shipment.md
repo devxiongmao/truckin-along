@@ -26,25 +26,20 @@ When a customer posts a shipment to the Truckin' Along platform, trucking compan
    - The marketplace displays both **available** and **claimed** shipments
    - The user can:
      - Quickly scan each shipment
-     - Click **`Show Details`** to open the full Shipment page (`/shipments/:id`) for more info, including:
-       - Pickup and dropoff locations
-       - Expected delivery window
-       - Package details
+     - Click **`Show Details`** to open the full Shipment page (`/shipments/:id`) for more info.
 
 3. **Select Shipments to Bid On**
 
    - Once a shipment looks like a good fit, the user can:
      - Check the box beside that shipment (multiple selections allowed)
-     - Click the **`Assign to Me`** button to proceed (this button launches the bid modal)
+     - Click the **`Submit Bids`** button to proceed (this button launches the bid modal)
 
 4. **Complete the Bid Form**
 
    - A modal appears prompting the user to enter the following for each shipment:
-     - **Estimated Delivery Date**
-     - **Delivery Location**
-     - **Dropoff vs. Pickup Preference**
      - **Offered Price**
-     - **Bid Expiry Date**
+     - **Pickup Location**
+     - **Delivery Location**
    - Once all required fields are completed, the user clicks **`Submit`**
 
 5. **Asynchronous Follow-Up: Bid Accepted**
@@ -59,22 +54,19 @@ When a customer posts a shipment to the Truckin' Along platform, trucking compan
 
 - 🟢 Pleased with the easy and streamlined bid submission process
 - 🟢 Appreciates the flexibility to choose multiple shipments and customize offers
-- 🟡 Finds it hard to **quickly identify shipment destinations** at a glance
-- 🟡 Mild confusion over the **`Assign to Me`** button, which implies finality rather than a bid submission
+- 🟢 Appreciates the layout and ease of understanding related to shipment metadata
 
 ---
 
 ## Pain Points
 
-- Important shipment info—like **pickup/dropoff location** and **time window**—is buried in the details page
-- The **`Assign to Me`** button is misleading, especially since users are actually submitting a bid, not claiming ownership yet
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- **XMDEV-350**: Rename **`Assign to Me`** button to **`Submit Bids`** for clarity
-- Improve shipment preview cards to **display key details** (location, timing) without requiring a deep dive
+- None currently reported in this workflow
 
 ---
 

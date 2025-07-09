@@ -1,6 +1,6 @@
 Under Construction
 
-# User Journey: Customer Accepting a Bid
+# User Journey: Customer Accepting/Rejecting a Bid
 
 ## Persona
 
@@ -20,50 +20,53 @@ Now that the user has submitted a shipment, they can receive bids from shipping 
 
 1. **Entry Point**
 
-   - After logging in, the user navigates to the Bids menu.
-   - Route: `/bids` (http://localhost:3000/bids)
+   - After logging in, the user navigates to the Offers menu.
+   - Route: `/offers` (http://localhost:3000/offers)
 
 2. **Reviewing the Bids**
 
    - On this page, for each shipment, there are a list of bids that companies have submitted
-   - [Any UI elements, forms, or buttons involved]
 
-3. **[Step Name]**
+3. **Accepting a bid**
 
-   - [Continue each step in sequential order]
-   - [Include decisions, alternate paths, retries, etc.]
+   - After reviewing the bids for each shipment, the user can click the Accept button to...
+     - Reject all other bids
+     - Accept the companies offer
+   - The offers include...
+     - Offers to pickup at the home location
+     - Deliver directly to the home address
+     - The price
+   - If the company is not willing to deliver directly to the home address, they can make the shipment available for pickup at the destination location close to the destination address.
 
-4. **[Optional Step: Verification/Onboarding/etc.]**
+4. **Rejecting a bid**
 
-   - [Describe any extra workflows the user goes through]
+   - Alternatively, the user can reject an individual bid by clicking the Reject button.
+   - This will allow the company to submit a different, more enticing offer.
 
-5. **[Final Step]**
-   - [What is the final screen, interaction, or outcome?]
+5. **Monitoring an accepted offer**
+   - Once the user has accepted an offer, they can proceed to the [monitoring shipment](customer_monitoring_shipment.md) workflow.
 
 ---
 
 ## Emotions
 
-- 🟢 [Positive emotion: e.g., “Happy with easy sign-up”]
-- 🟡 [Neutral or mixed: e.g., “Annoyed by pop-ups”]
-- 🔴 [Negative emotion: e.g., “Confused by unclear CTA”]
+- 🟢 Happy with the streamlined process
+- 🟢 Appreciate the email notifications to keep them in the loop.
 
 ---
 
 ## Pain Points
 
-- [List issues that interrupt or slow down the user]
-- [Think of usability, performance, copywriting, etc.]
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- [What could be improved in the journey?]
-- [Design, UX, feature enhancements, etc.]
+- None currently reported in this workflow
 
 ---
 
 ## Outcome
 
-[Summarize what happened by the end of the journey. Did the user succeed? Abandon the process? Return later?]
+The customer was able to easily review the bids they've received for their shipments as well as easily accept or reject bids that have come in.
