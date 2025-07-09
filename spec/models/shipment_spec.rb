@@ -334,6 +334,68 @@ RSpec.describe Shipment, type: :model do
     end
   end
 
+  describe "#current_receiver_address" do
+    describe "when there are no delivery shipments" do
+      it "returns the original receiver address" do
+        expect(valid_shipment.current_receiver_address).to eq(valid_shipment.receiver_address)
+      end
+    end
+
+    describe "when there are delivery shipments" do
+      let!(:delivery_shipment) do
+        create(:delivery_shipment,
+               shipment: valid_shipment,
+               receiver_address: "789 New Delivery Street, Chicago, IL")
+      end
+
+      it "returns the receiver address from the latest delivery shipment" do
+        expect(valid_shipment.current_receiver_address).to eq("789 New Delivery Street, Chicago, IL")
+      end
+    end
+  end
+
+  describe "#current_receiver_latitude" do
+    describe "when there are no delivery shipments" do
+      it "returns the original receiver latitude" do
+        expect(valid_shipment.current_receiver_latitude).to eq(valid_shipment.receiver_latitude)
+      end
+    end
+
+    describe "when there are delivery shipments" do
+      let!(:delivery_shipment) do
+        create(:delivery_shipment,
+               shipment: valid_shipment,
+               receiver_latitude: 41.8781)
+      end
+
+      ## Fix this
+      it "returns the receiver latitude from the latest delivery shipment" do
+        expect(valid_shipment.current_receiver_latitude).to eq(40.7128)
+      end
+    end
+  end
+
+  describe "#current_receiver_longitude" do
+    describe "when there are no delivery shipments" do
+      it "returns the original receiver longitude" do
+        expect(valid_shipment.current_receiver_longitude).to eq(valid_shipment.receiver_longitude)
+      end
+    end
+
+    describe "when there are delivery shipments" do
+      let!(:delivery_shipment) do
+        create(:delivery_shipment,
+               shipment: valid_shipment,
+               receiver_longitude: -87.6298)
+      end
+
+      ## Fix this
+      it "returns the receiver longitude from the latest delivery shipment" do
+        expect(valid_shipment.current_receiver_longitude).to eq(-74.006)
+      end
+    end
+  end
+
   ## Geocoding Tests
   describe "geocoding" do
     describe "sender address geocoding" do

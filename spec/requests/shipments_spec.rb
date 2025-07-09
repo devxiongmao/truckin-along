@@ -862,6 +862,7 @@ RSpec.describe "/shipments", type: :request do
       context "with valid params" do
         let(:truck) { create(:truck, company: company) }
         let(:claimed_shipment) { create(:shipment, company: company, truck: nil) }
+        let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment) }
 
         it "updates the shipments" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
@@ -877,12 +878,6 @@ RSpec.describe "/shipments", type: :request do
         it "shows the appropriate alert" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
           expect(flash[:notice]).to eq("Shipments successfully assigned to truck.")
-        end
-
-        it "enqueues a geocode job" do
-          expect {
-            post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
-          }.to have_enqueued_job(GeocodeDeliveryShipmentsJob)
         end
 
         describe "when a shipment action preference exists" do

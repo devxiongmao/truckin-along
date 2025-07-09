@@ -8,67 +8,74 @@ class ScheduleDelivery < ApplicationService
     @errors = []
   end
 
-
   def run
-    return error("Please select a truck.") unless (truck = Truck.find_by(id: @truck_id))
+    return add_error("Please select a truck.") unless valid_truck?
+
     shipments = find_shipments
-    return error("Please select at least one shipment.") if shipments.empty?
+    return add_error("Please select at least one shipment.") if shipments.empty?
 
     ActiveRecord::Base.transaction do
-      find_or_create_delivery(truck)
+      @delivery = find_or_create_delivery
       update_delivery_shipments(shipments)
       load_shipments(shipments)
     end
 
     true
-  rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid => e
+    add_error("Transaction failed: #{e.message}")
     false
   end
 
   private
 
-  def find_or_create_delivery(truck)
-    @delivery = truck.deliveries.scheduled.first
-    return if @delivery.present?
-    @delivery = Delivery.create!({
+  def valid_truck?
+    @truck ||= Truck.find_by(id: @truck_id)
+    @truck.present?
+  end
+
+  def find_or_create_delivery
+    delivery = @truck.deliveries.scheduled.first
+    return delivery if delivery.present?
+
+    @truck.deliveries.create!(
       user_id: nil,
-      truck_id: @truck_id,
       status: :scheduled
-    })
-  rescue ActiveRecord::RecordInvalid => e
-    @errors << "Failed to create delivery: #{e.message}"
-    raise e
+    )
   end
 
   def find_shipments
-    Shipment.for_company(@current_company).where(id: @shipment_ids)
+    @current_company.shipments.where(id: @shipment_ids)
   end
 
   def update_delivery_shipments(shipments)
-    shipments.each do |shipment|
-      last_delivery_shipment = shipment.latest_delivery_shipment
-      last_delivery_shipment.loaded_date = Time.now
-      last_delivery_shipment.delivery_id = @delivery.id
-      last_delivery_shipment.save!
+    shipments.includes(:delivery_shipments).find_each do |shipment|
+      latest_delivery_shipment = shipment.latest_delivery_shipment
+
+      latest_delivery_shipment.update!(
+        loaded_date: Time.current,
+        delivery_id: @delivery.id
+      )
     end
-  rescue ActiveRecord::RecordInvalid => e
-    @errors << "Failed to associate shipment: #{e.message}"
-    raise e
   end
+
 
   def load_shipments(shipments)
-    status_id = @current_company.shipment_action_preferences
-                  .find_by(action: "loaded_onto_truck")
-                  &.shipment_status_id
+    loaded_status_id = find_loaded_status_id
 
-    shipments.each { |s| s.update!(shipment_status_id: status_id) if status_id }
-    shipments.update_all(truck_id: @truck_id)
-  rescue => e
-    @errors << "Failed to update shipment: #{e.message}"
-    raise e
+    update_params = { truck_id: @truck_id }
+    update_params[:shipment_status_id] = loaded_status_id if loaded_status_id.present?
+
+    shipments.update_all(update_params)
   end
 
-  def error(message)
+  def find_loaded_status_id
+    @current_company
+      .shipment_action_preferences
+      .find_by(action: "loaded_onto_truck")
+      &.shipment_status_id
+  end
+
+  def add_error(message)
     @errors << message
     false
   end
