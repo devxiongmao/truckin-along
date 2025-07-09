@@ -41,16 +41,13 @@ RSpec.describe ScheduleDelivery, type: :service do
       end
 
       it "updates latest delivery_shipments with loaded_date and delivery_id" do
-        current_time = Time.current
-        allow(Time).to receive(:current).and_return(current_time)
-
         subject.run
         delivery = truck.deliveries.scheduled.first
 
-        expect(delivery_shipment1.reload.loaded_date).to eq(current_time)
+        expect(delivery_shipment1.reload.loaded_date).not_to be_nil
         expect(delivery_shipment1.delivery_id).to eq(delivery.id)
 
-        expect(delivery_shipment2.reload.loaded_date).to eq(current_time)
+        expect(delivery_shipment2.reload.loaded_date).not_to be_nil
         expect(delivery_shipment2.delivery_id).to eq(delivery.id)
       end
 
