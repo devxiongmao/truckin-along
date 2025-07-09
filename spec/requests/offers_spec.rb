@@ -241,6 +241,12 @@ RSpec.describe "/offers", type: :request do
           }.to change(Offer, :count).by(2)
         end
 
+        it "enqueues the offer received emails" do
+          expect {
+            post bulk_create_offers_url, params: valid_bulk_attributes
+          }.to have_enqueued_job(ActionMailer::MailDeliveryJob).exactly(2).times
+        end
+
         it "sets the status to 'issued' for all created offers" do
           post bulk_create_offers_url, params: valid_bulk_attributes
           created_offers = Offer.last(2)
@@ -495,6 +501,12 @@ RSpec.describe "/offers", type: :request do
           }.to change { customer_offer.reload.status }.from("issued").to("accepted")
         end
 
+        it "enqueues the offer accepted emails" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to have_enqueued_job(ActionMailer::MailDeliveryJob).exactly(1).times
+        end
+
         it "rejects all other issued offers for the same shipment" do
           expect {
             patch accept_offer_url(customer_offer)
@@ -717,6 +729,12 @@ RSpec.describe "/offers", type: :request do
           expect {
             patch reject_offer_url(customer_offer)
           }.to change { customer_offer.reload.status }.from("issued").to("rejected")
+        end
+
+        it "enqueues the offer rejected emails" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to have_enqueued_job(ActionMailer::MailDeliveryJob).exactly(1).times
         end
 
         it "redirects to offers path with success message" do

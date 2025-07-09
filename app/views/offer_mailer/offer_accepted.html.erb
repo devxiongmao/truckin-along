@@ -1,0 +1,38 @@
+<style type="text/css">
+  body {
+    font-family: Arial, sans-serif;
+    color: #333333;
+    line-height: 1.6;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1,
+  h2 {
+    color: #09e80d;
+    margin-bottom: 10px;
+  }
+
+  .details-container {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .detail-value {
+    color: #336699;
+  }
+</style>
+
+<h1>Your Offer Was Accepted!</h1>
+<p>Hello,</p>
+<p>Congratulations! Your offer for shipment <strong><%= @shipment.name %></strong> was accepted by the shipment owner.</p>
+<div class="details-container">
+  <p><strong>Price:</strong> <span class="detail-value">$<%= @offer.price %></span></p>
+  <p><strong>Notes:</strong> <span class="detail-value"><%= @offer.notes.presence || 'None' %></span></p>
+</div>
+<p>Please log in to your dashboard to view the shipment details and next steps.</p>
+<p>Thank you for truckin' along!</p>

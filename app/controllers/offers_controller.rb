@@ -36,6 +36,10 @@ class OffersController < ApplicationController
 
     if errors.empty?
       Offer.transaction { @offers.each(&:save!) }
+      # Send notification emails to shipment owners
+      @offers.each do |offer|
+        OfferMailer.offer_received(offer.id).deliver_later
+      end
       redirect_to offers_path, notice: "#{@offers.count} offers were successfully created."
     else
       redirect_to offers_path, alert: "Errors occurred: #{errors.join('; ')}"
@@ -74,7 +78,8 @@ class OffersController < ApplicationController
              .where.not(id: @offer.id)
              .update_all(status: :rejected)
       end
-
+      # Notify company admins that their offer was accepted
+      OfferMailer.offer_accepted(@offer.id).deliver_later
       redirect_to offers_path, notice: "Offer was successfully accepted. All other offers for this shipment have been rejected."
     else
       redirect_to offers_path, alert: "Only issued offers can be accepted."
@@ -87,6 +92,8 @@ class OffersController < ApplicationController
     if @offer.issued?
       authorize @offer, :reject?
       @offer.update!(status: :rejected)
+      # Notify company admins that their offer was rejected
+      OfferMailer.offer_rejected(@offer.id).deliver_later
       redirect_to offers_path, notice: "Offer was successfully rejected."
     else
       redirect_to offers_path, alert: "Only issued offers can be rejected."
