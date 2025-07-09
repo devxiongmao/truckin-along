@@ -41,7 +41,7 @@ This user likely heard about Truckin' Along through word of mouth and is checkin
 
 4. **First Sign-In**
 
-   - Upon successful sign-up, the user is redirected to the homepage.
+   - Upon successful sign-up, the user is redirected to their dashboard page.
    - A banner appears at the top of the screen:  
      `Welcome! You have signed up successfully.`
 
@@ -51,20 +51,18 @@ This user likely heard about Truckin' Along through word of mouth and is checkin
 
 - 🟢 Pleased with the simple, lightweight sign-up process
 - 🟢 Appreciates the lack of cognitive overhead
-- 🟡 Slightly confused upon redirection—the homepage still contains `Sign Up` buttons, making it unclear whether they are signed in
 
 ---
 
 ## Pain Points
 
-- Lack of clear visual feedback that the user is now signed in after completing the process
+- None currently reported in this workflow
 
 ---
 
 ## Opportunities
 
-- Update homepage content post-login to reflect the user's authenticated state more clearly  
-  _(XMDEV-316)_
+- None currently reported in this workflow
 
 ---
 
