@@ -98,21 +98,6 @@ class ShipmentsController < ApplicationController
     redirect_to delivery_path(@shipment.active_delivery), notice: "Shipment successfully closed."
   end
 
-  def assign
-    authorize Shipment
-    shipment_ids = params[:shipment_ids].presence || []
-    preference = current_company.shipment_action_preferences.find_by(action: "claimed_by_company")
-    if shipment_ids.any?
-      shipments = Shipment.where(id: shipment_ids)
-      shipments.update_all(company_id: current_company.id)
-      shipments.update_all(shipment_status_id: preference.shipment_status_id) if preference&.shipment_status_id
-      flash[:notice] = "Selected shipments have been assigned to your company."
-    else
-      flash[:alert] = "No shipments were selected."
-    end
-    redirect_to deliveries_path
-  end
-
   def assign_shipments_to_truck
     authorize Shipment
     service = ScheduleDelivery.new(params, current_company)

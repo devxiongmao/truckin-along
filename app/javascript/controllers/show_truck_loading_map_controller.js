@@ -25,12 +25,12 @@ export default class extends Controller {
     return (
       shipment.current_sender_latitude != null &&
       shipment.current_sender_longitude != null &&
-      shipment.receiver_latitude != null &&
-      shipment.receiver_longitude != null &&
+      shipment.current_receiver_latitude != null &&
+      shipment.current_receiver_longitude != null &&
       shipment.current_sender_latitude !== 0 &&
       shipment.current_sender_longitude !== 0 &&
-      shipment.receiver_latitude !== 0 &&
-      shipment.receiver_longitude !== 0
+      shipment.current_receiver_latitude !== 0 &&
+      shipment.current_receiver_longitude !== 0
     );
   }
 
@@ -48,12 +48,12 @@ export default class extends Controller {
         const senderMarker = L.marker([shipment.current_sender_latitude, shipment.current_sender_longitude]).addTo(map);
         senderMarker.bindPopup(`<b>Pickup Location ${index + 1}</b><br>${shipment.current_sender_address}`);
 
-        const receiverMarker = L.marker([shipment.receiver_latitude, shipment.receiver_longitude]).addTo(map);
-        receiverMarker.bindPopup(`<b>Delivery Location ${index + 1}</b><br>${shipment.receiver_address}`);
+        const receiverMarker = L.marker([shipment.current_receiver_latitude, shipment.current_receiver_longitude]).addTo(map);
+        receiverMarker.bindPopup(`<b>Delivery Location ${index + 1}</b><br>${shipment.current_receiver_address}`);
 
         L.polyline([
           [shipment.current_sender_latitude, shipment.current_sender_longitude],
-          [shipment.receiver_latitude, shipment.receiver_longitude]
+          [shipment.current_receiver_latitude, shipment.current_receiver_longitude]
         ], {
           color: this.getRouteColor(index),
           weight: 3,
@@ -61,7 +61,7 @@ export default class extends Controller {
         }).addTo(map);
 
         bounds.extend([shipment.current_sender_latitude, shipment.current_sender_longitude]);
-        bounds.extend([shipment.receiver_latitude, shipment.receiver_longitude]);
+        bounds.extend([shipment.current_receiver_latitude, shipment.current_receiver_longitude]);
       }
     });
 

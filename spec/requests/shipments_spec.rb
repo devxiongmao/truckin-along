@@ -363,18 +363,6 @@ RSpec.describe "/shipments", type: :request do
       end
     end
 
-    describe "POST #assign" do
-      it 'redirects to the dashboard page' do
-        post assign_shipments_url, params: { shipment_ids: [] }
-        expect(response).to redirect_to(dashboard_path)
-      end
-
-      it "shows an alert saying not authorized" do
-        post assign_shipments_url, params: { shipment_ids: [] }
-        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
-      end
-    end
-
     describe "POST #assign_shipments_to_truck" do
       it 'redirects to the dashboard' do
         post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [], truck_id: nil }
@@ -857,51 +845,6 @@ RSpec.describe "/shipments", type: :request do
       end
     end
 
-    describe "POST #assign" do
-      let!(:unassigned_shipment) { create(:shipment, user: valid_user, company: nil) }
-      let!(:unassigned_shipment2) { create(:shipment, user: other_user, company: nil) }
-
-      let!(:unassigned_shipments) { [ unassigned_shipment, unassigned_shipment2 ] }
-
-      it "assigns selected shipments to the current company" do
-        shipment_ids = unassigned_shipments.map(&:id)
-        post assign_shipments_url, params: { shipment_ids: shipment_ids }
-
-        unassigned_shipments.each do |shipment|
-          shipment.reload
-          expect(shipment.company.id).to eq(admin_user.company.id)
-        end
-      end
-
-      it "redirects to the deliveries path" do
-        post assign_shipments_url, params: { shipment_ids: [] }
-        expect(response).to redirect_to(deliveries_path)
-      end
-
-      it "shows an alert saying shipments have been assigned" do
-        shipment_ids = unassigned_shipments.map(&:id)
-        post assign_shipments_url, params: { shipment_ids: shipment_ids }
-        expect(flash[:notice]).to eq("Selected shipments have been assigned to your company.")
-      end
-
-      it "shows an alert if no shipments are selected" do
-        post assign_shipments_url, params: { shipment_ids: nil }
-        expect(flash[:alert]).to eq("No shipments were selected.")
-      end
-
-      describe "when a shipment action preference exists" do
-        let(:shipment_status) { create(:shipment_status, company: company) }
-        let!(:company_preference) { create(:shipment_action_preference, action: "claimed_by_company", company: company, shipment_status: shipment_status) }
-
-        it "updates the shipments to have that status" do
-          shipment_ids = unassigned_shipments.map(&:id)
-          post assign_shipments_url, params: { shipment_ids: shipment_ids }
-          shipment = Shipment.find(shipment_ids.last)
-          expect(shipment.shipment_status_id).to eq(shipment_status.id)
-        end
-      end
-    end
-
     describe "POST #assign_shipments_to_truck" do
       context "with invalid params" do
         it 'redirects to the load_truck_path' do
@@ -919,6 +862,7 @@ RSpec.describe "/shipments", type: :request do
       context "with valid params" do
         let(:truck) { create(:truck, company: company) }
         let(:claimed_shipment) { create(:shipment, company: company, truck: nil) }
+        let!(:delivery_shipment) { create(:delivery_shipment, shipment: claimed_shipment) }
 
         it "updates the shipments" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
@@ -934,12 +878,6 @@ RSpec.describe "/shipments", type: :request do
         it "shows the appropriate alert" do
           post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
           expect(flash[:notice]).to eq("Shipments successfully assigned to truck.")
-        end
-
-        it "enqueues a geocode job" do
-          expect {
-            post assign_shipments_to_truck_shipments_url, params: { shipment_ids: [ claimed_shipment.id ], truck_id: truck.id }
-          }.to have_enqueued_job(GeocodeDeliveryShipmentsJob)
         end
 
         describe "when a shipment action preference exists" do

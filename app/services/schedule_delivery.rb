@@ -4,91 +4,78 @@ class ScheduleDelivery < ApplicationService
   def initialize(params, company)
     @truck_id = params[:truck_id]
     @shipment_ids = Array(params[:shipment_ids]).map(&:to_i)
-    @delivery_address = params[:delivery_address]
     @current_company = company
     @errors = []
   end
 
-
   def run
-    return error("Please select a truck.") unless (truck = Truck.find_by(id: @truck_id))
+    return add_error("Please select a truck.") unless valid_truck?
+
     shipments = find_shipments
-    return error("Please select at least one shipment.") if shipments.empty?
+    return add_error("Please select at least one shipment.") if shipments.empty?
 
     ActiveRecord::Base.transaction do
-      find_or_create_delivery(truck)
-      create_delivery_shipments(shipments)
+      @delivery = find_or_create_delivery
+      update_delivery_shipments(shipments)
       load_shipments(shipments)
     end
 
     true
-  rescue ActiveRecord::Rollback, ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid => e
+    add_error("Transaction failed: #{e.message}")
     false
   end
 
   private
 
-  def find_or_create_delivery(truck)
-    @delivery = truck.deliveries.scheduled.first
-    return if @delivery.present?
-    @delivery = Delivery.create!({
+  def valid_truck?
+    @truck ||= Truck.find_by(id: @truck_id)
+    @truck.present?
+  end
+
+  def find_or_create_delivery
+    delivery = @truck.deliveries.scheduled.first
+    return delivery if delivery.present?
+
+    @truck.deliveries.create!(
       user_id: nil,
-      truck_id: @truck_id,
       status: :scheduled
-    })
-  rescue ActiveRecord::RecordInvalid => e
-    @errors << "Failed to create delivery: #{e.message}"
-    raise e
+    )
   end
 
   def find_shipments
-    Shipment.for_company(@current_company).where(id: @shipment_ids)
+    @current_company.shipments.where(id: @shipment_ids)
   end
 
-  def create_delivery_shipments(shipments)
-    shipment_attributes = shipments.map do |shipment|
-      {
-        delivery_id: @delivery.id,
-        shipment_id: shipment.id,
-        sender_address: set_sender_address(shipment),
-        receiver_address: set_receiver_address(shipment),
-        loaded_date: Time.now,
-        created_at: Time.current,
-        updated_at: Time.current
-      }
+  def update_delivery_shipments(shipments)
+    shipments.includes(:delivery_shipments).find_each do |shipment|
+      latest_delivery_shipment = shipment.latest_delivery_shipment
+
+      latest_delivery_shipment.update!(
+        loaded_date: Time.current,
+        delivery_id: @delivery.id
+      )
     end
-
-    inserted = @delivery.delivery_shipments.insert_all!(shipment_attributes, returning: %w[id])
-    GeocodeDeliveryShipmentsJob.perform_later(inserted.pluck("id"))
-  rescue ActiveRecord::RecordInvalid => e
-    @errors << "Failed to associate shipment: #{e.message}"
-    raise e
   end
 
-  def set_sender_address(shipment)
-    previous_delivery = shipment.latest_delivery_shipment
-    return previous_delivery.receiver_address unless previous_delivery.nil?
-    shipment.sender_address
-  end
-
-  def set_receiver_address(shipment)
-    return @delivery_address if @delivery_address.present?
-    shipment.receiver_address
-  end
 
   def load_shipments(shipments)
-    status_id = @current_company.shipment_action_preferences
-                  .find_by(action: "loaded_onto_truck")
-                  &.shipment_status_id
+    loaded_status_id = find_loaded_status_id
 
-    shipments.each { |s| s.update!(shipment_status_id: status_id) if status_id }
-    shipments.update_all(truck_id: @truck_id)
-  rescue => e
-    @errors << "Failed to update shipment: #{e.message}"
-    raise e
+    update_params = { truck_id: @truck_id }
+    update_params[:shipment_status_id] = loaded_status_id if loaded_status_id.present?
+
+    shipments.update_all(update_params)
   end
 
-  def error(message)
+  def find_loaded_status_id
+    @current_company
+      .shipment_action_preferences
+      .find_by(action: "loaded_onto_truck")
+      &.shipment_status_id
+  end
+
+  def add_error(message)
     @errors << message
     false
   end

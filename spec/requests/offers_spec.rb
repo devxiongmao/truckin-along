@@ -9,9 +9,9 @@ RSpec.describe "/offers", type: :request do
   let(:admin) { create(:user, :admin, company: company) }
   let(:other_driver) { create(:user, :driver, company: other_company) }
 
-  let(:customer_shipment) { create(:shipment, user: customer) }
+  let(:customer_shipment) { create(:shipment, user: customer, shipment_status_id: nil, company_id: nil) }
   let(:driver_shipment) { create(:shipment, user: driver) }
-  let(:other_customer_shipment) { create(:shipment, user: customer) }
+  let(:other_customer_shipment) { create(:shipment, user: customer, company_id: nil) }
 
   # New shipments specifically for bulk_create tests to avoid conflicts
   let(:bulk_test_shipment_1) { create(:shipment, user: customer) }
@@ -473,6 +473,8 @@ RSpec.describe "/offers", type: :request do
     let!(:rejected_offer) { create(:offer, shipment: customer_shipment, company: company, status: :rejected) }
     let!(:withdrawn_offer) { create(:offer, shipment: customer_shipment, company: company, status: :withdrawn) }
     let!(:other_issued_offer) { create(:offer, shipment: customer_shipment, company: other_company, status: :issued) }
+    let(:shipment_status) { create(:shipment_status, company: company) }
+    let!(:shipment_action_preference) { create(:shipment_action_preference, company: company, shipment_status: shipment_status) }
 
     context "when user is not signed in" do
       it "redirects to the sign in page" do
@@ -499,6 +501,33 @@ RSpec.describe "/offers", type: :request do
           }.to change { other_issued_offer.reload.status }.from("issued").to("rejected")
         end
 
+        it "creates a DeliveryShipment" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change(DeliveryShipment, :count).by(1)
+        end
+
+        it "creates DeliveryShipment with correct attributes" do
+          patch accept_offer_url(customer_offer)
+
+          delivery_shipment = DeliveryShipment.last
+          expect(delivery_shipment.shipment).to eq(customer_offer.shipment)
+          expect(delivery_shipment.sender_address).to eq(customer_offer.reception_address)
+          expect(delivery_shipment.receiver_address).to eq(customer_offer.dropoff_location)
+        end
+
+        it "updates shipment company_id" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change { customer_offer.shipment.reload.company_id }.from(nil).to(company.id)
+        end
+
+        it "updates shipment status when preference exists" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change { customer_offer.shipment.reload.shipment_status_id }.from(nil).to(shipment_status.id)
+        end
+
         it "redirects to offers path with success message" do
           patch accept_offer_url(customer_offer)
           expect(response).to redirect_to(offers_path)
@@ -521,11 +550,53 @@ RSpec.describe "/offers", type: :request do
         end
       end
 
+      context "when company has no shipment action preference" do
+        before do
+          ShipmentActionPreference.destroy_all
+        end
+
+        it "accepts the offer" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change { customer_offer.reload.status }.from("issued").to("accepted")
+        end
+
+        it "creates a DeliveryShipment" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change(DeliveryShipment, :count).by(1)
+        end
+
+        it "updates shipment company_id" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.to change { customer_offer.shipment.reload.company_id }.from(nil).to(company.id)
+        end
+
+        it "does not update shipment status when no preference exists" do
+          expect {
+            patch accept_offer_url(customer_offer)
+          }.not_to change { customer_offer.shipment.reload.shipment_status_id }
+        end
+      end
+
       context "with a non-issued offer" do
         it "does not accept the offer" do
           expect {
             patch accept_offer_url(accepted_offer)
           }.not_to change { accepted_offer.reload.status }
+        end
+
+        it "does not create a DeliveryShipment" do
+          expect {
+            patch accept_offer_url(accepted_offer)
+          }.not_to change(DeliveryShipment, :count)
+        end
+
+        it "does not update shipment company_id" do
+          expect {
+            patch accept_offer_url(accepted_offer)
+          }.not_to change { accepted_offer.shipment.reload.company_id }
         end
 
         it "redirects to offers path with error message" do
@@ -547,6 +618,23 @@ RSpec.describe "/offers", type: :request do
             patch accept_offer_url(other_company_offer)
           }.to change { other_company_offer.reload.status }.from("issued").to("accepted")
         end
+
+        it "creates a DeliveryShipment for the other company's offer" do
+          expect {
+            patch accept_offer_url(other_company_offer)
+          }.to change(DeliveryShipment, :count).by(1)
+
+          delivery_shipment = DeliveryShipment.last
+          expect(delivery_shipment.shipment).to eq(other_company_offer.shipment)
+          expect(delivery_shipment.sender_address).to eq(other_company_offer.reception_address)
+          expect(delivery_shipment.receiver_address).to eq(other_company_offer.dropoff_location)
+        end
+
+        it "updates shipment company_id to the other company" do
+          expect {
+            patch accept_offer_url(other_company_offer)
+          }.to change { other_company_offer.shipment.reload.company_id }.from(nil).to(other_company.id)
+        end
       end
     end
 
@@ -559,6 +647,12 @@ RSpec.describe "/offers", type: :request do
         expect {
           patch accept_offer_url(customer_offer)
         }.not_to change { customer_offer.reload.status }
+      end
+
+      it "does not create a DeliveryShipment" do
+        expect {
+          patch accept_offer_url(customer_offer)
+        }.not_to change(DeliveryShipment, :count)
       end
 
       it "redirects to dashboard path" do
@@ -581,6 +675,12 @@ RSpec.describe "/offers", type: :request do
         expect {
           patch accept_offer_url(customer_offer)
         }.not_to change { customer_offer.reload.status }
+      end
+
+      it "does not create a DeliveryShipment" do
+        expect {
+          patch accept_offer_url(customer_offer)
+        }.not_to change(DeliveryShipment, :count)
       end
 
       it "redirects to dashboard path" do
