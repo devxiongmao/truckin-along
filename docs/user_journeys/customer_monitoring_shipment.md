@@ -64,7 +64,7 @@ The customer wants to track the progress of their shipment to understand how far
 
 ## Opportunities
 
-- Maintain and improve shipment-claimed email notifications _(XMDEV-343)_
+- None currently reported in this workflow
 
 ---
 
