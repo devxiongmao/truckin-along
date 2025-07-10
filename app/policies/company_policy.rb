@@ -27,4 +27,8 @@ class CompanyPolicy < ApplicationPolicy
   def update?
     user.admin?
   end
+
+  def show?
+    true # Anyone can view company details
+  end
 end
