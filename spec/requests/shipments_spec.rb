@@ -339,7 +339,7 @@ RSpec.describe "/shipments", type: :request do
             expect(response).to redirect_to(dashboard_path)
           end
 
-          it "shows an alert saying cannot delete claimed shipment" do
+          it "shows an alert saying not authorized" do
             delete shipment_url(claimed_shipment)
             expect(flash[:alert]).to eq("You are not authorized to perform this action.")
           end
