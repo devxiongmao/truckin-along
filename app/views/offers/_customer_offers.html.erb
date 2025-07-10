@@ -29,7 +29,8 @@
       <% offers.each do |offer| %>
       <tr>
         <td>
-          <%= link_to offer.company.name, company_path(offer.company), class: 'action-link'%></td>
+          <%= link_to offer.company.name, company_path(offer.company), class: "company-link" %>
+        </td>
         <td>
           <% case offer.status %>
           <% when 'issued' %>
