@@ -348,7 +348,7 @@ jobs:
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [test, test_js, scan_ruby, scan_js, lint]
+    needs: [test, test_js, scan_ruby, scan_js, lint, lint_js]
     if: startsWith(github.head_ref, 'release-') && success()
     permissions:
       contents: write
