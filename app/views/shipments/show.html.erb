@@ -41,7 +41,9 @@
   <%= link_to 'Edit Shipment', edit_shipment_path(@shipment), class: 'button primary-button' %>
   <% if @current_user.customer? %>
   <%= link_to 'Copy Shipment', copy_shipment_path(@shipment), class: 'button warning-button' %>
+  <% unless @shipment.claimed? %>
   <%= link_to 'Destroy Shipment', @shipment, method: :delete, class: 'button danger-button', data: { confirm: 'Are you sure?' } %>
+  <% end %>
   <% end %>
 
 </div>

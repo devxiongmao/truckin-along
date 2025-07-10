@@ -65,20 +65,40 @@ RSpec.describe ShipmentPolicy, type: :policy do
 
     context 'when the user is a customer' do
       let(:user) { customer }
-      subject { described_class.new(user, shipment) }
 
-      it { expect(subject.index?).to be true }
-      it { expect(subject.show?).to be true }
-      it { expect(subject.new?).to be true }
-      it { expect(subject.edit?).to be true }
-      it { expect(subject.create?).to be true }
-      it { expect(subject.update?).to be true }
-      it { expect(subject.destroy?).to be true }
-      it { expect(subject.copy?).to be true }
-      it { expect(subject.close?).to be false }
-      it { expect(subject.assign?).to be false }
-      it { expect(subject.assign_shipments_to_truck?).to be false }
-      it { expect(subject.initiate_delivery?).to be false }
+      context 'with unclaimed shipment' do
+        subject { described_class.new(user, shipment) }
+
+        it { expect(subject.index?).to be true }
+        it { expect(subject.show?).to be true }
+        it { expect(subject.new?).to be true }
+        it { expect(subject.edit?).to be true }
+        it { expect(subject.create?).to be true }
+        it { expect(subject.update?).to be true }
+        it { expect(subject.destroy?).to be true }
+        it { expect(subject.copy?).to be true }
+        it { expect(subject.close?).to be false }
+        it { expect(subject.assign?).to be false }
+        it { expect(subject.assign_shipments_to_truck?).to be false }
+        it { expect(subject.initiate_delivery?).to be false }
+      end
+
+      context 'with claimed shipment' do
+        subject { described_class.new(user, company_shipment) }
+
+        it { expect(subject.index?).to be true }
+        it { expect(subject.show?).to be true }
+        it { expect(subject.new?).to be true }
+        it { expect(subject.edit?).to be true }
+        it { expect(subject.create?).to be true }
+        it { expect(subject.update?).to be true }
+        it { expect(subject.destroy?).to be false }
+        it { expect(subject.copy?).to be true }
+        it { expect(subject.close?).to be false }
+        it { expect(subject.assign?).to be false }
+        it { expect(subject.assign_shipments_to_truck?).to be false }
+        it { expect(subject.initiate_delivery?).to be false }
+      end
     end
 
     context 'when the user belongs to the same company as the shipment' do

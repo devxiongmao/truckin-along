@@ -37,7 +37,7 @@ class ShipmentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.customer?
+    user.customer? && !shipment.claimed?
   end
 
   def copy?

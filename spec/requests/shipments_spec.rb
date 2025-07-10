@@ -9,7 +9,7 @@ RSpec.describe "/shipments", type: :request do
 
   let(:admin_user) { create(:user, :admin, company: company) }
 
-  let!(:shipment) { create(:shipment, user: valid_user) }
+  let!(:shipment) { create(:shipment, user: valid_user, company: nil) }
   let!(:other_shipment) { create(:shipment, user: other_user) }
 
   let(:valid_attributes) do
@@ -311,16 +311,38 @@ RSpec.describe "/shipments", type: :request do
 
     describe "DELETE #destroy" do
       context "when the shipment belongs to the user" do
-        it "destroys the requested shipment" do
-          shipment
-          expect {
+        context "when the shipment is unclaimed" do
+          it "destroys the requested shipment" do
+            shipment
+            expect {
+              delete shipment_url(shipment)
+            }.to change(Shipment, :count).by(-1)
+          end
+
+          it "redirects to the shipments list" do
             delete shipment_url(shipment)
-          }.to change(Shipment, :count).by(-1)
+            expect(response).to redirect_to(shipments_path)
+          end
         end
 
-        it "redirects to the shipments list" do
-          delete shipment_url(shipment)
-          expect(response).to redirect_to(shipments_path)
+        context "when the shipment is claimed" do
+          let!(:claimed_shipment) { create(:shipment, user: valid_user, company: company) }
+
+          it "does not destroy the shipment" do
+            expect {
+              delete shipment_url(claimed_shipment)
+            }.to change(Shipment, :count).by(0)
+          end
+
+          it "redirects to the dashboard page" do
+            delete shipment_url(claimed_shipment)
+            expect(response).to redirect_to(dashboard_path)
+          end
+
+          it "shows an alert saying cannot delete claimed shipment" do
+            delete shipment_url(claimed_shipment)
+            expect(flash[:alert]).to eq("You are not authorized to perform this action.")
+          end
         end
       end
 
@@ -836,12 +858,12 @@ RSpec.describe "/shipments", type: :request do
     describe "DELETE #destroy" do
       it 'redirects to the dashboard page' do
         delete shipment_url(shipment)
-        expect(response).to redirect_to(deliveries_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 
       it "shows an alert saying not authorized" do
         delete shipment_url(shipment)
-        expect(flash[:alert]).to eq("You are not authorized to access this shipment.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
