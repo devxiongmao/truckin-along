@@ -3,6 +3,7 @@ class RatingsController < ApplicationController
 
   def create
     @rating = Rating.new(rating_params)
+    @rating.user_id = current_user.id
     authorize @rating
 
     if @rating.save
@@ -15,6 +16,6 @@ class RatingsController < ApplicationController
   private
 
     def rating_params
-      params.require(:rating).permit(:comment, :stars)
+      params.require(:rating).permit(:comment, :stars, :company_id)
     end
 end
