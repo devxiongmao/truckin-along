@@ -1,0 +1,84 @@
+<div class="company-show-container">
+  <div class="company-header">
+    <h1><%= @company.name %></h1>
+    <div class="company-meta">
+      <p><strong>Address:</strong> <%= @company.address %></p>
+      <% if @company.phone_number.present? %>
+      <p><strong>Phone:</strong> <%= @company.phone_number %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="company-stats">
+    <div class="stat-card">
+      <h3>Employees</h3>
+      <p class="stat-value"><%= @employees %></p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Years in Business</h3>
+      <p class="stat-value"><%= @years_in_business %></p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Average Rating</h3>
+      <div class="rating-display">
+        <%= star_rating(@company.average_rating, size: "1.5em") %>
+        <p class="rating-text">
+          <%= number_with_precision(@company.average_rating, precision: 1) %> out of 5
+          (<%= pluralize(@company.ratings_count, 'review') %>)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <h2>Customer Reviews</h2>
+
+    <% if @ratings.any? %>
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Rating</th>
+          <th>Customer</th>
+          <th>Comment</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @ratings.each do |rating| %>
+        <tr>
+          <td>
+            <%= star_rating(rating.stars, size: "1.2em") %>
+          </td>
+          <td>
+            <strong><%= rating.user.first_name %></strong>
+          </td>
+          <td>
+            <% if rating.comment.present? %>
+            <%= rating.comment %>
+            <% else %>
+            <em>No comment provided</em>
+            <% end %>
+          </td>
+          <td>
+            <%= rating.created_at.strftime("%B %d, %Y") %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% else %>
+    <div class="empty-state">
+      <p>No reviews yet. Be the first to leave a review!</p>
+    </div>
+    <% end %>
+  </div>
+
+  <div class="company-actions">
+    <% if current_user.admin? && current_user.company == @company %>
+    <%= link_to 'Edit Company', edit_company_path(@company), class: 'button primary-button' %>
+    <% end %>
+    <%= link_to 'Back to Dashboard', dashboard_path, class: 'button secondary-button' %>
+  </div>
+</div>

@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       get :start
     end
   end
-  resources :companies, only: %i[new create edit update]
+  resources :companies, only: %i[show new create edit update]
   resources :shipment_statuses, only: %i[new create edit update destroy]
   resources :shipment_action_preferences, only: %i[edit update]
 

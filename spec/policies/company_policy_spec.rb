@@ -17,6 +17,7 @@ RSpec.describe CompanyPolicy, type: :policy do
       it { expect(subject.create?).to be true }
       it { expect(subject.edit?).to be true }
       it { expect(subject.update?).to be true }
+      it { expect(subject.show?).to be true }
     end
 
     context 'when the user is an admin with a company' do
@@ -27,6 +28,7 @@ RSpec.describe CompanyPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.edit?).to be true }
       it { expect(subject.update?).to be true }
+      it { expect(subject.show?).to be true }
     end
 
     context 'when the user is a driver' do
@@ -37,6 +39,7 @@ RSpec.describe CompanyPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.edit?).to be false }
       it { expect(subject.update?).to be false }
+      it { expect(subject.show?).to be true }
     end
 
     context 'when the user is a customer' do
@@ -47,6 +50,7 @@ RSpec.describe CompanyPolicy, type: :policy do
       it { expect(subject.create?).to be false }
       it { expect(subject.edit?).to be false }
       it { expect(subject.update?).to be false }
+      it { expect(subject.show?).to be true }
     end
   end
 end

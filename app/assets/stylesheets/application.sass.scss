@@ -31,11 +31,13 @@
 @use "components/navbar";
 @use "components/messages";
 @use "components/modals";
+@use "components/ratings";
 
 /*
  * Page-specific styles
  */
 @use "pages/tabs";
+@use "pages/companies";
 
 /*
  * Utilities (load last to override)

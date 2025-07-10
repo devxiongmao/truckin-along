@@ -1,6 +1,13 @@
 class CompaniesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_company, only: %i[edit update]
+  before_action :set_company, only: %i[show edit update]
+
+  def show
+    authorize @company
+    @ratings = @company.ratings.includes(:user).order(created_at: :desc)
+    @employees = @company.users.count
+    @years_in_business = ((Time.current - @company.created_at) / 1.year).round(1)
+  end
 
   def new
     @company = Company.new
