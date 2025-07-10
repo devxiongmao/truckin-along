@@ -288,4 +288,57 @@ RSpec.describe "/companies", type: :request do
       end
     end
   end
+
+  describe "GET /companies/:id" do
+    context "when user is authenticated" do
+      before do
+        sign_in non_admin_user, scope: :user
+      end
+
+      it "displays the company show page" do
+        get company_path(company)
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays company information" do
+        get company_path(company)
+        expect(response.body).to include(company.name)
+        expect(response.body).to include(company.address)
+      end
+
+      it "displays employee count" do
+        get company_path(company)
+        expect(response.body).to include(company.users.count.to_s)
+      end
+
+      it "displays average rating" do
+        get company_path(company)
+        expect(response.body).to include(company.average_rating.to_s)
+      end
+
+      context "when company has ratings" do
+        let!(:rating) { create(:rating, company: company, user: non_admin_user, stars: 4, comment: "Great service!") }
+
+        it "displays ratings in the table" do
+          get company_path(company)
+          expect(response.body).to include("Great service!")
+          expect(response.body).to include(non_admin_user.first_name)
+        end
+      end
+
+      context "when company has no ratings" do
+        it "displays empty state message" do
+          get company_path(company)
+          expect(response.body).to include("No reviews yet")
+        end
+      end
+    end
+
+    context "when user is not authenticated" do
+      it "redirects to sign in" do
+        get company_path(company)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+  end
 end

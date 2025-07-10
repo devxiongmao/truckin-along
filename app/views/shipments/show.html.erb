@@ -61,11 +61,15 @@
     <tr>
       <td>
         <% company = @shipment.company || del_ship.delivery&.user&.company %>
-        <%= company&.name %>
-        <% if company&.phone_number.present? %>
+        <% if company.present? %>
+        <%= link_to company.name, company_path(company), class: "company-link" %>
+        <% if company.phone_number.present? %>
         <span style="cursor: help;" title="Phone: <%= company.phone_number %>">
           &#9432;
         </span>
+        <% end %>
+        <% else %>
+        N/A
         <% end %>
       </td>
       <td><%= del_ship.sender_address %></td>
