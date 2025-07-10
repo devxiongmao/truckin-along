@@ -1,9 +1,10 @@
-### From v1.6.0 to HEAD
+### From v1.6.1 to HEAD
 
-- Bump @eslint/js from 9.30.0 to 9.30.1 (#390) (eb8dc03) by dependabot[bot]
-- Bump faker from 3.5.1 to 3.5.2 (#388) (5c30a70) by dependabot[bot]
-- Bump globals from 16.2.0 to 16.3.0 (#385) (ada5615) by dependabot[bot]
-- Bump @typescript-eslint/eslint-plugin from 8.34.1 to 8.35.1 (#384) (25a8d57) by dependabot[bot]
+- Bump @typescript-eslint/parser from 8.35.1 to 8.36.0 (#393) (10ed565) by dependabot[bot]
+- XMDEV-336: Update shipment delete action to not delete if shipment is claimed (#401) (4902b6f) by Jon
+- XMDEV-419: Fix lint_js dependancy for create-release (#402) (27c619c) by Jon
+- XMDEV-418: Adds companies show page (#400) (a67c311) by Jon
+- XMDEV-351: Adds backend for ratings system (#399) (784074c) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
