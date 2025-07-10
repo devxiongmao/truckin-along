@@ -6,6 +6,9 @@ class Company < ApplicationRecord
   has_many :trucks, dependent: :destroy
   has_many :shipment_action_preferences, dependent: :destroy
   has_many :forms, dependent: :destroy
+  has_many :ratings, dependent: :destroy
+
+  validates :average_rating, numericality: { greater_than_or_equal_to: 0 }
 
   validates :name, presence: true, uniqueness: true
   validates :address, presence: true
