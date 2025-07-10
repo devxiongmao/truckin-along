@@ -40,7 +40,6 @@ RSpec.describe CompanyPolicy, type: :policy do
       it { expect(subject.edit?).to be false }
       it { expect(subject.update?).to be false }
       it { expect(subject.show?).to be true }
-
     end
 
     context 'when the user is a customer' do

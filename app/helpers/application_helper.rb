@@ -17,10 +17,13 @@ module ApplicationHelper
   end
 
   def star_rating(rating, size: "1em")
-    return "No ratings yet" if rating.nil? || rating == 0
+    return "No ratings yet" if rating.nil? || rating <= 0
 
-    full_stars = rating.floor
-    has_half_star = (rating - full_stars) >= 0.5
+    # Cap the rating at 5
+    capped_rating = [ rating, 5 ].min
+
+    full_stars = capped_rating.floor
+    has_half_star = (capped_rating - full_stars) >= 0.5
 
     stars_html = ""
 
