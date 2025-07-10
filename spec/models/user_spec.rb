@@ -13,6 +13,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:deliveries).dependent(:nullify) }
     it { is_expected.to have_many(:forms).dependent(:nullify) }
     it { should belong_to(:company).optional }
+    it { is_expected.to have_many(:ratings).dependent(:destroy) }
   end
 
   ## Association Tests

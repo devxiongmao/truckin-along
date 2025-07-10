@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_07_021627) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_10_011004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_021627) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "phone_number"
+    t.float "average_rating", default: 0.0, null: false
+    t.integer "ratings_count", default: 0, null: false
   end
 
   create_table "deliveries", force: :cascade do |t|
@@ -81,6 +83,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_021627) do
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_offers_on_company_id"
     t.index ["shipment_id"], name: "index_offers_on_shipment_id"
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "stars", null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_ratings_on_company_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "shipment_action_preferences", force: :cascade do |t|
@@ -175,6 +188,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_021627) do
   add_foreign_key "forms", "users"
   add_foreign_key "offers", "companies"
   add_foreign_key "offers", "shipments"
+  add_foreign_key "ratings", "companies"
+  add_foreign_key "ratings", "users"
   add_foreign_key "shipment_action_preferences", "companies"
   add_foreign_key "shipment_action_preferences", "shipment_statuses"
   add_foreign_key "shipment_statuses", "companies"

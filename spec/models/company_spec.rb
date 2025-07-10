@@ -10,11 +10,13 @@ RSpec.describe Company, type: :model do
   it { should have_many(:trucks).dependent(:destroy) }
   it { should have_many(:shipment_action_preferences).dependent(:destroy) }
   it { should have_many(:forms).dependent(:destroy) }
+  it { should have_many(:ratings).dependent(:destroy) }
 
   # Validations
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
   it { should validate_presence_of(:address) }
+  it { should validate_numericality_of(:average_rating).is_greater_than_or_equal_to(0) }
 
   describe 'phone_number format' do
     it 'is valid with correct format' do
@@ -68,6 +70,22 @@ RSpec.describe Company, type: :model do
 
     it 'does not include non-admin emails' do
       expect(company.admin_emails).not_to include('user@example.com')
+    end
+  end
+
+  describe 'rating attributes' do
+    let(:company) { create(:company) }
+
+    it 'has default values for rating attributes' do
+      expect(company.average_rating).to eq(0.0)
+      expect(company.ratings_count).to eq(0)
+    end
+
+    it 'can have ratings associated with it' do
+      customer = create(:user, :customer, company: company)
+      rating = create(:rating, company: company, user: customer, stars: 5)
+
+      expect(company.ratings).to include(rating)
     end
   end
 end
