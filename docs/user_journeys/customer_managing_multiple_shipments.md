@@ -78,7 +78,7 @@ This user is here because they want to use Truckin' Along’s services to get mu
 
 ## Opportunities
 
-- The `Delete Shipment` button should not always be visible. (XMDEV-336)
+- None currently reported in this workflow
 
 ---
 
