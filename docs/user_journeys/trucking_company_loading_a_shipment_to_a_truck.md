@@ -65,7 +65,7 @@ Once a shipment has been claimed by a trucking company, the next step is decidin
 
 ## Opportunities
 
-- **XMDEV-353**: Remove delivery address confirmation modal and refactor triggering of geocoding worker for location data
+- None currently reported in this workflow
 
 ---
 
