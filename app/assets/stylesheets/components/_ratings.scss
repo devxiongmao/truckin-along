@@ -43,4 +43,53 @@
   font-size: 1rem;
   color: #666;
   margin: 0;
+}
+
+/* Rating Modal Styles */
+.rating-section {
+  margin-bottom: 20px;
+}
+
+.star-input-group {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.star-label {
+  cursor: pointer;
+  font-size: 2em;
+  color: #ddd;
+  transition: color 0.2s ease;
+}
+
+.star-display {
+  display: inline-block;
+  color: #ddd;
+  transition: color 0.2s ease;
+}
+
+.star-display.full-star {
+  color: #ffd700;
+}
+
+.star-display {
+  display: inline-block;
+}
+
+.rating-help {
+  font-size: 0.9em;
+  color: #666;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.comment-section {
+  margin-bottom: 20px;
+}
+
+.comment-section textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
 } 

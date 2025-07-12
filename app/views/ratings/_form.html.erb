@@ -1,0 +1,39 @@
+<div class="modal-content">
+  <h3>Rate Your Delivery Experience</h3>
+
+  <form data-rating-modal-target="form" data-action="rating-modal#submitForm" action="/ratings" method="post">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+    <p>Please rate your experience with this delivery:</p>
+
+    <div class="rating-section">
+      <h4>Rating</h4>
+      <div class="star-input-group">
+        <% 5.times do |i| %>
+        <label class="star-label" data-action="mouseover->rating-modal#hoverStar mouseout->rating-modal#resetHover click->rating-modal#selectStar">
+          <input type="checkbox" data-rating-modal-target="stars" data-stars="<%= i + 1 %>" style="display: none;">
+          <span class="star-display">★</span>
+        </label>
+        <% end %>
+      </div>
+      <p class="rating-help">Click on the stars to rate (1-5 stars)</p>
+    </div>
+
+    <div class="comment-section">
+      <h4>Comment (Optional)</h4>
+      <textarea data-rating-modal-target="comment" name="rating[comment]" placeholder="Share your experience with this delivery..." rows="4" class="form-input"></textarea>
+    </div>
+
+    <input type="hidden" data-rating-modal-target="deliveryShipmentId" name="rating[delivery_shipment_id]">
+    <input type="hidden" data-rating-modal-target="companyId" name="rating[company_id]">
+
+    <div class="form-actions">
+      <button type="button" class="button secondary-button" data-rating-modal-target="closeBtn" data-action="rating-modal#hideModal">
+        Cancel
+      </button>
+      <button type="submit" class="button primary-button" data-rating-modal-target="submitBtn">
+        Submit Rating
+      </button>
+    </div>
+  </form>
+</div>

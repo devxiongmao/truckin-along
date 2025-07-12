@@ -2,20 +2,21 @@ class RatingsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @rating = Rating.new(rating_params)
-    @rating.user_id = current_user.id
+    @rating = current_user.ratings.build(rating_params)
     authorize @rating
 
+    shipment = @rating.delivery_shipment&.shipment
+
     if @rating.save
-      redirect_to dashboard_path, notice: "Rating was successfully submitted! Thank you."
+      redirect_to shipment_path(shipment), notice: "Rating was successfully submitted! Thank you."
     else
-      redirect_to dashboard_path, alert: "Something went wrong, please try again."
+      redirect_to shipment_path(shipment), alert: "Something went wrong, please try again."
     end
   end
 
   private
 
     def rating_params
-      params.require(:rating).permit(:comment, :stars, :company_id)
+      params.require(:rating).permit(:comment, :stars, :company_id, :delivery_shipment_id)
     end
 end
