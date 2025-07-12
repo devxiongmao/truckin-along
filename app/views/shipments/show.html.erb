@@ -48,37 +48,63 @@
 
 </div>
 
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Company</th>
-      <th>Departed From</th>
-      <th>Arriving At</th>
-      <th>Processing Date</th>
-      <th>Delivered Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @shipment.delivery_shipments.order(created_at: :desc).each do |del_ship| %>
-    <tr>
-      <td>
-        <% company = @shipment.company || del_ship.delivery&.user&.company %>
-        <% if company.present? %>
-        <%= link_to company.name, company_path(company), class: "company-link" %>
-        <% if company.phone_number.present? %>
-        <span style="cursor: help;" title="Phone: <%= company.phone_number %>">
-          &#9432;
-        </span>
-        <% end %>
-        <% else %>
-        N/A
-        <% end %>
-      </td>
-      <td><%= del_ship.sender_address %></td>
-      <td><%= del_ship.receiver_address %></td>
-      <td><%= del_ship.loaded_date&.strftime("%Y-%m-%d") %></td>
-      <td><%= del_ship.delivered_date&.strftime("%Y-%m-%d") %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<div data-controller="rating-modal">
+  <!-- Rating Modal -->
+  <div data-rating-modal-target="modal" class="modal">
+    <%= render 'ratings/form' %>
+  </div>
+
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Departed From</th>
+        <th>Arriving At</th>
+        <th>Processing Date</th>
+        <th>Delivered Date</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @shipment.delivery_shipments.order(created_at: :desc).each do |del_ship| %>
+      <tr>
+        <td>
+          <% company = @shipment.company || del_ship.delivery&.user&.company %>
+          <% if company.present? %>
+          <%= link_to company.name, company_path(company), class: "company-link" %>
+          <% if company.phone_number.present? %>
+          <span style="cursor: help;" title="Phone: <%= company.phone_number %>">
+            &#9432;
+          </span>
+          <% end %>
+          <% else %>
+          N/A
+          <% end %>
+        </td>
+        <td><%= del_ship.sender_address %></td>
+        <td><%= del_ship.receiver_address %></td>
+        <td><%= del_ship.loaded_date&.strftime("%Y-%m-%d") %></td>
+        <td><%= del_ship.delivered_date&.strftime("%Y-%m-%d") %></td>
+        <td>
+          <% if del_ship.delivered_date.present? %>
+          <% existing_rating = del_ship.rating %>
+          <% if existing_rating.present? %>
+          <%= star_rating(existing_rating.stars, size: "1.2em") %>
+          <% if existing_rating.comment.present? %>
+          <br><small><%= existing_rating.comment %></small>
+          <% end %>
+          <% else %>
+          <% company = @shipment.company || del_ship.delivery&.user&.company %>
+          <% if company.present? && @current_user.customer? %>
+          <button class="button primary-button small-button" data-action="rating-modal#showModal" data-delivery-shipment-id="<%= del_ship.id %>" data-company-id="<%= company.id %>">
+            Rate
+          </button>
+          <% end %>
+          <% end %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

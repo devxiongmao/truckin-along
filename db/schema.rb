@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_10_011004) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_12_170426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -92,7 +92,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_011004) do
     t.text "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "delivery_shipment_id", null: false
     t.index ["company_id"], name: "index_ratings_on_company_id"
+    t.index ["delivery_shipment_id"], name: "index_ratings_on_delivery_shipment_id"
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
@@ -189,6 +191,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_011004) do
   add_foreign_key "offers", "companies"
   add_foreign_key "offers", "shipments"
   add_foreign_key "ratings", "companies"
+  add_foreign_key "ratings", "delivery_shipments"
   add_foreign_key "ratings", "users"
   add_foreign_key "shipment_action_preferences", "companies"
   add_foreign_key "shipment_action_preferences", "shipment_statuses"

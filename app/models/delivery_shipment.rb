@@ -2,6 +2,8 @@ class DeliveryShipment < ApplicationRecord
   belongs_to :delivery, optional: true
   belongs_to :shipment
 
+  has_one :rating, dependent: :destroy
+
   after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? }
   after_validation :geocode_receiver, if: ->(obj) { obj.receiver_address.present? && obj.receiver_address_changed? }
 

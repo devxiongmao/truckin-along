@@ -7,15 +7,23 @@ class RatingsController < ApplicationController
     authorize @rating
 
     if @rating.save
-      redirect_to dashboard_path, notice: "Rating was successfully submitted! Thank you."
+      if request.xhr?
+        render json: { success: true, message: "Rating was successfully submitted! Thank you." }
+      else
+        redirect_to dashboard_path, notice: "Rating was successfully submitted! Thank you."
+      end
     else
-      redirect_to dashboard_path, alert: "Something went wrong, please try again."
+      if request.xhr?
+        render json: { success: false, message: "Something went wrong, please try again." }, status: :unprocessable_entity
+      else
+        redirect_to dashboard_path, alert: "Something went wrong, please try again."
+      end
     end
   end
 
   private
 
     def rating_params
-      params.require(:rating).permit(:comment, :stars, :company_id)
+      params.require(:rating).permit(:comment, :stars, :company_id, :delivery_shipment_id)
     end
 end
