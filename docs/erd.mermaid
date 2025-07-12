@@ -27,6 +27,8 @@ erDiagram
     Deliveries ||--o{ Forms : has
     
     Shipments |o--o{ DeliveryShipments : included_in
+
+    Ratings ||--|| DeliveryShipments : belong_to
     
     Companies {
         bigint id PK
