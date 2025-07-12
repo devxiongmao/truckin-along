@@ -780,6 +780,12 @@ RSpec.describe "/shipments", type: :request do
           post close_shipment_url(claimed_shipment)
           expect(claimed_shipment.reload.company_id).to be_nil
         end
+
+        it "enqueues the partially delivery email job" do
+          expect {
+            post close_shipment_url(claimed_shipment)
+          }.to have_enqueued_mail(ShipmentDeliveryMailer, :partially_delivered_email).with(claimed_shipment.id)
+        end
       end
 
       context "when there is a preference set" do
