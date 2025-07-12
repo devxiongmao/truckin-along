@@ -1,0 +1,15 @@
+flowchart TD
+    A[Customer creates shipment] --> B[Multiple companies bid on shipment]
+    B --> C[Customer accepts one bid]
+    C --> D[Company processes shipment and loads onto truck]
+    D --> E[Company begins delivery]
+    E --> F[Company delivers shipment]
+    F --> G{Is this the final destination?}
+    G -->|No| B
+    G -->|Yes| H[Mark shipment as delivered]
+    H --> I[Customer rates the companies who handled deliveries]
+    I --> J[End]
+
+    style A fill:#e1f5fe
+    style I fill:#e8f5e8,color:black
+    style J fill:#ffebee,color:black
