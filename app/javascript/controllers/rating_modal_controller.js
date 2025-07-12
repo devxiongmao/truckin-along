@@ -78,32 +78,16 @@ export default class extends Controller {
       alert('Please select a rating (1-5 stars)')
       return
     }
-    const formData = new FormData()
-    formData.append('rating[stars]', selectedStars)
-    formData.append('rating[comment]', this.commentTarget.value)
-    formData.append('rating[company_id]', this.companyIdTarget.value)
-    formData.append('rating[delivery_shipment_id]', this.deliveryShipmentIdTarget.value)
-    const csrfToken = document.querySelector("meta[name='csrf-token']").content
-    formData.append('authenticity_token', csrfToken)
-    fetch('/ratings', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        this.hideModal()
-        window.location.reload()
-      } else {
-        alert(data.message || 'Error submitting rating. Please try again.')
-      }
-    })
-    .catch(error => {
-      console.error('Error submitting rating:', error)
-      alert('Error submitting rating. Please try again.')
-    })
+    
+    // Create a hidden input for the star rating and submit the form normally
+    const starRatingInput = document.createElement('input')
+    starRatingInput.type = 'hidden'
+    starRatingInput.name = 'rating[stars]'
+    starRatingInput.value = selectedStars
+    
+    // Add the hidden input to the form
+    this.formTarget.appendChild(starRatingInput)
+    
+    this.formTarget.submit()
   }
-} 
+}

@@ -12,46 +12,26 @@ describe("RatingModalController", () => {
       <div data-controller="rating-modal">
         <div data-rating-modal-target="modal" class="modal">
           <div class="modal-content">
-            <form data-rating-modal-target="form" data-action="rating-modal#submitForm">
+            <form data-rating-modal-target="form" action="/ratings" method="post">
               <div class="star-input-group">
-                <label class="star-label">
-                  <input type="checkbox" data-rating-modal-target="stars" data-action="rating-modal#selectStar" data-stars="1" style="display: none;">
-                  <span class="star-display">☆</span>
-                </label>
-                <label class="star-label">
-                  <input type="checkbox" data-rating-modal-target="stars" data-action="rating-modal#selectStar" data-stars="2" style="display: none;">
-                  <span class="star-display">☆</span>
-                </label>
-                <label class="star-label">
-                  <input type="checkbox" data-rating-modal-target="stars" data-action="rating-modal#selectStar" data-stars="3" style="display: none;">
-                  <span class="star-display">☆</span>
-                </label>
-                <label class="star-label">
-                  <input type="checkbox" data-rating-modal-target="stars" data-action="rating-modal#selectStar" data-stars="4" style="display: none;">
-                  <span class="star-display">☆</span>
-                </label>
-                <label class="star-label">
-                  <input type="checkbox" data-rating-modal-target="stars" data-action="rating-modal#selectStar" data-stars="5" style="display: none;">
-                  <span class="star-display">☆</span>
-                </label>
+                ${[1, 2, 3, 4, 5].map(i => `
+                  <label class="star-label" data-action="mouseover->rating-modal#hoverStar mouseout->rating-modal#resetHover click->rating-modal#selectStar">
+                    <input type="checkbox" data-rating-modal-target="stars" data-stars="${i}" style="display: none;">
+                    <span class="star-display">★</span>
+                  </label>
+                `).join('')}
               </div>
-              <textarea data-rating-modal-target="comment" placeholder="Share your experience..."></textarea>
-              <input type="hidden" data-rating-modal-target="deliveryShipmentId">
-              <input type="hidden" data-rating-modal-target="companyId">
-              <button type="submit" data-rating-modal-target="submitBtn">Submit Rating</button>
+              <textarea data-rating-modal-target="comment" name="rating[comment]" placeholder="Share your experience..."></textarea>
+              <input type="hidden" data-rating-modal-target="deliveryShipmentId" name="rating[delivery_shipment_id]">
+              <input type="hidden" data-rating-modal-target="companyId" name="rating[company_id]">
               <button type="button" data-rating-modal-target="closeBtn" data-action="rating-modal#hideModal">Cancel</button>
+              <button type="submit" data-rating-modal-target="submitBtn">Submit Rating</button>
             </form>
           </div>
         </div>
-        <button data-action="rating-modal#showModal" data-delivery-shipment-id="123" data-company-id="456">Rate</button>
+        <button data-action="rating-modal#showModal" data-delivery-shipment-id="123" data-company-id="456">Open Modal</button>
       </div>
     `;
-
-    // Create a meta tag for CSRF token
-    const metaTag = document.createElement("meta");
-    metaTag.name = "csrf-token";
-    metaTag.content = "test-csrf-token";
-    document.head.appendChild(metaTag);
 
     // Initialize Stimulus
     application = Application.start();
@@ -64,175 +44,341 @@ describe("RatingModalController", () => {
   afterEach(() => {
     // Clean up
     document.body.innerHTML = "";
-    document.head.innerHTML = "";
     application.stop();
-    vi.restoreAllMocks();
   });
 
   describe("connect", () => {
-    it("initializes with modal hidden", () => {
+    it("initializes with modal hidden and star counts at zero", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+
+      // Check initial state
       expect(controller.modalTarget.style.display).toBe("none");
+      expect(controller.selectedStars).toBe(0);
+      expect(controller.hoveredStars).toBe(0);
     });
   });
 
   describe("showModal", () => {
-    it("shows the modal and sets the delivery shipment and company IDs", () => {
+    it("displays the modal and sets delivery data when button is clicked", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      const mockEvent = { preventDefault: vi.fn() };
-
-      // Mock the event.currentTarget.dataset
-      Object.defineProperty(mockEvent, 'currentTarget', {
-        value: {
+      
+      // Mock preventDefault
+      const mockEvent = { 
+        preventDefault: vi.fn(),
+        currentTarget: {
           dataset: {
-            deliveryShipmentId: '123',
-            companyId: '456'
+            deliveryShipmentId: "789",
+            companyId: "321"
           }
         }
-      });
-
+      };
+      
+      // Trigger the action
       controller.showModal(mockEvent);
-
+      
+      // Check if preventDefault was called
       expect(mockEvent.preventDefault).toHaveBeenCalled();
+      
+      // Check if modal is displayed
       expect(controller.modalTarget.style.display).toBe("flex");
-      expect(controller.deliveryShipmentIdTarget.value).toBe("123");
-      expect(controller.companyIdTarget.value).toBe("456");
-    });
-
-    it("resets the form when showing modal", () => {
-      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      const mockEvent = { preventDefault: vi.fn() };
-
-      // Mock the event.currentTarget.dataset
-      Object.defineProperty(mockEvent, 'currentTarget', {
-        value: {
-          dataset: {
-            deliveryShipmentId: '123',
-            companyId: '456'
-          }
-        }
-      });
-
-      // Set some initial values
-      controller.starsTargets[0].checked = true;
-      controller.commentTarget.value = "Test comment";
-
-      controller.showModal(mockEvent);
-
-      // Check that form was reset
-      expect(controller.starsTargets.every(star => !star.checked)).toBe(true);
+      
+      // Check if delivery data was set
+      expect(controller.deliveryShipmentIdTarget.value).toBe("789");
+      expect(controller.companyIdTarget.value).toBe("321");
+      
+      // Check if form was reset
       expect(controller.commentTarget.value).toBe("");
+      expect(controller.selectedStars).toBe(0);
+      expect(controller.hoveredStars).toBe(0);
+      
+      // Check if stars were unchecked
+      controller.starsTargets.forEach(star => {
+        expect(star.checked).toBe(false);
+      });
     });
   });
 
   describe("hideModal", () => {
     it("hides the modal", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      
-      // Show modal first
+
+      // Set initial state
       controller.modalTarget.style.display = "flex";
       
+      // Trigger the action
       controller.hideModal();
       
+      // Check if modal is hidden
       expect(controller.modalTarget.style.display).toBe("none");
+    });
+  });
+
+  describe("hoverStar", () => {
+    it("updates hover state and star display", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+      
+      // Mock event for hovering over 3rd star
+      const mockEvent = {
+        currentTarget: {
+          querySelector: vi.fn().mockReturnValue({
+            dataset: { stars: "3" }
+          })
+        }
+      };
+      
+      // Spy on updateStarDisplay
+      const updateStarDisplaySpy = vi.spyOn(controller, 'updateStarDisplay');
+      
+      // Trigger the action
+      controller.hoverStar(mockEvent);
+      
+      // Check if hover state was updated
+      expect(controller.hoveredStars).toBe(3);
+      expect(updateStarDisplaySpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("resetHover", () => {
+    it("resets hover state and updates star display", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+      
+      // Set initial hover state
+      controller.hoveredStars = 4;
+      
+      // Spy on updateStarDisplay
+      const updateStarDisplaySpy = vi.spyOn(controller, 'updateStarDisplay');
+      
+      // Trigger the action
+      controller.resetHover();
+      
+      // Check if hover state was reset
+      expect(controller.hoveredStars).toBe(0);
+      expect(updateStarDisplaySpy).toHaveBeenCalled();
     });
   });
 
   describe("selectStar", () => {
-    it("selects the correct number of stars", () => {
+    it("updates selected stars and checks appropriate star inputs", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      const event = { currentTarget: { dataset: { stars: "3" } } };
+      
+      // Mock event for selecting 4th star
+      const mockEvent = {
+        currentTarget: {
+          querySelector: vi.fn().mockReturnValue({
+            dataset: { stars: "4" }
+          })
+        }
+      };
+      
+      // Spy on updateStarDisplay
+      const updateStarDisplaySpy = vi.spyOn(controller, 'updateStarDisplay');
+      
+      // Trigger the action
+      controller.selectStar(mockEvent);
+      
+      // Check if selected stars was updated
+      expect(controller.selectedStars).toBe(4);
+      expect(updateStarDisplaySpy).toHaveBeenCalled();
+      
+      // Check if appropriate stars were checked
+      controller.starsTargets.forEach((star) => {
+        const starValue = parseInt(star.dataset.stars);
+        if (starValue <= 4) {
+          expect(star.checked).toBe(true);
+        } else {
+          expect(star.checked).toBe(false);
+        }
+      });
+    });
+  });
 
-      controller.selectStar(event);
+  describe("updateStarDisplay", () => {
+    it("adds full-star class to stars within count", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+      
+      // Set selected stars
+      controller.selectedStars = 3;
+      controller.hoveredStars = 0;
+      
+      // Trigger the action
+      controller.updateStarDisplay();
+      
+      // Check if appropriate stars have full-star class
+      controller.starsTargets.forEach((star) => {
+        const starSpan = star.parentElement.querySelector('.star-display');
+        const starValue = parseInt(star.dataset.stars);
+        if (starValue <= 3) {
+          expect(starSpan.classList.contains('full-star')).toBe(true);
+        } else {
+          expect(starSpan.classList.contains('full-star')).toBe(false);
+        }
+      });
+    });
 
-      // Check that first 3 stars are checked
-      expect(controller.starsTargets[0].checked).toBe(true);
-      expect(controller.starsTargets[1].checked).toBe(true);
-      expect(controller.starsTargets[2].checked).toBe(true);
-      expect(controller.starsTargets[3].checked).toBe(false);
-      expect(controller.starsTargets[4].checked).toBe(false);
+    it("prioritizes hover state over selected state", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+      
+      // Set both hover and selected states
+      controller.selectedStars = 2;
+      controller.hoveredStars = 4;
+      
+      // Trigger the action
+      controller.updateStarDisplay();
+      
+      // Check if hover state (4) is used instead of selected state (2)
+      controller.starsTargets.forEach((star) => {
+        const starSpan = star.parentElement.querySelector('.star-display');
+        const starValue = parseInt(star.dataset.stars);
+        if (starValue <= 4) {
+          expect(starSpan.classList.contains('full-star')).toBe(true);
+        } else {
+          expect(starSpan.classList.contains('full-star')).toBe(false);
+        }
+      });
     });
   });
 
   describe("submitForm", () => {
-    it("shows alert when no stars are selected", () => {
+    it("prevents default and shows alert when no stars selected", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      const event = { preventDefault: vi.fn() };
-      const mockAlert = vi.spyOn(window, 'alert').mockImplementation(() => {});
-
-      controller.submitForm(event);
-
-      expect(mockAlert).toHaveBeenCalledWith('Please select a rating (1-5 stars)');
-      mockAlert.mockRestore();
+      
+      // Mock event and alert
+      const mockEvent = { preventDefault: vi.fn() };
+      const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      
+      // Mock form submission
+      const mockSubmit = vi.fn();
+      controller.formTarget.submit = mockSubmit;
+      
+      // Trigger the action with no stars selected
+      controller.submitForm(mockEvent);
+      
+      // Check if preventDefault was called
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      
+      // Check if alert was shown
+      expect(alertSpy).toHaveBeenCalledWith('Please select a rating (1-5 stars)');
+      
+      // Check if form was NOT submitted
+      expect(mockSubmit).not.toHaveBeenCalled();
+      
+      // Clean up
+      alertSpy.mockRestore();
     });
 
-    it("submits form with correct data when stars are selected", async () => {
+    it("creates hidden input and submits form when stars are selected", () => {
       const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      const event = { preventDefault: vi.fn() };
       
-      // Set up form data
-      controller.deliveryShipmentIdTarget.value = "123";
-      controller.companyIdTarget.value = "456";
-      controller.commentTarget.value = "Great service!";
-      controller.starsTargets[0].checked = true;
-      controller.starsTargets[1].checked = true;
-      controller.starsTargets[2].checked = true;
-
-      // Mock fetch
-      global.fetch = vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve({ success: true, message: "Rating submitted successfully" })
-        })
-      );
-
-      // Mock window.location.reload
-      const mockReload = vi.spyOn(window.location, 'reload').mockImplementation(() => {});
-
-      await controller.submitForm(event);
-
-      expect(global.fetch).toHaveBeenCalledWith('/ratings', {
-        method: 'POST',
-        body: expect.any(FormData),
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      });
-
-      // Check that modal is hidden and page reloads
-      expect(controller.modalTarget.style.display).toBe("none");
-      expect(mockReload).toHaveBeenCalled();
-
-      global.fetch.mockRestore();
-      mockReload.mockRestore();
-    });
-
-    it("shows error alert when fetch fails", async () => {
-      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
-      const event = { preventDefault: vi.fn() };
+      // Mock event
+      const mockEvent = { preventDefault: vi.fn() };
       
-      // Set up form data
-      controller.starsTargets[0].checked = true;
-      controller.commentTarget.value = "Great service!";
-
-      // Mock fetch to fail
-      global.fetch = vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          status: 200,
-          json: () => Promise.resolve({ success: false, message: "Validation failed" })
-        })
-      );
-
-      const mockAlert = vi.spyOn(window, 'alert').mockImplementation(() => {});
-
-      await controller.submitForm(event);
-
-      expect(mockAlert).toHaveBeenCalledWith('Validation failed');
-
-      global.fetch.mockRestore();
-      mockAlert.mockRestore();
+      // Mock form submission
+      const mockSubmit = vi.fn();
+      controller.formTarget.submit = mockSubmit;
+      
+      // Set selected stars
+      controller.selectedStars = 5;
+      
+      // Initial form state - no star rating input should exist
+      expect(controller.formTarget.querySelector('input[name="rating[stars]"]')).toBe(null);
+      
+      // Trigger the action
+      controller.submitForm(mockEvent);
+      
+      // Check if preventDefault was called
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      
+      // Check if new hidden input was added
+      const starRatingInput = controller.formTarget.querySelector('input[name="rating[stars]"]');
+      expect(starRatingInput).not.toBe(null);
+      expect(starRatingInput.type).toBe("hidden");
+      expect(starRatingInput.value).toBe("5");
+      
+      // Check if form was submitted
+      expect(mockSubmit).toHaveBeenCalled();
     });
   });
-}); 
+  
+  describe("integration", () => {
+    it("properly handles the complete rating workflow", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+
+      // Mock form submission
+      const mockSubmit = vi.fn();
+      controller.formTarget.submit = mockSubmit;
+      
+      // 1. Initially modal is hidden
+      expect(controller.modalTarget.style.display).toBe("none");
+      expect(controller.selectedStars).toBe(0);
+      
+      // 2. Open the modal
+      const openButton = document.querySelector('[data-action="rating-modal#showModal"]');
+      openButton.dispatchEvent(new Event("click", { bubbles: true }));
+      expect(controller.modalTarget.style.display).toBe("flex");
+      
+      // 3. Select 4 stars
+      controller.selectedStars = 4;
+      controller.updateStarDisplay();
+      
+      // Check if 4 stars are displayed as selected
+      controller.starsTargets.forEach((star) => {
+        const starSpan = star.parentElement.querySelector('.star-display');
+        const starValue = parseInt(star.dataset.stars);
+        if (starValue <= 4) {
+          expect(starSpan.classList.contains('full-star')).toBe(true);
+        } else {
+          expect(starSpan.classList.contains('full-star')).toBe(false);
+        }
+      });
+      
+      // 4. Add a comment
+      controller.commentTarget.value = "Great delivery!";
+      
+      // 5. Submit the form by calling the method directly
+      const mockEvent = { preventDefault: vi.fn() };
+      controller.submitForm(mockEvent);
+      
+      // Check if form was submitted with correct star rating
+      const starRatingInput = controller.formTarget.querySelector('input[name="rating[stars]"]');
+      expect(starRatingInput.value).toBe("4");
+      expect(mockSubmit).toHaveBeenCalled();
+    });
+
+    it("properly handles star hover interactions", () => {
+      const controller = application.getControllerForElementAndIdentifier(container, "rating-modal");
+
+      // 1. Select 2 stars initially
+      controller.selectedStars = 2;
+      controller.updateStarDisplay();
+      
+      // 2. Hover over 4th star
+      controller.hoveredStars = 4;
+      controller.updateStarDisplay();
+      
+      // Check if 4 stars are displayed (hover overrides selection)
+      controller.starsTargets.forEach((star) => {
+        const starSpan = star.parentElement.querySelector('.star-display');
+        const starValue = parseInt(star.dataset.stars);
+        if (starValue <= 4) {
+          expect(starSpan.classList.contains('full-star')).toBe(true);
+        } else {
+          expect(starSpan.classList.contains('full-star')).toBe(false);
+        }
+      });
+      
+      // 3. Reset hover
+      controller.resetHover();
+      
+      // Check if display reverts to selected stars (2)
+      controller.starsTargets.forEach((star) => {
+        const starSpan = star.parentElement.querySelector('.star-display');
+        const starValue = parseInt(star.dataset.stars);
+        if (starValue <= 2) {
+          expect(starSpan.classList.contains('full-star')).toBe(true);
+        } else {
+          expect(starSpan.classList.contains('full-star')).toBe(false);
+        }
+      });
+    });
+  });
+});

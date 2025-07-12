@@ -1,7 +1,9 @@
 <div class="modal-content">
   <h3>Rate Your Delivery Experience</h3>
 
-  <form data-rating-modal-target="form" data-action="rating-modal#submitForm">
+  <form data-rating-modal-target="form" data-action="rating-modal#submitForm" action="/ratings" method="post">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
     <p>Please rate your experience with this delivery:</p>
 
     <div class="rating-section">
@@ -19,11 +21,11 @@
 
     <div class="comment-section">
       <h4>Comment (Optional)</h4>
-      <textarea data-rating-modal-target="comment" placeholder="Share your experience with this delivery..." rows="4" class="form-input"></textarea>
+      <textarea data-rating-modal-target="comment" name="rating[comment]" placeholder="Share your experience with this delivery..." rows="4" class="form-input"></textarea>
     </div>
 
-    <input type="hidden" data-rating-modal-target="deliveryShipmentId">
-    <input type="hidden" data-rating-modal-target="companyId">
+    <input type="hidden" data-rating-modal-target="deliveryShipmentId" name="rating[delivery_shipment_id]">
+    <input type="hidden" data-rating-modal-target="companyId" name="rating[company_id]">
 
     <div class="form-actions">
       <button type="button" class="button secondary-button" data-rating-modal-target="closeBtn" data-action="rating-modal#hideModal">
