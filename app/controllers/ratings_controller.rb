@@ -9,7 +9,7 @@ class RatingsController < ApplicationController
     if @rating.save
       redirect_to shipment_path(@rating.delivery_shipment.shipment), notice: "Rating was successfully submitted! Thank you."
     else
-      redirect_to shipment_path(@rating.delivery_shipment.shipment), alert: "Something went wrong, please try again."
+      redirect_to shipment_path(DeliveryShipment.find(rating_params[:delivery_shipment_id]).shipment), alert: "Something went wrong, please try again."
     end
   end
 

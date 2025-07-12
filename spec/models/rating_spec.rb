@@ -6,10 +6,12 @@ RSpec.describe Rating, type: :model do
   describe 'associations' do
     it { should belong_to(:company) }
     it { should belong_to(:user) }
+    it { should belong_to(:delivery_shipment) }
   end
 
   describe 'validations' do
     it { should validate_inclusion_of(:stars).in_range(1..5) }
+    it { should validate_uniqueness_of(:delivery_shipment_id)}
   end
 
   describe 'callbacks' do

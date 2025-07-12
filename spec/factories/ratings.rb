@@ -4,5 +4,6 @@ FactoryBot.define do
     comment { Faker::Lorem.sentence }
     association :user
     association :company
+    association :delivery_shipment
   end
 end
