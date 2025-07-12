@@ -1,7 +1,9 @@
 class Rating < ApplicationRecord
   belongs_to :company
   belongs_to :user
+  belongs_to :delivery_shipment
 
+  validates :delivery_shipment_id, uniqueness: true
   validates :stars, inclusion: { in: 1..5 }
 
   after_create :increment_company_rating

@@ -4,27 +4,21 @@ RSpec.describe ShipmentPolicy, type: :policy do
   let(:admin) { User.new(role: 'admin') }
   let(:driver) { User.new(role: 'driver') }
   let(:customer) { User.new(role: 'customer') }
+  let(:company1) { create(:company) }
+  let(:company2) { create(:company) }
 
   # User from a company for testing company-specific permissions
   let(:company_user) {
     user = User.new(role: 'driver')
-    user.company_id = 1
+    user.company_id = company1.id
     user
   }
 
-  let(:company_shipment) {
-    shipment = Shipment.new
-    shipment.company_id = 1
-    shipment
-  }
+  let(:company_shipment) { create(:shipment, company_id: company1.id) }
 
-  let(:other_company_shipment) {
-    shipment = Shipment.new
-    shipment.company_id = 2
-    shipment
-  }
+  let(:other_company_shipment) { create(:shipment, company_id: company2.id) }
 
-  let(:shipment) { Shipment.new } # Mock shipment object
+  let(:shipment) { create(:shipment, company: nil) } # Mock shipment object
 
   describe 'permissions' do
     context 'when the user is an admin' do

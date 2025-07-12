@@ -8,6 +8,7 @@ RSpec.describe DeliveryShipment, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:shipment) }
     it { is_expected.to belong_to(:delivery).optional }
+    it { is_expected.to have_one(:rating).dependent(:destroy) }
   end
 
   ## Geocoding Tests
