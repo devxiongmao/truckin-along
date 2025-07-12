@@ -17,6 +17,7 @@
     <thead>
       <tr>
         <th>Company</th>
+        <th>Rating</th>
         <th>Status</th>
         <th>Price</th>
         <th>Pickup Service</th>
@@ -30,6 +31,9 @@
       <tr>
         <td>
           <%= link_to offer.company.name, company_path(offer.company), class: "company-link" %>
+        </td>
+        <td>
+          <%= star_rating(offer.company.average_rating, size: "1.2em") %>
         </td>
         <td>
           <% case offer.status %>

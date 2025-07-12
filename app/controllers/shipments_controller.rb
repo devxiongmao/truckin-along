@@ -80,6 +80,7 @@ class ShipmentsController < ApplicationController
         company_id: nil,
         shipment_status_id: nil,
         truck_id: nil })
+      ShipmentDeliveryMailer.partially_delivered_email(@shipment.id).deliver_later
       return redirect_to delivery_path(@shipment.active_delivery), alert: "Shipment successfully returned to shipment marketplace. Please remember to mark this delivery complete once all packages are delivered."
     end
 
