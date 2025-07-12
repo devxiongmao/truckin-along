@@ -1,4 +1,10 @@
 /* Button Styles */
+
+.small-button {
+  font-size: 0.8em;
+  padding: 4px 8px;
+  min-width: auto;
+}
 button, .primary-button, .secondary-button, .warning-button, .danger-button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
