@@ -24,7 +24,8 @@ RSpec.describe "Ratings", type: :request do
       {
         rating: {
           stars: 6,
-          comment: ""
+          comment: "",
+          delivery_shipment_id: delivery_shipment.id
         }
       }
     end
@@ -98,10 +99,10 @@ RSpec.describe "Ratings", type: :request do
         }.not_to change(Rating, :count)
       end
 
-      it "redirects to the shipment show page with error alert" do
+      it "redirects to the dashboard path with error alert" do
         post ratings_path, params: valid_attributes
 
-        expect(response).to redirect_to(shipment_path(delivery_shipment.shipment))
+        expect(response).to redirect_to(dashboard_path)
         expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
@@ -117,10 +118,10 @@ RSpec.describe "Ratings", type: :request do
         }.not_to change(Rating, :count)
       end
 
-      it "redirects to the shipment show page with error alert" do
+      it "redirects to the dashboard with error alert" do
         post ratings_path, params: valid_attributes
 
-        expect(response).to redirect_to(shipment_path(delivery_shipment.shipment))
+        expect(response).to redirect_to(dashboard_path)
         expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
