@@ -51,8 +51,7 @@
 
 
 <h1>Hello, <%= @user.display_name %>!</h1>
-<p>Your shipment: <%= @shipment.name%> has been successfully delivered to <%= @shipment.receiver_address %>. Thank you for using Truckin' Along!</p>
-
+<p>Your shipment: <%= @shipment.name%> has been delivered to <%= @shipment.receiver_address %>. Be on the lookout for new bids that will get your package delivered the rest of the way!</p>
 <p>If you are satisfied with the service from <%=@shipment.company&.name%>, please consider leaving them a rating <a href="<%= shipment_url(@shipment) %>">here</a>.</p>
 
 <h2>Shipment Details</h2>
