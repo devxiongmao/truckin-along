@@ -1,0 +1,561 @@
+// Dashboard Styles
+// ================
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.dashboard-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.dashboard-header h2 {
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.dashboard-subtitle {
+  color: #666;
+  font-size: 16px;
+}
+
+// Metrics Grid
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.metric-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.metric-icon {
+  font-size: 2em;
+  opacity: 0.8;
+}
+
+.metric-number {
+  font-size: 2em;
+  font-weight: bold;
+  color: #09e80d;
+  margin: 0;
+}
+
+.metric-label {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+// Quick Actions
+.quick-actions {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.quick-actions h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-button.primary {
+  background: #09e80d;
+  color: white;
+}
+
+.action-button.primary:hover {
+  background: #07c00b;
+}
+
+.action-button.secondary {
+  background: #f8f9fa;
+  color: #333;
+  border: 1px solid #dee2e6;
+}
+
+.action-button.secondary:hover {
+  background: #e9ecef;
+}
+
+// Status Overview
+.status-overview {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.status-overview h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.status-cards {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.status-card {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+}
+
+.status-card.empty {
+  opacity: 0.6;
+}
+
+.status-name {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.status-count {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #09e80d;
+}
+
+// Dashboard Sections
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.dashboard-section {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.view-all-link {
+  color: #09e80d;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+// Recent Shipments
+.recent-shipments {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.shipment-card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f8f9fa;
+}
+
+.shipment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.shipment-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.shipment-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.shipment-status.ready { 
+  background: #d4edda; 
+  color: #155724; 
+}
+
+.shipment-status.in-transit { 
+  background: #fff3cd; 
+  color: #856404; 
+}
+
+.shipment-status.delivered { 
+  background: #d1ecf1; 
+  color: #0c5460; 
+}
+
+.shipment-status.no-status { 
+  background: #f8d7da; 
+  color: #721c24; 
+}
+
+.shipment-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.shipment-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+// Deadlines
+.deadline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.deadline-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.deadline-date {
+  text-align: center;
+  min-width: 60px;
+}
+
+.deadline-date .day {
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #09e80d;
+}
+
+.deadline-date .month {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.deadline-content {
+  flex: 1;
+}
+
+.deadline-content h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.deadline-content p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.days-remaining {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.days-remaining.urgent { 
+  color: #dc3545; 
+}
+
+.days-remaining.warning { 
+  color: #ffc107; 
+}
+
+.days-remaining.normal { 
+  color: #28a745; 
+}
+
+.deadline-action {
+  margin-left: auto;
+}
+
+// Empty States
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-state p {
+  margin-bottom: 15px;
+}
+
+// Offers Summary
+.offers-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #fff3cd;
+  border-radius: 8px;
+  border: 1px solid #ffeaa7;
+}
+
+.offer-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.offer-count {
+  font-size: 2em;
+  font-weight: bold;
+  color: #856404;
+}
+
+.offer-label {
+  color: #856404;
+  font-size: 14px;
+}
+
+.offer-actions {
+  margin-left: auto;
+}
+
+// Driver Dashboard Specific Styles
+// ==============================
+
+.recent-deliveries {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.delivery-card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f8f9fa;
+}
+
+.delivery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.delivery-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.delivery-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.delivery-status.scheduled { 
+  background: #d1ecf1; 
+  color: #0c5460; 
+}
+
+.delivery-status.in_progress { 
+  background: #fff3cd; 
+  color: #856404; 
+}
+
+.delivery-status.completed { 
+  background: #d4edda; 
+  color: #155724; 
+}
+
+.delivery-status.cancelled { 
+  background: #f8d7da; 
+  color: #721c24; 
+}
+
+.delivery-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.delivery-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.fleet-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.truck-card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f8f9fa;
+}
+
+.truck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.truck-header h4 {
+  margin: 0;
+  color: #333;
+}
+
+.truck-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.truck-status.active { 
+  background: #d4edda; 
+  color: #155724; 
+}
+
+.truck-status.maintenance { 
+  background: #f8d7da; 
+  color: #721c24; 
+}
+
+.truck-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.truck-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.maintenance-section {
+  margin-top: 30px;
+}
+
+.maintenance-table {
+  overflow-x: auto;
+}
+
+.active-delivery-alert {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  margin-top: 30px;
+}
+
+.active-delivery-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.delivery-info h4 {
+  margin: 0 0 10px 0;
+  color: #856404;
+}
+
+.delivery-info p {
+  margin: 5px 0;
+  color: #856404;
+}
+
+.delivery-actions {
+  margin-left: auto;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .dashboard-sections {
+    grid-template-columns: 1fr;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .deadline-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .deadline-action {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  
+  .active-delivery-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .delivery-actions {
+    margin-left: 0;
+    margin-top: 15px;
+  }
+} 

@@ -1,97 +1,245 @@
-<h3>Completed Trips</h3>
-<% if @deliveries.present? %>
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Status</th>
-      <th># of Shipments</th>
-      <th>Current Volume</th>
-      <th>Current Weight</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody id="my-shipments">
-    <% @deliveries.each do |delivery| %>
-    <tr>
-      <td><%= delivery.status.gsub('_', ' ').capitalize %></td>
-      <td><%= delivery.shipments.count%></td>
-      <td><%= delivery.volume / 1_000_000 %> m<sup>3</sup></td>
-      <td><%= delivery.weight %> kg</td>
-      <td>
-        <%= link_to 'Show', delivery, class: 'action-link' %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-<% else %>
-<div class="empty-state-container">
-  <div class="empty-state-content">
-    <h4>Seems a little quiet here...</h4>
-    <p>Head over to the deliveries page to start.... Truckin' Along!</p>
-    <%= link_to "Start First Delivery", start_deliveries_path, class: "primary-button" %>
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <h2>Welcome back, <%= current_user.first_name %>!</h2>
+    <p class="dashboard-subtitle">Here's your delivery overview and fleet status</p>
   </div>
-</div>
-<% end %>
 
-<br />
+  <!-- Key Metrics -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon">🚛</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @total_trucks %></h3>
+        <p class="metric-label">Total Trucks</p>
+      </div>
+    </div>
 
-<h3>Truck Maintenance</h3>
-<% if @trucks.present? %>
-<div data-controller="create-maintenance">
-  <div id="maintenance-modal" class="modal hidden">
-    <%= render 'forms/maintenance_form'%>
+    <div class="metric-card">
+      <div class="metric-icon">📦</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @total_deliveries %></h3>
+        <p class="metric-label">Total Deliveries</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon">✅</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @completed_deliveries %></h3>
+        <p class="metric-label">Completed Deliveries</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon">🔧</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @trucks_needing_maintenance %></h3>
+        <p class="metric-label">Trucks Needing Maintenance</p>
+      </div>
+    </div>
   </div>
-  <table class="styled-table">
-    <thead>
-      <tr>
-        <th>Make</th>
-        <th>Model</th>
-        <th>Year</th>
-        <th>Mileage</th>
-        <th>License Plate</th>
-        <th>Status</th>
-        <th>Actions</th>
-        <th>Maintenance</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @trucks.each do |truck| %>
-      <tr>
-        <td><%= truck.make %></td>
-        <td><%= truck.model %></td>
-        <td><%= truck.year %></td>
-        <td><%= truck.mileage %></td>
-        <td><%= truck.license_plate %></td>
-        <td>
-          <% if truck.active %>
-          <span class="status-active">Active</span>
-          <% else %>
-          <span class="status-inactive">Maintenance Required</span>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to 'View Details', truck, class: 'action-link' %>
-        </td>
-        <td>
-          <% if !truck.active %>
-          <button class="button warning-button" data-action="click->create-maintenance#open" data-modal-truck-id-value="<%= truck.id %>">
-            Complete Maintenance
-          </button>
-          <% else %>
-          <span class="status-active">Up to Date</span>
-          <% end %>
-        </td>
-      </tr>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <h3>Quick Actions</h3>
+    <div class="action-buttons">
+      <%= link_to 'Start Delivery', start_deliveries_path, class: 'action-button primary' %>
+      <%= link_to 'View All Deliveries', deliveries_path, class: 'action-button secondary' %>
+      <%= link_to 'Load Truck', load_truck_deliveries_path, class: 'action-button secondary' %>
+    </div>
+  </div>
+
+  <!-- Current Status -->
+  <div class="status-overview">
+    <h3>Current Status</h3>
+    <div class="status-cards">
+      <div class="status-card">
+        <span class="status-name">Active Trucks</span>
+        <span class="status-count"><%= @active_trucks %></span>
+      </div>
+      <div class="status-card">
+        <span class="status-name">Available Trucks</span>
+        <span class="status-count"><%= @available_trucks %></span>
+      </div>
+      <div class="status-card">
+        <span class="status-name">Active Deliveries</span>
+        <span class="status-count"><%= @active_deliveries %></span>
+      </div>
+      <div class="status-card">
+        <span class="status-name">Scheduled Deliveries</span>
+        <span class="status-count"><%= @scheduled_deliveries %></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity & Truck Maintenance -->
+  <div class="dashboard-sections">
+    <!-- Recent Deliveries -->
+    <div class="dashboard-section">
+      <div class="section-header">
+        <h3>Recent Deliveries</h3>
+        <%= link_to 'View All', deliveries_path, class: 'view-all-link' %>
+      </div>
+
+      <% if @recent_deliveries.present? %>
+      <div class="recent-deliveries">
+        <% @recent_deliveries.each do |delivery| %>
+        <div class="delivery-card">
+          <div class="delivery-header">
+            <h4>Delivery #<%= delivery.id %></h4>
+            <span class="delivery-status <%= delivery.status %>">
+              <%= delivery.status.gsub('_', ' ').capitalize %>
+            </span>
+          </div>
+          <div class="delivery-details">
+            <p><strong>Truck:</strong> <%= delivery.truck&.display_name %></p>
+            <p><strong>Shipments:</strong> <%= delivery.shipments.count %></p>
+            <p><strong>Volume:</strong> <%= (delivery.volume / 1_000_000).round(2) %> m³</p>
+            <p><strong>Weight:</strong> <%= delivery.weight.round(1) %> kg</p>
+            <p><strong>Created:</strong> <%= delivery.created_at.strftime("%b %d, %Y") %></p>
+          </div>
+          <div class="delivery-actions">
+            <%= link_to 'View Details', delivery_path(delivery), class: 'action-link' %>
+            <% if delivery.active? %>
+            <%= link_to 'Continue', delivery_path(delivery), class: 'action-link' %>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <% else %>
+      <div class="empty-state">
+        <p>No deliveries yet. Start your first delivery to get going!</p>
+        <%= link_to 'Start First Delivery', start_deliveries_path, class: 'primary-button' %>
+      </div>
       <% end %>
-    </tbody>
-  </table>
-</div>
-<% else %>
-<div class="empty-state-container">
-  <div class="empty-state-content">
-    <h4>No trucks available</h4>
-    <p>Contact your administrator to add trucks to your fleet.</p>
+    </div>
+
+    <!-- Fleet Overview -->
+    <div class="dashboard-section">
+      <div class="section-header">
+        <h3>Fleet Overview</h3>
+      </div>
+
+      <% if @fleet_overview_trucks.present? %>
+      <div class="fleet-overview">
+        <% @fleet_overview_trucks.each do |truck| %>
+        <div class="truck-card">
+          <div class="truck-header">
+            <h4><%= truck.display_name %></h4>
+            <span class="truck-status <%= truck.active? ? 'active' : 'maintenance' %>">
+              <%= truck.active? ? 'Active' : 'Maintenance Required' %>
+            </span>
+          </div>
+          <div class="truck-details">
+            <p><strong>Mileage:</strong> <%= number_with_delimiter(truck.mileage) %> km</p>
+            <p><strong>Capacity:</strong> <%= (truck.volume / 1_000_000).round(2) %> m³</p>
+            <p><strong>Max Weight:</strong> <%= truck.weight %> kg</p>
+            <p><strong>Available:</strong> <%= truck.available? ? 'Yes' : 'No' %></p>
+            <% if truck.current_shipments.any? %>
+            <p><strong>Current Load:</strong> <%= truck.current_shipments.count %> shipments</p>
+            <% end %>
+          </div>
+          <div class="truck-actions">
+            <%= link_to 'View Details', truck_path(truck), class: 'action-link' %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <% else %>
+      <div class="empty-state">
+        <p>No trucks available. Contact your administrator to add trucks to your fleet.</p>
+      </div>
+      <% end %>
+    </div>
   </div>
+
+  <!-- Truck Maintenance Section (Preserved from original) -->
+  <div class="dashboard-section maintenance-section">
+    <div class="section-header">
+      <h3>Truck Maintenance</h3>
+    </div>
+
+    <% if @trucks.present? %>
+    <div data-controller="create-maintenance">
+      <div id="maintenance-modal" class="modal hidden">
+        <%= render 'forms/maintenance_form'%>
+      </div>
+
+      <div class="maintenance-table">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Year</th>
+              <th>Mileage</th>
+              <th>License Plate</th>
+              <th>Status</th>
+              <th>Actions</th>
+              <th>Maintenance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @trucks.each do |truck| %>
+            <tr>
+              <td><%= truck.make %></td>
+              <td><%= truck.model %></td>
+              <td><%= truck.year %></td>
+              <td><%= number_with_delimiter(truck.mileage) %></td>
+              <td><%= truck.license_plate %></td>
+              <td>
+                <% if truck.active %>
+                <span class="status-active">Active</span>
+                <% else %>
+                <span class="status-inactive">Maintenance Required</span>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to 'View Details', truck, class: 'action-link' %>
+              </td>
+              <td>
+                <% if !truck.active %>
+                <button class="button warning-button" data-action="click->create-maintenance#open" data-modal-truck-id-value="<%= truck.id %>">
+                  Complete Maintenance
+                </button>
+                <% else %>
+                <span class="status-active">Up to Date</span>
+                <% end %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% else %>
+    <div class="empty-state">
+      <h4>No trucks available</h4>
+      <p>Contact your administrator to add trucks to your fleet.</p>
+    </div>
+    <% end %>
+  </div>
+
+  <!-- Active Delivery Alert -->
+  <% if @active_delivery %>
+  <div class="dashboard-section active-delivery-alert">
+    <div class="section-header">
+      <h3>🚛 Active Delivery</h3>
+    </div>
+
+    <div class="active-delivery-summary">
+      <div class="delivery-info">
+        <h4>You're currently on delivery #<%= @active_delivery.id %></h4>
+        <p><strong>Truck:</strong> <%= @active_delivery.truck&.display_name %></p>
+        <p><strong>Shipments:</strong> <%= @active_delivery.shipments.count %></p>
+        <p><strong>Status:</strong> <%= @active_delivery.status.gsub('_', ' ').capitalize %></p>
+      </div>
+      <div class="delivery-actions">
+        <%= link_to 'Continue Delivery', delivery_path(@active_delivery), class: 'primary-button' %>
+      </div>
+    </div>
+  </div>
+  <% end %>
 </div>
-<% end %>
