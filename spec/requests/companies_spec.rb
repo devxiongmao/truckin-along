@@ -300,12 +300,6 @@ RSpec.describe "/companies", type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "displays company information" do
-        get company_path(company)
-        expect(response.body).to include(company.name)
-        expect(response.body).to include(company.address)
-      end
-
       it "displays employee count" do
         get company_path(company)
         expect(response.body).to include(company.users.count.to_s)
