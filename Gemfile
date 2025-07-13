@@ -65,6 +65,8 @@ group :development, :test do
   gem "byebug"
   gem "faker"
   gem "factory_bot_rails"
+  gem "cucumber-rails", require: false
+  gem "database_cleaner-active_record"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -88,6 +90,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem "webdrivers"
 
   gem "shoulda-matchers"
 end

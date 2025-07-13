@@ -98,3 +98,13 @@ d_logs:
 .PHONY: d_test
 d_test:
 	docker compose exec truckin_along bundle exec rspec
+
+# Usage:
+#   make e2e-test                                    # runs ALL features
+#   make e2e-test FEATURE=features/hello.feature     # runs a specific feature
+#   make e2e-test FEATURE=features/hello.feature:12  # runs a specific feature scenario
+#   SHOW_BROWSER=true make e2e-test                  # can run all of the above using the browser
+
+.PHONY: e2e-test
+e2e-test:
+	SHOW_BROWSER=$(SHOW_BROWSER) bundle exec cucumber $(FEATURE)
