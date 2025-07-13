@@ -286,9 +286,8 @@ RSpec.describe Shipment, type: :model do
           delivery_shipment.update!(delivered_date: Time.current)
         end
 
-        ### Fix this
         it "returns the receiver latitude from the latest delivery shipment" do
-          expect(valid_shipment.current_sender_latitude).to eq(40.7128)
+          expect(valid_shipment.current_sender_latitude).to eq(34.0522)
         end
       end
 
@@ -320,9 +319,8 @@ RSpec.describe Shipment, type: :model do
           delivery_shipment.update!(delivered_date: Time.current)
         end
 
-        ### Fix this
         it "returns the receiver longitude from the latest delivery shipment" do
-          expect(valid_shipment.current_sender_longitude).to eq(-74.006)
+          expect(valid_shipment.current_sender_longitude).to eq(-118.2437)
         end
       end
 
@@ -368,9 +366,8 @@ RSpec.describe Shipment, type: :model do
                receiver_latitude: 41.8781)
       end
 
-      ## Fix this
       it "returns the receiver latitude from the latest delivery shipment" do
-        expect(valid_shipment.current_receiver_latitude).to eq(40.7128)
+        expect(valid_shipment.current_receiver_latitude).to eq(41.8781)
       end
     end
   end
@@ -389,9 +386,8 @@ RSpec.describe Shipment, type: :model do
                receiver_longitude: -87.6298)
       end
 
-      ## Fix this
       it "returns the receiver longitude from the latest delivery shipment" do
-        expect(valid_shipment.current_receiver_longitude).to eq(-74.006)
+        expect(valid_shipment.current_receiver_longitude).to eq(-87.6298)
       end
     end
   end
@@ -424,6 +420,14 @@ RSpec.describe Shipment, type: :model do
         expect(valid_shipment.sender_latitude).to be_nil
         expect(valid_shipment.sender_longitude).to be_nil
       end
+
+      context "when the coordinates are manually set" do
+        let(:manual_shipment) { create(:shipment, sender_longitude: 3.0, sender_latitude: 4.0,) }
+        it "does not update the coordinates" do
+          expect(manual_shipment.sender_longitude).to eq(3.0)
+          expect(manual_shipment.sender_latitude).to eq(4.0)
+        end
+      end
     end
 
     describe "receiver address geocoding" do
@@ -451,6 +455,14 @@ RSpec.describe Shipment, type: :model do
 
         expect(valid_shipment.receiver_latitude).to be_nil
         expect(valid_shipment.receiver_longitude).to be_nil
+      end
+    end
+
+    context "when the coordinates are manually set" do
+      let(:manual_shipment) { create(:shipment, receiver_longitude: 1.0, receiver_latitude: 2.0) }
+      it "does not update the coordinates" do
+        expect(manual_shipment.receiver_longitude).to eq(1.0)
+        expect(manual_shipment.receiver_latitude).to eq(2.0)
       end
     end
   end
