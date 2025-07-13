@@ -1,49 +1,174 @@
-<div class="page-header">
-  <h3>My Customer Shipments</h3>
-  <%= link_to 'Create New Shipment', new_shipment_path, class: 'button primary-button' %>
-</div>
-<% if @shipments.present? %>
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th>Company</th>
-      <th>Status</th>
-      <th>Name</th>
-      <th>Sender</th>
-      <th>Receiver</th>
-      <th>Weight</th>
-      <th>Deliver By</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @shipments.each do |shipment| %>
-    <tr>
-      <td><%= shipment&.company&.name %></td>
-      <td><%= shipment.status %></td>
-      <td><%= shipment.name %></td>
-      <td><%= shipment.sender_name %></td>
-      <td><%= shipment.receiver_name %></td>
-      <td><%= shipment.weight %></td>
-      <td><%= shipment.deliver_by %></td>
-      <td>
-        <%= link_to 'Show', shipment, class: 'action-link' %> |
-        <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %> |
-        <%= link_to 'Copy', copy_shipment_path(shipment), class: 'action-link' %>
-        <% unless shipment.claimed? %>
-        | <%= link_to 'Destroy', shipment, method: :delete, data: { confirm: 'Are you sure?' }, class: 'action-link danger-link' %>
-        <% end %>
-      </td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-<% else %>
-<div class="empty-state-container">
-  <div class="empty-state-content">
-    <h4>Seems a little quiet here...</h4>
-    <p>Head over to the shipments page to get some shipments.... Truckin' Along!</p>
-    <%= link_to "Create First Shipment", new_shipment_path, class: "primary-button" %>
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <h2>Welcome back, <%= current_user.first_name %>!</h2>
+    <p class="dashboard-subtitle">Here's what's happening with your shipments today</p>
   </div>
+
+  <!-- Key Metrics -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon">📦</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @total_shipments %></h3>
+        <p class="metric-label">Total Shipments</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon">⏳</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @pending_shipments %></h3>
+        <p class="metric-label">Pending Shipments</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon">🚛</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @claimed_shipments %></h3>
+        <p class="metric-label">Claimed Shipments</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon">📅</div>
+      <div class="metric-content">
+        <h3 class="metric-number"><%= @due_this_week_shipments %></h3>
+        <p class="metric-label">Due This Week</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <h3>Quick Actions</h3>
+    <div class="action-buttons">
+      <%= link_to 'Create New Shipment', new_shipment_path, class: 'action-button primary' %>
+      <%= link_to 'View All Shipments', shipments_path, class: 'action-button secondary' %>
+      <%= link_to 'Check Offers', offers_path, class: 'action-button secondary' %>
+    </div>
+  </div>
+
+  <!-- Status Overview -->
+  <div class="status-overview">
+    <h3>Shipment Status Overview</h3>
+    <div class="status-cards">
+      <% if @status_counts.any? %>
+      <% @status_counts.each do |status, count| %>
+      <div class="status-card">
+        <span class="status-name"><%= status || 'No Status' %></span>
+        <span class="status-count"><%= count %></span>
+      </div>
+      <% end %>
+      <% else %>
+      <div class="status-card empty">
+        <span class="status-name">No shipments yet</span>
+        <span class="status-count">0</span>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Recent Activity & Upcoming Deadlines -->
+  <div class="dashboard-sections">
+    <!-- Recent Shipments -->
+    <div class="dashboard-section">
+      <div class="section-header">
+        <h3>Recent Shipments</h3>
+        <%= link_to 'View All', shipments_path, class: 'view-all-link' %>
+      </div>
+
+      <% if @shipments.present? %>
+      <div class="recent-shipments">
+        <% @recent_shipments.each do |shipment| %>
+        <div class="shipment-card">
+          <div class="shipment-header">
+            <h4><%= shipment.name %></h4>
+            <span class="shipment-status <%= shipment.status&.downcase&.gsub(/\s+/, '-') || 'no-status' %>">
+              <%= shipment.status || 'No Status' %>
+            </span>
+          </div>
+          <div class="shipment-details">
+            <p><strong>From:</strong> <%= shipment.sender_name %></p>
+            <p><strong>To:</strong> <%= shipment.receiver_name %></p>
+            <p><strong>Weight:</strong> <%= shipment.weight %> kg</p>
+            <p><strong>Due:</strong> <%= shipment.deliver_by&.strftime("%b %d, %Y") %></p>
+            <% if shipment.company %>
+            <p><strong>Carrier:</strong> <%= shipment.company.name %></p>
+            <% end %>
+          </div>
+          <div class="shipment-actions">
+            <%= link_to 'View Details', shipment_path(shipment), class: 'action-link' %>
+            <% unless shipment.claimed? %>
+            <%= link_to 'Edit', edit_shipment_path(shipment), class: 'action-link' %>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <% else %>
+      <div class="empty-state">
+        <p>No shipments yet. Create your first shipment to get started!</p>
+        <%= link_to 'Create First Shipment', new_shipment_path, class: 'primary-button' %>
+      </div>
+      <% end %>
+    </div>
+
+    <!-- Upcoming Deadlines -->
+    <div class="dashboard-section">
+      <div class="section-header">
+        <h3>Upcoming Deadlines</h3>
+        <%= link_to 'View All', shipments_path, class: 'view-all-link' %>
+      </div>
+
+      <% if @upcoming_shipments.any? %>
+      <div class="deadline-list">
+        <% @upcoming_shipments.each do |shipment| %>
+        <div class="deadline-item">
+          <div class="deadline-date">
+            <span class="day"><%= shipment.deliver_by.day %></span>
+            <span class="month"><%= shipment.deliver_by.strftime("%b") %></span>
+          </div>
+          <div class="deadline-content">
+            <h4><%= shipment.name %></h4>
+            <p><%= shipment.receiver_name %> • <%= shipment.deliver_by.strftime("%B %d, %Y") %></p>
+            <% days_until = (shipment.deliver_by - Date.current).to_i %>
+            <span class="days-remaining <%= days_until <= 3 ? 'urgent' : days_until <= 7 ? 'warning' : 'normal' %>">
+              <%= pluralize(days_until, 'day') %> remaining
+            </span>
+          </div>
+          <div class="deadline-action">
+            <%= link_to 'View', shipment_path(shipment), class: 'action-link' %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+      <% else %>
+      <div class="empty-state">
+        <p>No upcoming deadlines. All caught up!</p>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Pending Offers Summary -->
+  <% if @pending_offers.any? %>
+  <div class="dashboard-section">
+    <div class="section-header">
+      <h3>Pending Offers</h3>
+      <%= link_to 'View All Offers', offers_path, class: 'view-all-link' %>
+    </div>
+
+    <div class="offers-summary">
+      <div class="offer-stats">
+        <span class="offer-count"><%= @pending_offers.count %></span>
+        <span class="offer-label">offers waiting for your review</span>
+      </div>
+      <div class="offer-actions">
+        <%= link_to 'Review Offers', offers_path, class: 'primary-button' %>
+      </div>
+    </div>
+  </div>
+  <% end %>
 </div>
-<% end %>
