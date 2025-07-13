@@ -41,7 +41,7 @@ jobs:
               - 'app/jobs/**'
               - 'app/mailers/**'
               - 'app/services/**'
-              - 'db/migrate/**'
+              - 'db/**'
               - 'config/**'
               - 'spec/**'
               - 'lib/**'
