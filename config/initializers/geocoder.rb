@@ -11,19 +11,6 @@ if Rails.env.test? || ENV["CI"] == "true" || ENV["GITHUB_ACTIONS"] == "true" || 
     timeout: 0.1
   )
 
-  # Create a default stub for all geocoding requests
-  Geocoder::Lookup::Test.add_stub(
-    "any", [
-      {
-        "coordinates"  => [ 40.7128, -74.0060 ],
-        "address"      => "New York, NY, USA",
-        "state"        => "New York",
-        "country"      => "United States",
-        "country_code" => "US"
-      }
-    ]
-  )
-
   # Add common address stubs for seed data
   common_addresses = [
     "101 Tech Blvd, Silicon Valley, USA",
@@ -47,6 +34,25 @@ if Rails.env.test? || ENV["CI"] == "true" || ENV["GITHUB_ACTIONS"] == "true" || 
       ]
     )
   end
+
+  # Add a more flexible fallback stub that creates deterministic coordinates based on the address
+  Geocoder::Lookup::Test.add_stub(
+    /.*/, lambda do |query|
+      # Create deterministic but unique coordinates based on the address hash
+      require "digest/md5"
+      seed = Digest::MD5.hexdigest(query).to_i(16)
+      lat = 37.0 + (seed % 10000) / 10000.0
+      lng = -122.0 + (seed / 10000 % 10000) / 10000.0
+
+      [ {
+        "coordinates"  => [ lat, lng ],
+        "address"      => query,
+        "state"        => query.split(", ")[1] || "Unknown State",
+        "country"      => "United States",
+        "country_code" => "US"
+      } ]
+    end
+  )
 elsif ENV["AZURE_MAPS_API_KEY"].present?
   # Production/Development mode - Azure Maps
   puts "🌍 Using Azure Maps geocoding service" if Rails.env.development?
