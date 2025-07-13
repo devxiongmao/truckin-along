@@ -25,20 +25,18 @@ class DashboardController < ApplicationController
     else
       @deliveries = Delivery.for_user(current_user).includes(:truck, :shipments)
 
+      @total_deliveries = @deliveries.size
+      @active_deliveries = @deliveries.active.size
+      @scheduled_deliveries = @deliveries.scheduled.size
+      @completed_deliveries = @deliveries.completed.size
+      @recent_deliveries = @deliveries.order(created_at: :desc).first(5)
+
       @trucks = Truck.for_company(current_company).includes(:deliveries, :shipments)
 
       @total_trucks = @trucks.size
-      @total_deliveries = @deliveries.size
-      @completed_deliveries = @deliveries.completed.size
       @trucks_needing_maintenance = @trucks.count { |t| !t.active }
-
       @active_trucks = @trucks.count { |t| t.active }
       @available_trucks = @trucks.count { |t| t.available? }
-
-      @active_deliveries = @deliveries.active.size
-      @scheduled_deliveries = @deliveries.scheduled.size
-
-      @recent_deliveries = @deliveries.order(created_at: :desc).first(5)
       @fleet_overview_trucks = @trucks.first(5)
 
       @active_delivery = current_user.active_delivery
