@@ -39,6 +39,14 @@ RSpec.describe DeliveryShipment, type: :model do
         expect(valid_delivery.sender_latitude).to be_nil
         expect(valid_delivery.sender_longitude).to be_nil
       end
+
+      context "when the coordinates are manually set" do
+        let(:manual_shipment) { create(:shipment, sender_longitude: 3.0, sender_latitude: 4.0,) }
+        it "does not update the coordinates" do
+          expect(manual_shipment.sender_longitude).to eq(3.0)
+          expect(manual_shipment.sender_latitude).to eq(4.0)
+        end
+      end
     end
 
     describe "receiver address geocoding" do
@@ -66,6 +74,14 @@ RSpec.describe DeliveryShipment, type: :model do
 
         expect(valid_delivery.receiver_latitude).to be_nil
         expect(valid_delivery.receiver_longitude).to be_nil
+      end
+
+      context "when the coordinates are manually set" do
+        let(:manual_shipment) { create(:shipment, receiver_longitude: 1.0, receiver_latitude: 2.0) }
+        it "does not update the coordinates" do
+          expect(manual_shipment.receiver_longitude).to eq(1.0)
+          expect(manual_shipment.receiver_latitude).to eq(2.0)
+        end
       end
     end
   end

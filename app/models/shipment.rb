@@ -11,8 +11,8 @@ class Shipment < ApplicationRecord
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }
 
-  after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? && obj.sender_latitude.blank? && obj.sender_longitude.blank? }
-  after_validation :geocode_receiver, if: ->(obj) { obj.receiver_address.present? && obj.receiver_address_changed? && obj.receiver_latitude.blank? && obj.receiver_longitude.blank? }
+  after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? }
+  after_validation :geocode_receiver, if: ->(obj) { obj.receiver_address.present? && obj.receiver_address_changed? }
 
   scope :for_user, ->(user) { where(user_id: user.id) }
 
@@ -87,6 +87,9 @@ class Shipment < ApplicationRecord
   private
 
   def geocode_sender
+    # Skip geocoding if coordinates were manually set
+    return if sender_latitude_changed? || sender_longitude_changed?
+
     result = Geocoder.search(sender_address).first
     if result
       self.sender_latitude = result.latitude
@@ -95,6 +98,9 @@ class Shipment < ApplicationRecord
   end
 
   def geocode_receiver
+    # Skip geocoding if coordinates were manually set
+    return if receiver_latitude_changed? || receiver_longitude_changed?
+
     result = Geocoder.search(receiver_address).first
     if result
       self.receiver_latitude = result.latitude
