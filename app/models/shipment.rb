@@ -11,8 +11,8 @@ class Shipment < ApplicationRecord
   validates :name, :sender_name, :sender_address, :receiver_name, :receiver_address, :weight, :length, :width, :height, presence: true
   validates :weight, :length, :width, :height, numericality: { greater_than: 0 }
 
-  after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? }
-  after_validation :geocode_receiver, if: ->(obj) { obj.receiver_address.present? && obj.receiver_address_changed? }
+  after_validation :geocode_sender, if: ->(obj) { obj.sender_address.present? && obj.sender_address_changed? && obj.sender_latitude.blank? && obj.sender_longitude.blank? }
+  after_validation :geocode_receiver, if: ->(obj) { obj.receiver_address.present? && obj.receiver_address_changed? && obj.receiver_latitude.blank? && obj.receiver_longitude.blank? }
 
   scope :for_user, ->(user) { where(user_id: user.id) }
 
