@@ -24,7 +24,7 @@ Then('I should remain on the new driver creation form') do
   expect(current_path).to eq(driver_managements_path)
 end
 
-Then('the previously entered information should still be present') do
+Then('the previously entered driver info should still be present') do
   expect(page).to have_field('First Name', with: 'Jane')
   expect(page).to have_field('Last Name', with: 'Smith')
   expect(page).to have_field('Email', with: 'jane.smith@example.com')
@@ -34,7 +34,7 @@ Then('the driver should have {string} as their license number') do |license|
   expect(page).to have_content(license)
 end
 
-Then('the form should be empty and ready for input') do
+Then('the driver form should be empty and ready for input') do
   # Check that the form fields exist and are empty
   expect(page).to have_field('First Name')
   expect(page).to have_field('Last Name')

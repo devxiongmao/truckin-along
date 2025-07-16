@@ -35,7 +35,7 @@ Feature: Admin Creating a Driver
     And I click "Create Driver"
     Then I should see an error message
     And I should remain on the new driver creation form
-    And the previously entered information should still be present
+    And the previously entered driver info should still be present
 
   Scenario: Create driver with placeholder information
     Given I am on the admin page
@@ -57,4 +57,4 @@ Feature: Admin Creating a Driver
     Given I am on the admin page
     When I click "Create New Driver"
     Then I should be on the new driver creation form
-    And the form should be empty and ready for input 
+    And the driver form should be empty and ready for input 

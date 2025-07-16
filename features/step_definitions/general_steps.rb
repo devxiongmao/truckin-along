@@ -19,7 +19,3 @@ end
 When('I check {string}') do |checkbox_label|
   check checkbox_label
 end
-
-Then('I should see an error message') do
-  expect(page).to have_content('error')
-end
