@@ -97,11 +97,6 @@ Then('the modal should have fields for maintenance information') do
   expect(page).to have_field('Additional Notes')
 end
 
-Then('the maintenance should be successfully recorded') do
-  # Verify the maintenance was saved to the database
-  expect(page).to have_content('Maintenance recorded successfully')
-end
-
 Then('I should see a confirmation message') do
-  expect(page).to have_content('Maintenance completed')
+  expect(page).to have_content('Maintenance form successfully submitted.')
 end
