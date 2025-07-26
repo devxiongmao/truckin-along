@@ -60,6 +60,8 @@ jobs:
               - 'docs/**'
             migrations:
               - 'db/migrate/**'
+            cucumber:
+              - 'features/**'
             dependencies:
               - 'Gemfile.lock'
               - 'package.json'
@@ -98,6 +100,10 @@ jobs:
 
           if [[ "${{ steps.filter.outputs.docs }}" == "true" ]]; then
             LABELS+=("documentation")
+          fi
+
+          if [[ "${{ steps.filter.outputs.cucumber }}" == "true" ]]; then
+            LABELS+=("cucumber")
           fi
 
           if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'Add|add|create|Create'; then
