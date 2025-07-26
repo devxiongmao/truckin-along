@@ -20,7 +20,7 @@ Feature: Admin Creating a Driver
     And I click "Create Driver"
     Then I should be redirected to the admin page
     And I should see a success message confirming the driver was created
-    And the new driver, "Michael", should be listed under the "Drivers" section
+    And the new record, "Michael", should be listed under the "Drivers" section
 
   Scenario: Attempt to create driver with missing information
     Given I am on the admin page
@@ -50,7 +50,7 @@ Feature: Admin Creating a Driver
     And I click "Create Driver"
     Then I should be redirected to the admin page
     And I should see a success message confirming the driver was created
-    And the new driver, "Bob", should be listed under the "Drivers" section
+    And the new record, "Bob", should be listed under the "Drivers" section
     And the driver should have "TBD" as their license number
 
   Scenario: Navigate to driver creation from admin page

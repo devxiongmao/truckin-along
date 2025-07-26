@@ -13,12 +13,6 @@ Then('I should see a success message confirming the driver was created') do
   expect(page).to have_content('Driver account created successfully')
 end
 
-Then('the new driver, {string}, should be listed under the {string} section') do |name, section|
-  expect(page).to have_content(section)
-  # Check for the driver's name in the table
-  expect(page).to have_content(name)
-end
-
 Then('I should remain on the new driver creation form') do
   # When validation fails, the form is re-rendered at the POST path
   expect(current_path).to eq(driver_managements_path)
