@@ -6,11 +6,11 @@ Feature: Admin Creating a Driver
   Background:
     Given I am on the root page
 
-  Scenario: Successfully create a new driver with complete information
+  Scenario: Successfully create a new customer with complete information
     Given I am on the root page
     When I click "Sign Up as Customer"
-    Then I should be on the new user creation form
-    And I should see a form with fields for user creation
+    Then I should be on the new customer creation form
+    And I should see a form with fields for customer creation
 
     When I fill in "First Name" with "Michael"
     And I fill in "Last Name" with "Holt"
