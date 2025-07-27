@@ -112,7 +112,7 @@ puts "Creating users..."
 
 ## LogiCo Express employees
 user1 = User.create!(
-  email: "john.doe@logico.com",
+  email: "john.doe@logico.ca",
   password: "password123",
   first_name: "John",
   last_name: "Doe",
@@ -742,7 +742,7 @@ Offer.create!(
   deliver_to_door: true,
   dropoff_location: "555 Happy Blvd, Charlotte, USA",
   pickup_at_dropoff: false,
-  price: 245.50,
+  price: 45.50,
   notes: "Fast delivery guaranteed"
 )
 
@@ -755,7 +755,7 @@ Offer.create!(
   deliver_to_door: true,
   dropoff_location: "555 Happy Blvd, Charlotte, USA",
   pickup_at_dropoff: false,
-  price: 220.00,
+  price: 20.00,
   notes: "Competitive pricing"
 )
 
@@ -768,7 +768,7 @@ Offer.create!(
   deliver_to_door: false,
   dropoff_location: "555 Happy Blvd, Charlotte, USA",
   pickup_at_dropoff: false,
-  price: 280.75,
+  price: 80.75,
   notes: "Premium service with tracking"
 )
 
@@ -782,7 +782,7 @@ Offer.create!(
   deliver_to_door: true,
   dropoff_location: "121 Productivity Blvd, Las Vegas, USA",
   pickup_at_dropoff: false,
-  price: 185.25,
+  price: 85.25,
   notes: "Reliable delivery service"
 )
 
@@ -795,7 +795,7 @@ Offer.create!(
   deliver_to_door: true,
   dropoff_location: "121 Productivity Blvd, Las Vegas, USA",
   pickup_at_dropoff: false,
-  price: 165.00,
+  price: 65.00,
   notes: "Best value for money"
 )
 
