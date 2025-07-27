@@ -7,3 +7,5 @@ World(FactoryBot::Syntax::Methods)
 # Include Devise test helpers
 include Warden::Test::Helpers
 Warden.test_mode!
+
+# Capybara.default_driver = :selenium
