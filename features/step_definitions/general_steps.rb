@@ -19,3 +19,15 @@ end
 When('I check {string}') do |checkbox_label|
   check checkbox_label
 end
+
+When('I wait') do
+  sleep 10
+end
+
+Given('I am on the root page') do
+  visit root_path
+end
+
+Then('I should be redirected to the dashboard page') do
+  expect(current_path).to eq(dashboard_path)
+end
