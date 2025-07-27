@@ -332,7 +332,8 @@ jobs:
           GEOCODER_DISABLED: true
         run: |
           bundle exec rake geocoder:prepare_for_seeds
-          bundle exec rake parallel:setup
+          bundle exec rake parallel:create
+          bundle exec rake parallel:migrate
 
       - name: Run Parallel RSpec Tests
         env:
