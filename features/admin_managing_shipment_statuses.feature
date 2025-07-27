@@ -6,7 +6,6 @@ Feature: Admin Managing Shipment Statuses
   Background:
     Given I am logged in as an admin user
     And I am on the admin page
-    And seed data is loaded
 
   Scenario: Successfully create a new shipment status
     Given I am on the admin page
