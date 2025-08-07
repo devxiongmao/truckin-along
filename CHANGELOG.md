@@ -1,12 +1,11 @@
-### From v1.7.0 to HEAD
+### From v1.7.1 to HEAD
 
-- Bump @testing-library/jest-dom from 6.6.3 to 6.6.4 (#435) (b48aa8e) by dependabot[bot]
-- Bump @testing-library/dom from 10.4.0 to 10.4.1 (#436) (36d86c7) by dependabot[bot]
-- Bump @typescript-eslint/eslint-plugin from 8.36.0 to 8.38.0 (#437) (37bbf17) by dependabot[bot]
-- Bump pg from 1.5.9 to 1.6.0 (#438) (a796611) by dependabot[bot]
-- Bump database_cleaner-active_record from 2.2.1 to 2.2.2 (#439) (5345efb) by dependabot[bot]
-- Bump importmap-rails from 2.2.0 to 2.2.2 (#441) (e7cac4c) by dependabot[bot]
-- Bump puma from 6.6.0 to 6.6.1 (#442) (4ca3ed3) by dependabot[bot]
+- Bump pg from 1.6.0 to 1.6.1 (#446) (9009842) by dependabot[bot]
+- NO-JIRA: Update dependabot check frequency (#449) (4482052) by Jon
+- Bump sass from 1.89.2 to 1.90.0 (#448) (7b0e72e) by dependabot[bot]
+- Bump thruster from 0.1.14 to 0.1.15 (#447) (7a78fe9) by dependabot[bot]
+- Bump parallel_tests from 5.3.1 to 5.4.0 (#445) (5f26267) by dependabot[bot]
+- Bump @typescript-eslint/parser from 8.38.0 to 8.39.0 (#444) (9598e0f) by dependabot[bot]
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
