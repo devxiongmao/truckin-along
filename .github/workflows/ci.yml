@@ -69,7 +69,6 @@ jobs:
               - 'pnpm-lock.yaml'
             actions:
               - '.github/workflows/**'
-              - '.kamal/hooks/**'
               - '.github/dependabot.yml'
 
       - name: Determine labels based on changes
