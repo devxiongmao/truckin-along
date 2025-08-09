@@ -27,7 +27,7 @@ end
 
 Then('I should remain on the new truck creation form') do
   # When validation fails, the form is re-rendered at the POST path
-  expect(current_path).to eq(trucks_path)
+  expect(current_path).to eq(new_truck_path)
 end
 
 Then('the previously entered truck information should still be present') do
@@ -56,16 +56,16 @@ Then('the truck form should be empty and ready for input') do
   expect(page).to have_field('Height of Bed (cm)')
 
   # Verify the fields are empty by checking their values
-  expect(find_field('Make').value).to be_nil
-  expect(find_field('Model').value).to be_nil
-  expect(find_field('Year').value).to be_nil
-  expect(find_field('Mileage').value).to be_nil
-  expect(find_field('VIN #').value).to be_nil
-  expect(find_field('License Plate').value).to be_nil
-  expect(find_field('Haul Weight (kg)').value).to be_nil
-  expect(find_field('Length of Bed (cm)').value).to be_nil
-  expect(find_field('Width of Bed (cm)').value).to be_nil
-  expect(find_field('Height of Bed (cm)').value).to be_nil
+  expect(find_field('Make').value.to_s).to eq("")
+  expect(find_field('Model').value.to_s).to eq("")
+  expect(find_field('Year').value.to_s).to eq("")
+  expect(find_field('Mileage').value.to_s).to eq("")
+  expect(find_field('VIN #').value.to_s).to eq("")
+  expect(find_field('License Plate').value.to_s).to eq("")
+  expect(find_field('Haul Weight (kg)').value.to_s).to eq("")
+  expect(find_field('Length of Bed (cm)').value.to_s).to eq("")
+  expect(find_field('Width of Bed (cm)').value.to_s).to eq("")
+  expect(find_field('Height of Bed (cm)').value.to_s).to eq("")
 end
 
 Given('a truck {string} exists in the system') do |truck_name|

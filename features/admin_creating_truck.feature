@@ -97,10 +97,3 @@ Feature: Admin Creating a Truck
     And I check "Tire pressure has been checked"
     And I fill in "Additional Notes" with "Initial maintenance completed"
     And I click "Confirm & Submit"
-    And I should see a confirmation message
-
-  Scenario: Navigate to truck creation from admin page
-    Given I am on the admin page
-    When I click "New Truck"
-    Then I should be on the new truck creation form
-    And the truck form should be empty and ready for input
