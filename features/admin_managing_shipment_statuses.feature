@@ -20,12 +20,10 @@ Feature: Admin Managing Shipment Statuses
     And I should see a success message confirming the shipment status was created
     And the new record, "Processing", should be listed under the "Shipment Statuses" section
 
-  Scenario: Assign Shipment Status to Common Action 
     Given I am on the admin page
     When I click "Edit" in the row that contains "Claimed by company"
     Then I should be on the shipment action preference form page
-
-    When I fill in "Name" with "Processing"
+    When I select "Processing" from "Shipment Status"
     And I click "Update"
     Then I should be redirected to the admin page
     And I should see a success message confirming the shipment action preference was saved

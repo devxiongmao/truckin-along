@@ -8,5 +8,13 @@ World(FactoryBot::Syntax::Methods)
 include Warden::Test::Helpers
 Warden.test_mode!
 
+# Make sure Cucumber runs in the "test" environment
+ENV['RAILS_ENV'] ||= 'test'
+
+# Clean DB and load seeds before each scenario
+Before do
+  DatabaseCleaner.clean_with(:truncation)
+  TestSeeds.load
+end
 
 # Capybara.default_driver = :selenium

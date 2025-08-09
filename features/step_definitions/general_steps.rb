@@ -16,6 +16,14 @@ When('I check {string}') do |checkbox_label|
   check checkbox_label
 end
 
+When('I select {string} from {string}') do |option, field|
+  select option, from: field
+end
+
+When('I wait for {int} seconds') do |seconds|
+  sleep seconds
+end
+
 When('I click {string} in the row that contains {string}') do |button_text, row_identifier|
   table_row = find(:xpath, "//tr[td[contains(text(), '#{row_identifier}')]]")
   within(table_row) do

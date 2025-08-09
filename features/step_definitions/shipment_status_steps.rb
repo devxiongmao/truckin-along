@@ -3,7 +3,7 @@ Then('I should be on the new shipment status creation form') do
 end
 
 Then('I should be on the shipment action preference form page') do
-  expect(current_path).to eq(edit_shipment_action_preference(1))
+  expect(current_path).to eq(edit_shipment_action_preference_path(1))
 end
 
 Then('I should see a form with fields for shipment status information') do

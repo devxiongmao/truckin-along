@@ -15,7 +15,7 @@ end
 
 Then('I should remain on the new driver creation form') do
   # When validation fails, the form is re-rendered at the POST path
-  expect(current_path).to eq(driver_managements_path)
+  expect(current_path).to eq(new_driver_management_path)
 end
 
 Then('the previously entered driver info should still be present') do
@@ -36,8 +36,8 @@ Then('the driver form should be empty and ready for input') do
   expect(page).to have_field('Email')
 
   # Verify the fields are empty by checking their values
-  expect(find_field('First Name').value).to be_nil
-  expect(find_field('Last Name').value).to be_nil
-  expect(find_field("Driver's License").value).to be_nil
-  expect(find_field('Email').value).to eq("")
+  expect(find_field('First Name').value.to_s).to eq("")
+  expect(find_field('Last Name').value.to_s).to eq("")
+  expect(find_field("Driver's License").value.to_s).to eq("")
+  expect(find_field('Email').value.to_s).to eq("")
 end

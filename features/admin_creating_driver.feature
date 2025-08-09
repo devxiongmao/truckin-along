@@ -34,6 +34,7 @@ Feature: Admin Creating a Driver
     And I fill in "Email" with "jane.smith@example.com"
     And I click "Create Driver"
     Then I should see an error message
+    And I wait for 5 seconds
     And I should remain on the new driver creation form
     And the previously entered driver info should still be present
 
