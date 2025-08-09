@@ -1,16 +1,14 @@
 Given('I am logged in as an admin user') do
-  company = create(:company)
-  admin = create(:user, :admin, company: company)
+  admin = User.find_by!(email: "john.doe@example.com")
   login_as(admin, scope: :user)
 end
 
-Given('I am logged in as an driver user') do
-  company = create(:company)
-  driver = create(:user, :driver, company: company)
+Given('I am logged in as a driver user') do
+  driver = User.find_by!(email: "jane.smith@example.com")
   login_as(driver, scope: :user)
 end
 
-Given('I am logged in as an customer user') do
-  customer = create(:user, :customer, company: company)
+Given('I am logged in as a customer user') do
+  customer = User.find_by!(email: "peter.parker@example.com")
   login_as(customer, scope: :user)
 end
