@@ -20,6 +20,11 @@ When('I select {string} from {string}') do |option, field|
   select option, from: field
 end
 
+When("I set the {string} date field to {int} days from today") do |field_label, num_days|
+  date_value = (Date.today + num_days).strftime("%Y-%m-%d")
+  fill_in field_label, with: date_value
+end
+
 When('I wait for {int} seconds') do |seconds|
   sleep seconds
 end
