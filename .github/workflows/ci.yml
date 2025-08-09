@@ -50,8 +50,6 @@ jobs:
               - 'app/assets/**'
               - 'app/views/**'
               - 'spec/javascripts/**'
-              - 'package.json'
-              - 'yarn.lock'
               - 'importmap.rb'
             docs:
               - '**/*.md'
@@ -69,7 +67,6 @@ jobs:
               - 'pnpm-lock.yaml'
             actions:
               - '.github/workflows/**'
-              - '.kamal/hooks/**'
               - '.github/dependabot.yml'
 
       - name: Determine labels based on changes
