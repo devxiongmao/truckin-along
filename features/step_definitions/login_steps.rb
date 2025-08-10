@@ -1,10 +1,10 @@
 Given('I am logged in as an admin user') do
-  admin = User.find_by!(email: "john.doe@example.com")
+  admin = User.find_by!(email: "john.doe@logico.ca")
   login_as(admin, scope: :user)
 end
 
 Given('I am logged in as a driver user') do
-  driver = User.find_by!(email: "jane.smith@example.com")
+  driver = User.find_by!(email: "jane.smith@logico.com")
   login_as(driver, scope: :user)
 end
 

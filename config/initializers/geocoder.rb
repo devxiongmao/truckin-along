@@ -17,7 +17,10 @@ if Rails.env.test? || ENV["CI"] == "true" || ENV["GITHUB_ACTIONS"] == "true" || 
     "123 Main St, Anytown, USA",
     "456 Park Ave, Metropolis, USA",
     "789 Broadway, New City, USA",
-    "10 Innovation Way, Tech Park, USA"
+    "10 Innovation Way, Tech Park, USA",
+    "789 Innovation St, New York, USA",
+    "101 Fun St, Minneapolis, USA",
+    "555 Happy Blvd, Charlotte, USA"
   ]
 
   # Add individual stubs for each common address
