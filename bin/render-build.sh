@@ -2,6 +2,7 @@
 # exit on error
 set -o errexit
 
+npm cache clean --force
 npm install
 bundle install
 bundle exec rails assets:precompile
