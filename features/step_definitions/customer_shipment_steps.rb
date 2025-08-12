@@ -11,6 +11,10 @@ Then('I should be on the new shipment creation form') do
   expect(current_path).to eq(new_shipment_path)
 end
 
+Then('I should be on the copy shipment creation form') do
+  expect(current_path).to eq(copy_shipment_path(Shipment.last.id))
+end
+
 Then('I should see a form with fields for shipment information') do
   expect(page).to have_field('Name')
   expect(page).to have_field('Sender name')
