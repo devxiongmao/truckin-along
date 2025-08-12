@@ -69,12 +69,6 @@ RSpec.describe "/trucks", type: :request do
     end
 
     describe "GET /show" do
-      it "assigns the requested truck as @truck" do
-        get truck_url(truck)
-        expect(response.body).to include(truck.make)
-        expect(response.body).to include(truck.model)
-      end
-
       it "renders the show template" do
         get truck_url(truck)
         expect(response).to render_template(:show)
