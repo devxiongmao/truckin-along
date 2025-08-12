@@ -81,9 +81,9 @@ RSpec.describe "/shipment_action_preferences", type: :request do
           expect(company_preference.company_id).not_to eq(nil)
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           patch shipment_action_preference_url(company_preference), params: { shipment_action_preference: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the edit template" do
