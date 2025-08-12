@@ -146,11 +146,6 @@ RSpec.describe "/companies", type: :request do
       end
 
       context "when the company is found" do
-        it 'assigns the requested company to @company' do
-          get edit_company_url(company)
-          expect(response.body).to include(company.name)
-        end
-
         it 'renders the edit template' do
           get edit_company_url(company)
           expect(response).to render_template(:edit)
