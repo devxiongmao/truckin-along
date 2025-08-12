@@ -22,7 +22,7 @@ class DriverManagementsController < ApplicationController
         DriverMailer.send_temp_password(@driver, temp_password).deliver_now
         redirect_to admin_index_path, notice: "Driver account created successfully."
       else
-        render :new, status: :unprocessable_entity, alert: "Unable to create driver account."
+        render :new, status: :unprocessable_content, alert: "Unable to create driver account."
       end
     end
 
@@ -35,7 +35,7 @@ class DriverManagementsController < ApplicationController
       if @driver.update(driver_params)
         redirect_to admin_index_path, notice: "Driver was successfully updated."
       else
-        render :edit, status: :unprocessable_entity
+        render :edit, status: :unprocessable_content
       end
     end
 

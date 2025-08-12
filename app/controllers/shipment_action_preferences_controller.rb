@@ -12,7 +12,7 @@ class ShipmentActionPreferencesController < ApplicationController
     if @preference.update(preference_params)
       redirect_to admin_index_path, notice: "Preference was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

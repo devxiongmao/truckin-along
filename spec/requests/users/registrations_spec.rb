@@ -64,7 +64,7 @@ RSpec.describe "Users::RegistrationsController", type: :request do
 
       it "renders a response with 422 status" do
         post user_registration_path, params: { user: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

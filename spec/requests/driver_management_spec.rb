@@ -110,9 +110,9 @@ RSpec.describe "/driver_managements", type: :request do
           }.not_to change { ActionMailer::Base.deliveries.count }
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           post driver_managements_url, params: { user: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the new template" do
@@ -174,9 +174,9 @@ RSpec.describe "/driver_managements", type: :request do
           expect(driver.first_name).not_to eq(nil)
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           patch driver_management_url(driver), params: { user: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 're-renders the edit template' do

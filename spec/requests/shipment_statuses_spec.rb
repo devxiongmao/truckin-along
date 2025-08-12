@@ -111,9 +111,9 @@ RSpec.describe "/shipment_statuses", type: :request do
           }.to change(ShipmentStatus, :count).by(0)
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           post shipment_statuses_url, params: { shipment_status: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the new template" do
@@ -144,9 +144,9 @@ RSpec.describe "/shipment_statuses", type: :request do
           expect(shipment_status.name).not_to eq(nil)
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           patch shipment_status_url(shipment_status), params: { shipment_status: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "re-renders the edit template" do

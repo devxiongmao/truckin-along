@@ -26,7 +26,7 @@ class TrucksController < ApplicationController
     if @truck.save
       redirect_to admin_index_path, notice: "Truck was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -36,7 +36,7 @@ class TrucksController < ApplicationController
     if @truck.update(truck_params)
       redirect_to admin_index_path, notice: "Truck was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
