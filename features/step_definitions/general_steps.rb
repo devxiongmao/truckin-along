@@ -61,3 +61,11 @@ end
 Then('I should be redirected to the dashboard page') do
   expect(current_path).to eq(dashboard_path)
 end
+
+Then('I should see a {string} button') do |button_text|
+  expect(page).to have_button(button_text)
+end
+
+Then('I should see a {string} link') do |link_text|
+  expect(page).to have_link(link_text)
+end

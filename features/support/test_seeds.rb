@@ -111,7 +111,7 @@ module TestSeeds
     )
 
     ## Customers
-    user10 = User.create!(
+    user8 = User.create!(
       email: "peter.parker@example.com",
       password: "password123",
       first_name: "Peter",
@@ -119,26 +119,6 @@ module TestSeeds
       drivers_license: "PP987654",
       role: 2, # customer
       home_address: "101 Tech Blvd, Silicon Valley, USA",
-      company: nil
-    )
-
-    user11 = User.create!(
-      email: "clark.kent@example.com",
-      password: "password123",
-      first_name: "Clark",
-      last_name: "Kent",
-      role: 2, # customer
-      home_address: "101 Fun St, Minneapolis, USA",
-      company: nil
-    )
-
-    user12 = User.create!(
-      email: "diana.prince@example.com",
-      password: "password123",
-      first_name: "Diana",
-      last_name: "Prince",
-      role: 2, # customer
-      home_address: "202 Amazon Ave, Washington DC, USA",
       company: nil
     )
 
@@ -187,7 +167,7 @@ module TestSeeds
     )
 
     ## SnapShip Solutions trucks
-    truck4 = Truck.create!(
+    truck2 = Truck.create!(
       make: "Peterbilt",
       model: "579",
       year: 2019,
@@ -199,11 +179,11 @@ module TestSeeds
       width: 2500,
       vin: "JH4KA9650MC012345",
       license_plate: "QWE-8523",
-      active: true
+      active: false
     )
 
     ## FastTrack Freight trucks
-    truck6 = Truck.create!(
+    truck3 = Truck.create!(
       make: "Volvo",
       model: "VNL 760",
       year: 2023,
@@ -215,7 +195,7 @@ module TestSeeds
       width: 2550,
       vin: "1M8GDM9A8KP042788",
       license_plate: "XYZ-1234",
-      active: true
+      active: false
     )
 
     ## Forms
@@ -243,7 +223,7 @@ module TestSeeds
       height: 30.0,
       truck: nil,
       shipment_status: nil,
-      user: user10,
+      user: user8,
       company: nil,
       deliver_by: today + 5.days
     )
@@ -261,7 +241,7 @@ module TestSeeds
       height: 30.0,
       truck: nil,
       shipment_status: nil,
-      user: user10,
+      user: user8,
       company: nil,
       deliver_by: today + 5.days
     )
@@ -286,9 +266,6 @@ module TestSeeds
       loaded_date: "2025-08-12 01:36:07.081448000 +0000",
       delivered_date: "2025-08-12 01:42:45.705674000 +0000"
     )
-
-    # Create offers from multiple companies
-    puts "Creating offers from multiple companies..."
 
     # Offers for shipment1 (unclaimed)
     Offer.create!(

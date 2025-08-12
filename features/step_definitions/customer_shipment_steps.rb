@@ -47,7 +47,3 @@ end
 Then('I should see the shipment map') do
   expect(page).to have_css('#shipment-map')
 end
-
-Then('I should see a {string} button') do |button_text|
-  expect(page).to have_button(button_text)
-end
