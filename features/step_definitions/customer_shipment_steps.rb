@@ -2,6 +2,11 @@ Given('I am on the customer shipment page') do
   visit shipments_path
 end
 
+When('I click the {string} link for shipment {string}') do |link_text, shipment_name|
+  row = find('tr', text: shipment_name)
+  within(row) { click_link link_text }
+end
+
 Then('I should be on the new shipment creation form') do
   expect(current_path).to eq(new_shipment_path)
 end
@@ -37,4 +42,8 @@ Then('the previously entered shipment information should still be present') do
   expect(page).to have_field('Receiver name', with: "Clark Kent")
   expect(page).to have_field('Receiver address', with: "123 Main St, Anytown, USA")
   expect(page).to have_field('Weight (kg)', with: '1')
+end
+
+Then('I should see the shipment map') do
+  expect(page).to have_css('#shipment-map')
 end
