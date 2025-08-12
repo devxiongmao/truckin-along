@@ -29,11 +29,6 @@ module TestSeeds
       address: "456 Transport Blvd, Dallas, USA",
       phone_number: "+1-555-456-7890"
     )
-    company4 = Company.create!(
-      name: "Reliable Routes",
-      address: "789 Cargo Way, Seattle, USA",
-      phone_number: "+1-555-321-0987"
-    )
 
     ## LogiCo Express employees
     user1 = User.create!(
@@ -115,29 +110,6 @@ module TestSeeds
       company: company3
     )
 
-    ## Reliable Routes employees
-    user8 = User.create!(
-      email: "emma.wilson@reliableroutes.com",
-      password: "password123",
-      first_name: "Emma",
-      last_name: "Wilson",
-      drivers_license: "EW334455",
-      role: 0, # admin
-      home_address: "555 Delivery Dr, Portland, USA",
-      company: company4
-    )
-
-    user9 = User.create!(
-      email: "frank.garcia@reliableroutes.com",
-      password: "password123",
-      first_name: "Frank",
-      last_name: "Garcia",
-      drivers_license: "FG445566",
-      role: 1, # driver
-      home_address: "666 Transport Tr, Phoenix, USA",
-      company: company4
-    )
-
     ## Customers
     user10 = User.create!(
       email: "peter.parker@example.com",
@@ -170,11 +142,92 @@ module TestSeeds
       company: nil
     )
 
-    [ company1, company2, company3, company4 ].each do |company|
-      %w[claimed_by_company loaded_onto_truck out_for_delivery successfully_delivered].each do |action|
-        ShipmentActionPreference.create!(action: action, company: company, shipment_status: nil)
-      end
-    end
+    ## Shipment Statuses
+    status5_logico = ShipmentStatus.create!(
+      name: "Delivered",
+      company: company1,
+      locked_for_customers: true,
+      closed: true
+    )
+
+    ## LogiCo Express preferences
+    ShipmentActionPreference.create!(action: "claimed_by_company", company: company1, shipment_status_id: nil)
+    ShipmentActionPreference.create!(action: "loaded_onto_truck", company: company1, shipment_status_id: nil)
+    ShipmentActionPreference.create!(action: "out_for_delivery", company: company1, shipment_status: nil)
+    ShipmentActionPreference.create!(action: "successfully_delivered", company: company1, shipment_status: status5_logico)
+
+    ## SnapShip Solutions preferences
+    ShipmentActionPreference.create!(action: "claimed_by_company", company: company2, shipment_status_id: nil)
+    ShipmentActionPreference.create!(action: "loaded_onto_truck", company: company2, shipment_status_id: nil)
+    ShipmentActionPreference.create!(action: "out_for_delivery", company: company2, shipment_status: nil)
+    ShipmentActionPreference.create!(action: "successfully_delivered", company: company2, shipment_status: nil)
+
+    ## FastTrack Freight preferences
+    ShipmentActionPreference.create!(action: "claimed_by_company", company: company3, shipment_status_id: nil)
+    ShipmentActionPreference.create!(action: "loaded_onto_truck", company: company3, shipment_status_id: nil)
+    ShipmentActionPreference.create!(action: "out_for_delivery", company: company3, shipment_status: nil)
+    ShipmentActionPreference.create!(action: "successfully_delivered", company: company3, shipment_status: nil)
+
+
+    # Create trucks
+    ## LogiCo Express trucks
+    truck1 = Truck.create!(
+      make: "Volvo",
+      model: "FH16",
+      year: 2022,
+      mileage: 5000,
+      company: company1,
+      weight: 44000,
+      length: 13600,
+      height: 2600,
+      width: 2500,
+      vin: "1HGCM82633A004352",
+      license_plate: "ABC-1234",
+      active: true
+    )
+
+    ## SnapShip Solutions trucks
+    truck4 = Truck.create!(
+      make: "Peterbilt",
+      model: "579",
+      year: 2019,
+      mileage: 18000,
+      company: company2,
+      weight: 41000,
+      length: 13000,
+      height: 2550,
+      width: 2500,
+      vin: "JH4KA9650MC012345",
+      license_plate: "QWE-8523",
+      active: true
+    )
+
+    ## FastTrack Freight trucks
+    truck6 = Truck.create!(
+      make: "Volvo",
+      model: "VNL 760",
+      year: 2023,
+      mileage: 5000,
+      company: company3,
+      weight: 45000,
+      length: 13600,
+      height: 2800,
+      width: 2550,
+      vin: "1M8GDM9A8KP042788",
+      license_plate: "XYZ-1234",
+      active: true
+    )
+
+    ## Forms
+    form1 = Form.create!(
+      user: user1,
+      company: company1,
+      title: "Maintenance Check",
+      form_type: "Maintenance",
+      content: { notes: "Nothing of note to report", mileage: 4500, oil_changed: true, last_inspection_date: "2025-08-11", tire_pressure_checked: true },
+      submitted_at: "2025-08-12 01:34:10.996113000 +0000",
+      formable: truck1
+    )
 
     ## Shipments
     today = Date.today
@@ -193,6 +246,45 @@ module TestSeeds
       user: user10,
       company: nil,
       deliver_by: today + 5.days
+    )
+
+    ## Shipment that has been moved by two companies
+    shipment2 = Shipment.create!(
+      name: "Documents",
+      sender_name: "Peter Parker",
+      sender_address: "101 Tech Blvd, Silicon Valley, USA",
+      receiver_name: "GadgetCo",
+      receiver_address: "789 Innovation St, New York, USA",
+      weight: 3.5,
+      length: 60.0,
+      width: 40.0,
+      height: 30.0,
+      truck: nil,
+      shipment_status: nil,
+      user: user10,
+      company: nil,
+      deliver_by: today + 5.days
+    )
+
+    # Deliveries
+    delivery1 = Delivery.create!(
+      user: user1,
+      truck: truck1,
+      status: :completed
+    )
+
+    # DeliveryShipments
+    deliveryShipment1 = DeliveryShipment.create!(
+      delivery: delivery1,
+      shipment: shipment2,
+      sender_address: "101 Fun St, Minneapolis, USA",
+      receiver_address: "555 Happy Blvd, Charlotte, USA",
+      sender_latitude: 44.993139,
+      sender_longitude: -93.2491445,
+      receiver_latitude: 41.2645606,
+      receiver_longitude: -95.9965907,
+      loaded_date: "2025-08-12 01:36:07.081448000 +0000",
+      delivered_date: "2025-08-12 01:42:45.705674000 +0000"
     )
 
     # Create offers from multiple companies
