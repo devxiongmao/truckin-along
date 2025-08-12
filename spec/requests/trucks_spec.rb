@@ -168,9 +168,9 @@ RSpec.describe "/trucks", type: :request do
           }.to change(Truck, :count).by(0)
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           post trucks_url, params: { truck: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 're-renders the new template' do
@@ -203,9 +203,9 @@ RSpec.describe "/trucks", type: :request do
           expect(truck.make).not_to eq(nil)
         end
 
-        it "renders an unprocessable_entity response" do
+        it "renders an unprocessable_content response" do
           patch truck_url(truck), params: { truck: invalid_attributes }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 're-renders the edit template' do

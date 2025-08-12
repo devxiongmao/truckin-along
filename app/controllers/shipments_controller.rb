@@ -33,7 +33,7 @@ class ShipmentsController < ApplicationController
     if @shipment.save
       redirect_to @shipment, notice: "Shipment was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

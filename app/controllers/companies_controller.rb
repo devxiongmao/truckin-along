@@ -25,7 +25,7 @@ class CompaniesController < ApplicationController
       redirect_to dashboard_path
     else
       flash.now[:alert] = "Failed to create company."
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -40,7 +40,7 @@ class CompaniesController < ApplicationController
       redirect_to dashboard_path
     else
       flash.now[:alert] = "Failed to update company."
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
