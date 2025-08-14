@@ -176,7 +176,7 @@ module TestSeeds
       length: 13600,
       height: 2600,
       width: 2500,
-      vin: "TBDTBDTBDTBDTBDTB",
+      vin: "1HGCM82633A005432",
       license_plate: "DCE-1234",
       active: false
     )
