@@ -166,8 +166,23 @@ module TestSeeds
       active: true
     )
 
-    ## SnapShip Solutions trucks
     truck2 = Truck.create!(
+      make: "Dodge",
+      model: "RAM",
+      year: 2022,
+      mileage: 5000,
+      company: company1,
+      weight: 44000,
+      length: 13600,
+      height: 2600,
+      width: 2500,
+      vin: "TBDTBDTBDTBDTBDTB",
+      license_plate: "DCE-1234",
+      active: false
+    )
+
+    ## SnapShip Solutions trucks
+    truck3 = Truck.create!(
       make: "Peterbilt",
       model: "579",
       year: 2019,
@@ -183,7 +198,7 @@ module TestSeeds
     )
 
     ## FastTrack Freight trucks
-    truck3 = Truck.create!(
+    truck4 = Truck.create!(
       make: "Volvo",
       model: "VNL 760",
       year: 2023,
