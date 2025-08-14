@@ -40,3 +40,12 @@ Then('I should see {int} offers for shipment {string}') do |expected_count, ship
     expect(page).to have_css('tbody tr', count: expected_count)
   end
 end
+
+When('I withdraw my offer for shipment {string}') do |shipment_name|
+  row = find('tr', text: shipment_name)
+  within(row) do
+    accept_confirm do
+      click_link 'Withdraw'
+    end
+  end
+end
