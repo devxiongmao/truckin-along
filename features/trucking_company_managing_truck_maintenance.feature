@@ -20,7 +20,6 @@ Feature: Trucking Company Managing Truck Maintenance (Driver from Dashboard)
     And I check "Tire pressure has been checked"
     And I fill in "Additional Notes" with "Completed maintenance from dashboard"
     And I click "Confirm & Submit"
-    And I wait
     Then I should see a confirmation message
 
 
