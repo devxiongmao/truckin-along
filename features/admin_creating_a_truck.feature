@@ -97,3 +97,4 @@ Feature: Admin Creating a Truck
     And I check "Tire pressure has been checked"
     And I fill in "Additional Notes" with "Initial maintenance completed"
     And I click "Confirm & Submit"
+    Then I should see a confirmation message
