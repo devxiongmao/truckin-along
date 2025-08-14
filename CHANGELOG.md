@@ -1,12 +1,13 @@
-### From v1.7.4 to HEAD
+### From v1.7.5 to HEAD
 
-- Bump sidekiq from 8.0.6 to 8.0.7 (#461) (31ac74c) by dependabot[bot]
-- Bump sidekiq-cron from 2.3.0 to 2.3.1 (#459) (14b5c98) by dependabot[bot]
-- Bump @eslint/js from 9.32.0 to 9.33.0 (#460) (b99f1c2) by dependabot[bot]
-- Bump actions/checkout from 4 to 5 (#465) (eb23349) by dependabot[bot]
-- Bump eslint from 9.32.0 to 9.33.0 (#463) (fe45bc7) by dependabot[bot]
-- XMDEV-434: Adds customer managing multiple shipments WDIO test (#466) (d1e14ab) by Jon
-- XMDEV-435: Adds customer monitoring shipment WDIO test (#464) (d44ef5e) by Jon
+- Bump jbuilder from 2.13.0 to 2.14.0 (#467) (ee49f51) by dependabot[bot]
+- Bump @typescript-eslint/parser from 8.39.0 to 8.39.1 (#462) (b753b25) by dependabot[bot]
+- XMDEV-473: Fixes form submission on truck maintenance modal (#474) (ca29b88) by Jon
+- XMDEV-440: Adds WDIO test for truck maintenance via the dashboard (#473) (cd7724a) by Jon
+- XMDEV-439: Adds WDIO test for trucking company loading shipments to a truck (#472) (c318344) by Jon
+- XMDEV-438: Adds WDIO test for trucking company issuing a bid for a shipment (#471) (445b4f3) by Jon
+- XMDEV-471: Fix flaky tests in companies and trucks request spec (#470) (2467d2c) by Jon
+- XMDEV-470: Updates unprocessibly_entity to be unprocessibly_content (#469) (34a7f99) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
