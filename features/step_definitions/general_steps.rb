@@ -36,6 +36,13 @@ When('I click {string} in the row that contains {string}') do |button_text, row_
   end
 end
 
+When('I check {string} in the row that contains {string}') do |checkbox_name, row_identifier|
+  table_row = find(:xpath, "//tr[td[contains(text(), '#{row_identifier}')]]")
+  within(table_row) do
+    check checkbox_name
+  end
+end
+
 Then('I should see an error message') do
   expect(page).to have_content('error')
 end
@@ -68,4 +75,8 @@ end
 
 Then('I should see a {string} link') do |link_text|
   expect(page).to have_link(link_text)
+end
+
+Then('I should see a {string} option') do |option_text|
+  expect(page).to have_selector('option', text: option_text)
 end
