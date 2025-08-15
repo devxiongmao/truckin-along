@@ -261,11 +261,34 @@ module TestSeeds
       deliver_by: today + 5.days
     )
 
+    shipment3 = Shipment.create!(
+      name: "Medical Equipment",
+      sender_name: "Peter Parker",
+      sender_address: "101 Tech Blvd, Silicon Valley, USA",
+      receiver_name: "GadgetCo",
+      receiver_address: "789 Innovation St, New York, USA",
+      weight: 3.5,
+      length: 60.0,
+      width: 40.0,
+      height: 30.0,
+      truck: truck1,
+      shipment_status: nil,
+      user: user8,
+      company: company1,
+      deliver_by: today + 5.days
+    )
+
     # Deliveries
     delivery1 = Delivery.create!(
       user: user1,
       truck: truck1,
       status: :completed
+    )
+
+    delivery2 = Delivery.create!(
+      user: nil,
+      truck: truck1,
+      status: :scheduled
     )
 
     # DeliveryShipments
@@ -280,6 +303,19 @@ module TestSeeds
       receiver_longitude: -95.9965907,
       loaded_date: "2025-08-12 01:36:07.081448000 +0000",
       delivered_date: "2025-08-12 01:42:45.705674000 +0000"
+    )
+
+    deliveryShipment2 = DeliveryShipment.create!(
+      delivery: delivery2,
+      shipment: shipment3,
+      sender_address: "101 Tech Blvd, Silicon Valley, USA",
+      receiver_address: "789 Innovation St, New York, USA",
+      sender_latitude: 44.993139,
+      sender_longitude: -93.2491445,
+      receiver_latitude: 41.2645606,
+      receiver_longitude: -95.9965907,
+      loaded_date: "2025-08-12 01:36:07.081448000 +0000",
+      delivered_date: nil
     )
 
     # Offers for shipment1 (unclaimed)
