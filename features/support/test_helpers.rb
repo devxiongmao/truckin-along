@@ -19,3 +19,4 @@ end
 
 Capybara.default_driver = :selenium
 Capybara.javascript_driver = :selenium
+
