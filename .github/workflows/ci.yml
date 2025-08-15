@@ -362,23 +362,33 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:13
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
-      - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config firefox
-
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential \
+            git \
+            libpq-dev \
+            pkg-config \
+            wget \
+            curl \
+            xvfb
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -387,29 +397,44 @@ jobs:
           bundler-cache: true
 
       - name: Setup Firefox
-        uses: browser-actions/setup-firefox@latest
+        uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: latest
 
-      - name: Install GeckoDriver
+      - name: Get GeckoDriver version
+        id: geckodriver-version
         run: |
           GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
+          echo "version=$GECKODRIVER_VERSION" >> $GITHUB_OUTPUT
+          echo "GeckoDriver version: $GECKODRIVER_VERSION"
+
+      - name: Cache GeckoDriver
+        id: cache-geckodriver
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/geckodriver
+          key: geckodriver-${{ runner.os }}-${{ steps.geckodriver-version.outputs.version }}
+
+      - name: Install GeckoDriver
+        if: steps.cache-geckodriver.outputs.cache-hit != 'true'
+        run: |
+          GECKODRIVER_VERSION=${{ steps.geckodriver-version.outputs.version }}
           wget -N "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
           tar -xzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
           rm geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
 
-      - name: Cache Firefox Driver
-        uses: actions/cache@v4
-        with:
-          path: /usr/local/bin/geckodriver
-          key: geckodriver-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Verify GeckoDriver installation
+        run: |
+          which geckodriver
+          geckodriver --version
+          ls -la /usr/local/bin/geckodriver
 
       - name: Wait for PostgreSQL
         run: |
-          for i in {1..10}; do
-            if pg_isready -h localhost -p 5432; then
+          for i in {1..15}; do
+            if pg_isready -h localhost -p 5432 -U postgres; then
               echo "PostgreSQL is ready";
               exit 0;
             fi;
@@ -419,16 +444,16 @@ jobs:
           echo "PostgreSQL did not start in time";
           exit 1;
 
-      - name: Disable Geocoder for tests
+      - name: Setup test environment
         run: |
-          echo "Disabling Geocoder for CI run..."
-          mkdir -p tmp
+          echo "Setting up test environment..."
+          mkdir -p tmp/screenshots
           echo "GEOCODER_DISABLED=true" >> .env.test
 
       - name: Setup Test Database
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
           GEOCODER_DISABLED: true
         run: |
           bundle exec rake geocoder:prepare_for_seeds
@@ -437,16 +462,24 @@ jobs:
       - name: Run Cucumber Tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: bundle exec cucumber
+          DATABASE_URL: postgres://postgres@localhost:5432/test
+          DISPLAY: ":99"
+        run: |
+          # Start virtual display for headless browser testing
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
 
-      - name: Keep screenshots from failed Cucumber tests
+          # Run cucumber tests
+          bundle exec cucumber
+
+      - name: Upload screenshots from failed tests
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cucumber-screenshots
+          name: cucumber-screenshots-${{ github.run_id }}
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+          retention-days: 7
 
   create-release:
     name: Create GitHub Release
