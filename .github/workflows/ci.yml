@@ -21,6 +21,7 @@ jobs:
       backend_changes: ${{ steps.filter.outputs.backend }}
       frontend_changes: ${{ steps.filter.outputs.frontend }}
       dependency_changes: ${{ steps.filter.outputs.dependencies }}
+      cucumber: ${{ steps.filter.outputs.cucumber }}
       has_labels: ${{ steps.determine-labels.outputs.has_labels }}
       labels: ${{ steps.determine-labels.outputs.labels }}
     steps:
