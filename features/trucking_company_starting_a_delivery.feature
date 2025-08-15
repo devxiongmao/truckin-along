@@ -12,4 +12,5 @@ Feature: Trucking Company Starting a Delivery
     When I check all required inspection checkboxes
     And I click "Confirm & Start Delivery"
     Then I should see a success message confirming the delivery was created
+    And I should see the shipment map
     And I should be redirected to the delivery show page
