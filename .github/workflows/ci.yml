@@ -348,10 +348,100 @@ jobs:
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
 
+  cucumber_test:
+    runs-on: ubuntu-latest
+    needs: analyze_changes
+    if: needs.analyze_changes.outputs.cucumber == 'true' || needs.analyze_changes.outputs.backend_changes == 'true' || needs.analyze_changes.outputs.frontend_changes == 'true' ||needs.analyze_changes.outputs.dependency_changes == 'true' || startsWith(github.head_ref, 'release-')
+    timeout-minutes: 30
+    env:
+      CI: true
+      DISABLE_GEOCODER: true
+      RAILS_ENV: test
+      DATABASE_TIMEOUT: 30000
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config google-chrome-stable
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      - name: Cache Chrome Driver
+        uses: actions/cache@v4
+        with:
+          path: ~/.chromedriver-helper
+          key: chromedriver-${{ runner.os }}
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..10}; do
+            if pg_isready -h localhost -p 5432; then
+              echo "PostgreSQL is ready";
+              exit 0;
+            fi;
+            echo "Waiting for PostgreSQL... ($i)";
+            sleep 2;
+          done;
+          echo "PostgreSQL did not start in time";
+          exit 1;
+
+      - name: Disable Geocoder for tests
+        run: |
+          echo "Disabling Geocoder for CI run..."
+          mkdir -p tmp
+          echo "GEOCODER_DISABLED=true" >> .env.test
+
+      - name: Setup Test Database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          GEOCODER_DISABLED: true
+        run: |
+          bundle exec rake geocoder:prepare_for_seeds
+          bundle exec rake db:create db:schema:load
+
+      - name: Run Cucumber Tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bundle exec cucumber
+
+      - name: Keep screenshots from failed Cucumber tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cucumber-screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
+
   create-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [test, test_js, scan_ruby, scan_js, lint, lint_js]
+    needs: [test, test_js, cucumber_test, scan_ruby, scan_js, lint, lint_js]
     if: startsWith(github.head_ref, 'release-') && success()
     permissions:
       contents: write
