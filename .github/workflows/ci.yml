@@ -391,11 +391,20 @@ jobs:
         with:
           firefox-version: latest
 
+      - name: Install GeckoDriver
+        run: |
+          GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4)
+          wget -N "https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz"
+          tar -xzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
+          chmod +x geckodriver
+          sudo mv geckodriver /usr/local/bin/
+          rm geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
+
       - name: Cache Firefox Driver
         uses: actions/cache@v4
         with:
-          path: ~/.geckodriver-helper
-          key: geckodriver-${{ runner.os }}
+          path: /usr/local/bin/geckodriver
+          key: geckodriver-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Wait for PostgreSQL
         run: |
