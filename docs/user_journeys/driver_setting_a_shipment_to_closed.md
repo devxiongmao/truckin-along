@@ -1,4 +1,4 @@
-# User Journey: Driver Setting a Delivery to Be Closed
+# User Journey: Driver Setting a Shipment to Be Closed
 
 ## Persona
 

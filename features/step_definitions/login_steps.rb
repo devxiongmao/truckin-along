@@ -3,8 +3,8 @@ Given('I am logged in as an admin user') do
   login_as(admin, scope: :user)
 end
 
-Given('I am logged in as a driver user') do
-  driver = User.find_by!(email: "jane.smith@logico.com")
+Given('I am logged in as a driver user with email {string}') do | email|
+  driver = User.find_by!(email: email)
   login_as(driver, scope: :user)
 end
 
