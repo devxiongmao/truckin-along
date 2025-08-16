@@ -677,8 +677,362 @@ delivery_shipment6_2 = DeliveryShipment.create!(
   delivered_date: 2.days.ago
 )
 
-# Create additional shipments for offers
+# ===== NEW ENHANCED DELIVERY SCENARIOS =====
+
+# Shipment 7: Cross-country shipment that passes through multiple companies
+puts "Creating complex cross-country shipments..."
+
 shipment7 = Shipment.create!(
+  name: "Industrial Equipment",
+  sender_name: "ManufacturingCorp",
+  sender_address: "500 Industry Blvd, Detroit, USA",
+  receiver_name: "Pacific Industries",
+  receiver_address: "888 Harbor Way, Los Angeles, USA",
+  weight: 25.0,
+  length: 180.0,
+  width: 120.0,
+  height: 100.0,
+  truck: truck8,
+  shipment_status: status3_reliable,
+  user: user10,
+  company: company4,
+  deliver_by: today + 8.days
+)
+
+# First leg: LogiCo picks up and delivers to hub (COMPLETED)
+delivery7_1 = Delivery.create!(
+  user: user2,
+  truck: truck1,
+  status: :completed
+)
+
+delivery_shipment7_1 = DeliveryShipment.create!(
+  delivery: delivery7_1,
+  shipment: shipment7,
+  sender_address: "500 Industry Blvd, Detroit, USA",
+  receiver_address: "456 Transport Blvd, Dallas, USA", # FastTrack hub
+  loaded_date: 15.days.ago,
+  delivered_date: 12.days.ago
+)
+
+# Second leg: FastTrack takes over and delivers to another hub (COMPLETED)
+delivery7_2 = Delivery.create!(
+  user: user7,
+  truck: truck6,
+  status: :completed
+)
+
+delivery_shipment7_2 = DeliveryShipment.create!(
+  delivery: delivery7_2,
+  shipment: shipment7,
+  sender_address: "456 Transport Blvd, Dallas, USA",
+  receiver_address: "789 Cargo Way, Seattle, USA", # Reliable Routes hub
+  loaded_date: 11.days.ago,
+  delivered_date: 8.days.ago
+)
+
+# Third leg: Reliable Routes final delivery (IN PROGRESS)
+delivery7_3 = Delivery.create!(
+  user: user9,
+  truck: truck8,
+  status: :in_progress
+)
+
+delivery_shipment7_3 = DeliveryShipment.create!(
+  delivery: delivery7_3,
+  shipment: shipment7,
+  sender_address: "789 Cargo Way, Seattle, USA",
+  receiver_address: "888 Harbor Way, Los Angeles, USA",
+  loaded_date: 2.days.ago,
+  delivered_date: nil
+)
+
+# Shipment 8: Pharmaceutical shipment with multiple handoffs
+shipment8 = Shipment.create!(
+  name: "Pharmaceutical Supplies",
+  sender_name: "MedPharm Inc",
+  sender_address: "200 Pharma Dr, Boston, USA",
+  receiver_name: "Regional Hospital",
+  receiver_address: "777 Health Plaza, Phoenix, USA",
+  weight: 12.0,
+  length: 100.0,
+  width: 80.0,
+  height: 60.0,
+  truck: truck5,
+  shipment_status: status2_snapship,
+  user: user11,
+  company: company2,
+  deliver_by: today + 3.days
+)
+
+# First leg: FastTrack initial pickup and hub delivery (COMPLETED)
+delivery8_1 = Delivery.create!(
+  user: user7,
+  truck: truck6,
+  status: :completed
+)
+
+delivery_shipment8_1 = DeliveryShipment.create!(
+  delivery: delivery8_1,
+  shipment: shipment8,
+  sender_address: "200 Pharma Dr, Boston, USA",
+  receiver_address: "840 Speedy Drive, Miami, USA", # SnapShip hub
+  loaded_date: 6.days.ago,
+  delivered_date: 4.days.ago
+)
+
+# Second leg: SnapShip final delivery (IN PROGRESS)
+delivery8_2 = Delivery.create!(
+  user: user5,
+  truck: truck5,
+  status: :in_progress
+)
+
+delivery_shipment8_2 = DeliveryShipment.create!(
+  delivery: delivery8_2,
+  shipment: shipment8,
+  sender_address: "840 Speedy Drive, Miami, USA",
+  receiver_address: "777 Health Plaza, Phoenix, USA",
+  loaded_date: 1.day.ago,
+  delivered_date: nil
+)
+
+# Shipment 9: Luxury goods with failed delivery requiring re-routing
+shipment9 = Shipment.create!(
+  name: "Luxury Jewelry Collection",
+  sender_name: "Diamond Elite",
+  sender_address: "333 Luxury Lane, New York, USA",
+  receiver_name: "Prestige Jewelers",
+  receiver_address: "555 Elegance St, San Francisco, USA",
+  weight: 2.0,
+  length: 30.0,
+  width: 20.0,
+  height: 15.0,
+  truck: truck4,
+  shipment_status: status2_snapship,
+  user: user12,
+  company: company2,
+  deliver_by: today + 7.days
+)
+
+# First attempt: LogiCo failed delivery (security issue) (COMPLETED)
+delivery9_1 = Delivery.create!(
+  user: user3,
+  truck: truck2,
+  status: :completed
+)
+
+delivery_shipment9_1 = DeliveryShipment.create!(
+  delivery: delivery9_1,
+  shipment: shipment9,
+  sender_address: "333 Luxury Lane, New York, USA",
+  receiver_address: "555 Elegance St, San Francisco, USA",
+  loaded_date: 10.days.ago,
+  delivered_date: nil # Failed - security protocols not met
+)
+
+# Second attempt: Re-routed through SnapShip for specialized handling (IN PROGRESS)
+delivery9_2 = Delivery.create!(
+  user: user5,
+  truck: truck4,
+  status: :in_progress
+)
+
+delivery_shipment9_2 = DeliveryShipment.create!(
+  delivery: delivery9_2,
+  shipment: shipment9,
+  sender_address: "333 Luxury Lane, New York, USA",
+  receiver_address: "555 Elegance St, San Francisco, USA",
+  loaded_date: 3.days.ago,
+  delivered_date: nil
+)
+
+# Shipment 10: Automotive parts with express delivery across companies
+shipment10 = Shipment.create!(
+  name: "Automotive Parts",
+  sender_name: "AutoSupply Co",
+  sender_address: "150 Motor Pkwy, Detroit, USA",
+  receiver_name: "Speed Garage",
+  receiver_address: "432 Racing Ave, Las Vegas, USA",
+  weight: 18.5,
+  length: 120.0,
+  width: 80.0,
+  height: 70.0,
+  truck: truck6,
+  shipment_status: status4_fasttrack,
+  user: user10,
+  company: company3,
+  deliver_by: today + 2.days
+)
+
+# Single express delivery by FastTrack (COMPLETED)
+delivery10 = Delivery.create!(
+  user: user7,
+  truck: truck6,
+  status: :completed
+)
+
+delivery_shipment10 = DeliveryShipment.create!(
+  delivery: delivery10,
+  shipment: shipment10,
+  sender_address: "150 Motor Pkwy, Detroit, USA",
+  receiver_address: "432 Racing Ave, Las Vegas, USA",
+  loaded_date: 5.days.ago,
+  delivered_date: 3.days.ago
+)
+
+# Shipment 11: Artwork requiring special handling through multiple specialists
+shipment11 = Shipment.create!(
+  name: "Fine Art Collection",
+  sender_name: "Metropolitan Museum",
+  sender_address: "100 Museum Mile, New York, USA",
+  receiver_name: "West Coast Gallery",
+  receiver_address: "250 Art District, Los Angeles, USA",
+  weight: 15.0,
+  length: 150.0,
+  width: 100.0,
+  height: 80.0,
+  truck: truck1,
+  shipment_status: status5_logico,
+  user: user11,
+  company: company1,
+  deliver_by: today + 14.days
+)
+
+# First leg: LogiCo climate-controlled transport to hub (COMPLETED)
+delivery11_1 = Delivery.create!(
+  user: user2,
+  truck: truck1,
+  status: :completed
+)
+
+delivery_shipment11_1 = DeliveryShipment.create!(
+  delivery: delivery11_1,
+  shipment: shipment11,
+  sender_address: "100 Museum Mile, New York, USA",
+  receiver_address: "789 Cargo Way, Seattle, USA", # Reliable Routes specialty hub
+  loaded_date: 20.days.ago,
+  delivered_date: 17.days.ago
+)
+
+# Second leg: Reliable Routes final specialized delivery (COMPLETED)
+delivery11_2 = Delivery.create!(
+  user: user9,
+  truck: truck8,
+  status: :completed
+)
+
+delivery_shipment11_2 = DeliveryShipment.create!(
+  delivery: delivery11_2,
+  shipment: shipment11,
+  sender_address: "789 Cargo Way, Seattle, USA",
+  receiver_address: "250 Art District, Los Angeles, USA",
+  loaded_date: 16.days.ago,
+  delivered_date: 14.days.ago
+)
+
+# Shipment 12: Emergency medical supplies with multiple attempts
+shipment12 = Shipment.create!(
+  name: "Emergency Medical Kit",
+  sender_name: "Emergency Supply Corp",
+  sender_address: "400 Emergency Blvd, Houston, USA",
+  receiver_name: "Rural Clinic",
+  receiver_address: "50 Country Rd, Bozeman, USA",
+  weight: 6.0,
+  length: 70.0,
+  width: 50.0,
+  height: 40.0,
+  truck: truck2,
+  shipment_status: status5_logico,
+  user: user12,
+  company: company1,
+  deliver_by: today + 1.day
+)
+
+# First attempt: Weather delay (COMPLETED)
+delivery12_1 = Delivery.create!(
+  user: user3,
+  truck: truck2,
+  status: :completed
+)
+
+delivery_shipment12_1 = DeliveryShipment.create!(
+  delivery: delivery12_1,
+  shipment: shipment12,
+  sender_address: "400 Emergency Blvd, Houston, USA",
+  receiver_address: "50 Country Rd, Bozeman, USA",
+  loaded_date: 8.days.ago,
+  delivered_date: nil # Weather delay
+)
+
+# Second attempt: Successful emergency delivery (COMPLETED)
+delivery12_2 = Delivery.create!(
+  user: user2,
+  truck: truck1,
+  status: :completed
+)
+
+delivery_shipment12_2 = DeliveryShipment.create!(
+  delivery: delivery12_2,
+  shipment: shipment12,
+  sender_address: "400 Emergency Blvd, Houston, USA",
+  receiver_address: "50 Country Rd, Bozeman, USA",
+  loaded_date: 4.days.ago,
+  delivered_date: 2.days.ago
+)
+
+# Shipment 13: Technology equipment with sequential company handoffs
+shipment13 = Shipment.create!(
+  name: "Server Equipment",
+  sender_name: "TechManufacturing",
+  sender_address: "600 Silicon Way, Austin, USA",
+  receiver_name: "DataCenter West",
+  receiver_address: "900 Cloud Ave, Seattle, USA",
+  weight: 45.0,
+  length: 200.0,
+  width: 150.0,
+  height: 120.0,
+  truck: truck4,
+  shipment_status: status1_snapship,
+  user: user10,
+  company: company2,
+  deliver_by: today + 5.days
+)
+
+# First leg: FastTrack regional transport (COMPLETED)
+delivery13_1 = Delivery.create!(
+  user: user7,
+  truck: truck6,
+  status: :completed
+)
+
+delivery_shipment13_1 = DeliveryShipment.create!(
+  delivery: delivery13_1,
+  shipment: shipment13,
+  sender_address: "600 Silicon Way, Austin, USA",
+  receiver_address: "840 Speedy Drive, Miami, USA", # SnapShip hub for specialized handling
+  loaded_date: 7.days.ago,
+  delivered_date: 5.days.ago
+)
+
+# Second leg: SnapShip scheduled for final delivery
+delivery13_2 = Delivery.create!(
+  user: user5,
+  truck: truck4,
+  status: :scheduled
+)
+
+delivery_shipment13_2 = DeliveryShipment.create!(
+  delivery: delivery13_2,
+  shipment: shipment13,
+  sender_address: "840 Speedy Drive, Miami, USA",
+  receiver_address: "900 Cloud Ave, Seattle, USA",
+  loaded_date: nil,
+  delivered_date: nil
+)
+
+# Create additional shipments for offers
+shipment14 = Shipment.create!(
   name: "Home Appliances",
   sender_name: "ApplianceDepot",
   sender_address: "67 Power Ln, Houston, USA",
@@ -695,7 +1049,7 @@ shipment7 = Shipment.create!(
   deliver_by: today + 7.days
 )
 
-shipment8 = Shipment.create!(
+shipment15 = Shipment.create!(
   name: "Toys and Games",
   sender_name: "ToyFactory",
   sender_address: "101 Fun St, Minneapolis, USA",
@@ -712,7 +1066,7 @@ shipment8 = Shipment.create!(
   deliver_by: today + 10.days
 )
 
-shipment9 = Shipment.create!(
+shipment16 = Shipment.create!(
   name: "Office Supplies",
   sender_name: "OfficeMart",
   sender_address: "987 Work Ave, Philadelphia, USA",
@@ -732,9 +1086,9 @@ shipment9 = Shipment.create!(
 # Create offers from multiple companies
 puts "Creating offers from multiple companies..."
 
-# Offers for shipment8 (unclaimed)
+# Offers for shipment15 (unclaimed)
 Offer.create!(
-  shipment: shipment8,
+  shipment: shipment15,
   company: company1,
   status: :issued,
   reception_address: "101 Fun St, Minneapolis, USA",
@@ -747,7 +1101,7 @@ Offer.create!(
 )
 
 Offer.create!(
-  shipment: shipment8,
+  shipment: shipment15,
   company: company2,
   status: :issued,
   reception_address: "101 Fun St, Minneapolis, USA",
@@ -760,7 +1114,7 @@ Offer.create!(
 )
 
 Offer.create!(
-  shipment: shipment8,
+  shipment: shipment15,
   company: company3,
   status: :issued,
   reception_address: "101 Fun St, Minneapolis, USA",
@@ -772,9 +1126,9 @@ Offer.create!(
   notes: "Premium service with tracking"
 )
 
-# Offers for shipment9 (unclaimed)
+# Offers for shipment16 (unclaimed)
 Offer.create!(
-  shipment: shipment9,
+  shipment: shipment16,
   company: company2,
   status: :issued,
   reception_address: "987 Work Ave, Philadelphia, USA",
@@ -787,7 +1141,7 @@ Offer.create!(
 )
 
 Offer.create!(
-  shipment: shipment9,
+  shipment: shipment16,
   company: company4,
   status: :issued,
   reception_address: "987 Work Ave, Philadelphia, USA",
@@ -819,6 +1173,22 @@ Rating.create!(
   comment: "Excellent delivery service. Furniture arrived in perfect condition."
 )
 
+Rating.create!(
+  company: company1,
+  user: user11,
+  delivery_shipment: delivery_shipment11_1,
+  stars: 5,
+  comment: "Perfect climate-controlled transport for our artwork. Highly professional."
+)
+
+Rating.create!(
+  company: company1,
+  user: user12,
+  delivery_shipment: delivery_shipment12_2,
+  stars: 5,
+  comment: "Excellent emergency response! Got our medical supplies delivered despite weather delays."
+)
+
 # Ratings for SnapShip Solutions
 Rating.create!(
   company: company2,
@@ -826,6 +1196,22 @@ Rating.create!(
   delivery_shipment: delivery_shipment6_2,
   stars: 3,
   comment: "Delivery was delayed, but eventually arrived safely."
+)
+
+Rating.create!(
+  company: company2,
+  user: user12,
+  delivery_shipment: delivery_shipment9_2,
+  stars: 4,
+  comment: "Much better security protocols than previous carrier. Jewelry arrived safely."
+)
+
+Rating.create!(
+  company: company2,
+  user: user11,
+  delivery_shipment: delivery_shipment8_2,
+  stars: 4,
+  comment: "Good handling of pharmaceutical supplies. Temperature controlled as requested."
 )
 
 # Ratings for FastTrack Freight
@@ -837,6 +1223,22 @@ Rating.create!(
   comment: "Good service, but had to correct the delivery address."
 )
 
+Rating.create!(
+  company: company3,
+  user: user10,
+  delivery_shipment: delivery_shipment10,
+  stars: 5,
+  comment: "Fantastic express service! Automotive parts arrived exactly when needed."
+)
+
+Rating.create!(
+  company: company3,
+  user: user11,
+  delivery_shipment: delivery_shipment8_1,
+  stars: 4,
+  comment: "Reliable first leg of cross-country pharmaceutical delivery."
+)
+
 # Ratings for Reliable Routes
 Rating.create!(
   company: company4,
@@ -844,6 +1246,22 @@ Rating.create!(
   delivery_shipment: delivery_shipment5,
   stars: 5,
   comment: "Perfect delivery service. Books arrived on time and in excellent condition."
+)
+
+Rating.create!(
+  company: company4,
+  user: user10,
+  delivery_shipment: delivery_shipment7_3,
+  stars: 4,
+  comment: "Great final leg service for our industrial equipment cross-country shipment."
+)
+
+Rating.create!(
+  company: company4,
+  user: user11,
+  delivery_shipment: delivery_shipment11_2,
+  stars: 5,
+  comment: "Exceptional specialized handling for fine art. White glove service!"
 )
 
 # Create forms for trucks and deliveries
@@ -908,6 +1326,38 @@ Form.create!(
     destination: "321 Style St, Boston, USA",
     start_time: 7.days.ago,
     items: [ "Furniture Set", "Assembly Instructions" ]
+  }
+)
+
+# Emergency delivery form
+Form.create!(
+  user: user2,
+  company: company1,
+  title: "Emergency Delivery Report",
+  form_type: "Emergency Delivery",
+  submitted_at: 2.days.ago,
+  formable: delivery12_2,
+  content: {
+    priority_level: "Critical",
+    weather_conditions: "Severe storm cleared",
+    delivery_method: "Direct route after weather delay",
+    recipient_notification: "Hospital notified of arrival"
+  }
+)
+
+# Specialized handling form for artwork
+Form.create!(
+  user: user9,
+  company: company4,
+  title: "Specialized Cargo Report",
+  form_type: "Specialized Handling",
+  submitted_at: 14.days.ago,
+  formable: delivery11_2,
+  content: {
+    cargo_type: "Fine Art",
+    special_requirements: "Climate controlled, vibration dampening, secured transport",
+    insurance_value: 500000,
+    handling_notes: "White glove service, museum-quality packaging maintained"
   }
 )
 
@@ -998,6 +1448,40 @@ Shipment.create!([
     user: user11,
     company: nil,
     deliver_by: today + 13.days
+  },
+
+  {
+    name: "Scientific Instruments",
+    sender_name: "LabTech Solutions",
+    sender_address: "123 Research Pkwy, Cambridge, USA",
+    receiver_name: "University Lab",
+    receiver_address: "456 Campus Dr, Berkeley, USA",
+    weight: 8.5,
+    length: 90.0,
+    width: 60.0,
+    height: 50.0,
+    truck: nil,
+    shipment_status: nil,
+    user: user12,
+    company: nil,
+    deliver_by: today + 16.days
+  },
+
+  {
+    name: "Restaurant Equipment",
+    sender_name: "Commercial Kitchen Co",
+    sender_address: "789 Chef Way, Chicago, USA",
+    receiver_name: "Bistro Downtown",
+    receiver_address: "321 Culinary St, Portland, USA",
+    weight: 35.0,
+    length: 180.0,
+    width: 120.0,
+    height: 90.0,
+    truck: nil,
+    shipment_status: nil,
+    user: user10,
+    company: nil,
+    deliver_by: today + 18.days
   }
 ])
 
@@ -1014,3 +1498,13 @@ puts "  - #{Rating.count} ratings"
 puts "  - #{Form.count} forms"
 puts "  - #{ShipmentStatus.count} shipment statuses"
 puts "  - #{ShipmentActionPreference.count} shipment action preferences"
+
+puts "\nDelivery Scenarios Created:"
+puts "  - Simple single-company deliveries"
+puts "  - Multiple delivery attempts within same company"
+puts "  - Cross-country shipments through multiple companies"
+puts "  - Failed deliveries with re-routing"
+puts "  - Emergency deliveries with weather delays"
+puts "  - Specialized cargo (art, pharmaceuticals, luxury goods)"
+puts "  - Express deliveries"
+puts "  - Sequential company handoffs"
