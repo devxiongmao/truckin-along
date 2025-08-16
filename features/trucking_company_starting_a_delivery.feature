@@ -5,7 +5,7 @@ Feature: Trucking Company Starting a Delivery
 
   @javascript
   Scenario: Driver starts a delivery
-    Given I am logged in as a driver user
+    Given I am logged in as a driver user with email "jane.smith@logico.com"
     Given I am on the deliveries start page
     When I click "Initiate" next to the "Volvo FH16" truck
     Then I should see a pre-delivery inspection modal
@@ -13,4 +13,4 @@ Feature: Trucking Company Starting a Delivery
     And I click "Confirm & Start Delivery"
     Then I should see a success message confirming the delivery was created
     And I should see the shipment map
-    And I should be redirected to the delivery show page
+    And I should be on the delivery show page

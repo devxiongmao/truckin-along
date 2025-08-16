@@ -181,8 +181,23 @@ module TestSeeds
       active: false
     )
 
-    ## SnapShip Solutions trucks
     truck3 = Truck.create!(
+      make: "Peterbilt",
+      model: "870",
+      year: 2022,
+      mileage: 5000,
+      company: company1,
+      weight: 44000,
+      length: 13600,
+      height: 2600,
+      width: 2500,
+      vin: "JH4KA9650MC056789",
+      license_plate: "EWQ-1234",
+      active: true
+    )
+
+    ## SnapShip Solutions trucks
+    truck4 = Truck.create!(
       make: "Peterbilt",
       model: "579",
       year: 2019,
@@ -198,7 +213,7 @@ module TestSeeds
     )
 
     ## FastTrack Freight trucks
-    truck4 = Truck.create!(
+    truck5 = Truck.create!(
       make: "Volvo",
       model: "VNL 760",
       year: 2023,
@@ -278,6 +293,23 @@ module TestSeeds
       deliver_by: today + 5.days
     )
 
+    shipment4 = Shipment.create!(
+      name: "Comic Books",
+      sender_name: "Peter Parker",
+      sender_address: "101 Tech Blvd, Silicon Valley, USA",
+      receiver_name: "GadgetCo",
+      receiver_address: "789 Innovation St, New York, USA",
+      weight: 3.5,
+      length: 60.0,
+      width: 40.0,
+      height: 30.0,
+      truck: truck3,
+      shipment_status: nil,
+      user: user8,
+      company: company1,
+      deliver_by: today + 5.days
+    )
+
     # Deliveries
     delivery1 = Delivery.create!(
       user: user1,
@@ -289,6 +321,12 @@ module TestSeeds
       user: nil,
       truck: truck1,
       status: :scheduled
+    )
+
+    delivery3 = Delivery.create!(
+      user: user3,
+      truck: truck3,
+      status: :in_progress
     )
 
     # DeliveryShipments
@@ -308,6 +346,19 @@ module TestSeeds
     deliveryShipment2 = DeliveryShipment.create!(
       delivery: delivery2,
       shipment: shipment3,
+      sender_address: "101 Tech Blvd, Silicon Valley, USA",
+      receiver_address: "789 Innovation St, New York, USA",
+      sender_latitude: 44.993139,
+      sender_longitude: -93.2491445,
+      receiver_latitude: 41.2645606,
+      receiver_longitude: -95.9965907,
+      loaded_date: "2025-08-12 01:36:07.081448000 +0000",
+      delivered_date: nil
+    )
+
+    deliveryShipment3 = DeliveryShipment.create!(
+      delivery: delivery3,
+      shipment: shipment4,
       sender_address: "101 Tech Blvd, Silicon Valley, USA",
       receiver_address: "789 Innovation St, New York, USA",
       sender_latitude: 44.993139,
