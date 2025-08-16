@@ -32,6 +32,24 @@ When('I click {string} for a shipment') do |button_text|
   end
 end
 
+When('I enter {string} in the odometer reading field') do |odometer_value|
+  within('[data-complete-delivery-target="modal"]') do
+    fill_in('odometer-reading', with: odometer_value)
+  end
+end
+
+When('I submit the completion form') do
+  within('[data-complete-delivery-target="modal"]') do
+    find('button[data-action="click->complete-delivery#submitWithOdometer"]').click
+  end
+end
+
+When('I click "Yes" in the confirmation modal') do
+  within('[data-complete-delivery-target="modal"]') do
+    find('[data-complete-delivery-target="confirmBtn"]').click
+  end
+end
+
 Then('I should see a pre-delivery inspection modal') do
   expect(page).to have_css('#initiate-modal')
   expect(page).to have_content('Pre-Delivery Inspection Checklist')
@@ -47,10 +65,30 @@ Then('I should be on the delivery show page') do
   expect(current_path).to match(/\/deliveries\/\d+/)
 end
 
+Then('I should be on the deliveries start page') do
+  expect(current_path).to match(/\/deliveries\/start/)
+end
+
 Then('I should see a {string} link for each shipment') do |link_text|
   expect(page).to have_link(link_text)
 end
 
 Then('I should be on the shipment edit page') do
   expect(current_path).to match(/\/shipments\/\d+\/edit/)
+end
+
+Then('I should see a confirmation modal') do
+  expect(page).to have_css('[data-complete-delivery-target="modal"]')
+  expect(page).to have_content('Mark this delivery as complete?')
+end
+
+Then('I should see an odometer reading field') do
+  within('[data-complete-delivery-target="modal"]') do
+    expect(page).to have_css('[data-complete-delivery-target="odometerContainer"]')
+    expect(page).to have_field('odometer-reading', type: 'number')
+  end
+end
+
+Then('I should see an error message {string}') do |message|
+  expect(page).to have_content(message)
 end
