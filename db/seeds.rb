@@ -1329,38 +1329,6 @@ Form.create!(
   }
 )
 
-# Emergency delivery form
-Form.create!(
-  user: user2,
-  company: company1,
-  title: "Emergency Delivery Report",
-  form_type: "Emergency Delivery",
-  submitted_at: 2.days.ago,
-  formable: delivery12_2,
-  content: {
-    priority_level: "Critical",
-    weather_conditions: "Severe storm cleared",
-    delivery_method: "Direct route after weather delay",
-    recipient_notification: "Hospital notified of arrival"
-  }
-)
-
-# Specialized handling form for artwork
-Form.create!(
-  user: user9,
-  company: company4,
-  title: "Specialized Cargo Report",
-  form_type: "Specialized Handling",
-  submitted_at: 14.days.ago,
-  formable: delivery11_2,
-  content: {
-    cargo_type: "Fine Art",
-    special_requirements: "Climate controlled, vibration dampening, secured transport",
-    insurance_value: 500000,
-    handling_notes: "White glove service, museum-quality packaging maintained"
-  }
-)
-
 # Create additional shipments for variety
 puts "Creating additional shipments..."
 
