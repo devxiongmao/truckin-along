@@ -1,3 +1,18 @@
+Given('a truck {string} exists in the system') do |truck_name|
+  # Parse truck name to extract make and model
+  make, model = truck_name.split(' ', 2)
+  create(:truck, make: make, model: model, active: false)
+end
+
+When('I click {string} next to the {string} truck') do |button_text, truck_identifier|
+  make, model = truck_identifier.split(' ', 2)
+  # Try the XPath
+  truck_row = find(:xpath, "//tr[td[contains(text(), '#{make}')] and td[contains(text(), '#{model}')]]")
+  within(truck_row) do
+    click_link_or_button button_text
+  end
+end
+
 Then('I should be on the new truck creation form') do
   expect(current_path).to eq(new_truck_path)
 end
@@ -66,21 +81,6 @@ Then('the truck form should be empty and ready for input') do
   expect(find_field('Length of Bed (cm)').value.to_s).to eq("")
   expect(find_field('Width of Bed (cm)').value.to_s).to eq("")
   expect(find_field('Height of Bed (cm)').value.to_s).to eq("")
-end
-
-Given('a truck {string} exists in the system') do |truck_name|
-  # Parse truck name to extract make and model
-  make, model = truck_name.split(' ', 2)
-  create(:truck, make: make, model: model, active: false)
-end
-
-When('I click {string} next to the {string} truck') do |button_text, truck_identifier|
-  make, model = truck_identifier.split(' ', 2)
-  # Try the XPath
-  truck_row = find(:xpath, "//tr[td[contains(text(), '#{make}')] and td[contains(text(), '#{model}')]]")
-  within(truck_row) do
-    click_link_or_button button_text
-  end
 end
 
 Then('I should see a maintenance form modal') do

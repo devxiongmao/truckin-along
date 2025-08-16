@@ -4,7 +4,7 @@ Feature: Trucking Company Claiming a Shipment
   So that I can claim shipments for delivery
 
   Background:
-    Given I am logged in as a driver user
+    Given I am logged in as a driver user with email "jane.smith@logico.com"
     And I am on the deliveries index page
 
   @javascript

@@ -5,7 +5,7 @@ Feature: Trucking Company Managing Truck Maintenance (Driver from Dashboard)
 
   @javascript
   Scenario: Driver completes maintenance for a truck from the dashboard
-    Given I am logged in as a driver user
+    Given I am logged in as a driver user with email "jane.smith@logico.com"
     And I am on the root page
     When I click "TRUCKIN' ALONG"
     Then I should be redirected to the dashboard page

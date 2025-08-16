@@ -12,7 +12,7 @@ Feature: Trucking Company Loading a Shipment to a Truck
 
   @javascript
   Scenario: Assign a shipment to a truck from the Truck Loading page
-    Given I am logged in as a driver user
+    Given I am logged in as a driver user with email "jane.smith@logico.com"
     And I am on the deliveries index page
     When I click "Truck Loading"
     Then I should see a "Add to Truck" button
