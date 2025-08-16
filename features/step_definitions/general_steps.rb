@@ -1,3 +1,7 @@
+Given('I am on the root page') do
+  visit root_path
+end
+
 When('I click {string}') do |button_text|
   click_link_or_button button_text
   # Add a small wait to ensure the form submission completes
@@ -43,8 +47,18 @@ When('I check {string} in the row that contains {string}') do |checkbox_name, ro
   end
 end
 
+When('I accept the confirmation dialog') do
+  accept_confirm do
+    # The confirmation dialog is handled by the accept_confirm block
+  end
+end
+
 Then('I should see an error message') do
   expect(page).to have_content('error')
+end
+
+Then('I should see a success message {string}') do |message|
+  expect(page).to have_content(message)
 end
 
 Then('the new record, {string}, should be listed under the {string} section') do |name, section|
@@ -55,14 +69,6 @@ end
 Then('the text, {string}, should be in the row next the text, {string}') do |first_text, second_text|
   table_row = find(:xpath, "//tr[td[contains(text(), '#{first_text}')] and td[contains(text(), '#{second_text}')]]")
   expect(table_row).not_to be_nil
-end
-
-When('I wait') do
-  sleep 10
-end
-
-Given('I am on the root page') do
-  visit root_path
 end
 
 Then('I should be redirected to the dashboard page') do

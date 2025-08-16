@@ -6,13 +6,6 @@ Given('I am on the deliveries start page') do
   visit start_deliveries_path
 end
 
-Then('I should see a pre-delivery inspection modal') do
-  expect(page).to have_css('#initiate-modal')
-  expect(page).to have_content('Pre-Delivery Inspection Checklist')
-  expect(page).not_to have_css('#initiate-modal.hidden')
-  expect(page).to have_field('modal-truck-id', type: 'hidden')
-end
-
 When('I check all required inspection checkboxes') do
   within('#initiate-modal') do
     # Scroll to the bottom of the modal to ensure all elements are accessible
@@ -32,6 +25,20 @@ When('I check all required inspection checkboxes') do
   end
 end
 
+When('I click {string} for a shipment') do |button_text|
+  # Find the first shipment row in the table and click the button/link within that context
+  within('table.styled-table tbody tr:first-child') do
+    click_link_or_button button_text
+  end
+end
+
+Then('I should see a pre-delivery inspection modal') do
+  expect(page).to have_css('#initiate-modal')
+  expect(page).to have_content('Pre-Delivery Inspection Checklist')
+  expect(page).not_to have_css('#initiate-modal.hidden')
+  expect(page).to have_field('modal-truck-id', type: 'hidden')
+end
+
 Then('I should see a success message confirming the delivery was created') do
   expect(page).to have_content('Delivery was successfully created')
 end
@@ -42,23 +49,6 @@ end
 
 Then('I should see a {string} link for each shipment') do |link_text|
   expect(page).to have_link(link_text)
-end
-
-When('I click {string} for a shipment') do |button_text|
-  # Find the first shipment row in the table and click the button/link within that context
-  within('table.styled-table tbody tr:first-child') do
-    click_link_or_button button_text
-  end
-end
-
-When('I accept the confirmation dialog') do
-  accept_confirm do
-    # The confirmation dialog is handled by the accept_confirm block
-  end
-end
-
-Then('I should see a success message {string}') do |message|
-  expect(page).to have_content(message)
 end
 
 Then('I should be on the shipment edit page') do
