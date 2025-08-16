@@ -1,13 +1,10 @@
-### From v1.7.5 to HEAD
+### From v1.7.6 to HEAD
 
-- Bump jbuilder from 2.13.0 to 2.14.0 (#467) (ee49f51) by dependabot[bot]
-- Bump @typescript-eslint/parser from 8.39.0 to 8.39.1 (#462) (b753b25) by dependabot[bot]
-- XMDEV-473: Fixes form submission on truck maintenance modal (#474) (ca29b88) by Jon
-- XMDEV-440: Adds WDIO test for truck maintenance via the dashboard (#473) (cd7724a) by Jon
-- XMDEV-439: Adds WDIO test for trucking company loading shipments to a truck (#472) (c318344) by Jon
-- XMDEV-438: Adds WDIO test for trucking company issuing a bid for a shipment (#471) (445b4f3) by Jon
-- XMDEV-471: Fix flaky tests in companies and trucks request spec (#470) (2467d2c) by Jon
-- XMDEV-470: Updates unprocessibly_entity to be unprocessibly_content (#469) (34a7f99) by Jon
+- XMDEV-421: Updates seed file with offers, ratings and more (#413) (283d4cd) by Jon
+- XMDEV-425: Update readme with significant feature information (#480) (987cfb6) by Jon
+- XMDEV-441: Adds trucking company marking delivery closed test (#479) (e5af281) by Jon
+- XMDEV-437: Adds driver closing shipment cucumber test (#478) (b0c4a04) by Jon
+- XMDEV-442: Adds WDIO test for Trucking Company starting a delivery (#476) (97459fa) by Jon
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
