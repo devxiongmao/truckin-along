@@ -1,12 +1,14 @@
-### From v1.8.0 to HEAD
+### From v1.8.1 to HEAD
 
-- Bump @typescript-eslint/parser from 8.39.1 to 8.40.0 (#486) (fba1694) by dependabot[bot]
-- Bump rspec-rails from 8.0.1 to 8.0.2 (#487) (19b7801) by dependabot[bot]
-- Bump @testing-library/jest-dom from 6.6.4 to 6.7.0 (#488) (c578321) by dependabot[bot]
-- Bump selenium-webdriver from 4.34.0 to 4.35.0 (#485) (48a0e93) by dependabot[bot]
-- Bump jbuilder from 2.14.0 to 2.14.1 (#484) (175e787) by dependabot[bot]
-- Bump rails from 8.0.2 to 8.0.2.1 (#483) (030d694) by dependabot[bot]
-- Bump solid_cable from 3.0.11 to 3.0.12 (#482) (7c385e7) by dependabot[bot]
+- Bump @typescript-eslint/parser from 8.40.0 to 8.41.0 (#498) (c7954e5) by dependabot[bot]
+- Bump @eslint/js from 9.33.0 to 9.34.0 (#497) (9f5aa3d) by dependabot[bot]
+- Bump @testing-library/jest-dom from 6.7.0 to 6.8.0 (#496) (2b19518) by dependabot[bot]
+- Bump cucumber-rails from 3.1.1 to 4.0.0 (#495) (66e7286) by dependabot[bot]
+- Bump sass from 1.90.0 to 1.91.0 (#499) (ad6d773) by dependabot[bot]
+- Bump @testing-library/jest-dom from 6.7.0 to 6.8.0 (#491) (dcc3f06) by dependabot[bot]
+- Bump sass from 1.90.0 to 1.91.0 (#493) (fde2676) by dependabot[bot]
+- Bump @eslint/js from 9.33.0 to 9.34.0 (#494) (cc0e07d) by dependabot[bot]
+- Bump @typescript-eslint/parser from 8.40.0 to 8.41.0 (#490) (80727a1) by dependabot[bot]
 
 Please see our [releases](https://github.com/devxiongmao/truckin-along/releases/) page for previous changelogs per version.
 
