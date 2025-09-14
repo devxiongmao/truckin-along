@@ -103,7 +103,7 @@ jobs:
             LABELS+=("cucumber")
           fi
 
-          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'Add|add|create|Create'; then
+          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'Add|add|create|Create|Update|update'; then
             LABELS+=("enhancement")
           fi
 
@@ -111,7 +111,7 @@ jobs:
             LABELS+=("bug")
           fi
 
-          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'refactor|Refactor|Update|update'; then
+          if git log --pretty=%B ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -Eiq 'refactor|Refactor'; then
             LABELS+=("refactor")
           fi
 
