@@ -2,8 +2,11 @@ name: Prevent Main Merge
 
 on:
   pull_request:
-    branches:
-      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
 
 jobs:
   check-branch-name:
@@ -31,8 +34,14 @@ jobs:
           echo "Source branch: ${{ steps.get-pr-info.outputs.head_ref }}"
           echo "Target branch: ${{ steps.get-pr-info.outputs.base_ref }}"
 
-          # Use the fetched branch information
-          if [[ "${{ steps.get-pr-info.outputs.base_ref }}" == "main" && "${{ steps.get-pr-info.outputs.head_ref }}" != release-* ]]; then
-            echo "Error: Only branches starting with 'release-' can be merged into main."
-            exit 1
+          # Only enforce the rule if targeting main
+          if [[ "${{ steps.get-pr-info.outputs.base_ref }}" == "main" ]]; then
+            if [[ "${{ steps.get-pr-info.outputs.head_ref }}" != release-* ]]; then
+              echo "Error: Only branches starting with 'release-' can be merged into main."
+              exit 1
+            else
+              echo "✓ Valid: release branch targeting main"
+            fi
+          else
+            echo "✓ Target is not main, no restrictions apply"
           fi
