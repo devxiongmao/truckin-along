@@ -3,8 +3,8 @@ updates:
   - package-ecosystem: bundler
     directory: "/"
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 10
+      interval: semiannually
+    open-pull-requests-limit: 20
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -13,5 +13,5 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
+      interval: semiannually
     open-pull-requests-limit: 10
