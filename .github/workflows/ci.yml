@@ -301,7 +301,7 @@ jobs:
           chrome-version: stable
 
       - name: Cache Chrome Driver
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.chromedriver-helper
           key: chromedriver-${{ runner.os }}
