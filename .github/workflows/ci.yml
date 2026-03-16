@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0 # Needed for git history and better file change detection
 
       - name: Filter changes
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
